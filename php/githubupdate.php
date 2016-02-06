@@ -21,7 +21,7 @@ $LOCAL_REPO         = "{$LOCAL_ROOT}/{$LOCAL_REPO_NAME}";
 $REMOTE_REPO        = "git@github.com:vmcbaptista/AGCT-Relational-Dynamic-Database.git";
 $BRANCH             = "master";
 
-if ( $_POST['payload'] ) {
+if ($_SERVER['HTTP_X_GITHUB_EVENT'] == 'push') {
   // Only respond to POST requests from Github
   
   if( file_exists($LOCAL_REPO) ) {
