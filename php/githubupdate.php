@@ -1,47 +1,40 @@
 <?php
-	/**
-	 * GIT DEPLOYMENT SCRIPT
-	 *
-	 * Used for automatically deploying websites via github or bitbucket, more deets here:
-	 *
-	 *		https://gist.github.com/1809044
-	 */
-	// The commands
-	$commands = array(
-		'echo $PWD',
-		'whoami',
-		'git pull',
-		'git status',
-		'git submodule sync',
-		'git submodule update',
-		'git submodule status',
-	);
-	// Run the commands for output
-	$output = '';
-	foreach($commands AS $command){
-		// Run it
-		$tmp = shell_exec($command);
-		// Output
-		$output .= "<span style=\"color: #6BE234;\">\$</span> <span style=\"color: #729FCF;\">{$command}\n</span>";
-		$output .= htmlentities(trim($tmp)) . "\n";
-	}
-	// Make it pretty for manual user access (and why not?)
-?>
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>GIT DEPLOYMENT SCRIPT</title>
-</head>
-<body style="background-color: #000000; color: #FFFFFF; font-weight: bold; padding: 0 10px;">
-<pre>
- .  ____  .    ____________________________
- |/      \|   |                            |
-[| <span style="color: #FF0000;">&hearts;    &hearts;</span> |]  | Git Deployment Script v0.1 |
- |___==___|  /              &copy; oodavid 2012 |
-              |____________________________|
+/**
+  * This script is for easily deploying updates to Github repos to your local server. It will automatically git clone or
+  * git pull in your repo directory every time an update is pushed to your $BRANCH (configured below).
+  *
+  * INSTRUCTIONS:
+  * 1. Edit the variables below
+  * 2. Upload this script to your server somewhere it can be publicly accessed
+  * 3. Make sure the apache user owns this script (e.g., sudo chown www-data:www-data webhook.php)
+  * 4. (optional) If the repo already exists on the server, make sure the same apache user from step 3 also owns that
+  *    directory (i.e., sudo chown -R www-data:www-data)
+  * 5. Go into your Github Repo > Settings > Service Hooks > WebHook URLs and add the public URL
+  *    (e.g., http://example.com/webhook.php)
+  *
+**/
 
-<?php echo $output; ?>
-</pre>
-</body>
-</html>
+// Set Variables
+$LOCAL_ROOT         = "/var/www/html";
+$LOCAL_REPO_NAME    = "custom";
+$LOCAL_REPO         = "{$LOCAL_ROOT}/{$LOCAL_REPO_NAME}";
+$REMOTE_REPO        = "git@github.com:vmcbaptista/AGCT-Relational-Dynamic-Database.git";
+$BRANCH             = "master";
+
+if ( $_POST['payload'] ) {
+  // Only respond to POST requests from Github
+  
+  if( file_exists($LOCAL_REPO) ) {
+    
+    // If there is already a repo, just run a git pull to grab the latest changes
+    shell_exec("cd {$LOCAL_REPO} && git pull");
+    die("done " . mktime());
+  } else {
+    
+    // If the repo does not exist, then clone it into the parent directory
+    shell_exec("cd {$LOCAL_ROOT} && git clone {$REMOTE_REPO}");
+    
+    die("done " . mktime());
+  }
+}
+?>
