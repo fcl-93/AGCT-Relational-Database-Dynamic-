@@ -119,17 +119,17 @@ $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 				if($_REQUEST['estado'] == 'inserir') //strcmp 
 				{
 					 echo '<h3>Gestão de componentes - inserção</h3>';
-					 if(empty($_REQUEST['nome'])
+					 if(empty($_REQUEST['nome']))
 					 {
 							echo 'O campo nome é de preenchimento obrigatório.';
 							goBarck();
 					 }
-					 elseif(empty($_REQUEST['tipo'))
+					 elseif(empty($_REQUEST['tipo']))
 					 {
 							echo 'Deve escolhe uma das opções do campo tipo.';
 							goBarck();
 					 }
-					 elseif(empty($_REQUEST['atv_int'))
+					 elseif(empty($_REQUEST['atv_int']))
 					 {
 							echo 'Deve escolhe uma das opções do campo estado.';
 							goBarck();
