@@ -119,7 +119,7 @@ $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 				if($_REQUEST['estado'] == 'inserir') //strcmp 
 				{
 					 echo '<h3>Gestão de componentes - inserção</h3>';
-					 if(empty($_REQUEST['nome'))
+					 if(empty($_REQUEST['nome'])
 					 {
 							echo 'O campo nome é de preenchimento obrigatório.';
 							goBarck();
