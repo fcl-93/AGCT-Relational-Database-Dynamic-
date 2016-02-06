@@ -83,18 +83,26 @@
 					
 					else if($_REQUEST["estado"] == "inserir")
 					{
-						$result = mysqli_query($link, "INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".mysqli_real_escape_string($link,$_REQUEST['nome'])."')");  
-						
-						if(!$result)
+						if(empty($_REQUEST['nome']))
 						{
-							echo 'Erro ao inserir os dados na tabela.';
+							echo 'Certifique-se que introduziu um nome para a unidade pretendida';
 						}
 						else
 						{
-							echo "<h3>Gestão de unidades - introdução</h3>";
-							echo "Inseriu os dados de novo tipo de unidade com sucesso. </br>";
-							echo "Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.";						
+							$result = mysqli_query($link, "INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".mysqli_real_escape_string($link,$_REQUEST['nome'])."')");  
+						
+							if(!$result)
+							{
+								echo 'Erro ao inserir os dados na tabela.';
+							}
+							else
+							{
+								echo "<h3>Gestão de unidades - introdução</h3>";
+								echo "Inseriu os dados de novo tipo de unidade com sucesso. </br>";
+								echo "Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.";						
+							}
 						}
+						
 					}		
 				}
 			}
