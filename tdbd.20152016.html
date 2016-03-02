@@ -1,0 +1,2421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>TDBD</title>
+
+
+  
+
+  
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
+<body>
+<h1>Trabalho de Desenvolvimento de uma Base de Dados (TDBD) - Fase 2</h1>
+
+<span style="font-weight: bold;">Desenvolvimento de
+Aplicação de Gestão de Casas de Turismo</span><br>
+
+<h2>Introdução</h2>
+
+Este trabalho consiste na implementação de uma
+Aplicação para Gestão de Casas de Turismo (AGCT).
+Actualmente a informação necessária
+para
+várias actividades da AGCT
+é mantida em ficheiros Excel.
+Vários processos
+de consolidação de informação requerem
+cálculos e operações manuais de
+copiar/colar, levando à inerente redundância de
+informação e possíveis
+erros nas operações devido ao factor humano. A AGCT a ser
+desenvolvida
+inclui vários componentes abaixo descritos que
+pretendem automatizar e tornar mais coerentes as várias tarefas
+que manipulam informação importante.<br>
+
+<h2>Preparação</h2>
+
+A aplicação é para ser desenvolvida de forma
+integrada no software <a href="http://wordpress.org/">Wordpress</a>,
+também usado pela como sistema gestor de
+conteúdos online (<a href="http://en.wikipedia.org/wiki/Web_content_management_system">Content
+Management System</a>).
+O Wordpress é uma aplicação desenvolvida sobre
+PHP+MySQL de forma a que
+todos os conteúdos de um website ficam armazenados numa BD,
+facilitando
+actualizações, tanto dos conteúdos como do
+próprio Wordpress. Um
+aspecto central do desenvolvimento do TDBD é a
+utilização do plugin <a href="http://bluesome.net/post/2005/08/18/50/">Exec-PHP</a>
+que permite que posts/páginas do Wordpress executem
+código PHP.
+Nomeadamente, os componentes da AGCT são para ser
+desenvolvidos
+em páginas gravadas numa instalação do Wordpress
+as quais irão conter referências a ficheiros contendo
+todo o código PHP e SQL necessário. As grandes vantagens
+desta abordagem é a rapidez e
+facilidade
+com que se organizam os vários componentes/subcomponentes, bem
+como a
+utilização de plugins/mecanismos/funcionalidades do
+próprio Wordpress
+para aumentar as capacidades da AGCT e também a
+realização de
+backups/restores.<br>
+
+<br>
+
+Os alunos terão de instalar o software <a href="http://www.vmware.com/products/player/">VMware player</a> para
+correr uma máquina virtual contendo o sistema operativo Linux
+(distribuição Ubuntu), servidor web Apache com PHP, o
+SGBD MySQL e o Wordpress já instalados. Nomeadamente,
+será necessário realizar download desta <a href="http://davidaveiro.eu/sgbd/bitnami-wordpress-4.3.1-1-ubuntu-14.04.zip">VMware
+virtual appliance</a> e, depois de descompactá-la, abri-la no
+VMware player.<br>
+
+<br>
+
+<span style="background-color: yellow;">Quem tenha CPU 32 bits
+não conseguirá usar a appliance acima</span> e, em
+alternativa, terá de instalar uma imagem vmware do ubuntu 14.04
+que
+seja para processador 32 bits, por exemplo a do site <a href="http://www.osboxes.org/ubuntu">http://www.osboxes.org/ubuntu</a>
+disponível também <a href="http://davidaveiro.eu/sgbd/Ubuntu_14.04-32bit.7z">aqui</a> em
+servidor em Portugal, provavelmente de download mais rápido.
+Depois instalar o <a href="http://davidaveiro.eu/sgbd/bitnami-wordpress-4.3.1-1-linux-installer.run">bitnami
+installer para linux 32 bits</a>.
+Para isso é necessário copiar o ficheiro de
+instalação
+para dentro da máquina virtual usando o acesso por SSH como
+explicado mais abaixo. Será necessário antes instalar o
+servidr ssh. Arrancar a máquina virtual, configurar a rede para
+NAT (Player-&gt;Manage-&gt;Virtual Machine Settings) na
+opção Network Adapter e deixar seleccionado Connected e
+Connect on Power on. Depois executar o comando do terminal <span style="font-family: monospace;">sudo apt-get update</span> e depois o
+comando do terminal: <span style="font-family: monospace;">sudo
+apt-get
+install openssh-server</span>.
+Depois de copiado o ficheiro para a pasta do user <span style="font-weight: bold;">osboxes</span>,&nbsp; aconselha-se
+mudar a password de <span style="font-weight: bold;">osboxes.org</span>
+para algo mais simples como <span style="font-weight: bold;">sgbdpass</span>,
+usando o comando <span style="font-family: monospace;">passwd</span>).
+Será necessário tornar o ficheiro executável com o
+comando <span style="font-family: monospace;">chmod 755
+bitnami-wordpress-*-linux-installer.run </span>depois executar o
+instalador escrevendo: <span style="font-family: monospace;">sudo
+./bitnami-wordpress-*-linux-installer.run</span>
+nas várias opções que aparecem na
+instalação, o essencial é dizer Y para a
+instalação do phpmyadmin, instalar a stack wordpress na
+pasta: <span style="font-family: monospace;">/opt/bitnami/apps/wordpress</span>,
+escolher a opção "developer" para facilitar as
+permissões. Nota: como neste caso não há o comando
+updateip mencionado abaixo, caso seja mudado o IP da máquina
+virtual e perdido o acesso ao wordpress, é necessário,
+através do phpmyadmin, mudar o URL do site armazenado na BD do
+wordpress, como mencionado aqui: <a href="http://wiki.bitnami.com/Applications/BitNami_Wordpress/Troubleshooting_WordPress">http://wiki.bitnami.com/Applications/BitNami_Wordpress/Troubleshooting_WordPress</a><br>
+
+<br>
+
+Após o arranque do sistema, a consola irá mostrar o IP em
+que o servidor virtual está acessível (doravante referido
+como <span style="font-weight: bold;">ipserver</span>). Realizar login
+na consola com o user e password bitnami e, logo de seguida,
+será solicitada a mudança de password que terá de
+ser: <span style="font-weight: bold;">sgbdpass</span> (ou seja, todos
+os grupos irão usar os mesmos dados).<br>
+
+<br>
+
+De seguida deverão ser executados os seguintes comandos na
+consola:<br>
+
+<br>
+
+<span style="font-family: monospace;">sudo nano
+/opt/bitnami/apps/phpmyadmin/conf/httpd-app.conf</span><br>
+
+<br>
+
+(usar a password sgbdpass)<br>
+
+<br>
+
+Isto irá abrir o ficheiro de configuração num
+editor de texto e é para substituir <span style="font-weight: bold;">127.0.0.1</span> por <span style="font-weight: bold;">all</span>, e <span style="font-weight: bold;">Require local</span> por <span style="font-weight: bold;">Require all granted</span> sendo depois
+necessário
+carregar em <span style="font-weight: bold;">CTRL+O</span> e depois <span style="font-weight: bold;">Enter</span> para gravar e <span style="font-weight: bold;">CTRL+X</span> para sair do editor. <br>
+
+<br>
+
+Depois executar os seguintes comandos:<br>
+
+<br>
+
+<span style="font-family: monospace;">cd /opt/bitnami</span><br style="font-family: monospace;">
+
+<span style="font-family: monospace;">sudo ./ctlscript.sh restart apache</span><br>
+
+<br>
+
+Neste momento o phpmyadmin já será acessível da
+máquina host pelo seguinte endereço:<br>
+
+<br>
+
+http://ipsever/phpmyadmin<br>
+
+<br>
+
+Os dados de acesso são: user <span style="font-weight: bold;">root</span>
+e password <span style="font-weight: bold;">bitnami</span>.<br>
+
+<br>
+
+Depois, executar os seguintes comandos na consola:<br>
+
+<br>
+
+<span style="font-family: monospace;">sudo mv /etc/init/ssh.conf.back
+/etc/init/ssh.conf</span><br style="font-family: monospace;">
+
+<span style="font-family: monospace;">sudo start ssh</span><br>
+
+<br>
+
+E, desta forma, já será possível aceder ao disco
+do servidor virtual, usando-se para isso qualquer programa que permita
+aceder a um servidor por ssh ou "montar" uma drive virtual no sistema
+operativo host com uma ligação ssh. Por exemplo, em linux
+pode-se usar o próprio nautilus (menu <span style="font-weight: bold;">File-&gt;Connect to serve</span>r, colocar
+em Server o <span style="font-weight: bold;">ipserver</span> e em User
+Name <span style="font-weight: bold;">bitnami</span> e indicar para se
+criar um bookmark para mais rápido acesso no futuro) e em
+Windows pode-se usar o <a href="http://www.swish-sftp.org/">Swish</a>
+ou <a href="http://winscp.net">WinSCP</a>, ou seguir
+instruções <a href="http://www.damtp.cam.ac.uk/user/jp107/xp-remote/ssh-map/">aqui</a>,
+por exemplo.<br>
+
+<br>
+
+Executar os seguintes comandos na consola:<br>
+
+<br>
+
+<span style="font-family: monospace;">sudo chown -R bitnami.daemon
+/opt/bitnami/apps/wordpress/htdocs</span><br>
+
+<br>
+
+Depois aceder a: http://ipsever/wp-admin para se iniciar a
+configuração básica do próprio Wordpress. O
+Username é <span style="font-weight: bold;">user</span> e a
+Password <span style="font-weight: bold;">bitnami</span>.
+Levar o cursor até ao canto superior direito onde tem o
+ícone de utilizador e depois selecionar a opção <span style="font-weight: bold;"></span><span style="font-weight: bold;">Edit
+my profile</span>. Alterar a
+password para <span style="font-weight: bold;">sgbdpass</span> (clicar
+na opção <span style="font-weight: bold;">Confirm use of
+weak password</span> para que esta password seja aceite).
+Antes de clicar no botão <span style="font-weight: bold;">Update
+profile</span>, seleccionar a opção <span style="font-weight: bold;">Disable
+the visual editor when writing</span> (no topo da página) e
+clicar então neste botão.<br>
+
+<br>
+
+Instalar os plugins disponíveis <a href="http://moodle.dme.uma.pt/file.php/57/tdbd/wpplugins.zip">neste
+ficheiro zip</a>, descompactando cada
+ficheiro zip de cada plugin e copiando cada pasta resultante para a
+pasta <span style="font-weight: bold;">/opt/bitnami/apps/wordpress/htdocs/</span><span style="font-weight: bold;">wp-content/plugins</span> na
+instalação do wordpress<br>
+
+<br>
+
+Aceder à opção de plugins no Dashboard do
+Wordpress e activar os
+plugins instalados (e atualizar os plugins sempre que houver
+atualizações disponíveis):
+<ol>
+
+  <li>Capability Manager Enhanced (a ser usado mais tarde)<br>
+  </li>
+  <li>Exclude Pages (para excluir páginas do
+público
+geral)<br>
+  </li>
+  <li>Exec-PHP (já explicado acima)<br>
+  </li>
+  <li>My Page Order (para facilmente ordenar páginas criadas)</li>
+  <li>PS Disable Auto Formatting (desactiva
+auto-formatação do Wordpress, necessário para se
+poder controlar completamente o output HTML realizado pelo Wordpress)</li>
+</ol>
+
+<span style="background-color: yellow;"></span>Na opção <span style="font-weight: bold;">General</span>
+em <span style="font-weight: bold;">Settings</span>, mudar <span style="font-weight: bold;">Date format</span> para AAAA-MM-DD, <span style="font-weight: bold;">Time format</span> para HH:MM (formato
+europeu, i.e., sem am/pm) e clicar em <span style="font-weight: bold;">Save
+changes</span><br>
+
+<br>
+
+Na opção <span style="font-weight: bold;">Permalinks</span>
+em <span style="font-weight: bold;">Settings</span>, em <span style="font-weight: bold;">Common settings</span> seleccionar <span style="font-weight: bold;">Post name</span>, de forma que
+apareça no campo abaixo em Custom Structure: <span style="font-weight: bold;">/%postname%</span>/
+e clicar em <span style="font-weight: bold;">Save changes</span><br>
+
+<br>
+
+Instalar o tema <a href="https://wordpress.org/themes/responsive/">Responsive</a>
+na
+opção <span style="font-weight: bold;">Appearance</span>
+em <span style="font-weight: bold;">Themes</span>,
+clicar em Add New e depois procurar por Responsive (assegurar que
+é o mesmo que indicado no link neste parágrago) e clicar
+em install.
+Após instalação do tema, activar o mesmo clicando
+em "Activate" e ignorar a recomendação de
+instalação de plugins recomendados.<br>
+
+<br>
+
+Executar o seguinte comando na consola:<br>
+
+<br>
+
+<span style="font-family: monospace;">sudo chmod 664
+/opt/bitnami/apps/wordpress/htdocs/wp-content/themes/responsive/functions.php</span><br>
+
+<br>
+
+Clicando na opção Pages no Dashboard do Wordpress
+é possível
+começar a criar páginas para
+desenvolver os componentes
+abaixo especificados. Por exemplo, ao criar-se a página com
+título <span style="font-weight: bold;">Gestão de
+componentes</span>. É automaticamente criado o "permalink" <span style="font-weight: bold;">http://ipserver/gestao-de-componentes</span>
+onde fica acessível o respectivo componente (nota: mandar para o
+lixo a página Sample). Criar as pastas <span style="font-weight: bold;">custom/php</span>
+na pasta raiz do wordpress (i.e., <span style="font-weight: bold;">/opt/bitnami/apps/wordpress/htdocs/custom/php</span>
+e, para cada componente (por exemplo o <span style="font-weight: bold;">gestao-de-componentes</span>):<br>
+
+<ul>
+
+  <li>criar uma página no Wordpress com o nome do componente</li>
+  <li>criar um ficheiro php na pasta <span style="font-weight: bold;">php</span>
+também
+com o mesmo nome</li>
+  <li>colocar na respectiva página do Wordpress o
+código: &lt;?php include("custom/php/<span style="font-weight: bold;">gestao-de-componentes.php</span>"); ?&gt;</li>
+  <li>realizar a programação directamente no ficheiro php
+criado</li>
+</ul>
+
+<span style="background-color: yellow;">Nota: podem haver problemas de
+lentidão na execução do wordpress devido ao plugin
+Exec-PHP, pelo que
+se isso acontecer, aconselha-se a desinstalação desse
+plugin e, em
+alternativa, a instalação do </span><a style="background-color: yellow;" href="http://wordpress.org/plugins/allow-php-in-posts-and-pages/">Allow
+PHP in Posts and Pages</a><span style="background-color: yellow;">
+em que para cada componente, em vez de colocar-se o código acima
+em cada página, terá de ser criado um snippet de
+código (contendo apenas a instrução include, sem
+as tags &lt;?php e ?&gt;) na respetiva opção de menu do
+Wordpress deste plugin e depois na página é só
+colocar esta tag para invocar o código: <span style="font-family: monospace;">[php function=X]</span></span><span style="background-color: yellow;">, em que x é o número
+indicado no respetivo snippet.</span><br style="background-color: yellow;">
+
+<br>
+
+<span style="font-weight: bold;">NOTAS IMPORTANTE</span>S<br>
+
+<ul>
+
+  <li style="font-weight: bold; text-decoration: underline;">Para
+editar os ficheiros php, usar um editor que permita gravar
+os ficheiros com codificação utf8 e usar sempre esta
+codificação, senão
+poderão ocorrer erros estranhos na execução.</li>
+  <li>Caso hajam problemas de permissões, ou o erro "Internal
+Server Error" no acesso às páginas, executar o seguinte
+na consola do Ubuntu deverá resolver o problema: </li>
+  <ul>
+    <li><span style="font-family: monospace;">sudo chown -R
+bitnami:daemon /opt/bitnami/apps/wordpress/htdocs</span></li>
+  </ul>
+  <li>Para evitar problemas de conexão, deve-se configurar a
+máquina virtual (menu VM-&gt;Settings) para usar <span style="font-weight: bold;">NAT</span> (opção
+disponível no Device Network Adapter) e não <span style="font-weight: bold;">bridged</span> que pode dar problemas.<br>
+  </li>
+  <li>Caso haja perda de acesso ao servidor dentro da máquina
+virtual, provavelmente será devido a mudança de IP ou
+necessidade de reiniciar a máquina virtual, sendo que
+será atribuído um novo ip. Normalmente reiniciando
+(comando na consola: <span style="font-family: monospace;">sudo
+shutdown -r now</span>) e depois executando o comando <span style="font-family: monospace;">/opt/bitnami/apps/wordpress/updateip</span>
+resolve-se o problema de acesso.</li>
+</ul>
+
+O esquema relacional da BD da AGCT está disponível num
+ficheiro MWB do
+MySQL
+Workbench (MSWB) aqui (consultar com regularidade o
+enunciado/fórum pois poderão ser publicadas novas
+versões): <a href="http://moodle.cee.uma.pt/file.php/57/tdbd/ag.v01.mwb">v01</a><span style="color: rgb(204, 204, 204);">,
+v02,
+v03</span>.
+Os ficheiros SQL gerados a partir dos esquemas e prontos a importar
+através
+do phpMyAdmin estão aqui: <a href="http://moodle.cee.uma.pt/file.php/57/tdbd/ag.v01.sql">v01</a><span style="color: rgb(204, 204, 204);">,
+v02,
+v03</span>.
+Os scripts de alteração com os comandos
+necessários para "upgrade" de cada versão estão
+aqui: <span style="color: rgb(204, 204, 204);">v01-&gt;
+v02 e v02-&gt;
+v03</span>. Todo o código SQL disponibilizado neste enunciado
+é
+para ser executado na Base de Dados <span style="font-weight: bold;">bitnami_wordpress</span>
+acessível no phpmyadmin, que contém as tabelas
+pré-definidas do wordpress e irá conter as tabelas da
+AGCT.<br>
+
+<br>
+
+Este esquema é para ser escrupulosamente respeitado sendo que
+todos
+os
+grupos não poderão realizar alterações ao
+mesmo. Este trabalho
+tem como foco o desenvolvimento de scripts PHP para concretizar os
+componentes
+pretendidos, contendo formulários e instruções SQL
+para inserção e
+visualização dos dados relevantes. <span style="text-decoration: underline;">No entanto, caso seja, por
+parte dos alunos, detectada alguma falha ou inconsistência no
+esquema
+definido, ou observada uma possível melhoria do esquema para
+torná-lo
+mais eficaz ou flexível, deve ser colocado um post no
+fórum do TDBD,
+para que a sugestão possa ser avaliada, podendo levar a
+eventual alteração do esquema base</span>.<br>
+
+<br>
+
+Clicando nas tabelas no MSWB, é possível visualizar os
+comentários
+criados para a tabela e para os atributos, que explicam a razão
+de ser
+da tabela ou do atributo e como se relacionam com outras tabelas e/ou
+atributos. Tabelas e/ou atributos óbvios (como ids) não
+têm
+comentários. A leitura
+atenta dos comentários é fundamental para o esquema
+relacional ser bem
+interiorizado e percebida a lógica de relacionamento das
+entidades em
+que os vários componentes da AGCT irão basear-se o que,
+por
+sua vez, é essencial para
+que o desenvolvimento da aplicação seja intuitiva e
+eficaz.<br>
+
+<br>
+
+Segue-se um conjunto de regras e dicas a seguir na
+execução do trabalho e, após esta
+secção, o conjunto de funcionalidades a implementar em
+cada
+componente. Para cada componente é especificado o comportamento
+esperado da AGCT e dadas instruções ou dicas para a
+sua
+implementação em PHP+SQL. A lista de componentes
+será completada ao
+longo do mês de Dezembro sendo que antes
+das férias
+será publicado um
+enunciado final,
+sendo indicados quais os componentes que
+terão de ser necessaria e completamente implementados para
+obtenção de
+nota mínima, sendo também especificados os requisitos
+para obtenção de
+patamares de nota mais elevados, até à nota máxima.<br>
+
+<h2>Regras/dicas a seguir</h2>
+
+<h3>Configurações adicionais no Wordpress</h3>
+
+<ul>
+
+  <li>Para utilização de <span style="font-weight: bold;">variáveis
+de sessão</span>,
+é necessário (e obrigatório) incluir logo no
+início (após a linha <span style="font-weight: bold;">&lt;?php</span>)
+do ficheiro <span style="font-weight: bold;">wp-config.php</span> uma
+linha com a
+instrução <span style="font-family: monospace;">session_start();</span>
+Para criar/utilizar
+variáveis de sessão é só usar: <span style="font-weight: bold;">$_SESSION['nome_da_var']<br>
+    </span></li>
+  <ul>
+    <li>Caso hajam problemas na utilização de
+variáveis de sessão, tentar o seguinte para detectar o
+erro:<br>
+    </li>
+    <ul>
+      <li>echo da sessão depois de se obter o id da
+função mysql_insert_id().<br>
+      </li>
+      <li>echo antes da transacção para se ver o que tem
+dentro da sessão.<br>
+      </li>
+      <li>certificar que o nome da sessão é o mesmo nos
+dois locais: $_SESSION['id']<br>
+      </li>
+      <li>certificar que NÃO está ser feito o unset da
+sessão no código antes de ser utilizada</li>
+    </ul>
+  </ul>
+  <li>Terão de ser criadas, na pasta <span style="font-weight: bold;">custom</span>, duas
+pastas
+com os nomes <span style="font-weight: bold;">css</span> e <span style="font-weight: bold;">js</span> que irão conter os
+ficheiros CSS
+e Javascript necessários (por ex. os ficheiros <span style="font-weight: bold;">.js</span>
+das bibliotecas de validação).</li>
+  <li>Colocar o seguinte no final do ficheiro <span style="font-weight: bold;">functions.php</span>
+do
+theme (Ir a: <span style="font-weight: bold;">Appearance</span>-&gt;<span style="font-weight: bold;">Editor</span> e, no lado direito, procurar
+por <span style="font-weight: bold;">Theme functions</span> e clicar
+neste link):</li>
+  <ul>
+    <li style="font-family: monospace;">wp_enqueue_style('ag',
+get_bloginfo( 'wpurl' ) .
+'/custom/css/ag.css',false,'1.1','all');</li>
+    <li>Nota: na pasta <span style="font-weight: bold;">css</span>,
+tem de ser criado um ficheiro com o nome <span style="font-weight: bold;">ag.css</span>
+onde podem ser colocadas as instruções CSS a serem
+aplicadas nos
+conteúdos HTML dos componentes da AGCT. <span style="text-decoration: underline;">Todos os
+estilos CSS utilizados pelos grupos (inclusivé os das
+bibliotecas
+de validação) têm de ser copiados para dentro deste
+ficheiro</span>. </li>
+  </ul>
+</ul>
+
+<h3>Regras a seguir na programação</h3>
+
+<ul>
+
+  <li style="background-color: yellow;"><span style="font-weight: bold; text-decoration: underline;">Atenção
+às maiúsculas e minúsculas</span>!
+No Linux os nomes de ficheiros e nomes de tabelas/atributos em SQL
+são case-sensitive. <span style="font-weight: bold; text-decoration: underline;">Os nomes dos
+ficheiros têm de ter
+letras todas minúsculas e os nomes das tabelas/atributos
+é também
+para ficar tudo em minúsculas</span>.</li>
+  <li><span style="background-color: yellow;">Atenção
+que nos formulários HTML não devem haver campos com nome
+"name" pois irá dar problemas na execução, usar
+nomes do género <span style="font-weight: bold;">component_name</span>,
+etc.</span><br>
+  </li>
+  <li>Na especificação dos componentes (apresentada na
+secção do enunciado após as dicas) é
+indicado, para os formulários a constar
+nos mesmos, para cada campo, o seguinte conjunto de items separados por
+um traço:</li>
+  <ul>
+    <li>a negrito - <a style="font-weight: bold;" href="http://www.w3schools.com/html/html_forms.asp">tipo de input</a>
+(o nome do respetivo campo deverá ser uma string sempre em
+minúsculas e com
+underscore em vez dos espaços, devendo tal nome ser
+idêntico ou próximo
+do nome do respetivo atributo existente na BD, <span style="text-decoration: underline;">caso
+apareça um nome entre parêntesis à frente do tipo
+de input, é esse o
+nome para ser usado como nome do campo e que irá corresponder ao
+nome
+da chave no array POST/REQUEST</span>)</li>
+    <li>a itálico <span style="font-style: italic;">-
+descrição do
+campo que tem de aparecer no output antes do mesmo</span> <br>
+    </li>
+    <li>dentro de parêntesis - regras de preenchimento do campo
+(que
+deverão ser mostradas também no output junto aos
+respectivos campo da forma mais
+intuitiva, normalmente após os mesmos, à direita ou
+abaixo)</li>
+    <li>sublinhado - <span style="text-decoration: underline;">dicas/instruções
+de apresentação</span></li>
+  </ul>
+  <li style="background-color: yellow;">Para obtenção dos
+resultados de uma query que faça um select, recomenda-se a
+utilização da seguinte função (ver exemplo
+"procedural style" no site):<a href="http://us1.php.net/manual/en/mysqli-result.fetch-assoc.php">
+http://us1.php.net/manual/en/mysqli-result.fetch-assoc.php</a></li>
+  <li>Sem ser em formulários, ao longo da
+especificação dos
+componentes, sempre que aparecer <span style="font-style: italic;">texto
+em itálico</span> significa que é texto que deverá
+ser apresentado ao
+utilizador e <span style="text-decoration: underline;">texto sublinhado</span>
+significam instruções a serem seguidas para
+apresentação de conteúdos.<br>
+  </li>
+  <li>Realizar validação <span style="font-weight: bold;">server-side</span>,
+dos inputs que necessitarem de validação (campos
+obrigatórios, formato
+de emails, datas, etc.) no código que processa os campos
+submetidos o
+qual tem de voltar a
+mostrar o formulário submetido (com todos os dados já
+inseridos)
+indicando o(s) erro(s) se for o caso. <br>
+  </li>
+  <li>Realizar validação <span style="font-weight: bold;">client-side</span>
+em tempo real usando <a href="http://jqueryvalidation.org/">esta
+biblioteca</a>
+(<span style="background-color: yellow;">nova bibioteca mais poderosa
+que deve ser usada</span>) ou outra melhor (informar o docente em caso
+de
+localização de melhor
+alternativa).<span style="text-decoration: line-through;"></span> <span style="background-color: yellow;">NOTA
+IMPORTANTE: o uso destas bibliotecas (ou outras com
+função idêntica) não
+é necessário para obtenção de nota
+mínima (embora seja atribuído um certo peso na nota
+final), <span style="text-decoration: underline;">logo deixar a
+validação client-side para mais tarde em
+caso de dificuldades na
+instalação/utilização</span>)</span>.</li>
+  <li>Ao serem inseridos tuplos em mais que uma tabela, ou seja, ao
+haver uma sequência de comandos INSERT que têm todos de ser
+executados
+ou nenhum, delimitar as instruções INSERT por uma
+transacção. <span style="background-color: yellow;">NOTA
+IMPORTANTE: (a utilização de transacções </span><span style="background-color: yellow;">não
+é necessária para obtenção de nota
+mínima (embora seja atribuído um certo peso na nota
+final), <span style="text-decoration: underline;">logo deixar para
+mais tarde em
+caso de dificuldades</span>)</span>.</li>
+  <li>Deve ser usada a tecnologia <a href="http://pt.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a>
+para a <span style="text-decoration: underline;">especificação
+do formato de
+apresentação de todos os conteúdos</span>, o que
+permite separar completamente a
+lógica de estrutura de
+um documento (secções, linhas, campos, etc.) da sua
+lógica de
+apresentação (tamanhos de letra, cores, alinhamentos,
+etc.).
+Nomeadamente, para o output de formulários, devem ser usadas as
+tags
+html
+DIV, LABEL, FIELDSET, etc. para a especificação da
+estrutura do
+formulário, sendo aplicadas as classes CSS adequadas para a
+correcta
+apresentação dos conteúdos.</li>
+  <li style="background-color: yellow;">Não é
+necessário realizar conexão à base de dados, pois
+o Wordpress já mantém a ligação ao mysql
+ativa e é possível executar diretamente o comando
+mysql_query ao longo do código especificado.</li>
+  <li>Criar um ficheiro chamado <span style="font-weight: bold;">common.php</span>
+que terá de ficar na pasta <span style="font-weight: bold;">custom/php</span>.</li>
+  <ul>
+    <li>Este
+ficheiro terá de incluir todas as funções PHP que
+são para
+ser reutilizadas entre componentes diferentes e/ou chamadas a
+bibliotecas Javascript (por exemplo,
+funções de validação server-side, chamada
+à bibliotecas, etc.). <span style="font-weight: bold; background-color: yellow;">NOTA</span><span style="background-color: yellow;">: Código
+a ser reutilizado em apenas um componente tem de ser colocado em
+funções definidas no próprio componente</span>. </li>
+  </ul>
+  <li><span style="text-decoration: underline;">Não podem ser
+criadas referências/links a caminhos absolutos e
+têm&nbsp;sempre
+de ser usados caminhos relativos</span>. Exemplos:</li>
+  <ul>
+    <li>na especificação de um action de um formulario,
+em vez de <span style="font-family: monospace;">http://10.42.43.10/wordpress/gestao-de-componentes"</span>
+tem de constar <span style="font-family: monospace;">"gestao-de-componentes"</span></li>
+    <li><span style="font-family: monospace;"></span>em
+relação ao ficheiro <span style="font-weight: bold;">common.php</span>,
+explicado acima, todos os ficheiros php de componentes (como o
+gestao-de-componentes.php) terão de ter como primeira
+instrução PHP (logo a seguir a <span style="font-weight: bold;">&lt;?php</span>)
+a
+seguinte (inclusão com caminho relativo de código PHP de
+um
+ficheiro): <span style="font-family: monospace;">require_once("custom/php/common.php");</span><br>
+    </li>
+  </ul>
+  <li>A chamada às bibliotecas de validação
+Javascript deverá ser feita com uma ou mais
+funções php (ou com o próprio código
+Javascript): (1) ou no
+ficheiro common.php, ou (2) no próprio código do
+componente, imediatamente antes de serem usadas. Por exemplo, logo no
+início do ficheiro common.php (e <span style="text-decoration: underline;">antes</span> de <span style="font-weight: bold;">&lt;?php</span>) pode constar o
+código: <span style="font-family: monospace;">&lt;script
+type="text/javascript"
+src="&lt;?php echo
+get_bloginfo('wpurl');?&gt;/custom/js/anytime.js"&gt;&lt;/script&gt;</span>
+que invoca uma biblioteca.</li>
+  <li>Em vez de se usar os arrays $_POST e $_GET, utilizar o array
+$_REQUEST que contém todos os campos passados tanto por GET como
+POST</li>
+  <li>Na execução dos componentes, os estados de
+validação (server-side) devem ter um if que
+primeiro faz as validações (só dos campos do tipo
+text pois os de tipo select ou checkbox não precisam de
+validação pois são valores que foram retirados da
+BD)
+e só no caso de não haver erros é que são
+apresentados os dados inseridos e a opção de confirmar a
+inserção. Caso contrário é só
+mostrado o(s)
+erro(s) e a opção de voltar atrás.</li>
+  <li>Em todos os estados em que são mostrados os dados ao
+utilizador antes de ele confirmar, não é suposto voltar a
+ser apresentado um formulário com os dados, mas texto contendo a
+informação introduzida, sendo que é realizado
+output do formulário mas com os respectivos campos
+hidden e depois o botão de confirmar.</li>
+  <li>Quando há erros no código, é só
+estar atento a qual a linha do
+"eval'd code" que é a prevaricadora. Será essa linha no
+código
+PHP que estará a provocar o erro.</li>
+  <ul>
+  </ul>
+  <ul>
+  </ul>
+  <li>Quando tabelas com dados tiverem muitas colunas e o
+conteúdo "salte fora" do espaço onde é suposto
+estar, deverá de ser usado CSS para que a tabela toda caiba no
+respectivo espaço. A tag HTML que inicia a tabela deverá
+ser do género: <span style="font-family: monospace;">&lt;table
+class="mytable" style="text-align: left; width: 100%;" border="1"
+cellpadding="2" cellspacing="2"&gt;</span>, em que <span style="font-family: monospace;">class="mytable"</span> indica o nome
+da
+classe cujo estilo é para aplicar nesta tabela. Depois,
+terá de ser incluído no ficheiro <span style="font-weight: bold;">ag.css</span> código do tipo
+(reduzir font-size caso necessário e não remover o
+código <span style="font-weight: bold;">!important</span> pois
+o estilo deixa de
+funcionar.):</li>
+  <ul>
+    <li><span style="font-family: monospace;">.mytable td, </span><span style="font-family: monospace;">.mytable th</span><span style="font-family: monospace;"> {</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp; margin:
+0&nbsp; !important;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp; border:
+1px solid !important;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp; padding:
+1px !important;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;
+font-size: 11px&nbsp; !important;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">}</span><br>
+    </li>
+  </ul>
+  <li>Todos os estados de todos os componentes que não sejam os
+estados iniciais têm sempre de incluir uma ligação <span style="font-weight: bold;">Voltar atrás</span> cujo
+código deve ser algo do género (solução
+retirada <a href="http://www.wdmac.com/acessibility-the-back-button">aqui</a>,
+recomenda-se colocar este código numa função no
+ficheiro common.php e chamar essa função sempre que
+necessário):</li>
+  <ul>
+    <li><span style="font-family: monospace;">&lt;?php</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">echo "&lt;script
+type='text/javascript'&gt;document.write(\"&lt;a
+href='javascript:history.back()' class='backLink' title='Voltar
+atr&amp;aacute;s'&gt;Voltar
+atr&amp;aacute;s&lt;/a&gt;\");&lt;/script&gt;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&lt;noscript&gt;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&lt;a
+href='".$_SERVER['HTTP_REFERER']."‘ class='backLink' title='Voltar
+atr&amp;aacute;s'&gt;Voltar atr&amp;aacute;s&lt;/a&gt;</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">&lt;/noscript&gt;";</span><br style="font-family: monospace;">
+      <span style="font-family: monospace;">?&gt;</span><br>
+    </li>
+  </ul>
+  <li>Para se obter o role de um user basta usar
+funções/variáveis do próprio wordpress,
+alguns exemplos podem ser encontrados <a href="http://wordpress.org/support/topic/how-to-get-the-current-logged-in-users-role">aqui</a>.<br>
+  </li>
+  <li>Sempre que são realizadas queries convém invocar a
+função mysql_error como é feito nos slides da aula
+teórica pois ajuda na descoberta de bugs.</li>
+  <li>Cuidado com a replicação de código! É
+comum repetir-se o mesmo código SQL, para diferentes casos em
+diferentes pesquisas (dependendo de que campos
+são seleccionados pelo utilizador). Em vez de
+repetição deve haver
+reutilização. Nestes casos é só criar uma
+variável (string) com a parte inicial da query e ir concatenando
+a essa string os
+bocados de SQL necessários, de acordo com o que terá sido
+especificado pelo utilizador</li>
+  <li>Nem sempre está ligação ativa por parte do
+wordpress à BD, pelo que, pelo seguro, convém sempre
+realizar ligação sempre que necessário, o que
+poderá ser feito com código do género
+(possível de colocar numa função no ficheiro
+common.php:<br>
+    <div style="margin-left: 40px;">
+    <pre>$link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);</pre>
+    <pre>$result = mysqli_query($link,$query);</pre>
+    </div>
+em que na 1ª linha estão constantes definidas
+automaticamente pelo Wordpress.<br>
+  </li>
+  <li>Todos os comandos php mysql deverão incluir a letra "i"
+(como os acima) pois correspondem à versão mais recente e
+a sem o "i" nem sempre funciona como esperado, estando em fase de ser
+deprecada.<br>
+  </li>
+  <li>Quando a query SQL a construir varia consoante várias
+condições diferentes (por exemplo, parâmetros
+opcionais), a mesma pode ir sendo construída aos poucos com a
+operação de concatenação a ser executada ao
+longo de cada if, em vez de serem realizados inúmeros ifs e uma
+query (praticamente idêntica) para cada if</li>
+  <li>Para ser possível a verificação do
+funcionamento da validação server side, é
+necessário estar desativada a validação client
+side, pelo que todos os grupos que implementem validação
+clientside devem incluir uma variável no ficheiro common.php
+chamada $clientsideval=0; variável esta que deverá ser
+testada antes da realização de qualquer output de
+código de validação client side (como o atributo
+"required"), output o qual só deverá ocorrer se a
+variável for true (=1).<br>
+  </li>
+  <li>Algumas instalações podem ter problemas na
+execução dos estados após o inicial quando o
+action no formulário é especificado conforme neste
+enunciado, sendo que a alternativa será não especificar o
+atributo action, o que leva à execução do action
+como sendo uma chamada à própria página, o que
+funciona na mesma<br>
+  </li>
+  <li>Para simplificar a inserção de tuplos em que algum
+atributo que é foreign key e pode ser nulo e porque pode haver
+problemas ao colocar-se o termo "NULL" no código SQL, o mais
+simples é colocar na respetiva tabela no phpmyadmin como default
+value desse atributo o valor NULL e, ao realizar-se a
+inserção para o caso de ser nulo esse atributo,
+simplesmente não incluir esse atributo no INSERT.<br>
+  </li>
+  <li>...<br>
+  </li>
+  <ul>
+    <ul>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Regras para as entregas</h3>
+
+<ul>
+
+  <li>Em cada entrega, juntamente com o ficheiro <span style="font-weight: bold;">.odt</span> com o RT (contendo o registo do
+trabalho do respectivo período e/ou eventuais howtos) é
+para vir, em
+anexo, um ficheiro <span style="font-weight: bold;">.zip</span> (com o
+mesmo nome do .odt), contendo, na sua raiz:</li>
+  <ul>
+    <li>a pasta <span style="font-weight: bold;">custom</span>
+(que por sua vez tem as pastas com os ficheiros <span style="font-weight: bold;">php</span>, <span style="font-weight: bold;">js</span> e <span style="font-weight: bold;">css</span> codificados/utilizados por cada
+grupo, tal como na instalação "live" do wordpress)</li>
+    <li>um ficheiro com o nome <span style="font-weight: bold;">ag.sql</span>
+que resulta da exportação da BD <span style="font-weight: bold;">bitnami_wordpress</span> e
+respectivo conteúdo - NOTA: este ficheiro terá de conter
+a
+exportação (feita pelo phpmyadmin) dos dados <span style="font-weight: bold;">apenas
+das tabelas da AG que estão no esquema relacional deste
+enunciado</span>.
+É possível seleccionar as tabelas a serem exportadas na
+página de
+exportação do phpMyAdmin.
+Seleccionar a opção de incluir DROP TABLE. </li>
+  </ul>
+  <li>Na entrega final<span style="font-weight: bold; text-decoration: underline;"></span>:<br>
+  </li>
+  <ul>
+    <li><span style="font-weight: bold; text-decoration: underline;">o
+ficheiro .odt&nbsp; entregue tem de conter, por esta ordem, as seguintes 3 secções:</span></li>
+    <ul>
+      <li><span style="font-weight: bold;">Componentes implementados</span>
+- uma lista dos componentes (copiar tal e qual a lista presente abaixo
+na secção "Valores atribuídos às
+funcionalidades implementadas com sucesso"), sendo colocado à
+frente de cada item da lista uma percentagem a indicar o quanto o mesmo
+ficou completo e, no caso de não ser 100%, um pequeno texto a
+explicar o que ficou feito e o que ficou por fazer</li>
+      <li><span style="font-weight: bold;">Código</span> - listagem (copy paste) de todo o
+código existente nos ficheiros PHP e CSS criados</li>
+      <li><span style="font-weight: bold;">Registo de trabalho</span> - todas as entradas do registo de trabalho da segunda fase do TDBD <span style="font-weight: bold; text-decoration: underline;">coladas como tabela com texto pesquisável e não como imagem</span><br>
+    </li>
+    </ul>
+
+  </ul>
+  <ul>
+    <li>de modo a obedecer ao regulamento da UMa e as regras existentes
+na página do GAE <a href="http://gae.uma.pt/index.php?option=com_docman&amp;task=doc_download&amp;gid=93&amp;Itemid=53&amp;lang=en">aqui</a>
+e <a href="http://gae.uma.pt/index.php?option=com_content&amp;view=article&amp;id=50&amp;Itemid=60&amp;lang=en">aqui</a>,
+a entrega do RT final da fase 2 do TDBD terá também de
+ser
+feita para o endereço trabalhos@uma.pt, ou seja, além da
+entrega a ser realizada seguindo as regras indicadas neste enunciado,
+é necessário, tembém, um dos alunos do grupo
+enviar um e-mail com o RT (.odt) <span style="font-weight: bold; text-decoration: underline;">exportado para
+o formato PDF</span> (não gravar como imagem) sendo que o nome
+do ficheiro (com extensão .pdf), o assunto da mensagem e o corpo
+da mensagem têm de seguir a seguinte nomenclatura:<br>
+    </li>
+  </ul>
+  <ul>
+    <ul>
+      <li><span style="color: rgb(0, 0, 255);">AnibalSilva</span>_SistemasGestoresdeBasesDados_Prof.DavidAveiro<br>
+      </li>
+      <li>O nome (em azul) tem de ser o nome do aluno (tal como consta
+no
+remetente da mensagem) que também envia o artigo final seguindo
+as regras internas.<br>
+      </li>
+    </ul>
+    <li>Resumindo, a entrega tem de ser realizada, pelo mesmo aluno,
+com duas mensagens: uma directamente para o docente seguindo as regras
+internas de SGBD e outra, para o GAE, seguindo as regras acima.</li>
+  </ul>
+  <li>...<br>
+  </li>
+</ul>
+
+<h2>Componentes</h2>
+
+<h3>Gestão de componentes</h3>
+
+Página <span style="font-weight: bold;">gestao-de-componentes</span><br>
+
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage components</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage components</span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (POST) sobre o estado de
+execução, é apresentado:</li>
+  <ul>
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">component</span> apresentar o
+texto "<span style="font-style: italic;">Não há
+componentes</span>",
+caso contrário, apresentar uma lista com todos os componentes
+com o seguinte formato (ordenada por ordem alfabética):</li>
+    <ul>
+      <li>
+        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+          <tbody>
+            <tr>
+              <td style="vertical-align: top; font-weight: bold;">tipo<br>
+              </td>
+              <td style="vertical-align: top;"><span style="font-weight: bold;">id</span><br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">nome<br>
+              </td>
+              <td style="vertical-align: top;"><span style="font-weight: bold;">estado</span><br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">ação<br>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="1" rowspan="4" style="vertical-align: top;">propriedade<br>
+              </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">entidade a faturar<br>
+              </td>
+              <td style="vertical-align: top;">ativo<br>
+              </td>
+              <td style="vertical-align: top;">[editar] [desativar]<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;">serviços
+contratados </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">3<br>
+              </td>
+              <td style="vertical-align: top;">áreas </td>
+              <td style="vertical-align: top;">ativo </td>
+              <td style="vertical-align: top;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">4<br>
+              </td>
+              <td style="vertical-align: top;">tv<br>
+              </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar] [desativar] </td>
+            </tr>
+            <tr>
+              <td colspan="1" rowspan="3" style="vertical-align: top;">canal
+de venda<br>
+              <br>
+              <br>
+              </td>
+              <td style="vertical-align: top;">5<br>
+              </td>
+              <td style="vertical-align: top;">nome<br>
+              </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">6<br>
+              </td>
+              <td style="vertical-align: top;">custos<br>
+              </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">7<br>
+              </td>
+              <td style="vertical-align: top;">comissão<br>
+              </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">fornecedor<br>
+              </td>
+              <td style="vertical-align: top;">...<br>
+              </td>
+              <td style="vertical-align: top;">...<br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+(<span style="font-weight: bold;">notas</span>: propriedade aqui
+significa um imóvel tipo casa, apartamento, etc.; para
+já, apresentar na coluna <span style="font-weight: bold;">ação</span>
+apenas o
+texto
+lá indicado, mais tarde será especificado o que fazer)</li>
+      <li>Dicas:</li>
+      <ul>
+        <li>ao realizar output do &lt;td&gt; do tipo é
+necessário indicar valores para os atributos
+HTML <span style="font-weight: bold;">colspan</span> <span style="font-weight: bold;">rowspan</span>,
+sendo que o primeiro é 1 e o segundo é igual ao
+número de componentes existentes desse tipo - no
+exemplo acima (ver código-fonte HTML) temos, para os primeiros 2
+tipos apresentados, rowspans de 3. Quando acontece este
+"span" de X em N colunas, nas X-1 linhas seguintes da tabela
+(&lt;tr&gt;) só
+é preciso especificar N-1 colunas (por ex., na linha
+de altura, só há 4 &lt;td&gt;</li>
+        <li>não fazer uma query gigante para toda a tabela,
+primeiro
+deve fazer-se uma query para obter a lista de tipos e
+iniciar um ciclo para, em cada iteração deste ciclo,
+realizar-se o output dos componentes de
+cada tipo, sendo que será
+necessário outra nova query para se obter os componentes deste
+tipo</li>
+        <ul>
+          <li>no 1º td já se deve ter em conta o
+aspeto acima referido do rowspan, determinado automaticamente a partir
+do número de linhas da query anterior<br>
+          </li>
+        </ul>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+
+<ul>
+
+  <ul>
+    <ul>
+    </ul>
+    <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de componentes</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de um novo
+componente:</li>
+    <ul>
+      <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li>
+      <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo</span> - (obrigatório) <span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+uma lista com todos os tipos de componentes presentes na tabela
+comp_type com o seguinte aspeto</span></li>
+      <ul>
+        <li><input checked="checked" name="comp_type" value="child_data" type="radio">propriedade</li>
+        <li><input name="comp_type" value="diagnosis" type="radio">canal
+de venda</li>
+        <li>...</li>
+      </ul>
+      <ul>
+        <li><span style="text-decoration: underline;">em que cada tipo
+tem como value de cada
+opção o respetivo id de tipo</span></li>
+      </ul>
+      <li>radio - <span style="font-style: italic;">Estado</span> -
+(obrigatório)</li>
+      <ul>
+        <li><input checked="checked" name="state" value="active" type="radio">ativo</li>
+        <li><input name="state" value="inactive" type="radio">inativo<br>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <ul>
+        <li><span style="text-decoration: underline;">em que cada
+opção tem como value o respetivo valor do respetivo
+atributo state que é do tipo ENUM<br>
+          </span></li>
+      </ul>
+      <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir componente</span><br>
+      </li>
+    </ul>
+    <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+    <ul>
+      <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
+de componentes</span></span><span style="font-style: italic; font-weight: bold;"></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+inserção</span><br>
+        </span></li>
+      <li>construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">component</span>
+e executá-lo</li>
+      <li>Apresentar, em caso de sucesso da
+inserção:</li>
+      <ul>
+        <li><span style="font-style: italic;">Inseriu os dados de novo
+componente com sucesso.</span></li>
+        <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
+        <li>em que Continuar é uma ligação para a
+página <span style="font-weight: bold;">gestao-de-componentes</span><span style="font-weight: bold;"></span></li>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Gestão de unidades<br>
+</h3>
+
+Página <span style="font-weight: bold;">gestao-de-unidades</span>
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage unit types</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage unit types</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (POST) sobre o estado de
+execução é apresentado:</li>
+  <ul>
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">prop_unit_type</span>, apresentar o
+texto "<span style="font-style: italic;">Não há
+tipos de unidades</span>",
+caso contrário, apresentar uma lista com todos os tipos de
+unidades
+com o seguinte formato (ordenada por ordem alfabética):</li>
+  </ul>
+  <ul>
+    <ul>
+      <li>
+        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+          <tbody>
+            <tr>
+              <td style="vertical-align: top; font-weight: bold;">id<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">unidade<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">m2<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;">cm<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+    <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de unidades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de um novo
+tipo de unidade:</li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+    <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir tipo de unidade</span><br>
+    </li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+  <ul>
+    <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
+de unidades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+inserção</span><br>
+      </span></li>
+    <li>construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">prop_unit_type</span>
+e executá-lo</li>
+    <li>Apresentar, em caso de sucesso da
+inserção:</li>
+    <ul>
+      <li><span style="font-style: italic;">Inseriu os dados de novo
+tipo de unidade com sucesso.</span></li>
+      <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
+      <li>em que Continuar é uma ligação para a
+página <span style="font-weight: bold;">gestao-de-unidades</span></li>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Gestão de propriedades<br>
+</h3>
+
+Página <span style="font-weight: bold;">gestao-de-propriedades</span>
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage properties</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage properties</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (POST) sobre o estado de
+execução é apresentado:</li>
+  <ul>
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">properties</span>, apresentar o
+texto "<span style="font-style: italic;">Não há
+propiedades especificadas</span>",
+caso contrário, apresentar uma lista com todos as propriedades
+com o seguinte formato (ordenada por ordem alfabética):</li>
+  </ul>
+  <ul>
+    <ul>
+      <li>
+        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+          <tbody>
+            <tr>
+              <td style="vertical-align: top; font-weight: bold;">componente<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">id<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">propriedade<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">tipo
+de valor<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">nome
+do campo<br>
+no formulário<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">tipo
+do campo<br>
+no formulário</td>
+              <td style="vertical-align: top; font-weight: bold;">tipo
+de unidade<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">ordem
+do campo<br>
+no formulário</td>
+              <td style="vertical-align: top;"><span style="font-weight: bold;">tamanho do campo no formulário</span><br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">obrigatório<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">estado<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold;">ação<br>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="1" rowspan="2" style="vertical-align: top;">entidade
+a faturar<br>
+              <br>
+              </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">nome<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">pro-1-nome<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">-<br>
+              </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">128<br>
+              </td>
+              <td style="vertical-align: top;">sim<br>
+              </td>
+              <td style="vertical-align: top;">ativo<br>
+              </td>
+              <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;">NIF<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">pro-2-nif<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">- </td>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;">15<br>
+              </td>
+              <td style="vertical-align: top;">não<br>
+              </td>
+              <td style="vertical-align: top;">ativo </td>
+              <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td colspan="1" rowspan="2" style="vertical-align: top;">serviços
+contratados<br>
+              </td>
+              <td style="vertical-align: top;">3<br>
+              </td>
+              <td style="vertical-align: top;">limpeza<br>
+              </td>
+              <td style="vertical-align: top;">bool<br>
+              </td>
+              <td style="vertical-align: top;">ser-3-limpeza<br>
+              </td>
+              <td style="vertical-align: top;">radio<br>
+              </td>
+              <td style="vertical-align: top;">- </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;">sim<br>
+              </td>
+              <td style="vertical-align: top;">ativo<br>
+              </td>
+              <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">4<br>
+              </td>
+              <td style="vertical-align: top;">comercialização<br>
+              </td>
+              <td style="vertical-align: top;">enum<br>
+              </td>
+              <td style="vertical-align: top;">ser-4-comercializao</td>
+              <td style="vertical-align: top;">radio<br>
+              </td>
+              <td style="vertical-align: top;">-<br>
+              </td>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;">não<br>
+              </td>
+              <td style="vertical-align: top;">ativo<br>
+              </td>
+              <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td colspan="1" rowspan="2" style="vertical-align: top;">áreas<br>
+              </td>
+              <td style="vertical-align: top;">5<br>
+              </td>
+              <td style="vertical-align: top;">sala<br>
+              </td>
+              <td style="vertical-align: top;">int<br>
+              </td>
+              <td style="vertical-align: top;">rea-5-sala<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">m2<br>
+              </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">4<br>
+              </td>
+              <td style="vertical-align: top;">não</td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">6<br>
+              </td>
+              <td style="vertical-align: top;">suite<br>
+              </td>
+              <td style="vertical-align: top;">int<br>
+              </td>
+              <td style="vertical-align: top;">rea-6-suite<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">m2<br>
+              </td>
+              <td style="vertical-align: top;">2<br>
+              </td>
+              <td style="vertical-align: top;">4<br>
+              </td>
+              <td style="vertical-align: top;">não</td>
+              <td style="vertical-align: top;">inativo</td>
+              <td style="vertical-align: top;">[editar]<br>
+[ativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">tv<br>
+              </td>
+              <td style="vertical-align: top;">7<br>
+              </td>
+              <td style="vertical-align: top;">diagonal<br>
+              </td>
+              <td style="vertical-align: top;">int<br>
+              </td>
+              <td style="vertical-align: top;">tv-7-diagonal<br>
+              </td>
+              <td style="vertical-align: top;">text<br>
+              </td>
+              <td style="vertical-align: top;">cm<br>
+              </td>
+              <td style="vertical-align: top;">1<br>
+              </td>
+              <td style="vertical-align: top;">4<br>
+              </td>
+              <td style="vertical-align: top;">não<br>
+              </td>
+              <td style="vertical-align: top;">ativo</td>
+              <td style="vertical-align: top;">[editar]<br>
+[ativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;">...<br>
+              </td>
+              <td style="vertical-align: top;">...<br>
+              </td>
+              <td style="vertical-align: top;">...<br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+    <ul>
+      <li>Dica: para o atributo <span style="font-weight: bold;">componente</span>,
+seguir as mesmas dicas que as dadas em relação ao rowspan
+para o atributo <span style="font-weight: bold;">tipo</span>
+apresentadas no componente gestao-de-componentes<br>
+      </li>
+    </ul>
+    <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de uma nova
+propriedade:</li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome da propriedade</span> -
+(obrigatório)</li>
+    <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo de valor</span> - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+uma lista com todos os tipos de valores presentes no atributo
+value_type (usar uma função php no ficheiro common.php
+para obter diretamente da base de dados os valores de um atributo do
+tipo enum como <a href="http://forums.devnetwork.net/viewtopic.php?f=1&amp;t=80136">esta</a>
+pois esta função será reutilizada em
+situações idênticas) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+    <ul>
+      <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
+      <li><input name="value_type" value="int" type="radio">int</li>
+      <li>...</li>
+    </ul>
+    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Componente</span><span style="background-color: yellow;"> a que irá pertencer esta
+propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todos os componentes presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">component</span><br>
+    </li>
+    <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
+- (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+uma lista com todos os tipos de campo de formulário presentes no
+atributo form_field_type (usar função recomendada para o
+atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+    <ul>
+      <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
+      <li><input name="value_type" value="int" type="radio">text box<br>
+      </li>
+      <li>...</li>
+    </ul>
+    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todos os tipos de unidade presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">prop_unit_type</span><span style="text-decoration: underline;"> em
+que a opção inicial selecionada deverá estar em
+branco, o que equivale à inserção de um NULL</span><span style="font-weight: bold; text-decoration: underline;"><br>
+      </span></li>
+    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
+- (obrigatório e um número superior a 0)</li>
+    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
+- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li>
+    <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
+(obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+as seguintes duas opções, sendo que na primeira o valor
+do campo no formulário na 1ª opção é 1
+e na 2ª opção é 0</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+    <ul>
+      <li><input checked="checked" name="value_type" value="text" type="radio">sim</li>
+      <li><input name="value_type" value="int" type="radio">não</li>
+    </ul>
+    <li style="background-color: yellow;"><span style="font-weight: bold;">selectbox</span> - Componente referenciado
+por esta propriedade - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todos os componentes presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">component</span></li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+    <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span><br>
+    </li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+  <ul>
+    <li>Verificar se (caso inserido) o valor dos campos <span style="font-style: italic;">Ordem do campo no formulário</span>
+e <span style="font-style: italic;">Tamanho do campo no
+formulário </span>são
+um número e também, se não for, apresentar
+mensagem indicando esse erro e mostrando ligação para se
+voltar atrás. Apresentar erro também caso tenha sido
+escolhido o tipo de campo text ou text box e não tenha sido
+indicado valor para o tamanho do campo. No caso do tipo de campo ser
+text box, o tamanho do campo tem de ser uma string do género
+aaxbb em que aa é o número de colunas e bb o
+número de linhas da caixa de texto, devendo haver
+validação para se garantir que a string está neste
+formato.<br>
+    </li>
+    <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
+de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+inserção</span><br>
+      </span></li>
+    <li>Construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">property</span>
+e executá-lo</li>
+    <ul>
+      <li><span style="background-color: yellow;">o valor para o
+atributo comp_fk_id
+é o id do eventual componente selecionado na segunda select box
+e significa que num dado componente (por exemplo tv) esta propriedade
+é uma "chave estrangeira" para outro componente. Clarificando,
+para por exemplo uma casa/propriedade, instâncias do componente
+tv terão um value para esta propriedade do tipo "fk" que
+será igual ao id do comp_inst de uma casa particular.</span><br>
+      </li>
+      <li>o valor para o atributo form_field_name é determinado
+neste estado e será uma string
+resultante da concatenação dos três primeiros
+caracteres do componente a que esta propriedade vai pertencer, seguido
+de um traço, seguido do id da propriedade, seguido de outro
+traço e seguido do nome da propriedade especificado no respetivo
+campo pelo utilizador, sendo que este nome deverá ser
+transformado numa cadeia de caracteres só com catacteres
+puramente ascii (usando-se por exemplo este código: <span style="font-family: monospace;">$string = preg_replace('/[^a-z0-9_
+]/i', '', $string);</span>)
+e sendo os espaços substituídos pelo caracter underscore.
+A tabela de exemplo de lista de propriedades acima apresenta o
+resultado final esperado deste requisito.</li>
+      <ul>
+        <li><span style="font-weight: bold;">Nota:</span> como
+só se pode saber o id da propriedade depois de inseri-la, a
+solução mais segura e simples será fazer primeiro
+um insert com uma string idêntica à especificada mas sem o
+id e, logo de seguida ,
+realizar um update já com a string contendo o id, depois de se
+obter o id usando-se a função <a href="http://www.php.net/manual/en/mysqli.insert-id.php" data-mce-href="http://www.php.net/manual/en/mysqli.insert-id.php">mysqli_insert_id</a>
+(e não a antiga mysql_insert_id que em breve será
+obsoleta).</li>
+      </ul>
+      <li>o valor para o atributo <span style="font-weight: bold;">state</span>
+será: "active"<br>
+      </li>
+    </ul>
+    <li>Apresentar, em caso de sucesso da
+inserção:</li>
+    <ul>
+      <li><span style="font-style: italic;">Inseriu os dados de novo
+tipo de unidade com sucesso.</span></li>
+      <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
+      <li>em que Continuar é uma ligação para a
+página <span style="font-weight: bold;">gestao-de-propriedades</span><span style="font-weight: bold;"></span></li>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Gestão de valores permitidos<br>
+</h3>
+
+Página <span style="font-weight: bold;">gestao-de-valores-permitidos</span>
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage allowed values</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage </span><span style="font-weight: bold;">allowed values</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (REQUEST) sobre o estado de
+execução é apresentado:</li>
+  <ul>
+    <li>Se não houverem propriedades especificadas (com tipo de
+valor enum), apresentar o texto: "<span style="font-style: italic;">Não
+há propriedades especificadas cujo tipo de valor seja enum.
+Especificar primeiro nova(s) propriedade(s) e depois voltar a esta
+opção</span>.".
+Caso contrário, apresentar uma lista com todos os valores
+permitidos
+com o seguinte formato e só para as propriedades cujo tipo de
+valor seja enum (ordenada por ordem alfabética), sendo que se
+para uma certa propriedade não houverem tuplos na tabela <span style="font-weight: bold;">prop_allowed_value</span>, deve ser
+apresentado o
+texto "<span style="font-style: italic;">Não há valores
+permitidos definidos</span>" na respetiva linha da tabela:</li>
+    <li>
+      <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;">componente<br>
+            </td>
+            <td style="vertical-align: top;">id<br>
+            </td>
+            <td style="vertical-align: top; font-weight: bold;">propriedade<br>
+            </td>
+            <td style="vertical-align: top;">id<br>
+            </td>
+            <td style="vertical-align: top;">valores permitidos<br>
+            </td>
+            <td style="vertical-align: top;">estado<br>
+            </td>
+            <td style="vertical-align: top;">ação<br>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">serviços
+contratados<br>
+            <br>
+            </td>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">1<br>
+            </td>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">[comercialização]<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">parcial<br>
+            </td>
+            <td style="vertical-align: top;">ativo<br>
+            </td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">total<br>
+            </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">3<br>
+            </td>
+            <td style="vertical-align: top;">conjunta<br>
+            </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td colspan="1" rowspan="6" style="vertical-align: top;">tv<br>
+            </td>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">3<br>
+            </td>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">[tecnologia
+3D]<br>
+            </td>
+            <td style="vertical-align: top;">4<br>
+            </td>
+            <td style="vertical-align: top;">ativa<br>
+            </td>
+            <td style="vertical-align: top;">ativo<br>
+            </td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">5<br>
+            </td>
+            <td style="vertical-align: top;">passiva<br>
+            </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">6<br>
+            </td>
+            <td style="vertical-align: top;">grave<br>
+            </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">4<br>
+            </td>
+            <td colspan="1" rowspan="3" style="vertical-align: top;">[resolução]<br>
+            </td>
+            <td style="vertical-align: top;">7<br>
+            </td>
+            <td style="vertical-align: top;">Half HD<br>
+            </td>
+            <td style="vertical-align: top;">ativo<br>
+            </td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">8<br>
+            </td>
+            <td style="vertical-align: top;">Full HD<br>
+            </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">9<br>
+            </td>
+            <td style="vertical-align: top;">Ultra HD </td>
+            <td style="vertical-align: top;">ativo</td>
+            <td style="vertical-align: top;">[editar]<br>
+[desativar]</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">...<br>
+            </td>
+            <td style="vertical-align: top;">...<br>
+            </td>
+            <td style="vertical-align: top;">...<br>
+            </td>
+            <td style="vertical-align: top;">...<br>
+            </td>
+            <td style="vertical-align: top;">...<br>
+            </td>
+            <td style="vertical-align: top;">...</td>
+            <td style="vertical-align: top;">...</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  </ul>
+</ul>
+
+<ul>
+
+  <ul>
+    <li>o texto de cada propriedade corresponde a uma
+ligação para o seguinte endereço: "<span style="font-weight: bold;">gestao-de-valores-permitidos?estado=introducao&amp;propriedade=x</span>"
+onde <span style="font-weight: bold;">x</span> é o id da
+respetiva propriedade nessa linha<br>
+    </li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">introducao</span></li>
+  <ul>
+    <li>Guardar numa variável de sessão chamada
+property_id o valor que vem no vector REQUEST associado à
+variável propriedade</li>
+    <li>Apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de valores permitidos</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de um novo
+valor permitido:</li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">text</span> - Valor -
+(obrigatório)</li>
+  </ul>
+  <ul>
+    <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+    <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir valor permitido</span><br>
+    </li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+  <ul>
+    <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
+de valores permitidos</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+inserção</span><br>
+      </span></li>
+    <li>construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">prop_allowed_value</span>
+e executá-lo</li>
+    <ul>
+      <li>o
+valor para o atributo property_id será igual ao que está
+na variável de sessão com o mesmo nome e o valor do
+atributo state será "active"<br>
+      </li>
+    </ul>
+    <li>Apresentar, em caso de sucesso da
+inserção:</li>
+    <ul>
+      <li><span style="font-style: italic;">Inseriu os dados de novo
+valor permitido com sucesso.</span></li>
+      <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
+      <li>em que Continuar é uma ligação para a
+página <span style="font-weight: bold;">gestao-de-valores-permitidos</span></li>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Gestão de formulários customizados<br>
+</h3>
+
+Página gestao-de-formularios<br>
+
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage custom forms</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage custom forms</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (REQUEST) sobre o estado de
+execução:</li>
+  <ul>
+    <li>Apresentar o Sub-título
+(heading 3): <span style="font-weight: bold;">Gestão de
+formulários customizados</span>
+e apresentar uma tabela listando os formulários customizados
+existentes, idêntica à tabela do componente gestão
+de propriedades, mas sendo que em vez do nome do componente, aparece o
+nome dado ao formulário customizado. Este nome do form deve ser
+clicável, sendo o link disponível, um link para este
+próprio componente, mas em que é passado pelo
+método GET as variáveis <span style="font-weight: bold;">estado</span>
+com o valor <span style="font-style: italic;">editar_form</span> e <span style="font-weight: bold;">id</span> com o id do respetivo
+formulário customizado.<br>
+    </li>
+  </ul>
+  <ul>
+    <li>Depois apresentar um formulário que permita a
+criação de um novo formulário customizado. Neste
+formulário, colocar o campo estado hidden com o valor inserir e
+apresentar um campo do tipo text onde é para ser indicado o nome
+do formulário.</li>
+    <li>Depois deste text input apresentar uma tabela&nbsp;
+idêntica à do componente gestão de propriedades,
+mas que em vez da coluna ação, contém uma coluna
+chamada <span style="font-weight: bold;">escolher</span>, contendo uma
+checkbox que permite escolher essa propriedade para vir a fazer parte
+do formulário customizado. Adicionalmente, à direita
+desta coluna deve haver outra com o nome <span style="font-weight: bold;">ordem</span> onde é possível
+indicar a ordem na qual é suposto aparecer este campo no form
+customizado.</li>
+    <li>Terminar o formulário com um botão submit
+seguindo as mesmas diretrizes que para os outros componentes</li>
+  </ul>
+  <li>Se
+o valor do estado é inserir, inserir nas tabelas custom_form e
+custom_form_has_property os respetivos valores de acordo com o que foi
+preenchido/escolhido no formulário do ponto anterior.</li>
+  <li>Se
+o valor do estado é editar, apresentar um
+formulário idêntico ao do estado de inserir, mas
+apresentando já pré-preenchido o nome do
+formulário customizado (que poderá ser atualizado) e
+pré-seleccionadas as propriedades pertencentes a este form,
+sendo possível selecionar novas ou "des-selecionar" uma
+propriedade para deixar de fazer parte deste custom form. O estado
+seguinte deverá ser atualizar_form_custom.</li>
+  <li>Se
+o valor do estado é atualizar_form_custom, realizar os
+necessários updates (e/ou deletes) nas respetivas tabelas.<br>
+  </li>
+</ul>
+
+<h3>Inserção de valores<br>
+</h3>
+
+Página <span style="font-weight: bold;">insercao-de-valores</span><br>
+
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Insert values</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Insert values</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (REQUEST) sobre o estado de
+execução, apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+escolher componente/formulário customizado</span></span></li>
+  <ul>
+  </ul>
+  <ul>
+    <li>Apresentar uma lista dos tipos de componentes e componentes
+existentes na BD, seguindo-se o seguinte formato:</li>
+    <li>Componentes:<br>
+    </li>
+    <ul>
+      <li>propriedade&nbsp;&nbsp; <br>
+      </li>
+      <ul>
+        <li>[entidade a faturar]</li>
+        <li>[serviços contratados]</li>
+        <li>[áreas]</li>
+        <li>[tv]</li>
+      </ul>
+      <li>canal de venda</li>
+      <ul>
+        <li>[nome]</li>
+        <li>[custos]</li>
+        <li>[comissão]<br>
+        </li>
+      </ul>
+    </ul>
+  </ul>
+  <ul>
+    <ul>
+      <ul>
+        <li>...</li>
+      </ul>
+    </ul>
+    <li>Formulários customizados</li>
+    <ul>
+      <li>[Form 1]</li>
+      <li>[Form 2]</li>
+      <li>...<br>
+      </li>
+    </ul>
+  </ul>
+  <ul style="text-decoration: underline;">
+    <li>Nota: as listas são construídas dinamicamente
+graças às queries necessárias à BD, que
+vão buscar os nomes na tabela <span style="font-weight: bold;">comp_type</span>
+(entradas de nível superior) e <span style="font-weight: bold;">component</span>
+- que aparecem listados entre parêntesis retos, e em que cada
+item é uma ligação para o seguinte
+endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id <span style="font-weight: bold;"></span>do respetivo componente nessa
+entrada ou "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;form=f</span>" onde <span style="font-weight: bold;">f</span> é o id <span style="font-weight: bold;"></span>do respetivo form customizado </li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">introducao</span></li>
+  <ul style="text-decoration: underline;">
+    <li><span style="font-weight: bold;">Nota:
+escrever código
+para implementar um comportamento semelhante ao especificado abaixo
+para este estado e também para os estados validar e inserir, mas
+para o caso de ser escolhido um form customizado, devendo os nomes dos
+estados/variáveis ser idênticos mas com "form" em vez de
+"comp"<br>
+      </span></li>
+  </ul>
+  <ul>
+    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_id </span>o valor que vem no vector
+REQUEST associado à variável <span style="font-weight: bold;">comp</span></li>
+    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_name</span> o nome do componente
+associado ao id da linha anterior (necessário pequena query
+à BD para buscar este nome)</li>
+    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_type_id</span> o id do respetivo tipo
+de componente (necessário pequena query à BD para buscar
+este valor)</li>
+    <li>Apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span>
+      <span style="text-decoration: underline;">(onde </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
+variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span></li>
+    <li>Apresentar um formulário construído dinamicamente
+a partir da informação que consta na BD, nomeadamente:</li>
+    <ul>
+      <li>o nome do formulário é uma string do
+género <span style="font-weight: bold;">comp_type_x_comp_y</span>
+em que x é o id do tipo de componente e y o id de componente</li>
+      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=validar&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente</li>
+      <li>é feita uma query à BD que obtém todas
+as propriedades associadas ao componente selecionado que estejam no
+estado active e, para cada uma, é apresentado o respetivo campo
+com a configuração especificada na própria
+propriedade. Dicas:</li>
+      <ul>
+        <li>usar um switch para, conforme o tipo de valor executar o
+código apropriado, nomeadamente:</li>
+        <ul>
+          <li>para o tipo text apresentar um input do tipo text ou
+textbox (conforme o tipo de campo especificado na BD)</li>
+          <li>para o tipo bool apresentar um input do tipo radio<br>
+          </li>
+          <li>para os tipos int e double apresentar um input do tipo
+text</li>
+          <li>para o tipo enum apresentar um input do tipo radio,
+checkbox ou selectbox (conforme o tipo de campo especificado na BD) em
+que as
+opções são obtidas através de uma query
+à tabela prop_allowed_value</li>
+          <li style="background-color: yellow;">para o tipo comp_ref,
+apresentar um input do tipo selectbox em que as opções
+são obtidas através de uma query à BD para se
+obter uma lista dos tuplos em comp_inst que referenciem o id da
+tabela component, que seja também referenciado pelo atributo
+comp_fk_id da propriedade que é "chave estrangeira" no
+componente selecionado para inserção de valores. O value
+de cada opção será o id do tuplo de comp_inst e o
+texto a apresentar na opção será o valor no
+atributo component_name. Por exemplo e clarificando, assumindo um
+componente chamado <span style="font-weight: bold;">casa</span>,
+pertencente ao tipo de
+componente <span style="font-weight: bold;">propriedade</span> e que
+por sua vez tem a property <span style="font-weight: bold;">nome</span>
+(da casa). Assumindo que o componente tv tem uma propriedade, com
+value_type comp_ref e em que o valor de comp_fk_id=ao id do componente <span style="font-weight: bold;">casa</span>.
+Assumindo que já existem na tabela comp_inst tuplos com valores
+para os nomes de 2 casas:
+"casa das terças" e "quinta do curral" (duas instâncias de
+componentes, em que os nomes das casas em si, poderão estar
+repetidos,
+tanto no value associado à property nome, como também no
+atributo component_name na tabela comp_inst). Se queremos introduzir
+informação das tvs que existem nestas duas casas, ao
+estarmos no estado insercao-de-valores para o componente tv, devem
+aparecer como texto das opções os valores existentes no
+atributo component_name:"casa das terças" e "quinta do curral" </li>
+        </ul>
+        <li>o nome de cada campo será o nome especificado no
+respetivo atributo do respetivo tuplo da respetiva propriedade</li>
+        <li>caso a propriedade a ser mostrada tenha um tipo de unidade,
+mostrar à frente do respetivo input o nome desse tipo de unidade</li>
+        <li>caso seja uma propriedade obrigatória, não
+permitir o avanço/validação caso não
+estiver preenchido, ou seja, o avanço não é
+permitido no estado validar (estado seguinte), sendo mostrada mensagem
+de erro. Se o utilizador deixar um campo obrigatório em branco
+no estado introdução ele pode submeter, mas no estado
+validar não pode avançar.<br data-mce-bogus="1">
+        </li>
+      </ul>
+      <li style="background-color: yellow;"><span style="font-weight: bold;">text</span> - nome para instância do
+componente - (opcional)</li>
+    </ul>
+  </ul>
+  <ul>
+    <ul>
+      <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">validar</span></li>
+    </ul>
+    <ul>
+      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Submeter</span></li>
+    </ul>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">validar</span></li>
+  <ul>
+    <li>Apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span><span style="font-weight: bold; font-style: italic;"> - validar</span> <span style="text-decoration: underline;">(onde </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
+variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span></li>
+    <li>Caso
+algum campo obrigatório não tenha sido preenchido
+apresentar mensagem de erro indicando que é obrigatório o
+preenchimento do campo (mostrar o nome da propriedade) e apresentar
+ligação para voltar atrás.</li>
+    <li>Caso contrário listar os dados inseridos pelo
+utilizador
+mostrando:</li>
+    <li><span style="font-style: italic;">Estamos prestes a inserir
+os
+dados abaixo na base de dados. Confirma que os dados
+estão
+correctos e pretende submeter os mesmos?</span><br>
+      <span style="text-decoration: underline;"></span></li>
+    <ul>
+      <li><span style="text-decoration: underline;">apresentar
+uma
+lista com os dados preenchidos no estado anterior (só para o
+utilizador ler, não é possível a
+edição)<br>
+        </span></li>
+      <li><span style="text-decoration: underline;">output
+de
+formulário com todos os campos preenchidos como inputs hidden
+(para os dados poderem passar para o estado seguinte, outra alternativa
+é usar variáveis de sessão) e,
+adicionalmente:</span><br>
+      </li>
+    </ul>
+    <ul>
+      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=inserir&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente </li>
+    </ul>
+    <ul>
+      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Submeter</span><br>
+      </li>
+    </ul>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+  <ul>
+    <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção
+de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span><span style="font-weight: bold; font-style: italic;"> -
+inserção</span> <span style="text-decoration: underline;">(onde
+      </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
+variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span><span style="font-style: italic;"> </span></li>
+    <li>Para cada campo, obter o id da propriedade a partir do nome do
+campo e construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">value</span>
+em que o <span style="font-weight: bold;">comp_inst_id</span>
+é o id de um tuplo previamente inserido na tabela comp_inst, que
+é um tuplo que irá "agregar" todos os valores de
+propriedades inseridas relativas a um componente, o <span style="font-weight: bold;">property_id</span> é o id obtido
+como indicado atrás, <span style="font-weight: bold;">value</span>
+é o valor do
+respetivo campo, <span style="font-weight: bold;">date</span> é
+a data atual, <span style="font-weight: bold;">time</span> o instante
+de tempo atual e <span style="font-weight: bold;">producer</span> o
+user name wordpress logado<br>
+    </li>
+    <li>Executar os comandos SQL e apresentar, em caso de sucesso da
+inserção:</li>
+    <ul>
+      <li><span style="font-style: italic;">Inseriu o(s) valor(es) com
+sucesso.</span></li>
+      <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Voltar</span><span style="font-style: italic;"> para voltar ao início da
+inserção de valores e poder escolher outro componente ou
+em <span style="font-weight: bold;">Continuar a inserir valores neste
+componente</span> se quiser continuar a inserir valores<br>
+        </span></li>
+      <ul>
+        <li>em que <span style="font-weight: bold; font-style: italic;">Voltar</span>
+é uma ligação para a
+página <span style="font-weight: bold;">insercao-de-valores</span>
+e <span style="font-style: italic;"><span style="font-weight: bold;">Continuar
+a inserir valores neste componente</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span>
+é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente
+guardado em sessão <br>
+        </li>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+
+<h3>Pesquisa Dinâmica<br>
+</h3>
+
+Página <span style="font-weight: bold;">pesquisa-dinamica</span><br>
+
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Dynamic Search</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Dynamic Search</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (REQUEST) sobre o estado de
+execução, apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Pesquisa Dinâmica - escolher
+componente<br>
+    </span></span></li>
+  <ul>
+    <li>Apresentar uma lista dos tipos de
+componentes e componentes existentes na BD, que sejam referenciados por
+pelo menos um outro componente, no atributo comp_fk_id, seguindo-se o
+formato de listas do componente anterior, mas sendo o URL o seguinte: "<span style="font-weight: bold;">pesquisa-dinamica?estado=escolha&amp;comp=c</span></li>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">escolha</span></li>
+  
+  <ul>
+
+    
+    <li>Apresentar uma lista das propriedades do componente escolhido,
+sendo cada propriedade seguida por uma checkbox. As propriedades
+selecionadas serão as cujos valores deverão aparecer no
+resultado desta pesquisa.</li>
+<li>Apresentar
+também uma lista das propriedades (também seguidas por
+uma checkbox) dos componentes que contenham pelo menos uma propriedade
+cujo
+value_type seja "comp_ref" e cujo atributo comp_fk_id referencie o
+componente escolhido. Dando continuidade ao exemplo apresentado para a
+inserção de valores, se o componente escolhido for casa,
+além das propriedades desse próprio componente a
+apresentar segundo o ponto anterior, deverão também ser
+apresentadas as propriedades do componente tv, pois este tem uma
+propriedade do tipo comp_ref, referenciando o componente casa<br>
+</li>
+    <li>Tem de ser possível restringir a lista de
+instâncias do
+componente escolhido com um conjunto de critérios aplicados
+às propriedades escolhidas (tanto do componente escolhido como
+dos eventuais componentes que o referem), sendo
+que deve ser dada ao utilizador a capacidade de escolher trios
+de:&nbsp; propriedade, operador e valor. Por ex, se o componente
+escolhido for <span style="font-weight: bold;">casa</span>
+e ele tiver propriedades: nome (nota: deve ser possível deixar
+os trios com escolha vazia, caso em que não é aplicado
+filtro - neste exemplo deve ser possível mostrar casas com
+qualquer nome) e tipologia (do tipo enum, com valores permitidos:
+vivenda, mansão, apartamento, geminada),
+podemos ter os seguintes 3 trios numa pesquisa: nome (deixar vazio para
+mostrar qualquer casa), tipologia = vivenda (para mostrar só
+instâncias de vivenda), diagonal &lt; 50;
+tecnologia 3D = ativa; resolução = Ultra HD</li>
+
+  
+  </ul>
+
+  <li>Se o estado é <span style="font-weight: bold;">execucao</span>,
+a
+ser invocado depois de escolhido o conjunto de trios, é
+construída dinamicamente uma query SQL que executa a pesquisa
+construída e faz output para o utilizador.</li>
+  <li>Notas:</li>
+  <ul>
+    <li>este componente deve ser totalmente dinâmico indo buscar
+num array no ficheiro common.php a lista de operadores disponíves</li>
+    <li>a nível de usabilidade, para facilitar a escolha da
+propriedade uma hipótese é fazer output de uma
+árvore do género da que é feita no componente
+inserção de valores, mas que além dos tipos de
+componente, e componente mostra també as propriedades de cada
+componente.</li>
+    <li>quando o utilizador escolhe uma propriedade os valores devem
+ser restringidos de acordo com o seu tipo. Por exemplo, se for enum
+aparece uma lista dos valores permitidos. Se for double permite inserir
+um número real</li>
+    <li>considerar os 4 operadores: &gt; = &lt; !=<span style="font-weight: bold;"></span></li>
+  </ul>
+  <li><span style="font-weight: bold;">Exportação de
+valores</span></li>
+  <ul>
+    <li>Dar a capacidade de ser possível
+exportar os resultados das pesquisas dinâmicas para um ficheiro
+Excel, usando-se biblioteca PHP que permita a geração e
+download do respetivo fichero excel, com a tabela dos resultados. A
+primeira linha do ficheiro excel deverá conter uma frase gerada
+automaticamente (a partir das propriedades e trios acima escolhidos)
+"descrevendo" a query. A segunda linha deve conter o cabeçalho
+com os nomes em form-field-name, a terceira linha os nomes em si das
+propriedades. As linhas seguintes os valores.<br>
+    </li>
+  </ul>
+</ul>
+
+<h3>Importação de Valores<br>
+</h3>
+
+Página importacao-de-valores<br>
+
+<ul>
+
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Values Import</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
+  <li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Values Import</span><span style="font-weight: bold;"></span></li>
+  <li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (REQUEST) sobre o estado de
+execução, apresentar o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Importação de Valores -
+escolher componente<br>
+    </span></span></li>
+  <ul>
+    <li>Apresentar uma lista dos tipos de componentes e componentes
+existentes na BD, seguindo-se o seguinte formato:</li>
+    <li>Componentes:<br>
+    </li>
+    <ul>
+      <li>propriedade&nbsp;&nbsp; <br>
+      </li>
+      <ul>
+        <li>[entidade a faturar]</li>
+        <li>[serviços contratados]</li>
+        <li>[áreas]</li>
+        <li>[tv]</li>
+      </ul>
+      <li>canal de venda</li>
+      <ul>
+        <li>[nome]</li>
+        <li>[custos]</li>
+        <li>[comissão]<br>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <ul>
+        <li>...</li>
+      </ul>
+    </ul>
+    <li>Formulários customizados</li>
+    <ul>
+      <li>[Form 1]</li>
+      <li>[Form 2]</li>
+      <li>...<br>
+      </li>
+    </ul>
+    <li>Nota: as listas são construídas dinamicamente
+graças às queries necessárias à BD, que
+vão buscar os nomes na tabela <span style="font-weight: bold;">comp_type</span>
+(entradas de nível superior) e <span style="font-weight: bold;">component</span>
+- que aparecem listados entre parêntesis retos, e em que cada
+item é uma ligação para o seguinte
+endereço: "<span style="font-weight: bold;">importacao-de-valores?estado=introducao&amp;comp=c</span>"
+onde <span style="font-weight: bold;">c</span> é o id <span style="font-weight: bold;"></span>do respetivo componente nessa
+entrada ou "<span style="font-weight: bold;">importacao-de-valores?estado=introducao&amp;form=f</span>"
+onde <span style="font-weight: bold;">f</span> é o id <span style="font-weight: bold;"></span>do respetivo form customizado </li>
+    <li>Se o estado de execução é <span style="font-weight: bold;">introducao</span></li>
+    <ul>
+      <li>Apresentar uma tabela com duas linhas, contendo, na primeira,
+em cada coluna os formfieldnames das
+propriedades do componente ou formulário clicado. Para o caso de
+propriedades do tipo enum, repetir nesta linha o nome deste campo o
+número de vezes igual ao total de valores permitidos. Na segunda
+linha, apresentar, apenas para as propriedades enum, nas respetivas
+colunas os valores permitidos. Por baixo desta tabela indicar ao
+utilizador que deverá copiar estas linhas para um ficheiro excel
+e introduzir os valores a importar, sendo que no caso das propriedades
+enum, deverá constar um 0 quando esse valor permitido não
+se aplique à instância em causa e um 1 quando esse valor
+se aplica.</li>
+      <li>Por baixo da tabela deve constar um campo para upload do
+ficheiro excel sendo o próximo estado <span style="font-weight: bold;">insercao</span>.</li>
+    </ul>
+    <li>Se o estado de execução é <span style="font-weight: bold;">insercao</span>:</li>
+    <ul>
+      <li>processar o ficheiro recebido e realizar inserts na BD sendo
+que cada linha do excel irá corresponder a uma instância
+(tuplo em comp_inst e tuplos em value necessários) do componente
+selecionado.</li>
+    </ul>
+  </ul>
+</ul>
+
+<ul>
+
+</ul>
+
+
+</body></html>
