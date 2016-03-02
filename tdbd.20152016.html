@@ -2,12 +2,12 @@
 <html><head><title>TDBD</title>
 
 
+
   
 
   
   
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
-<body>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>
 <h1>Construção de uma Base de Dados Relacional Dinâmica<br></h1>
 
 <span style="font-weight: bold;">Desenvolvimento de
@@ -712,17 +712,17 @@ internas de SGBD e outra, para o GAE, seguindo as regras acima.</li>
 
 <h2>Componentes</h2>
 
-<h3>Gestão de componentes</h3>
+<h3>Gestão de entidades</h3>
 
-Página <span style="font-weight: bold;">gestao-de-componentes</span><br>
+Página <span style="font-weight: bold;">gestao-de-entidades</span><br>
 
 <ul>
 
-  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage components</span> e activar esta
+  <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage entities</span> e activar esta
 capability para o Role <span style="font-weight: bold;">Administrator</span>.</li>
   <li>Este componente, ao ser executado, faz primeiramente um teste se
 foi realizado um login no Wordpress e se o utilizador com sessão
-iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage components</span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span></li>
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage entities</span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span></li>
   <li>Caso não tenha, é mostrada uma mensagem a dizer
 "Não tem
 autorização para aceder a esta página", caso
@@ -732,101 +732,100 @@ comportamento a seguir especificado.</li>
 valor na variável (POST) sobre o estado de
 execução, é apresentado:</li>
   <ul>
-    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">component</span> apresentar o
-texto "<span style="font-style: italic;">Não há
-componentes</span>",
+    
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">entity</span> apresentar o
+texto "<span style="font-style: italic;">Não há entidades"</span>
 caso contrário, apresentar uma lista com todos os componentes
 com o seguinte formato (ordenada por ordem alfabética):</li>
+</ul></ul>
+<ul>
+  <ul>
+
     <ul>
       <li>
-        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+        <div style="text-align: center;">
+        </div>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
           <tbody>
             <tr>
-              <td style="vertical-align: top; font-weight: bold;">tipo<br>
+              
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">id</span><br>
               </td>
-              <td style="vertical-align: top;"><span style="font-weight: bold;">id</span><br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">nome<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">nome<br>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">estado</span><br>
               </td>
-              <td style="vertical-align: top;"><span style="font-weight: bold;">estado</span><br>
-              </td>
-              <td style="vertical-align: top; font-weight: bold;">ação<br>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="1" rowspan="4" style="vertical-align: top;">propriedade<br>
-              </td>
-              <td style="vertical-align: top;">1<br>
-              </td>
-              <td style="vertical-align: top;">entidade a faturar<br>
-              </td>
-              <td style="vertical-align: top;">ativo<br>
-              </td>
-              <td style="vertical-align: top;">[editar] [desativar]<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">ação<br>
               </td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">2<br>
+              
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">serviços
+              <td style="vertical-align: top; text-align: center;">entidade a faturar<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">serviços
 contratados </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar] [desativar]</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">3<br>
+              <td style="vertical-align: top; text-align: center;">3<br>
               </td>
-              <td style="vertical-align: top;">áreas </td>
-              <td style="vertical-align: top;">ativo </td>
-              <td style="vertical-align: top;">[editar] [desativar]</td>
+              <td style="vertical-align: top; text-align: center;">áreas </td>
+              <td style="vertical-align: top; text-align: center;">ativo </td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">4<br>
+              <td style="vertical-align: top; text-align: center;">4<br>
               </td>
-              <td style="vertical-align: top;">tv<br>
+              <td style="vertical-align: top; text-align: center;">tv<br>
               </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar] [desativar] </td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar] </td>
             </tr>
             <tr>
-              <td colspan="1" rowspan="3" style="vertical-align: top;">canal
-de venda<br>
-              <br>
-              <br>
+              
+              <td style="vertical-align: top; text-align: center;">5<br>
               </td>
-              <td style="vertical-align: top;">5<br>
+              <td style="vertical-align: top; text-align: center;">nome<br>
               </td>
-              <td style="vertical-align: top;">nome<br>
-              </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar] [desativar]</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">6<br>
+              <td style="vertical-align: top; text-align: center;">6<br>
               </td>
-              <td style="vertical-align: top;">custos<br>
+              <td style="vertical-align: top; text-align: center;">custos<br>
               </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar] [desativar]</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">7<br>
+              <td style="vertical-align: top; text-align: center;">7<br>
               </td>
-              <td style="vertical-align: top;">comissão<br>
+              <td style="vertical-align: top; text-align: center;">comissão<br>
               </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar] [desativar]</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">fornecedor<br>
+              
+              <td style="vertical-align: top; text-align: center;">...<br>
               </td>
-              <td style="vertical-align: top;">...<br>
+              <td style="vertical-align: top; text-align: center;">...<br>
               </td>
-              <td style="vertical-align: top;">...<br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
-              </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
             </tr>
           </tbody>
@@ -866,8 +865,11 @@ do número de linhas da query anterior<br>
         </ul>
       </ul>
     </ul>
+  
   </ul>
+
 </ul>
+
 
 <ul>
 
@@ -875,27 +877,12 @@ do número de linhas da query anterior<br>
     <ul>
     </ul>
     <li>Apresentar após a tabela acima o Sub-título
-(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de componentes</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de entidades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
 introdução</span></span> e logo depois um
 formulário que possibilita a inserção de um novo
 componente:</li>
     <ul>
-      <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li>
-      <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo</span> - (obrigatório) <span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
-uma lista com todos os tipos de componentes presentes na tabela
-comp_type com o seguinte aspeto</span></li>
-      <ul>
-        <li><input checked="checked" name="comp_type" value="child_data" type="radio">propriedade</li>
-        <li><input name="comp_type" value="diagnosis" type="radio">canal
-de venda</li>
-        <li>...</li>
-      </ul>
-      <ul>
-        <li><span style="text-decoration: underline;">em que cada tipo
-tem como value de cada
-opção o respetivo id de tipo</span></li>
-      </ul>
-      <li>radio - <span style="font-style: italic;">Estado</span> -
+      <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li><li>radio - <span style="font-style: italic;">Estado</span> -
 (obrigatório)</li>
       <ul>
         <li><input checked="checked" name="state" value="active" type="radio">ativo</li>
@@ -912,27 +899,26 @@ atributo state que é do tipo ENUM<br>
       </ul>
       <li><span style="font-weight: bold;">hidden</span> (estado) -
 value: <span style="font-weight: bold;">inserir</span></li>
-      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir componente</span><br>
+      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir entidade</span><br>
       </li>
     </ul>
     <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
     <ul>
       <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
-de componentes</span></span><span style="font-style: italic; font-weight: bold;"></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+de entidades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
 inserção</span><br>
         </span></li>
       <li>construir uma string com o comando SQL necessário
 para
-inserção dos dados na tabela <span style="font-weight: bold;">component</span>
+inserção dos dados na tabela <span style="font-weight: bold;">entity</span>
 e executá-lo</li>
       <li>Apresentar, em caso de sucesso da
 inserção:</li>
       <ul>
-        <li><span style="font-style: italic;">Inseriu os dados de novo
-componente com sucesso.</span></li>
+        <li><span style="font-style: italic;">Inseriu os dados de uma nova entidade com sucesso.</span></li>
         <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
         <li>em que Continuar é uma ligação para a
-página <span style="font-weight: bold;">gestao-de-componentes</span><span style="font-weight: bold;"></span></li>
+página <span style="font-weight: bold;">gestao-de-entidades</span><span style="font-weight: bold;"></span></li>
       </ul>
     </ul>
   </ul>
@@ -968,30 +954,32 @@ com o seguinte formato (ordenada por ordem alfabética):</li>
   <ul>
     <ul>
       <li>
-        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+        <div style="text-align: center;">
+        </div>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
           <tbody>
             <tr>
-              <td style="vertical-align: top; font-weight: bold;">id<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">unidade<br>
-              </td>
-            </tr>
-            <tr>
-              <td style="vertical-align: top;">1<br>
-              </td>
-              <td style="vertical-align: top;">m2<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">unidade<br>
               </td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">2<br>
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">cm<br>
+              <td style="vertical-align: top; text-align: center;">m2<br>
               </td>
             </tr>
             <tr>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;">2<br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;">cm<br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
             </tr>
           </tbody>
@@ -1064,234 +1052,227 @@ com o seguinte formato (ordenada por ordem alfabética):</li>
   <ul>
     <ul>
       <li>
-        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+        <div style="text-align: center;">
+        </div>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
           <tbody>
             <tr>
-              <td style="vertical-align: top; font-weight: bold;">componente<br>
+              
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">id<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">propriedade<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">propriedade<br>
-              </td>
-              <td style="vertical-align: top; font-weight: bold;">tipo
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
 de valor<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">nome
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">nome
 do campo<br>
 no formulário<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">tipo
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
 do campo<br>
 no formulário</td>
-              <td style="vertical-align: top; font-weight: bold;">tipo
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
 de unidade<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">ordem
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">ordem
 do campo<br>
 no formulário</td>
-              <td style="vertical-align: top;"><span style="font-weight: bold;">tamanho do campo no formulário</span><br>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">tamanho do campo no formulário</span><br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">obrigatório<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">obrigatório<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">estado<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">estado<br>
               </td>
-              <td style="vertical-align: top; font-weight: bold;">ação<br>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">ação<br>
               </td>
             </tr>
             <tr>
-              <td colspan="1" rowspan="2" style="vertical-align: top;">entidade
-a faturar<br>
-              <br>
+              
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">1<br>
+              <td style="vertical-align: top; text-align: center;">nome<br>
               </td>
-              <td style="vertical-align: top;">nome<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">pro-1-nome<br>
               </td>
-              <td style="vertical-align: top;">pro-1-nome<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">-<br>
               </td>
-              <td style="vertical-align: top;">-<br>
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">1<br>
+              <td style="vertical-align: top; text-align: center;">128<br>
               </td>
-              <td style="vertical-align: top;">128<br>
+              <td style="vertical-align: top; text-align: center;">sim<br>
               </td>
-              <td style="vertical-align: top;">sim<br>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
               </td>
-              <td style="vertical-align: top;">ativo<br>
-              </td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">2<br>
+              <td style="vertical-align: top; text-align: center;">2<br>
               </td>
-              <td style="vertical-align: top;">NIF<br>
+              <td style="vertical-align: top; text-align: center;">NIF<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">pro-2-nif<br>
+              <td style="vertical-align: top; text-align: center;">pro-2-nif<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">- </td>
-              <td style="vertical-align: top;">2<br>
+              <td style="vertical-align: top; text-align: center;">- </td>
+              <td style="vertical-align: top; text-align: center;">2<br>
               </td>
-              <td style="vertical-align: top;">15<br>
+              <td style="vertical-align: top; text-align: center;">15<br>
               </td>
-              <td style="vertical-align: top;">não<br>
+              <td style="vertical-align: top; text-align: center;">não<br>
               </td>
-              <td style="vertical-align: top;">ativo </td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">ativo </td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [desativar]</td>
             </tr>
             <tr>
-              <td colspan="1" rowspan="2" style="vertical-align: top;">serviços
-contratados<br>
+              
+              <td style="vertical-align: top; text-align: center;">3<br>
               </td>
-              <td style="vertical-align: top;">3<br>
+              <td style="vertical-align: top; text-align: center;">limpeza<br>
               </td>
-              <td style="vertical-align: top;">limpeza<br>
+              <td style="vertical-align: top; text-align: center;">bool<br>
               </td>
-              <td style="vertical-align: top;">bool<br>
+              <td style="vertical-align: top; text-align: center;">ser-3-limpeza<br>
               </td>
-              <td style="vertical-align: top;">ser-3-limpeza<br>
+              <td style="vertical-align: top; text-align: center;">radio<br>
               </td>
-              <td style="vertical-align: top;">radio<br>
+              <td style="vertical-align: top; text-align: center;">- </td>
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">- </td>
-              <td style="vertical-align: top;">1<br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;">sim<br>
               </td>
-              <td style="vertical-align: top;">sim<br>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
               </td>
-              <td style="vertical-align: top;">ativo<br>
-              </td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">4<br>
+              <td style="vertical-align: top; text-align: center;">4<br>
               </td>
-              <td style="vertical-align: top;">comercialização<br>
+              <td style="vertical-align: top; text-align: center;">comercialização<br>
               </td>
-              <td style="vertical-align: top;">enum<br>
+              <td style="vertical-align: top; text-align: center;">enum<br>
               </td>
-              <td style="vertical-align: top;">ser-4-comercializao</td>
-              <td style="vertical-align: top;">radio<br>
+              <td style="vertical-align: top; text-align: center;">ser-4-comercializao</td>
+              <td style="vertical-align: top; text-align: center;">radio<br>
               </td>
-              <td style="vertical-align: top;">-<br>
+              <td style="vertical-align: top; text-align: center;">-<br>
               </td>
-              <td style="vertical-align: top;">2<br>
+              <td style="vertical-align: top; text-align: center;">2<br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;">não<br>
+              <td style="vertical-align: top; text-align: center;">não<br>
               </td>
-              <td style="vertical-align: top;">ativo<br>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
               </td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [desativar]</td>
             </tr>
             <tr>
-              <td colspan="1" rowspan="2" style="vertical-align: top;">áreas<br>
+              
+              <td style="vertical-align: top; text-align: center;">5<br>
               </td>
-              <td style="vertical-align: top;">5<br>
+              <td style="vertical-align: top; text-align: center;">sala<br>
               </td>
-              <td style="vertical-align: top;">sala<br>
+              <td style="vertical-align: top; text-align: center;">int<br>
               </td>
-              <td style="vertical-align: top;">int<br>
+              <td style="vertical-align: top; text-align: center;">rea-5-sala<br>
               </td>
-              <td style="vertical-align: top;">rea-5-sala<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">m2<br>
               </td>
-              <td style="vertical-align: top;">m2<br>
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">1<br>
+              <td style="vertical-align: top; text-align: center;">4<br>
               </td>
-              <td style="vertical-align: top;">4<br>
-              </td>
-              <td style="vertical-align: top;">não</td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">não</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">6<br>
+              <td style="vertical-align: top; text-align: center;">6<br>
               </td>
-              <td style="vertical-align: top;">suite<br>
+              <td style="vertical-align: top; text-align: center;">suite<br>
               </td>
-              <td style="vertical-align: top;">int<br>
+              <td style="vertical-align: top; text-align: center;">int<br>
               </td>
-              <td style="vertical-align: top;">rea-6-suite<br>
+              <td style="vertical-align: top; text-align: center;">rea-6-suite<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">m2<br>
+              <td style="vertical-align: top; text-align: center;">m2<br>
               </td>
-              <td style="vertical-align: top;">2<br>
+              <td style="vertical-align: top; text-align: center;">2<br>
               </td>
-              <td style="vertical-align: top;">4<br>
+              <td style="vertical-align: top; text-align: center;">4<br>
               </td>
-              <td style="vertical-align: top;">não</td>
-              <td style="vertical-align: top;">inativo</td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">não</td>
+              <td style="vertical-align: top; text-align: center;">inativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [ativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">tv<br>
+              
+              <td style="vertical-align: top; text-align: center;">7<br>
               </td>
-              <td style="vertical-align: top;">7<br>
+              <td style="vertical-align: top; text-align: center;">diagonal<br>
               </td>
-              <td style="vertical-align: top;">diagonal<br>
+              <td style="vertical-align: top; text-align: center;">int<br>
               </td>
-              <td style="vertical-align: top;">int<br>
+              <td style="vertical-align: top; text-align: center;">tv-7-diagonal<br>
               </td>
-              <td style="vertical-align: top;">tv-7-diagonal<br>
+              <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top;">text<br>
+              <td style="vertical-align: top; text-align: center;">cm<br>
               </td>
-              <td style="vertical-align: top;">cm<br>
+              <td style="vertical-align: top; text-align: center;">1<br>
               </td>
-              <td style="vertical-align: top;">1<br>
+              <td style="vertical-align: top; text-align: center;">4<br>
               </td>
-              <td style="vertical-align: top;">4<br>
+              <td style="vertical-align: top; text-align: center;">não<br>
               </td>
-              <td style="vertical-align: top;">não<br>
-              </td>
-              <td style="vertical-align: top;">ativo</td>
-              <td style="vertical-align: top;">[editar]<br>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
 [ativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top;">...<br>
+              
+              <td style="vertical-align: top; text-align: center;">...<br>
               </td>
-              <td style="vertical-align: top;">...<br>
+              <td style="vertical-align: top; text-align: center;">...<br>
               </td>
-              <td style="vertical-align: top;">...<br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
-              </td>
-              <td style="vertical-align: top;"><br>
-              </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
               <td style="vertical-align: top;"><br>
               </td>
               <td style="vertical-align: top;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
               </td>
             </tr>
           </tbody>
@@ -1299,10 +1280,10 @@ contratados<br>
       </li>
     </ul>
     <ul>
-      <li>Dica: para o atributo <span style="font-weight: bold;">componente</span>,
+      <li>Dica: para o atributo entidade,
 seguir as mesmas dicas que as dadas em relação ao rowspan
 para o atributo <span style="font-weight: bold;">tipo</span>
-apresentadas no componente gestao-de-componentes<br>
+apresentadas no componente gestao-de-entidades<br>
       </li>
     </ul>
     <li>Apresentar após a tabela acima o Sub-título
@@ -1327,16 +1308,18 @@ situações idênticas) com o seguinte aspeto</span>:<span style="text-decoratio
       <li><input name="value_type" value="int" type="radio">int</li>
       <li>...</li>
     </ul>
-    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Componente</span><span style="background-color: yellow;"> a que irá pertencer esta
+    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Entidade</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
 propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todos os componentes presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">component</span><br>
+de todas as entidades presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">entity</span><br>
     </li>
+    
     <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
 - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
 uma lista com todos os tipos de campo de formulário presentes no
 atributo form_field_type (usar função recomendada para o
 atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
       </span></li>
+
     <ul>
       <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
       <li><input name="value_type" value="int" type="radio">text box<br>
