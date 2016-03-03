@@ -9,7 +9,8 @@
 
   
   
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
+<body>
 <h1>Construção de uma Base de Dados Relacional Dinâmica<br></h1>
 
 <span style="font-weight: bold;">Desenvolvimento de
@@ -100,12 +101,9 @@ tem o cuidado de fazer com que a página Web se ajuste a todos os tipos
 de ecrãs.<br><br>Cada
 uma das componentes descritas de seguida terá correspondência a uma
 página no Wordpress.&nbsp; Por exemplo, ao criar-se a página com
-título <span style="font-weight: bold;">Gestão de
-componentes</span>. É automaticamente criado o "permalink" <span style="font-weight: bold;">http://ipserver/gestao-de-componentes</span>
-onde fica acessível o respectivo componente (nota: mandar para o
-lixo a página Sample). Criar as pastas <span style="font-weight: bold;">custom/php</span>
-na pasta raiz do wordpress (i.e., <span style="font-weight: bold;">/opt/bitnami/apps/wordpress/htdocs/custom/php</span>
-e, para cada componente (por exemplo o <span style="font-weight: bold;">gestao-de-componentes</span>):<br>
+título <span style="font-weight: bold;">Gestão de entidades</span>, é automaticamente criado o "permalink" <span style="font-weight: bold;">http://agct16.ddns.net/gestao-de-entidades </span>onde fica acessível o respectivo componente. Criar as pastas <span style="font-weight: bold;">custom/php</span>
+na pasta raiz do wordpress (i.e., <span style="font-weight: bold;">/var/www/html/custom/php</span>
+e, para cada componente (por exemplo o <span style="font-weight: bold;">gestao-de-entidades</span>):<br>
 
 <ul>
 
@@ -114,143 +112,11 @@ e, para cada componente (por exemplo o <span style="font-weight: bold;">gestao-d
 também
 com o mesmo nome</li>
   <li>colocar na respectiva página do Wordpress o
-código: &lt;?php include("custom/php/<span style="font-weight: bold;">gestao-de-componentes.php</span>"); ?&gt;</li>
+código: &lt;?php include("custom/php/<span style="font-weight: bold;">gestao-de-</span><span style="font-weight: bold;">entidades</span>)<span style="font-weight: bold;">.php</span>"); ?&gt;</li>
   <li>realizar a programação directamente no ficheiro php
-criado</li>
-</ul>
+criado<br></li></ul>
 
-<span style="background-color: yellow;">Nota: podem haver problemas de
-lentidão na execução do wordpress devido ao plugin
-Exec-PHP, pelo que
-se isso acontecer, aconselha-se a desinstalação desse
-plugin e, em
-alternativa, a instalação do </span><a style="background-color: yellow;" href="http://wordpress.org/plugins/allow-php-in-posts-and-pages/">Allow
-PHP in Posts and Pages</a><span style="background-color: yellow;">
-em que para cada componente, em vez de colocar-se o código acima
-em cada página, terá de ser criado um snippet de
-código (contendo apenas a instrução include, sem
-as tags &lt;?php e ?&gt;) na respetiva opção de menu do
-Wordpress deste plugin e depois na página é só
-colocar esta tag para invocar o código: <span style="font-family: monospace;">[php function=X]</span></span><span style="background-color: yellow;">, em que x é o número
-indicado no respetivo snippet.</span><br style="background-color: yellow;">
 
-<br>
-
-<span style="font-weight: bold;">NOTAS IMPORTANTE</span>S<br>
-
-<ul>
-
-  <li style="font-weight: bold; text-decoration: underline;">Para
-editar os ficheiros php, usar um editor que permita gravar
-os ficheiros com codificação utf8 e usar sempre esta
-codificação, senão
-poderão ocorrer erros estranhos na execução.</li>
-  <li>Caso hajam problemas de permissões, ou o erro "Internal
-Server Error" no acesso às páginas, executar o seguinte
-na consola do Ubuntu deverá resolver o problema: </li>
-  <ul>
-    <li><span style="font-family: monospace;">sudo chown -R
-bitnami:daemon /opt/bitnami/apps/wordpress/htdocs</span></li>
-  </ul>
-  <li>Para evitar problemas de conexão, deve-se configurar a
-máquina virtual (menu VM-&gt;Settings) para usar <span style="font-weight: bold;">NAT</span> (opção
-disponível no Device Network Adapter) e não <span style="font-weight: bold;">bridged</span> que pode dar problemas.<br>
-  </li>
-  <li>Caso haja perda de acesso ao servidor dentro da máquina
-virtual, provavelmente será devido a mudança de IP ou
-necessidade de reiniciar a máquina virtual, sendo que
-será atribuído um novo ip. Normalmente reiniciando
-(comando na consola: <span style="font-family: monospace;">sudo
-shutdown -r now</span>) e depois executando o comando <span style="font-family: monospace;">/opt/bitnami/apps/wordpress/updateip</span>
-resolve-se o problema de acesso.</li>
-</ul>
-
-O esquema relacional da BD da AGCT está disponível num
-ficheiro MWB do
-MySQL
-Workbench (MSWB) aqui (consultar com regularidade o
-enunciado/fórum pois poderão ser publicadas novas
-versões): <a href="http://moodle.cee.uma.pt/file.php/57/tdbd/ag.v01.mwb">v01</a><span style="color: rgb(204, 204, 204);">,
-v02,
-v03</span>.
-Os ficheiros SQL gerados a partir dos esquemas e prontos a importar
-através
-do phpMyAdmin estão aqui: <a href="http://moodle.cee.uma.pt/file.php/57/tdbd/ag.v01.sql">v01</a><span style="color: rgb(204, 204, 204);">,
-v02,
-v03</span>.
-Os scripts de alteração com os comandos
-necessários para "upgrade" de cada versão estão
-aqui: <span style="color: rgb(204, 204, 204);">v01-&gt;
-v02 e v02-&gt;
-v03</span>. Todo o código SQL disponibilizado neste enunciado
-é
-para ser executado na Base de Dados <span style="font-weight: bold;">bitnami_wordpress</span>
-acessível no phpmyadmin, que contém as tabelas
-pré-definidas do wordpress e irá conter as tabelas da
-AGCT.<br>
-
-<br>
-
-Este esquema é para ser escrupulosamente respeitado sendo que
-todos
-os
-grupos não poderão realizar alterações ao
-mesmo. Este trabalho
-tem como foco o desenvolvimento de scripts PHP para concretizar os
-componentes
-pretendidos, contendo formulários e instruções SQL
-para inserção e
-visualização dos dados relevantes. <span style="text-decoration: underline;">No entanto, caso seja, por
-parte dos alunos, detectada alguma falha ou inconsistência no
-esquema
-definido, ou observada uma possível melhoria do esquema para
-torná-lo
-mais eficaz ou flexível, deve ser colocado um post no
-fórum do TDBD,
-para que a sugestão possa ser avaliada, podendo levar a
-eventual alteração do esquema base</span>.<br>
-
-<br>
-
-Clicando nas tabelas no MSWB, é possível visualizar os
-comentários
-criados para a tabela e para os atributos, que explicam a razão
-de ser
-da tabela ou do atributo e como se relacionam com outras tabelas e/ou
-atributos. Tabelas e/ou atributos óbvios (como ids) não
-têm
-comentários. A leitura
-atenta dos comentários é fundamental para o esquema
-relacional ser bem
-interiorizado e percebida a lógica de relacionamento das
-entidades em
-que os vários componentes da AGCT irão basear-se o que,
-por
-sua vez, é essencial para
-que o desenvolvimento da aplicação seja intuitiva e
-eficaz.<br>
-
-<br>
-
-Segue-se um conjunto de regras e dicas a seguir na
-execução do trabalho e, após esta
-secção, o conjunto de funcionalidades a implementar em
-cada
-componente. Para cada componente é especificado o comportamento
-esperado da AGCT e dadas instruções ou dicas para a
-sua
-implementação em PHP+SQL. A lista de componentes
-será completada ao
-longo do mês de Dezembro sendo que antes
-das férias
-será publicado um
-enunciado final,
-sendo indicados quais os componentes que
-terão de ser necessaria e completamente implementados para
-obtenção de
-nota mínima, sendo também especificados os requisitos
-para obtenção de
-patamares de nota mais elevados, até à nota máxima.<br>
 
 <h2>Regras/dicas a seguir</h2>
 
@@ -632,87 +498,7 @@ simplesmente não incluir esse atributo no INSERT.<br>
     <ul>
     </ul>
   </ul>
-</ul>
-
-<h3>Regras para as entregas</h3>
-
-<ul>
-
-  <li>Em cada entrega, juntamente com o ficheiro <span style="font-weight: bold;">.odt</span> com o RT (contendo o registo do
-trabalho do respectivo período e/ou eventuais howtos) é
-para vir, em
-anexo, um ficheiro <span style="font-weight: bold;">.zip</span> (com o
-mesmo nome do .odt), contendo, na sua raiz:</li>
-  <ul>
-    <li>a pasta <span style="font-weight: bold;">custom</span>
-(que por sua vez tem as pastas com os ficheiros <span style="font-weight: bold;">php</span>, <span style="font-weight: bold;">js</span> e <span style="font-weight: bold;">css</span> codificados/utilizados por cada
-grupo, tal como na instalação "live" do wordpress)</li>
-    <li>um ficheiro com o nome <span style="font-weight: bold;">ag.sql</span>
-que resulta da exportação da BD <span style="font-weight: bold;">bitnami_wordpress</span> e
-respectivo conteúdo - NOTA: este ficheiro terá de conter
-a
-exportação (feita pelo phpmyadmin) dos dados <span style="font-weight: bold;">apenas
-das tabelas da AG que estão no esquema relacional deste
-enunciado</span>.
-É possível seleccionar as tabelas a serem exportadas na
-página de
-exportação do phpMyAdmin.
-Seleccionar a opção de incluir DROP TABLE. </li>
-  </ul>
-  <li>Na entrega final<span style="font-weight: bold; text-decoration: underline;"></span>:<br>
-  </li>
-  <ul>
-    <li><span style="font-weight: bold; text-decoration: underline;">o
-ficheiro .odt&nbsp; entregue tem de conter, por esta ordem, as seguintes 3 secções:</span></li>
-    <ul>
-      <li><span style="font-weight: bold;">Componentes implementados</span>
-- uma lista dos componentes (copiar tal e qual a lista presente abaixo
-na secção "Valores atribuídos às
-funcionalidades implementadas com sucesso"), sendo colocado à
-frente de cada item da lista uma percentagem a indicar o quanto o mesmo
-ficou completo e, no caso de não ser 100%, um pequeno texto a
-explicar o que ficou feito e o que ficou por fazer</li>
-      <li><span style="font-weight: bold;">Código</span> - listagem (copy paste) de todo o
-código existente nos ficheiros PHP e CSS criados</li>
-      <li><span style="font-weight: bold;">Registo de trabalho</span> - todas as entradas do registo de trabalho da segunda fase do TDBD <span style="font-weight: bold; text-decoration: underline;">coladas como tabela com texto pesquisável e não como imagem</span><br>
-    </li>
-    </ul>
-
-  </ul>
-  <ul>
-    <li>de modo a obedecer ao regulamento da UMa e as regras existentes
-na página do GAE <a href="http://gae.uma.pt/index.php?option=com_docman&amp;task=doc_download&amp;gid=93&amp;Itemid=53&amp;lang=en">aqui</a>
-e <a href="http://gae.uma.pt/index.php?option=com_content&amp;view=article&amp;id=50&amp;Itemid=60&amp;lang=en">aqui</a>,
-a entrega do RT final da fase 2 do TDBD terá também de
-ser
-feita para o endereço trabalhos@uma.pt, ou seja, além da
-entrega a ser realizada seguindo as regras indicadas neste enunciado,
-é necessário, tembém, um dos alunos do grupo
-enviar um e-mail com o RT (.odt) <span style="font-weight: bold; text-decoration: underline;">exportado para
-o formato PDF</span> (não gravar como imagem) sendo que o nome
-do ficheiro (com extensão .pdf), o assunto da mensagem e o corpo
-da mensagem têm de seguir a seguinte nomenclatura:<br>
-    </li>
-  </ul>
-  <ul>
-    <ul>
-      <li><span style="color: rgb(0, 0, 255);">AnibalSilva</span>_SistemasGestoresdeBasesDados_Prof.DavidAveiro<br>
-      </li>
-      <li>O nome (em azul) tem de ser o nome do aluno (tal como consta
-no
-remetente da mensagem) que também envia o artigo final seguindo
-as regras internas.<br>
-      </li>
-    </ul>
-    <li>Resumindo, a entrega tem de ser realizada, pelo mesmo aluno,
-com duas mensagens: uma directamente para o docente seguindo as regras
-internas de SGBD e outra, para o GAE, seguindo as regras acima.</li>
-  </ul>
-  <li>...<br>
-  </li>
-</ul>
-
-<h2>Componentes</h2>
+</ul><h2>Componentes</h2>
 
 <h3>Gestão de entidades</h3>
 
