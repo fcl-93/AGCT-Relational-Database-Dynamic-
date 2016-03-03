@@ -3,6 +3,8 @@
 
 
 
+
+
   
 
   
@@ -733,7 +735,7 @@ valor na variável (POST) sobre o estado de
 execução, é apresentado:</li>
   <ul>
     
-    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">entity</span> apresentar o
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">ent_type</span> apresentar o
 texto "<span style="font-style: italic;">Não há entidades"</span>
 caso contrário, apresentar uma lista com todos os componentes
 com o seguinte formato (ordenada por ordem alfabética):</li>
@@ -882,7 +884,7 @@ introdução</span></span> e logo depois um
 formulário que possibilita a inserção de um novo
 componente:</li>
     <ul>
-      <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li><li>radio - <span style="font-style: italic;">Estado</span> -
+      <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome</span> - (obrigatório)</li><li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Estado</span> -
 (obrigatório)</li>
       <ul>
         <li><input checked="checked" name="state" value="active" type="radio">ativo</li>
@@ -910,7 +912,7 @@ inserção</span><br>
         </span></li>
       <li>construir uma string com o comando SQL necessário
 para
-inserção dos dados na tabela <span style="font-weight: bold;">entity</span>
+inserção dos dados na tabela <span style="font-weight: bold;">ent_type</span>
 e executá-lo</li>
       <li>Apresentar, em caso de sucesso da
 inserção:</li>
@@ -1042,23 +1044,46 @@ comportamento a seguir especificado.</li>
   <li>Se não vier nenhum
 valor na variável (POST) sobre o estado de
 execução é apresentado:</li>
+  
   <ul>
-    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">properties</span>, apresentar o
+    <li>Deverá ser possivel escolher entre&nbsp; entidade ou&nbsp; relação,
+sendo que conforme essa seleção o utilizador é encaminhado para a mesma
+página mas em que o estado corresponderá respetivamente a <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation</span>.<br>
+    </li>
+  </ul>
+<ul></ul>
+</ul>
+<ul>
+
+  
+  <li>Caso o estado de execução seja <span style="font-weight: bold;">entity</span> deverá ser apresentada uma
+lista com todas as propriedades que se encontram associadas as entidades</li>
+<ul>
+    
+    
+    <li>Se não houverem tuplos na tabela <span style="font-weight: bold;">property</span>, apresentar o
 texto "<span style="font-style: italic;">Não há
 propiedades especificadas</span>",
-caso contrário, apresentar uma lista com todos as propriedades
-com o seguinte formato (ordenada por ordem alfabética):</li>
-  </ul>
+caso contrário:</li>
+<ul>
+      
+    </ul>
+</ul>
+</ul>
+<ul>
   <ul>
     <ul>
-      <li>
+      <ul>
+        <li>
         <div style="text-align: center;">
         </div>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
           <tbody>
             <tr>
               
-              <td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
+              <td style="vertical-align: top;"><span style="font-weight: bold;">Entidade</span><br>
+          </td>
+<td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
               </td>
               <td style="vertical-align: top; font-weight: bold; text-align: center;">propriedade<br>
               </td>
@@ -1089,7 +1114,11 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top; text-align: center;">1<br>
+              <td colspan="1" rowspan="2" style="vertical-align: top; text-align: center;"><br>
+propriedade <br>
+
+          </td>
+<td style="vertical-align: top; text-align: center;">1<br>
               </td>
               <td style="vertical-align: top; text-align: center;">nome<br>
               </td>
@@ -1113,7 +1142,8 @@ no formulário</td>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top; text-align: center;">2<br>
+              
+<td style="vertical-align: top; text-align: center;">2<br>
               </td>
               <td style="vertical-align: top; text-align: center;">NIF<br>
               </td>
@@ -1136,7 +1166,10 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top; text-align: center;">3<br>
+              <td colspan="1" rowspan="2" style="vertical-align: top;"><br>
+Serviços contratados<br>
+</td>
+<td style="vertical-align: top; text-align: center;">3<br>
               </td>
               <td style="vertical-align: top; text-align: center;">limpeza<br>
               </td>
@@ -1159,7 +1192,8 @@ no formulário</td>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top; text-align: center;">4<br>
+              
+<td style="vertical-align: top; text-align: center;">4<br>
               </td>
               <td style="vertical-align: top; text-align: center;">comercialização<br>
               </td>
@@ -1183,7 +1217,10 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top; text-align: center;">5<br>
+              <td colspan="1" rowspan="2" style="vertical-align: top;">áreas<br>
+                <br>
+</td>
+<td style="vertical-align: top; text-align: center;">5<br>
               </td>
               <td style="vertical-align: top; text-align: center;">sala<br>
               </td>
@@ -1205,7 +1242,8 @@ no formulário</td>
 [desativar]</td>
             </tr>
             <tr>
-              <td style="vertical-align: top; text-align: center;">6<br>
+              
+<td style="vertical-align: top; text-align: center;">6<br>
               </td>
               <td style="vertical-align: top; text-align: center;">suite<br>
               </td>
@@ -1228,7 +1266,9 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top; text-align: center;">7<br>
+              <td style="vertical-align: top;">tv<br>
+          </td>
+<td style="vertical-align: top; text-align: center;">7<br>
               </td>
               <td style="vertical-align: top; text-align: center;">diagonal<br>
               </td>
@@ -1252,7 +1292,9 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top; text-align: center;">...<br>
+              <td style="vertical-align: top;">...<br>
+          </td>
+<td style="vertical-align: top; text-align: center;">...<br>
               </td>
               <td style="vertical-align: top; text-align: center;">...<br>
               </td>
@@ -1278,21 +1320,356 @@ no formulário</td>
           </tbody>
         </table>
       </li>
+      </ul>
     </ul>
     <ul>
-      <li>Dica: para o atributo entidade,
-seguir as mesmas dicas que as dadas em relação ao rowspan
-para o atributo <span style="font-weight: bold;">tipo</span>
-apresentadas no componente gestao-de-entidades<br>
-      </li>
-    </ul>
+      <br>
+</ul></ul></ul>
+<ul style="margin-left: 40px;">
+  <ul>
     <li>Apresentar após a tabela acima o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
 introdução</span></span> e logo depois um
 formulário que possibilita a inserção de uma nova
 propriedade:</li>
   </ul>
+</ul>
+<ul>
   <ul>
+    <ul>
+      <ul>
+        <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome da propriedade</span> -
+(obrigatório)</li>
+        <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo de valor</span> - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+uma lista com todos os tipos de valores presentes no atributo
+value_type (usar uma função php no ficheiro common.php
+para obter diretamente da base de dados os valores de um atributo do
+tipo enum como <a href="http://forums.devnetwork.net/viewtopic.php?f=1&amp;t=80136">esta</a>
+pois esta função será reutilizada em
+situações idênticas) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+        <ul>
+          <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
+          <li><input name="value_type" value="int" type="radio">int</li>
+          <li>...</li>
+        </ul>
+      </ul>
+    </ul>
+    <ul>
+      <ul>
+        <li><span style="font-weight: bold;">selectbox</span> ( ent_type_id ) - <span style="font-style: italic;">Entidade</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
+propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todas as entidades presentes na tabela <span style="font-weight: bold;">entity_type</span></span></li>
+        <br>
+        <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
+- (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+uma lista com todos os tipos de campo de formulário presentes no
+atributo form_field_type (usar função recomendada para o
+atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+        <ul>
+<li><input checked="checked" name="value_type" value="text" type="radio">text</li><li><input name="value_type" value="int" type="radio">text box<br>
+      </li><li>...</li>
+        </ul>
+        <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todos os tipos de unidade presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">prop_unit_type</span><span style="text-decoration: underline;"> em
+que a opção inicial selecionada deverá estar em
+branco, o que equivale à inserção de um NULL</span><span style="font-weight: bold; text-decoration: underline;"><br>
+      </span></li>
+        <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
+- (obrigatório e um número superior a 0)</li>
+        <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
+- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li>
+        <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
+(obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
+as seguintes duas opções, sendo que na primeira o valor
+do campo no formulário na 1ª opção é 1
+e na 2ª opção é 0</span>:<span style="text-decoration: underline;"><br>
+      </span></li>
+        <ul>
+<li><input checked="checked" name="value_type" value="text" type="radio">sim</li><li><input name="value_type" value="int" type="radio">não</li>
+        </ul>
+        <li style="background-color: yellow;"><span style="font-weight: bold;">selectbox</span> - Entidade referenciada
+por esta propriedade - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todas as entidades presentes na tabela <span style="font-weight: bold;">ent_type</span></span><span style="font-weight: bold; text-decoration: underline;"></span></li>
+        <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+        <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li>
+      </ul>
+<br>
+      <li>Caso o estado de exeção seja <span style="font-weight: bold;">relation</span></li>
+    
+    </ul>
+
+
+  
+  
+  </ul>
+
+</ul>
+
+<ul>
+
+  <ul>
+    <ul>
+      
+      <ul>
+        <li>
+        <div style="text-align: center;">
+        </div><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="vertical-align: top;"><span style="font-weight: bold;">Relação</span><br>
+                </td>
+<td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">propriedade<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
+de valor<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">nome
+do campo<br>
+no formulário<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
+do campo<br>
+no formulário</td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">tipo
+de unidade<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">ordem
+do campo<br>
+no formulário</td>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">tamanho do campo no formulário</span><br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">obrigatório<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">estado<br>
+              </td>
+              <td style="vertical-align: top; font-weight: bold; text-align: center;">ação<br>
+              </td>
+            </tr>
+            <tr>
+              
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">data<br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">dat-1-<br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">-<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">128<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">sim<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">- </td>
+              <td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">15<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">não<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo </td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">3<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">bool<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">radio<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">- </td>
+              <td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">sim<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">4<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">enum<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">radio<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">-<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">não<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">5<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">int<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">m2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">4<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">não</td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">6<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">int<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">m2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">4<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">não</td>
+              <td style="vertical-align: top; text-align: center;">inativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[ativar]</td>
+            </tr>
+            <tr>
+              
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">7<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">int<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+</td>
+              <td style="vertical-align: top; text-align: center;">text<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">cm<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">4<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">não<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">ativo</td>
+              <td style="vertical-align: top; text-align: center;">[editar]<br>
+[ativar]</td>
+            </tr>
+            <tr>
+              
+              <td style="vertical-align: top;"><br>
+                </td>
+<td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      </ul>
+
+    </ul>
+    <br>
+
+    
+    <ul>
+      <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de uma nova
+propriedade:</li>
+      <ul>
+
+
     <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome da propriedade</span> -
 (obrigatório)</li>
     <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo de valor</span> - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
@@ -1306,12 +1683,29 @@ situações idênticas) com o seguinte aspeto</span>:<span style="text-decoratio
     <ul>
       <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
       <li><input name="value_type" value="int" type="radio">int</li>
-      <li>...</li>
-    </ul>
-    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Entidade</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
+      <li>...</li></ul>
+      </ul>
+      <ul>
+        <li><span style="font-weight: bold;">selectbox</span> ( rel_type_id ) - <span style="font-style: italic;">Relação</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
 propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todas as entidades presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">entity</span><br>
-    </li>
+de todas as relações presentes na tabela <span style="font-weight: bold;">rel_type</span></span></li>
+      </ul>
+    </ul>
+</ul></ul>
+<ul>
+  <ul>
+    <ul>
+      <ul>
+      </ul>
+      <ul>
+
+    <ul>
+
+    
+    </ul>
+
+    
+    
     
     <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
 - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
@@ -1319,6 +1713,7 @@ uma lista com todos os tipos de campo de formulário presentes no
 atributo form_field_type (usar função recomendada para o
 atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
       </span></li>
+
 
     <ul>
       <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
@@ -1343,19 +1738,23 @@ e na 2ª opção é 0</span>:<span style="text-decoration: underline;"><br>
       </span></li>
     <ul>
       <li><input checked="checked" name="value_type" value="text" type="radio">sim</li>
-      <li><input name="value_type" value="int" type="radio">não</li>
-    </ul>
-    <li style="background-color: yellow;"><span style="font-weight: bold;">selectbox</span> - Componente referenciado
-por esta propriedade - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todos os componentes presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">component</span></li>
-  </ul>
-  <ul>
-    <li><span style="font-weight: bold;">hidden</span> (estado) -
+      <li><input name="value_type" value="int" type="radio">não</li></ul>
+      </ul>
+      <ul>
+        <li><span style="font-weight: bold;">hidden</span> (estado) -
 value: <span style="font-weight: bold;">inserir</span></li>
-    <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span><br>
-    </li>
+        <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li>
+      </ul>
+    </ul>
+
+  
   </ul>
-  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+
+  
+  
+</ul>
+<ul>
+<li>Se o estado de execução é <span style="font-weight: bold;">inserir</span></li>
   <ul>
     <li>Verificar se (caso inserido) o valor dos campos <span style="font-style: italic;">Ordem do campo no formulário</span>
 e <span style="font-style: italic;">Tamanho do campo no
@@ -1373,26 +1772,69 @@ formato.<br>
     </li>
     <li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
 de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
-inserção</span><br>
-      </span></li>
+inserção</span></span></li>
     <li>Construir uma string com o comando SQL necessário
 para
 inserção dos dados na tabela <span style="font-weight: bold;">property</span>
 e executá-lo</li>
     <ul>
-      <li><span style="background-color: yellow;">o valor para o
+      <li>Se vier um valor na varíavel POST['rel_type_id']:</li>
+      <ul>
+<li>o valor para o atributo form_field_name é determinado
+neste estado e será uma string
+resultante da concatenação dos primeiros
+caracteres da entidade a que esta propriedade vai pertencer, seguido
+de um traço, seguido do id da propriedade, seguido de outro
+traço e seguido do nome da propriedade especificado no respetivo
+campo pelo utilizador, sendo que este nome deverá ser
+transformado numa cadeia de caracteres só com catacteres
+puramente ascii (usando-se por exemplo este código: <span style="font-family: monospace;">$string = preg_replace('/[^a-z0-9_
+]/i', '', $string);</span>)
+e sendo os espaços substituídos pelo caracter underscore.
+A tabela de exemplo de lista de propriedades acima apresenta o
+resultado final esperado deste requisito.</li><ul><li><span style="font-weight: bold;">Nota:</span> como
+só se pode saber o id da propriedade depois de inseri-la, a
+solução mais segura e simples será fazer primeiro
+um insert com uma string idêntica à especificada mas sem o
+id e, logo de seguida ,
+realizar um update já com a string contendo o id, depois de se
+obter o id usando-se a função <a href="http://www.php.net/manual/en/mysqli.insert-id.php" data-mce-href="http://www.php.net/manual/en/mysqli.insert-id.php">mysqli_insert_id</a>
+(e não a antiga mysql_insert_id que em breve será
+obsoleta).</li></ul>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+<ul>
+  <ul>
+    <ul>
+      <li>Caso contrário isto é se POST['ent_type_id']:<span style="font-weight: bold;"></span></li>
+    </ul>
+  </ul>
+</ul>
+<ul>
+<ul>
+    <ul>
+      <ul>
+        <li><span style="background-color: yellow;">o valor para o
 atributo comp_fk_id
 é o id do eventual componente selecionado na segunda select box
 e significa que num dado componente (por exemplo tv) esta propriedade
 é uma "chave estrangeira" para outro componente. Clarificando,
 para por exemplo uma casa/propriedade, instâncias do componente
 tv terão um value para esta propriedade do tipo "fk" que
-será igual ao id do comp_inst de uma casa particular.</span><br>
-      </li>
-      <li>o valor para o atributo form_field_name é determinado
+será igual ao id do comp_inst de uma casa particular.</span></li>
+      </ul>
+    </ul>
+
+    <ul>
+      
+      
+      <ul>
+        <li>o valor para o atributo form_field_name é determinado
 neste estado e será uma string
-resultante da concatenação dos três primeiros
-caracteres do componente a que esta propriedade vai pertencer, seguido
+resultante da concatenação dos primeiros
+caracteres da entidade a que esta propriedade vai pertencer, seguido
 de um traço, seguido do id da propriedade, seguido de outro
 traço e seguido do nome da propriedade especificado no respetivo
 campo pelo utilizador, sendo que este nome deverá ser
@@ -1402,7 +1844,8 @@ puramente ascii (usando-se por exemplo este código: <span style="font-family: m
 e sendo os espaços substituídos pelo caracter underscore.
 A tabela de exemplo de lista de propriedades acima apresenta o
 resultado final esperado deste requisito.</li>
-      <ul>
+        <ul>
+
         <li><span style="font-weight: bold;">Nota:</span> como
 só se pode saber o id da propriedade depois de inseri-la, a
 solução mais segura e simples será fazer primeiro
@@ -1411,23 +1854,26 @@ id e, logo de seguida ,
 realizar um update já com a string contendo o id, depois de se
 obter o id usando-se a função <a href="http://www.php.net/manual/en/mysqli.insert-id.php" data-mce-href="http://www.php.net/manual/en/mysqli.insert-id.php">mysqli_insert_id</a>
 (e não a antiga mysql_insert_id que em breve será
-obsoleta).</li>
+obsoleta).</li><br>
+        </ul>
       </ul>
-      <li>o valor para o atributo <span style="font-weight: bold;">state</span>
-será: "active"<br>
-      </li>
-    </ul>
+</ul>
+    <li>o valor para o atributo <span style="font-weight: bold;">state</span>
+será: "active"</li>
+
     <li>Apresentar, em caso de sucesso da
 inserção:</li>
     <ul>
       <li><span style="font-style: italic;">Inseriu os dados de novo
-tipo de unidade com sucesso.</span></li>
+tipo de propriedade com sucesso.</span></li>
       <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
       <li>em que Continuar é uma ligação para a
 página <span style="font-weight: bold;">gestao-de-propriedades</span><span style="font-weight: bold;"></span></li>
     </ul>
   </ul>
 </ul>
+
+
 
 <h3>Gestão de valores permitidos<br>
 </h3>
@@ -1449,7 +1895,24 @@ comportamento a seguir especificado.</li>
 valor na variável (REQUEST) sobre o estado de
 execução é apresentado:</li>
   <ul>
-    <li>Se não houverem propriedades especificadas (com tipo de
+    <li>Deverá ser possivel escolher entre entidade ou&nbsp; relação,
+de modo a que se possam visualizar todos os valores&nbsp; que pertencem
+as propriedades enum da entidades ou relações ,sendo que conforme essa seleção o utilizador é encaminhado para a mesma
+página, no entanto o estado corresponderá respetivamente a  <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation</span>.</li>
+  </ul>
+  <li>Caso o estado de execução seja <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation:</span></li>
+  <ul>
+    <li><span style="font-weight: bold;"><span style="text-decoration: underline;">NOTA</span>:
+Conforme o estado de excução, as páginas terão um comportamento
+semelhante, sendo que estas deverão ser adaptadas respetivamente, caso
+estejamos a tratar de entidades ou relações.<br>
+      </span></li>
+  </ul>
+
+  <ul>
+    
+    <ul>
+      <li>Se não houverem propriedades especificadas (com tipo de
 valor enum), apresentar o texto: "<span style="font-style: italic;">Não
 há propriedades especificadas cujo tipo de valor seja enum.
 Especificar primeiro nova(s) propriedade(s) e depois voltar a esta
@@ -1462,23 +1925,25 @@ para uma certa propriedade não houverem tuplos na tabela <span style="font-weig
 apresentado o
 texto "<span style="font-style: italic;">Não há valores
 permitidos definidos</span>" na respetiva linha da tabela:</li>
+    </ul>
+
     <li>
       <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
         <tbody>
           <tr>
-            <td style="vertical-align: top; font-weight: bold;">componente<br>
+            <td style="vertical-align: top; font-weight: bold;">entidade<br>
             </td>
-            <td style="vertical-align: top;">id<br>
+            <td style="vertical-align: top;"><span style="font-weight: bold;">id</span><br>
             </td>
             <td style="vertical-align: top; font-weight: bold;">propriedade<br>
             </td>
-            <td style="vertical-align: top;">id<br>
+            <td style="vertical-align: top;"><span style="font-weight: bold;">id</span><br>
             </td>
-            <td style="vertical-align: top;">valores permitidos<br>
+            <td style="vertical-align: top; font-weight: bold;">valores permitidos<br>
             </td>
-            <td style="vertical-align: top;">estado<br>
+            <td style="vertical-align: top;"><span style="font-weight: bold;">estado</span><br>
             </td>
-            <td style="vertical-align: top;">ação<br>
+            <td style="vertical-align: top;"><span style="font-weight: bold;">ação</span><br>
             </td>
           </tr>
           <tr>
@@ -1688,7 +2153,7 @@ execução:</li>
 formulários customizados</span>
 e apresentar uma tabela listando os formulários customizados
 existentes, idêntica à tabela do componente gestão
-de propriedades, mas sendo que em vez do nome do componente, aparece o
+de unidades, mas sendo que em vez do nome de unidade, aparece o
 nome dado ao formulário customizado. Este nome do form deve ser
 clicável, sendo o link disponível, um link para este
 próprio componente, mas em que é passado pelo
