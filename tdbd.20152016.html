@@ -5,12 +5,14 @@
 
 
 
+
+
+
   
 
   
   
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
-<body>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
 <h1>Construção de uma Base de Dados Relacional Dinâmica<br></h1>
 
 <span style="font-weight: bold;">Desenvolvimento de
@@ -706,14 +708,138 @@ inserção:</li>
         <li><span style="font-style: italic;">Inseriu os dados de uma nova entidade com sucesso.</span></li>
         <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li>
         <li>em que Continuar é uma ligação para a
-página <span style="font-weight: bold;">gestao-de-entidades</span><span style="font-weight: bold;"></span></li>
+página <span style="font-weight: bold;">gestao-de-entidades</span></li><span style="font-weight: bold;"><br>
+        </span><span style="font-weight: bold;"></span><br>
+        <span style="font-weight: bold;"></span></ul></ul></ul></ul>
+<ul>
+  <ul>
+    <ul>
+      <ul>
+        <span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span>
+      
       </ul>
+
+    
     </ul>
+
+  
+  </ul>
+
+</ul>
+
+
+<h3>Gestão de relações</h3>
+
+Página <span style="font-weight: bold;">gestao-de-relacoes</span><br>
+<ul>
+<li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Manage relation</span> e activar esta
+capability para o Role <span style="font-weight: bold;">Administrator</span>.</li><li>Este componente, ao ser executado, faz primeiramente um teste se
+foi realizado um login no Wordpress e se o utilizador com sessão
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Manage relation</span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span></li><li>Caso não tenha, é mostrada uma mensagem a dizer
+"Não tem
+autorização para aceder a esta página", caso
+tenha, é executado o
+comportamento a seguir especificado.</li>
+  <li>Se não vier nenhum
+valor na variável (POST) sobre o estado de
+execução, é apresentado:</li>
+  <ul>
+    <li>Se não houverem 2 ou mais tuplos na tabela <span style="font-weight: bold;">ent_type</span> apresentar o
+texto "<span style="font-style: italic;">Não existem entidades que se possam relacionar"</span>
+caso contrário, <br>
+    </li>
+  </ul>
+<ul><li>Se não houverem tuplos na tabela <span style="font-weight: bold;">rel_type</span> apresentar o
+texto "<span style="font-style: italic;">Não há tipos de relação"</span>
+car uma lista com todas as relações
+com o seguinte formato (ordenada por ordem alfabética):aso contrário, apresent</li></ul>
+</ul>
+<ul>
+  <ul>
+    <ul>
+      <li>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  
+        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+          <tbody>
+            <tr>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">ID</span><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">Entidade 1</span><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">Entidade 2</span><br>
+              </td>
+              <td style="vertical-align: top; text-align: center;"><span style="font-weight: bold;">Ação</span><br>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top; text-align: center;">1<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">Casa<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">Serviços Contratados<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top; text-align: center;">2<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">[editar] [desativar]</td>
+            </tr>
+            <tr>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+              <td style="vertical-align: top; text-align: center;">...<br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+      </li>
+    </ul>
+    <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de relações</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de um novo
+tipo de relação:</li>
+    <ul>
+      <li><span style="font-weight: bold;">selectbox</span> - Entidade 1 - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todas as entidades presentes na tabela <span style="font-weight: bold;">ent_type</span></span></li>
+      <li><span style="font-weight: bold;">selectbox</span> - Entidade 2 - (obrigatório)<span style="font-weight: bold;"></span> - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+de todas as entidades presentes na tabela <span style="font-weight: bold;">ent_type</span></span></li>
+      <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li>
+      <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir tipo de relação</span></li>
+    </ul>
+  </ul>
+  <li>Se o estado de execução é <span style="font-weight: bold;">inserir</span><span style="font-weight: bold;"></span></li>
+  <ul>
+<li>Sub-título deste estado (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão
+de relações</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+inserção</span><br>
+      </span></li><li>construir uma string com o comando SQL necessário
+para
+inserção dos dados na tabela <span style="font-weight: bold;">rel_type</span>
+e executá-lo</li><li>Apresentar, em caso de sucesso da
+inserção:</li><ul><li><span style="font-style: italic;">Inseriu os dados de novo
+tipo de relação com sucesso.</span></li><li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Continuar</span><span style="font-style: italic;"> para avançar</span></li><li>em que Continuar é uma ligação para a
+página <span style="font-weight: bold;">gestao-de-relacoes</span></li></ul>
   </ul>
 </ul>
 
+
+
+
+
 <h3>Gestão de unidades<br>
 </h3>
+
 
 Página <span style="font-weight: bold;">gestao-de-unidades</span>
 <ul>
@@ -1954,8 +2080,11 @@ criação de um novo formulário customizado. Neste
 formulário, colocar o campo estado hidden com o valor inserir e
 apresentar um campo do tipo text onde é para ser indicado o nome
 do formulário.</li>
-    <li>Depois deste text input apresentar uma tabela&nbsp;
-idêntica à do componente gestão de propriedades,
+    <li>Depois
+deste text input apresentar duas tabelas&nbsp;
+idênticas à do componente gestão de propriedades (onde cada tabela
+apresenta respetivamente as propriedades dos entidades e as
+propriedades das relações ),
 mas que em vez da coluna ação, contém uma coluna
 chamada <span style="font-weight: bold;">escolher</span>, contendo uma
 checkbox que permite escolher essa propriedade para vir a fazer parte
@@ -2006,39 +2135,23 @@ comportamento a seguir especificado.</li>
 valor na variável (REQUEST) sobre o estado de
 execução, apresentar o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
-escolher componente/formulário customizado</span></span></li>
+escolher entidade/formulário customizado</span></span></li>
   <ul>
   </ul>
   <ul>
-    <li>Apresentar uma lista dos tipos de componentes e componentes
+    <li>Apresentar uma lista dos tipos de entidades
 existentes na BD, seguindo-se o seguinte formato:</li>
-    <li>Componentes:<br>
-    </li>
+    <li>Entidade:</li>
     <ul>
-      <li>propriedade&nbsp;&nbsp; <br>
+      <li>[casa]</li>
+      <li>[serviços contratados]</li>
+      <li>[tv]</li>
+      <li>[quarto]</li>
+      <li>[suite]<br>
       </li>
-      <ul>
-        <li>[entidade a faturar]</li>
-        <li>[serviços contratados]</li>
-        <li>[áreas]</li>
-        <li>[tv]</li>
-      </ul>
-      <li>canal de venda</li>
-      <ul>
-        <li>[nome]</li>
-        <li>[custos]</li>
-        <li>[comissão]<br>
-        </li>
-      </ul>
     </ul>
-  </ul>
-  <ul>
-    <ul>
-      <ul>
-        <li>...</li>
-      </ul>
-    </ul>
-    <li>Formulários customizados</li>
+
+    </ul><ul><li>Formulários customizados</li>
     <ul>
       <li>[Form 1]</li>
       <li>[Form 2]</li>
@@ -2049,11 +2162,9 @@ existentes na BD, seguindo-se o seguinte formato:</li>
   <ul style="text-decoration: underline;">
     <li>Nota: as listas são construídas dinamicamente
 graças às queries necessárias à BD, que
-vão buscar os nomes na tabela <span style="font-weight: bold;">comp_type</span>
-(entradas de nível superior) e <span style="font-weight: bold;">component</span>
-- que aparecem listados entre parêntesis retos, e em que cada
+vão buscar os nomes na tabela <span style="font-weight: bold;">ent_type</span>&nbsp; - que aparecem listados entre parêntesis retos, e em que cada
 item é uma ligação para o seguinte
-endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id <span style="font-weight: bold;"></span>do respetivo componente nessa
+endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id da respetiva entidade nessa
 entrada ou "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;form=f</span>" onde <span style="font-weight: bold;">f</span> é o id <span style="font-weight: bold;"></span>do respetivo form customizado </li>
   </ul>
   <li>Se o estado de execução é <span style="font-weight: bold;">introducao</span></li>
@@ -2064,31 +2175,29 @@ para implementar um comportamento semelhante ao especificado abaixo
 para este estado e também para os estados validar e inserir, mas
 para o caso de ser escolhido um form customizado, devendo os nomes dos
 estados/variáveis ser idênticos mas com "form" em vez de
-"comp"<br>
+"ent"<br>
       </span></li>
   </ul>
   <ul>
-    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_id </span>o valor que vem no vector
-REQUEST associado à variável <span style="font-weight: bold;">comp</span></li>
-    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_name</span> o nome do componente
-associado ao id da linha anterior (necessário pequena query
-à BD para buscar este nome)</li>
-    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">comp_type_id</span> o id do respetivo tipo
-de componente (necessário pequena query à BD para buscar
-este valor)</li>
-    <li>Apresentar o Sub-título
+    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">ent_id </span>o valor que vem no vector
+REQUEST associado à variável <span style="font-weight: bold;">ent</span></li>
+    <li>Guardar numa variável de sessão chamada <span style="font-weight: bold;">ent_name</span> o nome do entidade
+associada ao id da linha anterior (necessário pequena query
+à BD para buscar este nome)</li><li>Apresentar o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span>
       <span style="text-decoration: underline;">(onde </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
-variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span></li>
+variável de sessão <span style="font-weight: bold;">ent</span></span><span style="font-weight: bold; text-decoration: underline;">_name</span><span style="text-decoration: underline;">)</span></li>
     <li>Apresentar um formulário construído dinamicamente
 a partir da informação que consta na BD, nomeadamente:</li>
     <ul>
       <li>o nome do formulário é uma string do
-género <span style="font-weight: bold;">comp_type_x_comp_y</span>
-em que x é o id do tipo de componente e y o id de componente</li>
-      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=validar&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente</li>
+género <span style="font-weight: bold;">ent_x</span>
+em que x é o id da entidade.<br>
+</li>
+      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=validar&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id da entidade<br>
+</li>
       <li>é feita uma query à BD que obtém todas
-as propriedades associadas ao componente selecionado que estejam no
+as propriedades e relações associadas a entidade selecionada que estejam com o
 estado active e, para cada uma, é apresentado o respetivo campo
 com a configuração especificada na própria
 propriedade. Dicas:</li>
@@ -2107,33 +2216,32 @@ checkbox ou selectbox (conforme o tipo de campo especificado na BD) em
 que as
 opções são obtidas através de uma query
 à tabela prop_allowed_value</li>
-          <li style="background-color: yellow;">para o tipo comp_ref,
+          <li style="background-color: yellow;">para
+o tipo ent_ref,
 apresentar um input do tipo selectbox em que as opções
 são obtidas através de uma query à BD para se
-obter uma lista dos tuplos em comp_inst que referenciem o id da
-tabela component, que seja também referenciado pelo atributo
-comp_fk_id da propriedade que é "chave estrangeira" no
-componente selecionado para inserção de valores. O value
-de cada opção será o id do tuplo de comp_inst e o
+obter uma lista dos tuplos em entity que referenciem o id da
+tabela ent_type, que seja também referenciado pelo atributo
+fk_ent_type_id da propriedade que é "chave estrangeira" na entidade
+selecionada para inserção de valores. O value
+de cada opção será o id do tuplo de entity e o
 texto a apresentar na opção será o valor no
-atributo component_name. Por exemplo e clarificando, assumindo um
-componente chamado <span style="font-weight: bold;">casa</span>,
-pertencente ao tipo de
-componente <span style="font-weight: bold;">propriedade</span> e que
+atributo value correspondente à propriedade nome da entidade
+selecionada. Por exemplo e clarificando, assumindo uma entidade chamada
+<span style="font-weight: bold;">casa</span>,&nbsp; e que
 por sua vez tem a property <span style="font-weight: bold;">nome</span>
-(da casa). Assumindo que o componente tv tem uma propriedade, com
-value_type comp_ref e em que o valor de comp_fk_id=ao id do componente <span style="font-weight: bold;">casa</span>.
-Assumindo que já existem na tabela comp_inst tuplos com valores
+(da casa). Assumindo que a entidade tv tem uma propriedade, com
+value_type ent_ref e em que o valor de fk_ent_type_id=ao id da entidade <span style="font-weight: bold;">casa</span>.
+Assumindo que já existem na tabela entity tuplos com valores
 para os nomes de 2 casas:
-"casa das terças" e "quinta do curral" (duas instâncias de
-componentes, em que os nomes das casas em si, poderão estar
-repetidos,
-tanto no value associado à property nome, como também no
-atributo component_name na tabela comp_inst). Se queremos introduzir
+"casa das terças" e "quinta do curral" (duas instâncias da entidade casa). Se queremos introduzir
 informação das tvs que existem nestas duas casas, ao
-estarmos no estado insercao-de-valores para o componente tv, devem
-aparecer como texto das opções os valores existentes no
-atributo component_name:"casa das terças" e "quinta do curral" </li>
+estarmos no estado insercao-de-valores para a entidade tv, devem
+aparecer como texto das opções os valores existentes  no
+atributo value correspondente à propriedade nome da entidade selecionada, que correspondem as instancias de casa.</li>
+          <li style="background-color: rgb(255, 7, 29);">FALTA MUITOS PARA MUITOS<br>
+          </li>
+
         </ul>
         <li>o nome de cada campo será o nome especificado no
 respetivo atributo do respetivo tuplo da respetiva propriedade</li>
@@ -2148,8 +2256,7 @@ no estado introdução ele pode submeter, mas no estado
 validar não pode avançar.<br data-mce-bogus="1">
         </li>
       </ul>
-      <li style="background-color: yellow;"><span style="font-weight: bold;">text</span> - nome para instância do
-componente - (opcional)</li>
+      <li style="background-color: yellow;"><span style="font-weight: bold;">text</span> - nome para instância da entidade - (opcional)</li>
     </ul>
   </ul>
   <ul>
@@ -2165,7 +2272,7 @@ value: <span style="font-weight: bold;">validar</span></li>
   <ul>
     <li>Apresentar o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Inserção de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span><span style="font-weight: bold; font-style: italic;"> - validar</span> <span style="text-decoration: underline;">(onde </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
-variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span></li>
+variável de sessão <span style="font-weight: bold;">ent</span></span><span style="font-weight: bold; text-decoration: underline;">_name</span><span style="text-decoration: underline;">)</span></li>
     <li>Caso
 algum campo obrigatório não tenha sido preenchido
 apresentar mensagem de erro indicando que é obrigatório o
@@ -2196,7 +2303,8 @@ adicionalmente:</span><br>
       </li>
     </ul>
     <ul>
-      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=inserir&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente </li>
+      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=inserir&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id do entidade<br>
+ </li>
     </ul>
     <ul>
       <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Submeter</span><br>
@@ -2209,39 +2317,40 @@ adicionalmente:</span><br>
 de valores</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span><span style="font-style: italic;"><span style="font-weight: bold;"> - xxx</span></span><span style="font-weight: bold; font-style: italic;"> -
 inserção</span> <span style="text-decoration: underline;">(onde
       </span><span style="font-weight: bold; text-decoration: underline;">xxx</span><span style="text-decoration: underline;"> é o valor na
-variável de sessão </span><span style="font-weight: bold; text-decoration: underline;">comp_name</span><span style="text-decoration: underline;">)</span><span style="font-style: italic;"> </span></li>
+variável de sessão <span style="font-weight: bold;">ent</span></span><span style="font-weight: bold; text-decoration: underline;">_name</span><span style="text-decoration: underline;">)</span><span style="font-style: italic;"> </span></li>
     <li>Para cada campo, obter o id da propriedade a partir do nome do
 campo e construir uma string com o comando SQL necessário
 para
 inserção dos dados na tabela <span style="font-weight: bold;">value</span>
-em que o <span style="font-weight: bold;">comp_inst_id</span>
-é o id de um tuplo previamente inserido na tabela comp_inst, que
+em que o <span style="font-weight: bold;">entity_id</span>
+é o id de um tuplo previamente inserido na tabela <span style="font-weight: bold;">entity</span>, que
 é um tuplo que irá "agregar" todos os valores de
-propriedades inseridas relativas a um componente, o <span style="font-weight: bold;">property_id</span> é o id obtido
+propriedades inseridas relativas a uma entidade, o <span style="font-weight: bold;">property_id</span> é o id obtido
 como indicado atrás, <span style="font-weight: bold;">value</span>
 é o valor do
 respetivo campo, <span style="font-weight: bold;">date</span> é
 a data atual, <span style="font-weight: bold;">time</span> o instante
 de tempo atual e <span style="font-weight: bold;">producer</span> o
-user name wordpress logado<br>
+user name wordpress logado</li>
+    <li style="background-color: red;">FALTA RELAÇÃO<br>
     </li>
+
     <li>Executar os comandos SQL e apresentar, em caso de sucesso da
 inserção:</li>
     <ul>
       <li><span style="font-style: italic;">Inseriu o(s) valor(es) com
 sucesso.</span></li>
       <li><span style="font-style: italic;">Clique em </span><span style="font-weight: bold; font-style: italic;">Voltar</span><span style="font-style: italic;"> para voltar ao início da
-inserção de valores e poder escolher outro componente ou
-em <span style="font-weight: bold;">Continuar a inserir valores neste
-componente</span> se quiser continuar a inserir valores<br>
+inserção de valores e poder escolher outra entidade ou
+em <span style="font-weight: bold;">Continuar a inserir valores nesta entidade</span> se quiser continuar a inserir valores<br>
         </span></li>
       <ul>
         <li>em que <span style="font-weight: bold; font-style: italic;">Voltar</span>
 é uma ligação para a
 página <span style="font-weight: bold;">insercao-de-valores</span>
 e <span style="font-style: italic;"><span style="font-weight: bold;">Continuar
-a inserir valores neste componente</span></span><span style="font-style: italic;"><span style="font-weight: bold;"></span></span>
-é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;comp=c</span>" onde <span style="font-weight: bold;">c</span> é o id do componente
+a inserir valores nesta entidade</span></span>
+é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id da entidade
 guardado em sessão <br>
         </li>
       </ul>
