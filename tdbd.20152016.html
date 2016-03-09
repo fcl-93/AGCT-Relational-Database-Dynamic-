@@ -15,7 +15,8 @@
 
   
   
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
+<body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
 <h1>Construção de uma Base de Dados Relacional Dinâmica<br></h1>
 
 <span style="font-weight: bold;">Desenvolvimento de
@@ -187,23 +188,7 @@ ficheiro</span>. </li>
 
 <h3>Regras a seguir na programação</h3>
 
-<ul>
-
-  <li style="background-color: yellow;"><span style="font-weight: bold; text-decoration: underline;">Atenção
-às maiúsculas e minúsculas</span>!
-No Linux os nomes de ficheiros e nomes de tabelas/atributos em SQL
-são case-sensitive. <span style="font-weight: bold; text-decoration: underline;">Os nomes dos
-ficheiros têm de ter
-letras todas minúsculas e os nomes das tabelas/atributos
-é também
-para ficar tudo em minúsculas</span>.</li>
-  <li><span style="background-color: yellow;">Atenção
-que nos formulários HTML não devem haver campos com nome
-"name" pois irá dar problemas na execução, usar
-nomes do género <span style="font-weight: bold;">component_name</span>,
-etc.</span><br>
-  </li>
-  <li>Na especificação dos componentes (apresentada na
+<ul><li>Na especificação dos componentes (apresentada na
 secção do enunciado após as dicas) é
 indicado, para os formulários a constar
 nos mesmos, para cada campo, o seguinte conjunto de items separados por
@@ -232,13 +217,7 @@ intuitiva, normalmente após os mesmos, à direita ou
 abaixo)</li>
     <li>sublinhado - <span style="text-decoration: underline;">dicas/instruções
 de apresentação</span></li>
-  </ul>
-  <li style="background-color: yellow;">Para obtenção dos
-resultados de uma query que faça um select, recomenda-se a
-utilização da seguinte função (ver exemplo
-"procedural style" no site):<a href="http://us1.php.net/manual/en/mysqli-result.fetch-assoc.php">
-http://us1.php.net/manual/en/mysqli-result.fetch-assoc.php</a></li>
-  <li>Sem ser em formulários, ao longo da
+  </ul><li>Sem ser em formulários, ao longo da
 especificação dos
 componentes, sempre que aparecer <span style="font-style: italic;">texto
 em itálico</span> significa que é texto que deverá
@@ -260,30 +239,12 @@ indicando o(s) erro(s) se for o caso. <br>
   <li>Realizar validação <span style="font-weight: bold;">client-side</span>
 em tempo real usando <a href="http://jqueryvalidation.org/">esta
 biblioteca</a>
-(<span style="background-color: yellow;">nova bibioteca mais poderosa
-que deve ser usada</span>) ou outra melhor (informar o docente em caso
-de
-localização de melhor
-alternativa).<span style="text-decoration: line-through;"></span> <span style="background-color: yellow;">NOTA
-IMPORTANTE: o uso destas bibliotecas (ou outras com
-função idêntica) não
-é necessário para obtenção de nota
-mínima (embora seja atribuído um certo peso na nota
-final), <span style="text-decoration: underline;">logo deixar a
-validação client-side para mais tarde em
-caso de dificuldades na
-instalação/utilização</span>)</span>.</li>
+.<span style="background-color: yellow;"></span></li>
   <li>Ao serem inseridos tuplos em mais que uma tabela, ou seja, ao
 haver uma sequência de comandos INSERT que têm todos de ser
 executados
 ou nenhum, delimitar as instruções INSERT por uma
-transacção. <span style="background-color: yellow;">NOTA
-IMPORTANTE: (a utilização de transacções </span><span style="background-color: yellow;">não
-é necessária para obtenção de nota
-mínima (embora seja atribuído um certo peso na nota
-final), <span style="text-decoration: underline;">logo deixar para
-mais tarde em
-caso de dificuldades</span>)</span>.</li>
+transacção.</li>
   <li>Deve ser usada a tecnologia <a href="http://pt.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a>
 para a <span style="text-decoration: underline;">especificação
 do formato de
@@ -301,13 +262,7 @@ DIV, LABEL, FIELDSET, etc. para a especificação da
 estrutura do
 formulário, sendo aplicadas as classes CSS adequadas para a
 correcta
-apresentação dos conteúdos.</li>
-  <li style="background-color: yellow;">Não é
-necessário realizar conexão à base de dados, pois
-o Wordpress já mantém a ligação ao mysql
-ativa e é possível executar diretamente o comando
-mysql_query ao longo do código especificado.</li>
-  <li>Criar um ficheiro chamado <span style="font-weight: bold;">common.php</span>
+apresentação dos conteúdos.</li><li>Criar um ficheiro chamado <span style="font-weight: bold;">common.php</span>
 que terá de ficar na pasta <span style="font-weight: bold;">custom/php</span>.</li>
   <ul>
     <li>Este
@@ -316,9 +271,7 @@ são para
 ser reutilizadas entre componentes diferentes e/ou chamadas a
 bibliotecas Javascript (por exemplo,
 funções de validação server-side, chamada
-à bibliotecas, etc.). <span style="font-weight: bold; background-color: yellow;">NOTA</span><span style="background-color: yellow;">: Código
-a ser reutilizado em apenas um componente tem de ser colocado em
-funções definidas no próprio componente</span>. </li>
+à bibliotecas, etc.).&nbsp;<span style="font-weight: bold; background-color: yellow;"></span> </li>
   </ul>
   <li><span style="text-decoration: underline;">Não podem ser
 criadas referências/links a caminhos absolutos e
@@ -326,7 +279,7 @@ têm&nbsp;sempre
 de ser usados caminhos relativos</span>. Exemplos:</li>
   <ul>
     <li>na especificação de um action de um formulario,
-em vez de <span style="font-family: monospace;">http://10.42.43.10/wordpress/gestao-de-componentes"</span>
+em vez de <span style="font-family: monospace;">http:/agct16.ddns.net/gestao-de-componentes"</span>
 tem de constar <span style="font-family: monospace;">"gestao-de-componentes"</span></li>
     <li><span style="font-family: monospace;"></span>em
 relação ao ficheiro <span style="font-weight: bold;">common.php</span>,
@@ -371,11 +324,7 @@ ser apresentado um formulário com os dados, mas texto contendo a
 informação introduzida, sendo que é realizado
 output do formulário mas com os respectivos campos
 hidden e depois o botão de confirmar.</li>
-  <li>Quando há erros no código, é só
-estar atento a qual a linha do
-"eval'd code" que é a prevaricadora. Será essa linha no
-código
-PHP que estará a provocar o erro.</li>
+  
   <ul>
   </ul>
   <ul>
@@ -434,8 +383,7 @@ funções/variáveis do próprio wordpress,
 alguns exemplos podem ser encontrados <a href="http://wordpress.org/support/topic/how-to-get-the-current-logged-in-users-role">aqui</a>.<br>
   </li>
   <li>Sempre que são realizadas queries convém invocar a
-função mysql_error como é feito nos slides da aula
-teórica pois ajuda na descoberta de bugs.</li>
+função mysql_error.</li>
   <li>Cuidado com a replicação de código! É
 comum repetir-se o mesmo código SQL, para diferentes casos em
 diferentes pesquisas (dependendo de que campos
@@ -446,19 +394,7 @@ variável (string) com a parte inicial da query e ir concatenando
 a essa string os
 bocados de SQL necessários, de acordo com o que terá sido
 especificado pelo utilizador</li>
-  <li>Nem sempre está ligação ativa por parte do
-wordpress à BD, pelo que, pelo seguro, convém sempre
-realizar ligação sempre que necessário, o que
-poderá ser feito com código do género
-(possível de colocar numa função no ficheiro
-common.php:<br>
-    <div style="margin-left: 40px;">
-    <pre>$link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);</pre>
-    <pre>$result = mysqli_query($link,$query);</pre>
-    </div>
-em que na 1ª linha estão constantes definidas
-automaticamente pelo Wordpress.<br>
-  </li>
+  
   <li>Todos os comandos php mysql deverão incluir a letra "i"
 (como os acima) pois correspondem à versão mais recente e
 a sem o "i" nem sempre funciona como esperado, estando em fase de ser
@@ -473,22 +409,14 @@ query (praticamente idêntica) para cada if</li>
   <li>Para ser possível a verificação do
 funcionamento da validação server side, é
 necessário estar desativada a validação client
-side, pelo que todos os grupos que implementem validação
-clientside devem incluir uma variável no ficheiro common.php
+side, pelo que se deve incluir uma variável no ficheiro common.php
 chamada $clientsideval=0; variável esta que deverá ser
 testada antes da realização de qualquer output de
 código de validação client side (como o atributo
 "required"), output o qual só deverá ocorrer se a
 variável for true (=1).<br>
   </li>
-  <li>Algumas instalações podem ter problemas na
-execução dos estados após o inicial quando o
-action no formulário é especificado conforme neste
-enunciado, sendo que a alternativa será não especificar o
-atributo action, o que leva à execução do action
-como sendo uma chamada à própria página, o que
-funciona na mesma<br>
-  </li>
+  
   <li>Para simplificar a inserção de tuplos em que algum
 atributo que é foreign key e pode ser nulo e porque pode haver
 problemas ao colocar-se o termo "NULL" no código SQL, o mais
@@ -2539,7 +2467,10 @@ apresentadas as propriedades da entidade tv, pois estas têm uma
 propriedade do tipo ent_ref, referenciando o componente casa.</li>
     <li style="background-color: white;"><br>
     </li>
-    <li style="background-color: white;">Apresentar também uma lista das propriedades de todas as entidades que possuem uma relação com a entidade selecionada.(Isto é tuplos da tabela rel_type, em que um dos entity_id, seja igual
+    <li style="background-color: white;">Apresentar
+também uma lista das propriedades de todas as entidades que possuem uma
+relação com a entidade selecionada.(Isto é tuplos da tabela rel_type,
+em que um dos entity_id, seja igual
 ao id da entidade selecionada.) E todas as propriedades referentes as
 relações existentes com a entidade selecionada. Por exemplo como existe
 uma relação entre casa e serviços contratados, deverão ser apresentadas
