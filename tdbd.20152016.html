@@ -9,6 +9,8 @@
 
 
 
+
+
   
 
   
@@ -2506,45 +2508,56 @@ comportamento a seguir especificado.</li>
   <li>Se não vier nenhum
 valor na variável (REQUEST) sobre o estado de
 execução, apresentar o Sub-título
-(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Pesquisa Dinâmica - escolher
-componente<br>
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Pesquisa Dinâmica - escolher entidade<br>
     </span></span></li>
   <ul>
-    <li>Apresentar uma lista dos tipos de
-componentes e componentes existentes na BD, que sejam referenciados por
-pelo menos um outro componente, no atributo comp_fk_id, seguindo-se o
-formato de listas do componente anterior, mas sendo o URL o seguinte: "<span style="font-weight: bold;">pesquisa-dinamica?estado=escolha&amp;comp=c</span></li>
+    <li>Apresentar uma lista das entidades existentes na BD, que sejam referenciadas por
+pelo menos uma outra entidade, no atributo fk_ent_type_id, seguindo-se o
+formato de listas do <span style="font-weight: bold;">componente Inserção de Valores</span>, mas sendo o URL o seguinte: "<span style="font-weight: bold;">pesquisa-dinamica?estado=escolha&amp;ent=e"</span></li>
   </ul>
   <li>Se o estado de execução é <span style="font-weight: bold;">escolha</span></li>
   
+  
   <ul>
 
+
     
-    <li>Apresentar uma lista das propriedades do componente escolhido,
-sendo cada propriedade seguida por uma checkbox. As propriedades
+    <li>Apresentar uma lista das propriedades da entidade escolhida,
+sendo que cada propriedade deverá ser seguida por uma checkbox. As propriedades
 selecionadas serão as cujos valores deverão aparecer no
 resultado desta pesquisa.</li>
-<li>Apresentar
+<li style="background-color: white;">Apresentar
 também uma lista das propriedades (também seguidas por
-uma checkbox) dos componentes que contenham pelo menos uma propriedade
+uma checkbox) das entidades que contenham pelo menos uma propriedade
 cujo
-value_type seja "comp_ref" e cujo atributo comp_fk_id referencie o
-componente escolhido. Dando continuidade ao exemplo apresentado para a
-inserção de valores, se o componente escolhido for casa,
-além das propriedades desse próprio componente a
+value_type seja "ent_ref" e cujo atributo fk_ent_type_id referencie a
+entidade escolhida. Dando continuidade ao exemplo apresentado para a
+inserção de valores, se a entidade escolhida for casa,
+além das propriedades dessa entidade a
 apresentar segundo o ponto anterior, deverão também ser
-apresentadas as propriedades do componente tv, pois este tem uma
-propriedade do tipo comp_ref, referenciando o componente casa<br>
-</li>
-    <li>Tem de ser possível restringir a lista de
-instâncias do
-componente escolhido com um conjunto de critérios aplicados
-às propriedades escolhidas (tanto do componente escolhido como
-dos eventuais componentes que o referem), sendo
+apresentadas as propriedades da entidade tv, pois estas têm uma
+propriedade do tipo ent_ref, referenciando o componente casa.</li>
+    <li style="background-color: white;"><br>
+    </li>
+    <li style="background-color: white;">Apresentar também uma lista das propriedades de todas as entidades que possuem uma relação com a entidade selecionada.(Isto é tuplos da tabela rel_type, em que um dos entity_id, seja igual
+ao id da entidade selecionada.) E todas as propriedades referentes as
+relações existentes com a entidade selecionada. Por exemplo como existe
+uma relação entre casa e serviços contratados, deverão ser apresentadas
+todas as propriedades referentes a serviços contratados, e também a
+propriedade custo, uma vez que custo é uma propriedade da relação entre
+casa e serviços contratados.<br>
+    </li>
+    <li style="background-color: white;">&nbsp;<br>
+
+    </li>
+<li style="background-color: white;">Tem de ser possível restringir a lista de
+instâncias da entidade escolhida com um conjunto de critérios aplicados
+às propriedades escolhidas (tanto da entidade escolhida como
+de eventuais entidades que a referem), sendo
 que deve ser dada ao utilizador a capacidade de escolher trios
-de:&nbsp; propriedade, operador e valor. Por ex, se o componente
+de:&nbsp; propriedade, operador e valor. Por ex, se a entidade
 escolhido for <span style="font-weight: bold;">casa</span>
-e ele tiver propriedades: nome (nota: deve ser possível deixar
+e ela tiver propriedades: nome (nota: deve ser possível deixar
 os trios com escolha vazia, caso em que não é aplicado
 filtro - neste exemplo deve ser possível mostrar casas com
 qualquer nome) e tipologia (do tipo enum, com valores permitidos:
@@ -2555,7 +2568,11 @@ instâncias de vivenda), diagonal &lt; 50;
 tecnologia 3D = ativa; resolução = Ultra HD</li>
 
   
+  
   </ul>
+</ul>
+<ul>
+
 
   <li>Se o estado é <span style="font-weight: bold;">execucao</span>,
 a
@@ -2569,9 +2586,7 @@ num array no ficheiro common.php a lista de operadores disponíves</li>
     <li>a nível de usabilidade, para facilitar a escolha da
 propriedade uma hipótese é fazer output de uma
 árvore do género da que é feita no componente
-inserção de valores, mas que além dos tipos de
-componente, e componente mostra també as propriedades de cada
-componente.</li>
+inserção de valores, mas que além das entidades, mostra também as suas propriedades.</li>
     <li>quando o utilizador escolhe uma propriedade os valores devem
 ser restringidos de acordo com o seu tipo. Por exemplo, se for enum
 aparece uma lista dos valores permitidos. Se for double permite inserir
@@ -2594,6 +2609,7 @@ propriedades. As linhas seguintes os valores.<br>
   </ul>
 </ul>
 
+
 <h3>Importação de Valores<br>
 </h3>
 
@@ -2615,33 +2631,33 @@ comportamento a seguir especificado.</li>
 valor na variável (REQUEST) sobre o estado de
 execução, apresentar o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Importação de Valores -
-escolher componente<br>
+escolher entidade<br>
     </span></span></li>
   <ul>
-    <li>Apresentar uma lista dos tipos de componentes e componentes
+    <li>Apresentar uma lista de todas as entidades
 existentes na BD, seguindo-se o seguinte formato:</li>
-    <li>Componentes:<br>
+    <li>Entidades:<br>
     </li>
     <ul>
-      <li>propriedade&nbsp;&nbsp; <br>
-      </li>
-      <ul>
-        <li>[entidade a faturar]</li>
-        <li>[serviços contratados]</li>
-        <li>[áreas]</li>
-        <li>[tv]</li>
-      </ul>
-      <li>canal de venda</li>
-      <ul>
-        <li>[nome]</li>
-        <li>[custos]</li>
-        <li>[comissão]<br>
-        </li>
-      </ul>
+      <li>[Casa]</li>
+      <li>[Serviços contratados]</li>
+      <li>[Tv]</li>
+      <li>[Quarto]</li>
     </ul>
     <ul>
-      <ul>
-        <li>...</li>
+
+        
+        
+        
+        
+      
+    </ul>
+
+    <ul>
+      
+      <li>...</li>
+<ul>
+        
       </ul>
     </ul>
     <li>Formulários customizados</li>
@@ -2653,19 +2669,17 @@ existentes na BD, seguindo-se o seguinte formato:</li>
     </ul>
     <li>Nota: as listas são construídas dinamicamente
 graças às queries necessárias à BD, que
-vão buscar os nomes na tabela <span style="font-weight: bold;">comp_type</span>
-(entradas de nível superior) e <span style="font-weight: bold;">component</span>
-- que aparecem listados entre parêntesis retos, e em que cada
+vão buscar os nomes na tabela <span style="font-weight: bold;">ent_type</span>,<span style="font-weight: bold;"></span> que aparecem listados entre parêntesis retos, e em que cada
 item é uma ligação para o seguinte
-endereço: "<span style="font-weight: bold;">importacao-de-valores?estado=introducao&amp;comp=c</span>"
-onde <span style="font-weight: bold;">c</span> é o id <span style="font-weight: bold;"></span>do respetivo componente nessa
+endereço: "<span style="font-weight: bold;">importacao-de-valores?estado=introducao&amp;ent=e</span>"
+onde <span style="font-weight: bold;">e</span> é o id da respetiva entidade nessa
 entrada ou "<span style="font-weight: bold;">importacao-de-valores?estado=introducao&amp;form=f</span>"
 onde <span style="font-weight: bold;">f</span> é o id <span style="font-weight: bold;"></span>do respetivo form customizado </li>
     <li>Se o estado de execução é <span style="font-weight: bold;">introducao</span></li>
     <ul>
       <li>Apresentar uma tabela com duas linhas, contendo, na primeira,
 em cada coluna os formfieldnames das
-propriedades do componente ou formulário clicado. Para o caso de
+propriedades da entidade ou formulário clicado. Para o caso de
 propriedades do tipo enum, repetir nesta linha o nome deste campo o
 número de vezes igual ao total de valores permitidos. Na segunda
 linha, apresentar, apenas para as propriedades enum, nas respetivas
@@ -2682,7 +2696,7 @@ ficheiro excel sendo o próximo estado <span style="font-weight: bold;">insercao
     <ul>
       <li>processar o ficheiro recebido e realizar inserts na BD sendo
 que cada linha do excel irá corresponder a uma instância
-(tuplo em comp_inst e tuplos em value necessários) do componente
+(tuplo em entity e tuplos em value necessários) da entidade
 selecionado.</li>
     </ul>
   </ul>
