@@ -1,20 +1,63 @@
 <?php
 
 //This class will handle all the operations related to the database
-public class Db_Op ()
+class Db_Op
 {
     //DB_HOST,DB_USER,DB_PASSWORD,DB_NAME these are contants present in the wordpress
-    $mysqli;
+    public $mysqli;
+  
     //This method will make the database connection
     public function connectToDb()
     {
       $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       if($mysqli->connect_errno)
       {
-        
+      	printf("Connect failed: %s\n", $mysqli->connect_error);
+      	exit();
       }
     }
-
+	
+    //This method will receive a String(query) and will process it 
+    //If the query received starts with 
+    // SELECT, SHOW, DESCRIBE, EXPLAIN it will return a mysqli_result object
+    // else it will return true and at last if something goes wrong after/during the query 
+    // run the result that will be returned is false.
+    public function runQuery($query)
+    {
+    	if(substr($query,0,5) == "SELECT" ||
+    	   substr($query,0,5) == "SHOW"||
+    	   substr($query,0,5) == "DESCRIBE"||
+    	   substr($query,0,5) == "EXPLAIN")
+    	{
+    		$result = $mysqli->query($query);
+    		if($result == false)					//erro na query
+    		{
+    			printf("".$query);
+    			printf("Error: %s\n", $mysqli->error);
+    			return $result;
+    		}
+    		else 									//retorna um objecto do tipo  mysqli_result 
+    		{
+    			return $result;
+    		}
+    	}
+    	else
+    	{
+    		$result = $mysqli->query($query);
+    		if($result == false)
+    		{
+    			printf("".$query);
+    			printf("Error: %s\n", $mysqli->error);
+    			return $result;
+    		}
+    		else
+    		{
+    			return true;
+    		}
+    	}
+    }
+    
+    //This method will disconnect a database connection
     public function disconnectToDb()
     {
       $mysqli->close();
