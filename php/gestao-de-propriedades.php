@@ -117,7 +117,7 @@ class PropertyManage
         <thead>
             <tr>
             <?php
-                if ($tipo === entity)
+                if ($tipo === "entity")
                 {
             ?>
                 <th>Entidade</th>
