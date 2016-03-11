@@ -10,7 +10,7 @@
 			if(empty($_REQUEST['estado']))
 			{
 				//Apresentar tabela
-				$res_EntType = $bd->runQuery("SELECT * FROM ent_type WHERE state like 'active'");
+				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
 				//verifica se há ou não entidades
 				if($res_EntType->num_rows > 0)
 				{
@@ -37,11 +37,13 @@
 							<td><?php echo $read_EntType['state']?></td>
 							<td>
 								<form>
+									<input type="hidden" name="ent_id" value="<?php $read_EntType['id']; ?>">
 									<input type="hidden" name="estado" value="editar">
 									<input type="submit" value="[editar]">
 								</form>
 								
 								<form>
+									<input type="hidden" name="ent_id" value="<?php $read_EntType['id']; ?>">
 									<input type="hidden" name="estado" value="desativar">
 									<input type="submit" value="[desativar]">
 								</form>
