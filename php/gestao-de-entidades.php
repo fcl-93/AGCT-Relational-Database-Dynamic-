@@ -61,7 +61,7 @@
 						<br>	
 						<label>Estado:</label><br>
 <?php 
-						$stateEnumValues = getEnumValues('ent_type','state'); //this function is in common.php
+						$stateEnumValues = $bd->getEnumValues('ent_type','state'); //this function is in common.php
 						foreach($enumTipos as $value)
 						{
 ?>
