@@ -62,6 +62,7 @@ function verificaEstado()
 
 function existePropriedade($tipo)
 {
+    echo "entrei aqui";
     $querySelect = "SELECT * FROM PROPERTY WHERE ";
     if ($tipo === "relation")
     {
