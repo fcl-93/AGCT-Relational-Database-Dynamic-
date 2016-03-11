@@ -104,8 +104,9 @@ class PropertyManage
         if($this->existePropriedade($tipo))
         {
             $this->apresentaTabela($tipo);
-            $this->apresentaForm($tipo);
+            
         }
+        $this->apresentaForm($tipo);
     }
 
     private function apresentaTabela($tipo)
