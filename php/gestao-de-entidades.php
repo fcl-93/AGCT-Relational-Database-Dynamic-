@@ -79,16 +79,22 @@
 				$res_EntTypeA = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
 				$read_EntTypeA = $res_EntTypeA->fetch_assoc();
 				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
- 				echo 'A entidade '.$read_EntTypeA[name].' foi ativada';
- 				echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
+?>
+				<html>
+ 					<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>;
+ 					<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>;
+				</html>
+<?php 		
  			}
  			else if($_REQUEST['estado'] == 'desativar')
  			{
  				$res_EntTypeD = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
  				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
  				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
- 				echo 'A entidade .'.$read_EntTypeD['name'].' foi desativada';
- 				echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
+?>			
+				<p>A entidade <?php echo $read_EntTypeA['name'] ?>  foi desativada</p>;
+ 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>;
+<?php 
  			}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
@@ -164,12 +170,24 @@ class entidade
 			
 			foreach($stateEnumValues as $value)
 			{
+				if($value == 'active')
+				{
+?>				
+					<html>
+						<input type="radio" name="atv_int" value="active" required>Ativo
+						<br>
+					</html>
+<?php 	
+				}
+				else 
+				{
 ?>
-				<html>
-					<input type="radio" name="atv_int" value="<?php echo $value ?>" required><?php echo $value?>
-					<br>
-				</html>
-<?php 
+					<html>
+						<input type="radio" name="atv_int" value="inctive" required>Desativo
+						<br>
+					</html>
+<?php 				
+				}
 			}
 ?>
 				<br>
