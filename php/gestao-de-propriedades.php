@@ -75,11 +75,11 @@ class PropertyManage
         $querySelect = "SELECT * FROM property WHERE ";
         if ($tipo === "relation")
         {
-            $querySelect.= "ent_type_id = NULL";
+            $querySelect.= "rel_type_id != NULL";
         }
         else
         {
-            $querySelect.= "rel_type_id = NULL";
+            $querySelect.= "ent_type_id != NULL";
         }
         $resultSelect = $this->db->runQuery($querySelect);
             
@@ -116,20 +116,20 @@ class PropertyManage
     <table>
         <thead>
             <tr>
-                        <?php
-                            if ($tipo === entity)
-                            {
-                        ?>
+            <?php
+                if ($tipo === entity)
+                {
+            ?>
                 <th>Entidade</th>
-                        <?php
-                            }
-                            else
-                            {
-                        ?>
-                <th>Relação</th>
-                <?
+            <?php
                 }
-                ?>
+                else
+                {
+            ?>
+                <th>Relação</th>
+            <?
+                }
+            ?>
                 <th>ID</th>
                 <th>Propriedade</th>
                 <th>Tipo de valor</th>
@@ -352,7 +352,7 @@ class PropertyManage
                             <option value="NULL"></option>';
                             $selecionaEntidades= "SELECT id, name FROM ent_type";
                             $result = $this->db->runQuery($selecionaEntidades);
-                            while($guardaEntidade = $result->fetch_assoc($result))
+                            while($guardaEntidade = $result->fetch_assoc())
                             {
                                 echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
                             }
