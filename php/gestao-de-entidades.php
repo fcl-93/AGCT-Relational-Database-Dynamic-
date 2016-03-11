@@ -26,7 +26,7 @@
 <?php				
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
 				//verifica se h� ou n�o entidades
-				if(!$res_EntType)
+				if($res_EntType)
 				{
 					while($read_EntType = $res_EntType->fetch_assoc())
 					{
@@ -68,9 +68,9 @@
 						foreach($enumTipos as $value)
 						{
 ?>
-						<html>
-							<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
-						</html>	
+							<html>
+								<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+							</html>	
 <?php 								
 						}
 ?>						
