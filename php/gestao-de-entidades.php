@@ -28,13 +28,13 @@
 <?php				
 				
 					while($read_EntType = $res_EntType->fetch_assoc())
-					{print_r($read_EntType);
+					{	//print_r($read_EntType);
 						//printa a restante tabela
 ?>						
 						<tr>
-							<td><?php $read_EntType['id']; ?></td>
-							<td><?php $read_EntType['name']?></td>
-							<td><?php $read_EntType['state']?></td>
+							<td><?php echo $read_EntType['id']; ?></td>
+							<td><?php echo $read_EntType['name']?></td>
+							<td><?php echo $read_EntType['state']?></td>
 							<td>[editar][desativar]</td>
 						</tr>
 <?php 
