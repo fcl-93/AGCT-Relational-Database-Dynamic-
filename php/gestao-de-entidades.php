@@ -12,7 +12,7 @@
 				//Apresentar tabela
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type WHERE state like 'active'");
 				//verifica se há ou não entidades
-				if(!$res_EntType)
+				if($res_EntType)
 				{
 ?>
 				<html>
@@ -62,7 +62,7 @@
 				if($entity->ssvalidation()) //serverside validations
 				{
 					$sanitizeName = $bd->userInputVal($_REQUEST['nome']);
-					$res_checkRep = $bd->runQuery("SELECT * FROM ent_type WHERE name like".$sanitizeName);
+					$res_checkRep = $bd->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
 					if($res_checkRep->num_rows)
 					{
 ?>
