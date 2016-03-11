@@ -82,8 +82,8 @@ efetuamos uma alteração ao código da aplicação, desta forma conseguimos
 trabalhar de forma colaborativa e mais eficiente, sendo que todas as
 alterações feitas ficam automaticamente disponíveis entre nós. A
 utilização do GitHub como repositório de código tem também a vantagem
-de ter a funcionalidade de controlo de versões que permite que caso
-neessário possamos regredir as alterações que forem feitas.<br><br>Esse servidor está online e pode ser consultado recorrendo ao endereço <a href="http://agct16.ddns.net/">http://agct16.ddns.net/</a><br>
+de ter a funcionalidade de controlo de versões que permite que, caso
+neessário, possamos regredir as alterações que forem feitas.<br><br>Esse servidor está online e pode ser consultado recorrendo ao endereço <a href="http://agct16.ddns.net/">http://agct16.ddns.net/</a><br>
 
 <br>Iremos utilizar os seguintes plugins do Wordpress:
 <ol>
@@ -681,9 +681,8 @@ caso contrário, <br>
     </li>
   </ul>
 <ul><li>Se não houverem tuplos na tabela <span style="font-weight: bold;">rel_type</span> apresentar o
-texto "<span style="font-style: italic;">Não há tipos de relação"</span>
-car uma lista com todas as relações
-com o seguinte formato (ordenada por ordem alfabética):aso contrário, apresent</li></ul>
+texto "<span style="font-style: italic;">Não há tipos de relação"</span>, caso contrário deverá ser apresentada uma lista com todas as relações
+com o seguinte formato (ordenada por ordem alfabética):</li></ul>
 </ul>
 <ul>
   <ul>
@@ -886,10 +885,10 @@ tenha, é executado o
 comportamento a seguir especificado.</li>
   <li>Se não vier nenhum
 valor na variável (POST) sobre o estado de
-execução é apresentado:</li>
+execução:</li>
   
   <ul>
-    <li>Deverá ser possivel escolher entre&nbsp; entidade ou&nbsp; relação,
+    <li>Deverá ser possivel escolher entre&nbsp; entidade ou relação,
 sendo que conforme essa seleção o utilizador é encaminhado para a mesma
 página mas em que o estado corresponderá respetivamente a <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation</span>.<br>
     </li>
@@ -900,7 +899,7 @@ página mas em que o estado corresponderá respetivamente a <span style="font-we
 
   
   <li>Caso o estado de execução seja <span style="font-weight: bold;">entity</span> deverá ser apresentada uma
-lista com todas as propriedades que se encontram associadas as entidades</li>
+lista com todas as propriedades que se encontram associadas às entidades</li>
 <ul>
     
     
@@ -910,16 +909,8 @@ propiedades especificadas</span>",
 caso contrário:</li>
 <ul>
       
-    </ul>
-</ul>
-</ul>
-<ul>
-  <ul>
-    <ul>
-      <ul>
-        <li>
-        <div style="text-align: center;">
-        </div>
+    </ul><ul><li>
+        
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
           <tbody>
             <tr>
@@ -1162,24 +1153,27 @@ Serviços contratados<br>
             </tr>
           </tbody>
         </table>
-      </li>
+      </li></ul>
       </ul>
-    </ul>
-    <ul>
-      <br>
-</ul></ul></ul>
-<ul style="margin-left: 40px;">
-  <ul>
-    <li>Apresentar após a tabela acima o Sub-título
-(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
-introdução</span></span> e logo depois um
-formulário que possibilita a inserção de uma nova
-propriedade:</li>
-  </ul>
 </ul>
 <ul>
   <ul>
     <ul>
+      
+    </ul>
+    
+      
+    <li>Apresentar após a tabela acima o Sub-título
+(heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
+introdução</span></span> e logo depois um
+formulário que possibilita a inserção de uma nova
+propriedade:</li></ul></ul>
+<ul style="margin-left: 40px;"><ul>
+  </ul>
+</ul>
+<ul>
+  <ul>
+    
       <ul>
         <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Nome da propriedade</span> -
 (obrigatório)</li>
@@ -1197,69 +1191,59 @@ situações idênticas) com o seguinte aspeto</span>:<span style="text-decoratio
           <li>...</li>
         </ul>
       </ul>
-    </ul>
+    
     <ul>
-      <ul>
-        <li><span style="font-weight: bold;">selectbox</span> ( ent_type_id ) - <span style="font-style: italic;">Entidade</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
+      <li><span style="font-weight: bold;">selectbox</span> ( ent_type_id ) - <span style="font-style: italic;">Entidade</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
 propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todas as entidades presentes na tabela <span style="font-weight: bold;">entity_type</span></span></li>
-        <br>
-        <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
+de todas as entidades presentes na tabela <span style="font-weight: bold;">entity_type</span></span></li><li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
 - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
 uma lista com todos os tipos de campo de formulário presentes no
 atributo form_field_type (usar função recomendada para o
 atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
-      </span></li>
-        <ul>
+      </span></li><ul>
+        
 <li><input checked="checked" name="value_type" value="text" type="radio">text</li><li><input name="value_type" value="int" type="radio">text box<br>
       </li><li>...</li>
-        </ul>
-        <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+        
+        </ul><li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
 de todos os tipos de unidade presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">prop_unit_type</span><span style="text-decoration: underline;"> em
 que a opção inicial selecionada deverá estar em
 branco, o que equivale à inserção de um NULL</span><span style="font-weight: bold; text-decoration: underline;"><br>
-      </span></li>
-        <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
-- (obrigatório e um número superior a 0)</li>
-        <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
-- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li>
-        <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
+      </span></li><li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
+- (obrigatório e um número superior a 0)</li><li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
+- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li><li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
 (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
 as seguintes duas opções, sendo que na primeira o valor
 do campo no formulário na 1ª opção é 1
 e na 2ª opção é 0</span>:<span style="text-decoration: underline;"><br>
-      </span></li>
-        <ul>
+      </span></li><ul>
+        
+        
+        
+        
 <li><input checked="checked" name="value_type" value="text" type="radio">sim</li><li><input name="value_type" value="int" type="radio">não</li>
-        </ul>
-        <li style="background-color: yellow;"><span style="font-weight: bold;">selectbox</span> - Entidade referenciada
+        
+        </ul><li style="background-color: yellow;"><span style="font-weight: bold;">selectbox</span> - Entidade referenciada
 por esta propriedade - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todas as entidades presentes na tabela <span style="font-weight: bold;">ent_type</span></span><span style="font-weight: bold; text-decoration: underline;"></span></li>
-        <li><span style="font-weight: bold;">hidden</span> (estado) -
-value: <span style="font-weight: bold;">inserir</span></li>
-        <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li>
+de todas as entidades presentes na tabela <span style="font-weight: bold;">ent_type</span></span><span style="font-weight: bold; text-decoration: underline;"></span></li><li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li><li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li><ul>
+        
+        
       </ul>
 <br>
-      <li>Caso o estado de exeção seja <span style="font-weight: bold;">relation</span></li>
+      
     
     </ul>
 
 
   
   
-  </ul>
-
-</ul>
-
-<ul>
-
-  <ul>
-    <ul>
-      
-      <ul>
-        <li>
-        <div style="text-align: center;">
-        </div><table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="vertical-align: top;"><span style="font-weight: bold;">Relação</span><br>
+  </ul><li>Caso o estado de exeção seja <span style="font-weight: bold;">relation </span>deverá ser apresentada uma
+lista com todas as propriedades que se encontram associadas às relações</li><ul><li>Se não houverem tuplos na tabela <span style="font-weight: bold;">property</span>, apresentar o
+texto "<span style="font-style: italic;">Não há
+propiedades especificadas</span>",
+caso contrário:</li><ul><li>
+        <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="vertical-align: top;"><span style="font-weight: bold;">Relação</span><br>
                 </td>
 <td style="vertical-align: top; font-weight: bold; text-align: center;">id<br>
               </td>
@@ -1292,7 +1276,7 @@ no formulário</td>
             </tr>
             <tr>
               
-              <td style="vertical-align: top;"><br>
+              <td style="vertical-align: top;">Casa-serviços contratados<br>
                 </td>
 <td style="vertical-align: top; text-align: center;">1<br>
               </td>
@@ -1300,7 +1284,7 @@ no formulário</td>
 </td>
               <td style="vertical-align: top; text-align: center;">text<br>
               </td>
-              <td style="vertical-align: top; text-align: center;">dat-1-<br>
+              <td style="vertical-align: top; text-align: center;">cas-1-data<br>
 </td>
               <td style="vertical-align: top; text-align: center;">text<br>
               </td>
@@ -1497,14 +1481,23 @@ no formulário</td>
             </tr>
           </tbody>
         </table>
-      </li>
+      </li></ul>
       </ul>
+
+</ul>
+
+<ul>
+
+  <ul>
+    <ul>
+      
+      
 
     </ul>
     <br>
 
     
-    <ul>
+    
       <li>Apresentar após a tabela acima o Sub-título
 (heading 3): <span style="font-style: italic;"><span style="font-weight: bold;">Gestão de propriedades</span></span><span style="font-style: italic;"><span style="font-weight: bold;"> -
 introdução</span></span> e logo depois um
@@ -1531,14 +1524,7 @@ situações idênticas) com o seguinte aspeto</span>:<span style="text-decoratio
       <ul>
         <li><span style="font-weight: bold;">selectbox</span> ( rel_type_id ) - <span style="font-style: italic;">Relação</span><span style="background-color: yellow;">&nbsp; a que irá pertencer esta
 propriedade</span> - (obrigatório) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
-de todas as relações presentes na tabela <span style="font-weight: bold;">rel_type</span></span></li>
-      </ul>
-    </ul>
-</ul></ul>
-<ul>
-  <ul>
-    <ul>
-      <ul>
+de todas as relações presentes na tabela <span style="font-weight: bold;">rel_type</span></span></li><ul>
       </ul>
       <ul>
 
@@ -1550,45 +1536,50 @@ de todas as relações presentes na tabela <span style="font-weight: bold;">rel_
     
     
     
-    <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
+    </ul><li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Tipo do campo do formulário</span>
 - (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
 uma lista com todos os tipos de campo de formulário presentes no
 atributo form_field_type (usar função recomendada para o
 atributo tipo de valor) com o seguinte aspeto</span>:<span style="text-decoration: underline;"><br>
-      </span></li>
+      </span></li><ul>
 
 
-    <ul>
-      <li><input checked="checked" name="value_type" value="text" type="radio">text</li>
-      <li><input name="value_type" value="int" type="radio">text box<br>
-      </li>
-      <li>...</li>
+    <li><input checked="checked" name="value_type" value="text" type="radio">text</li><li><input name="value_type" value="int" type="radio">text box<br>
+      </li><li>...</li><ul>
+      
+      
+      
     </ul>
-    <li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
+    </ul><li><span style="font-weight: bold;">selectbox</span> - <span style="font-style: italic;">Tipo de unidade</span> - (opcional) - <span style="text-decoration: underline;">apresentar uma lista com os nomes
 de todos os tipos de unidade presentes na tabela </span><span style="font-weight: bold; text-decoration: underline;">prop_unit_type</span><span style="text-decoration: underline;"> em
 que a opção inicial selecionada deverá estar em
 branco, o que equivale à inserção de um NULL</span><span style="font-weight: bold; text-decoration: underline;"><br>
-      </span></li>
-    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
-- (obrigatório e um número superior a 0)</li>
-    <li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
-- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li>
-    <li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
+      </span></li><li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Ordem do campo no formulário</span>
+- (obrigatório e um número superior a 0)</li><li><span style="font-weight: bold;">text</span> - <span style="font-style: italic;">Tamanho do campo no formulário</span>
+- (obrigatório no caso de o tipo de campo ser <span style="font-style: italic;">text</span> ou <span style="font-style: italic;">text box</span>)</li><li><span style="font-weight: bold;">radio</span> - <span style="font-style: italic;">Obrigatório</span> -
 (obrigatório)<span style="font-style: italic;"></span>- <span style="text-decoration: underline;">apresentar
 as seguintes duas opções, sendo que na primeira o valor
 do campo no formulário na 1ª opção é 1
 e na 2ª opção é 0</span>:<span style="text-decoration: underline;"><br>
-      </span></li>
-    <ul>
+      </span></li><ul>
+    
+    
+    
+    
       <li><input checked="checked" name="value_type" value="text" type="radio">sim</li>
-      <li><input name="value_type" value="int" type="radio">não</li></ul>
+      <li><input name="value_type" value="int" type="radio">não</li>
       </ul>
-      <ul>
-        <li><span style="font-weight: bold;">hidden</span> (estado) -
-value: <span style="font-weight: bold;">inserir</span></li>
-        <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li>
+      <li><span style="font-weight: bold;">hidden</span> (estado) -
+value: <span style="font-weight: bold;">inserir</span></li><li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Inserir propriedade</span></li><ul>
+        
+        
       </ul>
     </ul>
+    
+</ul></ul>
+<ul>
+  <ul>
+    
 
   
   </ul>
@@ -1621,12 +1612,12 @@ para
 inserção dos dados na tabela <span style="font-weight: bold;">property</span>
 e executá-lo</li>
     <ul>
-      <li>Se vier um valor na varíavel POST['rel_type_id']:</li>
+      <li>Se vier um valor na varíavel $POST['rel_type_id']:</li>
       <ul>
 <li>o valor para o atributo form_field_name é determinado
 neste estado e será uma string
 resultante da concatenação dos primeiros
-caracteres da entidade a que esta propriedade vai pertencer, seguido
+caracteres da realcao a que esta propriedade vai pertencer, seguido
 de um traço, seguido do id da propriedade, seguido de outro
 traço e seguido do nome da propriedade especificado no respetivo
 campo pelo utilizador, sendo que este nome deverá ser
@@ -1651,7 +1642,7 @@ obsoleta).</li></ul>
 <ul>
   <ul>
     <ul>
-      <li>Caso contrário isto é se POST['ent_type_id']:<span style="font-weight: bold;"></span></li>
+      <li>Caso contrário isto é se $POST['ent_type_id']:<span style="font-weight: bold;"></span></li>
     </ul>
   </ul>
 </ul>
@@ -1660,13 +1651,13 @@ obsoleta).</li></ul>
     <ul>
       <ul>
         <li><span style="background-color: yellow;">o valor para o
-atributo comp_fk_id
-é o id do eventual componente selecionado na segunda select box
-e significa que num dado componente (por exemplo tv) esta propriedade
+atributo&nbsp;fk_ent_type_id
+é o id da eventual entidade selecionada na segunda select box
+e significa que numa dada entidade (por exemplo tv) esta propriedade
 é uma "chave estrangeira" para outro componente. Clarificando,
-para por exemplo uma casa/propriedade, instâncias do componente
+para por exemplo uma casa, instâncias da entidade
 tv terão um value para esta propriedade do tipo "fk" que
-será igual ao id do comp_inst de uma casa particular.</span></li>
+será igual ao id do entity de uma casa particular.</span></li>
       </ul>
     </ul>
 
@@ -1736,12 +1727,14 @@ tenha, é executado o
 comportamento a seguir especificado.</li>
   <li>Se não vier nenhum
 valor na variável (REQUEST) sobre o estado de
-execução é apresentado:</li>
+execução:</li>
   <ul>
-    <li>Deverá ser possivel escolher entre entidade ou&nbsp; relação,
+    <li>Deverá
+ser possivel escolher entre entidade ou&nbsp; relação,
 de modo a que se possam visualizar todos os valores&nbsp; que pertencem
-as propriedades enum da entidades ou relações ,sendo que conforme essa seleção o utilizador é encaminhado para a mesma
-página, no entanto o estado corresponderá respetivamente a  <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation</span>.</li>
+às propriedades enum das entidades ou relações ,sendo que conforme essa
+seleção o utilizador é encaminhado para a mesma
+página, no entanto o estado corresponderá respetivamente a <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation</span>.</li>
   </ul>
   <li>Caso o estado de execução seja <span style="font-weight: bold;">entity</span> ou <span style="font-weight: bold;">relation:</span></li>
   <ul>
@@ -2157,7 +2150,7 @@ fk_ent_type_id da propriedade que é "chave estrangeira" na entidade
 selecionada para inserção de valores. O value
 de cada opção será o id do tuplo de entity e o
 texto a apresentar na opção será o valor no
-atributo value correspondente à propriedade nome da entidade
+atributo value correspondente à property nome da entidade
 selecionada. Por exemplo e clarificando, assumindo uma entidade chamada
 <span style="font-weight: bold;">casa</span>,&nbsp; e que
 por sua vez tem a property <span style="font-weight: bold;">nome</span>
@@ -2169,7 +2162,7 @@ para os nomes de 2 casas:
 informação das tvs que existem nestas duas casas, ao
 estarmos no estado insercao-de-valores para a entidade tv, devem
 aparecer como texto das opções os valores existentes  no
-atributo value correspondente à propriedade nome da entidade selecionada, que correspondem as instancias de casa.</li></ul>
+atributo value correspondente à property nome da entidade selecionada, que correspondem às instancias de casa.</li></ul>
         <li>o nome de cada campo será o nome especificado no
 respetivo atributo do respetivo tuplo da respetiva propriedade</li>
         <li>caso a propriedade a ser mostrada tenha um tipo de unidade,
@@ -2230,7 +2223,7 @@ adicionalmente:</span><br>
       </li>
     </ul>
     <ul>
-      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=inserir&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id do entidade<br>
+      <li>o action do formulário tem o seguite formato <span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=inserir&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id da entidade<br>
  </li>
     </ul>
     <ul>
@@ -2269,14 +2262,13 @@ em  </span><span style="font-style: italic;"><span style="font-weight: bold;">Co
         </span></li>
       <ul>
         
+        
         <li>em que <span style="font-weight: bold; font-style: italic;">Voltar</span>
 é uma ligação para a
-página <span style="font-weight: bold;">insercao-de-valores</span>
-e <span style="font-style: italic;"><span style="font-weight: bold;">Continuar
+página <span style="font-weight: bold;">insercao-de-valores</span>, <span style="font-style: italic;"><span style="font-weight: bold;">Continuar
 a inserir valores nesta entidade</span></span>
 é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-valores</span><span style="font-weight: bold;">?estado=introducao&amp;ent=e</span>" onde <span style="font-weight: bold;">e</span> é o id da entidade
-guardado em sessão</li>
-        <li><span style="font-weight: bold;"> </span>em que<span style="font-weight: bold;"> <span style="font-style: italic;">Associar entidades</span></span> é uma ligação para&nbsp; o seguinte&nbsp; endereço: "<span style="font-weight: bold;">insercao-de-relacoes?estado=associar&amp;ent=e</span>", onde <span style="font-weight: bold;">e</span> é o id da entidade que acabou de ser criada.  <span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
+guardado em sessão e<span style="font-weight: bold;"> <span style="font-style: italic;">Associar entidades</span></span> é uma ligação para&nbsp; o seguinte&nbsp; endereço: "<span style="font-weight: bold;">insercao-de-relacoes?estado=associar&amp;ent=e</span>", onde <span style="font-weight: bold;">e</span> é o id da entidade que acabou de ser criada.  <span style="font-style: italic;"><span style="font-weight: bold;"></span></span><br>
         </li>
 </ul></ul></ul></ul>
 <h3><span style="font-weight: bold;">Inserção de relações</span></h3>
@@ -2285,7 +2277,7 @@ Página <span style="font-weight: bold;">insercao-de-relacoes</span><br>
 <li>Criar no Wordpress (menu Users) uma nova capability chamada <span style="font-weight: bold;">Insert relation</span> e activar esta
 capability para o Role <span style="font-weight: bold;">Administrator</span>.</li><li>Este componente, ao ser executado, faz primeiramente um teste se
 foi realizado um login no Wordpress e se o utilizador com sessão
-iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Insert&nbsp; relation.</span><span style="font-weight: bold;"></span></li><li>Caso não tenha, é mostrada uma mensagem a dizer
+iniciada tem (independentemente do seu role) a capability <span style="font-weight: bold;">Insert&nbsp;relation.</span><span style="font-weight: bold;"></span></li><li>Caso não tenha, é mostrada uma mensagem a dizer
 "Não tem
 autorização para aceder a esta página", caso
 tenha, é executado o
@@ -2346,7 +2338,7 @@ execução, apresentar uma tabela com a seguinte estrutura:</li>
     <ul>
       <li>Em que id é o id da relação.</li>
       <li>Em que tipo de relação é composto pelos nomes dos dois tipos de entidades que se relacionam.</li>
-      <li>Entidade 1 e Entidade 2 são as instâncias correspondentes a esse tipo de relação.</li>
+      <li>Entidade 1 e Entidade 2 são as instâncias correspondentes a esse tipo de relação.</li><li>Em que [editar] é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-relacoes?estado=editar&amp;rel=r",</span><span style="font-weight: bold;"> </span>onde <span style="font-weight: bold;">r </span>é<span style="font-weight: bold;"> </span>o id<span style="font-weight: bold;"> </span>da relação selecionada.</li>
     </ul>
   </ul>
 </ul>
@@ -2358,7 +2350,7 @@ execução, apresentar uma tabela com a seguinte estrutura:</li>
       <li>Todas as propriedades dessa relação são campos desse formulário. <br>
       </li>
       <li>Os valores dessas propriedades devem ser preenchidos
-automáticamente (com recurso a uma query SQL), assim que a página seja
+automaticamente (com recurso a uma query SQL), assim que a página seja
 carregada.</li>
       <li style="font-weight: bold;">&nbsp;<span style="font-weight: normal;">Deve
 ter-se em conta as propriedades que são obrigatórias. Isso poderá ser
@@ -2383,10 +2375,10 @@ ent_type2_id), seja do mesmo tipo da entidade cujo o <span style="font-weight: b
   <li><span style="font-style: italic;"><span style="font-weight: bold;">Se o estado de execução for introducao:</span></span><span style="font-weight: bold;"></span></li>
   <ul>
     <li>Caso anteriormente (no estado associar), se tenha selecionado
-um tipo de relação em que, ent_type_1 é igual ao id do tipo de entidade
+um tipo de relação em que, ent_type1_id é igual ao id do tipo de entidade
 que se acabou de inserir, deve agora apresentar-se todas as instancias
 de entidades, cujo tipo seu id seja igual ent_type2_id, caso contrário
-apresentar todas as instancias em queo id seja igual ent_type1_id. </li>
+apresentar todas as instancias em que o id seja igual ent_type1_id. </li>
     <ul>
       <li>Caso exista mais do que uma instancia de entidade, deverá ser
 possivel selecionar várias dessas entidades. Para isso deverá recorrer
@@ -2397,13 +2389,13 @@ a uma checkBox.</li>
       <li><span style="font-weight: bold;">submit</span> - <span style="font-style: italic;">Submeter</span></li>
     </ul>
   </ul>
-  <li><span style="font-style: italic;">&nbsp;Se o estado for inserir:</span></li>
+  <li style="font-weight: bold;"><span style="font-style: italic;">&nbsp;Se o estado for inserir:</span></li>
   <ul>
     <li>Se o valor da variavel flag que vem pelo REQUEST for<span style="font-style: italic;"> </span><span style="font-weight: bold;">naoeditar</span></li>
     <ul>
       <li>executar uma query SQL, que crie um novo tuplo na tabela <span style="font-weight: bold;">relation</span>, em que<span style="font-weight: bold;"> rel_type_id&nbsp;</span> é o id da relação selecionada no estado associar, <span style="font-weight: bold;">entity1_id</span>  é o id da entidade que foi criada na pagina inserção de valores, e <span style="font-weight: bold;">entity2_id</span> o id da entidade selecionada no estado introdução<span style="font-weight: bold;">. <br>
         </span></li>
-      <li><span style="font-weight: bold;">Apresentar a seguinte mensagem : </span><span style="font-style: italic;">"Associou com sucesso a entidade <span style="font-weight: bold;">xxx</span>, a entidade <span style="font-weight: bold;">yyy</span>.Clique em <span style="font-weight: bold;">inserir propriedades</span> para preencher informações relativas a relação que acabou de criar.". </span>onde <span style="font-weight: bold; font-style: italic;">xxx</span> e <span style="font-weight: bold; font-style: italic;">yyy,</span> corresponde ao nome das entidade que acabaram de ser associadas. Inserir propriedades é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-relacoes?estado=editar&amp;rel=r", </span>onde <span style="font-weight: bold;">r </span>é<span style="font-weight: bold;"> </span>o id<span style="font-weight: bold;"> </span>da relação que acabou de ser criada.<br>
+      <li><span style="font-weight: bold;">Apresentar a seguinte mensagem : </span><span style="font-style: italic;">"Associou com sucesso a entidade <span style="font-weight: bold;">xxx</span>, a entidade <span style="font-weight: bold;">yyy</span>.Clique em <span style="font-weight: bold;">inserir propriedades</span> para preencher informações relativas a relação que acabou de criar.". </span>onde <span style="font-weight: bold; font-style: italic;">xxx</span> e <span style="font-weight: bold; font-style: italic;">yyy,</span> corresponde ao nome das entidade que acabaram de ser associadas.<span style="font-weight: bold;"> Inserir propriedades</span> é uma ligação para o seguinte endereço: "<span style="font-weight: bold;">insercao-de-relacoes?estado=editar&amp;rel=r", </span>onde <span style="font-weight: bold;">r </span>é<span style="font-weight: bold;"> </span>o id<span style="font-weight: bold;"> </span>da relação que acabou de ser criada.<br>
       </li>
     </ul>
     <li>caso contrário se o valor for<span style="font-weight: bold;"> editar</span></li>
@@ -2413,7 +2405,7 @@ a uma checkBox.</li>
     </ul>
   </ul>
 </ul>
-<br>
+
 
 
 <h3>Pesquisa Dinâmica<br>
@@ -2464,23 +2456,18 @@ inserção de valores, se a entidade escolhida for casa,
 além das propriedades dessa entidade a
 apresentar segundo o ponto anterior, deverão também ser
 apresentadas as propriedades da entidade tv, pois estas têm uma
-propriedade do tipo ent_ref, referenciando o componente casa.</li>
-    <li style="background-color: white;"><br>
-    </li>
-    <li style="background-color: white;">Apresentar
+propriedade do tipo ent_ref, referenciando o componente casa.</li><li style="background-color: white;">Apresentar
 também uma lista das propriedades de todas as entidades que possuem uma
 relação com a entidade selecionada.(Isto é tuplos da tabela rel_type,
 em que um dos entity_id, seja igual
-ao id da entidade selecionada.) E todas as propriedades referentes as
+ao id da entidade selecionada.) e todas as propriedades referentes as
 relações existentes com a entidade selecionada. Por exemplo como existe
 uma relação entre casa e serviços contratados, deverão ser apresentadas
 todas as propriedades referentes a serviços contratados, e também a
-propriedade custo, uma vez que custo é uma propriedade da relação entre
+propriedade data, uma vez que data é uma propriedade da relação entre
 casa e serviços contratados.<br>
     </li>
-    <li style="background-color: white;">&nbsp;<br>
-
-    </li>
+    
 <li style="background-color: white;">Tem de ser possível restringir a lista de
 instâncias da entidade escolhida com um conjunto de critérios aplicados
 às propriedades escolhidas (tanto da entidade escolhida como
