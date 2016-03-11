@@ -88,12 +88,28 @@
 		}
 		else
 		{
+<<<<<<< HEAD
+?>
+			<html>
+				<p> O utilizador usa um role.</p>
+			</html>
+<?php 
+=======
 			echo "#3";//user nï¿½o tem a capability
+>>>>>>> origin/master
 		}		
 	}
 	else
 	{
+<<<<<<< HEAD
+	?>
+		<html>
+			<p> O utilizador não se encontra logado.</p>
+		</html>
+	<?php
+=======
 		echo "#4";//user nï¿½o esta logado
+>>>>>>> origin/master
 	}
 	
  ?>
