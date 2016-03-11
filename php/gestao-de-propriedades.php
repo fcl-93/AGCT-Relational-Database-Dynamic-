@@ -445,7 +445,7 @@ class PropertyManage
 	else
 	{
             //obtem o último id que foi introduzido na BD
-            $id = $this->db->getMysqli()->insert_id ();
+            $id = $this->db->getMysqli()->insert_id;
             // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
             $form_field_name = $ent.$traco.$id.$traco.$nomeField;
             // atualiza esse atributo
