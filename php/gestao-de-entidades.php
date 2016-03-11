@@ -10,6 +10,10 @@
 			if(empty($_REQUEST['estado']))
 			{
 				//Apresentar tabela
+				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
+				//verifica se hÁ ou nÃo entidades
+				if(!$res_EntType)
+				{
 ?>
 				<html>
 					<table>
@@ -21,10 +25,7 @@
 								<td> Ação</td>
 							</tr>
 <?php				
-				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se hÁ ou nÃo entidades
-				if(!$res_EntType)
-				{
+				
 					while($read_EntType = $res_EntType->fetch_assoc())
 					{
 						//printa a restante tabela
@@ -51,35 +52,13 @@
 						<p> Não há componentes.</p>
 					</html>
 <?php 			}
-?>				
-			<html>
-					<h3>Gestão de Componentes - Introdução</h3>
-					<form>
-						<label>Nome:</label>
-						<br>
-						<input type="text" name="nome" required>
-						<br>	
-						<label>Estado:</label><br>
-<?php 
-						$stateEnumValues = getEnumValues('ent_type','state'); //this function is in common.php
-						foreach($enumTipos as $value)
-						{
-?>
-							<html>
-								<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
-							</html>	
-<?php 								
-						}
-?>
-						<br>
-						<input type="hidden" name="estado" value="inserir">
-						<input type="submit" value="Inserir Componente">
-					</form>
-			</html>
-<?php 		}
+				
+			$entity = new entidade();
+			$entity->form($bd);
+ 		}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
-
+				//Validações php
 			}
 			
 		}
@@ -102,3 +81,49 @@
 	}
 	
  ?>
+
+<?php
+
+class entidade
+{
+	//This method will be responsable for the print of the form
+	//this method will receive a Dp_OpObject (instance from the class in common)
+	public function form($Dp_OpObject)
+	{
+?>
+		<html>
+			<h3>Gestão de Componentes - Introdução</h3>
+			<form>
+				<label>Nome:</label>
+				<br>
+				<input type="text" name="nome" required>
+				<br>
+				<label>Estado:</label><br>
+<?php 
+			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
+			print_r($stateEnumValues);
+			
+			foreach($stateEnumValues as $value)
+			{
+?>
+				<html>
+					<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+				</html>
+<?php 
+			}
+?>
+				<br>
+				<input type="hidden" name="estado" value="inserir">
+				<input type="submit" value="Inserir Componente">
+				</form>
+				</html>
+<?php 	
+	}
+	//This method will do the server side validation
+	public function ssvalidation()
+	{
+	
+	}
+	
+} 
+?>

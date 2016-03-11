@@ -49,7 +49,7 @@ class Db_Op
     	$enum_array = array();
     
     	$query = 'SHOW COLUMNS FROM `' . $table . '` LIKE "' . $field . '"';
-    	$result = runQuery($query);
+    	$result = $this->runQuery($query);
 
     		$row = $result->fetch_row();
     		//Trata a coluna onde está o enum e guarda o valor em enum_arry
