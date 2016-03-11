@@ -74,7 +74,7 @@
  			{
  				
  			}
- 			else if($_REQUEST[estado] == 'ativar')
+ 			else if($_REQUEST['estado'] == 'ativar')
  			{
 				$res_EntTypeA = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
 				$read_EntTypeA = $res_EntTypeA->fetch_assoc();
