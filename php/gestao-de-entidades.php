@@ -10,8 +10,8 @@
 			if(empty($_REQUEST['estado']))
 			{
 				//Apresentar tabela
-				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se hÁ ou nÃo entidades
+				$res_EntType = $bd->runQuery("SELECT * FROM ent_type WHERE state like 'active'");
+				//verifica se há ou não entidades
 				if(!$res_EntType)
 				{
 ?>
@@ -62,11 +62,23 @@
 				if($entity->ssvalidation()) //serverside validations
 				{
 					$sanitizeName = $bd->userInputVal($_REQUEST['nome']);
-					$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
-					$res_querState = $bd->runQuery($queryInsert);
+					$res_checkRep = $bd->runQuery("SELECT * FROM ent_type WHERE name like".$sanitizeName);
+					if($res_checkRep->num_rows)
+					{
+?>
+						<html><p>Já existe uma entidade do tipo que está a criar.</p></html>
+<?php 
+						goBack();
+					}
+					else 
+					{
+						$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
+						$res_querState = $bd->runQuery($queryInsert);
+						
+						echo 'Inseriu os dados de novo componente com sucesso.';
+						echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
+					}
 					
-					echo 'Inseriu os dados de novo componente com sucesso.';
-					echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
 				}
 				else
 				{
@@ -153,7 +165,7 @@ class entidade
 		}
 		else
 		{
-			return true;
+				return true;
 		}
 	}
 	
