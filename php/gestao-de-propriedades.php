@@ -394,7 +394,7 @@ class PropertyManage
             $entRel = criaNomeRel($queryNome1, $queryNome2);
         }	
 	// Obtemos as suas 3 primeiras letras
-	$entRel = substr($entidade, 0 , 3);
+	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
 	$idProp = '';
 	// Garantimos que não há SQL injection através do campo nome
