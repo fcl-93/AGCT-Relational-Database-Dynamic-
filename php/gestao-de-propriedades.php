@@ -422,7 +422,7 @@ class PropertyManage
 	{
             $queryInsere .= '`form_field_size`, ';
         }*/
-        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
+        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `fk_ent_type_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
            $queryInsere .= $_REQUEST["entidadePertence"]; 
