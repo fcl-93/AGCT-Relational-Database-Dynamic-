@@ -85,12 +85,20 @@
 		}
 		else
 		{
-			//user não tem a capability
+?>
+			<html>
+				<p> O utilizador usa um role.</p>
+			</html>
+<?php 
 		}		
 	}
 	else
 	{
-		//user não esta logado
+	?>
+		<html>
+			<p> O utilizador não se encontra logado.</p>
+		</html>
+	<?php
 	}
 	
  ?>
