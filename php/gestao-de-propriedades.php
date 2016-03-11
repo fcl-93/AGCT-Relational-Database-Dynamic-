@@ -422,7 +422,7 @@ class PropertyManage
 	{
             $queryInsere .= '`form_field_size`, ';
         }
-        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape($_REQUEST["nome"]).'\',';
+        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
            $queryInsere .= $_REQUEST["componentePertence"]; 
@@ -434,9 +434,9 @@ class PropertyManage
         $queryInsere .= ',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
         if(!empty($_REQUEST["tamanho"]))
 	{
-            $queryInsere = ',"'.$this->db->getMysqli()->real_escape($_REQUEST["tamanho"]).'"';
+            $queryInsere = ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}
-        $queryInsere .= ','.$this->db->getMysqli()->real_escape($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["componenteReferenciado"].')';
+        $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["componenteReferenciado"].')';
 	$insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
