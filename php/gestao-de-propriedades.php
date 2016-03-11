@@ -34,7 +34,8 @@ else
 
 function verificaEstado()
 {
-    if (empty($REQUEST["estado"]))
+    print_r($_REQUEST);
+    if (empty($_REQUEST["estado"]))
     {
 ?>
     <html>
@@ -46,15 +47,15 @@ function verificaEstado()
     </html>
 <?php
     }
-    elseif ($REQUEST["estado"] === "relation")
+    elseif ($_REQUEST["estado"] === "relation")
     {
         estadoEntityRelation("relation");
     }
-    elseif ($REQUEST["estado"] === "entity")
+    elseif ($_REQUEST["estado"] === "entity")
     {
         estadoEntityRelation("entity");
     }
-    elseif ($REQUEST["estado"] === "inserir")
+    elseif ($_REQUEST["estado"] === "inserir")
     {
         estadoInserir();
     }
