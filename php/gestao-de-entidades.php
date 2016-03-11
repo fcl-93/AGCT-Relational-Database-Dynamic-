@@ -5,13 +5,10 @@
 	
 	if ( is_user_logged_in() )
 	{
-            echo "#1";
-            if(current_user_can('manage_entities'))
+        if(current_user_can('manage_entities'))
 		{
-                echo "#2";
 			if(empty($_REQUEST['estado']))
 			{
-                            echo "#3";
 				//Apresentar tabela
 ?>
 				<html>
@@ -25,7 +22,7 @@
 							</tr>
 <?php				
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se h� ou n�o entidades
+				//verifica se hÁ ou nÃo entidades
 				if($res_EntType)
 				{
 					while($read_EntType = $res_EntType->fetch_assoc())
@@ -51,12 +48,12 @@
 				{
 ?>
 					<html>
-						<p> N�o h� componentes.</p>
+						<p> Não há componentes.</p>
 					</html>
 <?php 			}
 ?>				
 			<html>
-					<h3>Gest�o de componentes - introdu��o</h3>
+					<h3>Gestão de Componentes - Introdução</h3>
 					<form>
 						<label>Nome:</label>
 						<br>
@@ -88,28 +85,20 @@
 		}
 		else
 		{
-<<<<<<< HEAD
 ?>
 			<html>
 				<p> O utilizador usa um role.</p>
 			</html>
 <?php 
-=======
-			echo "#3";//user n�o tem a capability
->>>>>>> origin/master
 		}		
 	}
 	else
 	{
-<<<<<<< HEAD
 	?>
 		<html>
-			<p> O utilizador n�o se encontra logado.</p>
+			<p> O utilizador n�o se encontra logado.</p>
 		</html>
 	<?php
-=======
-		echo "#4";//user n�o esta logado
->>>>>>> origin/master
 	}
 	
  ?>
