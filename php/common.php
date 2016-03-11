@@ -9,7 +9,7 @@ class Db_Op
     //This method will make the database connection
     public function __contruct()
     {
-        echo "É suposto entrar aqui"
+        echo "É suposto entrar aqui";
       $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       var_dump(get_object_vars($this));
       if($this->mysqli->connect_errno)
