@@ -247,7 +247,7 @@ class PropertyManage
 		<label>Nome da Propriedade:</label><br>
 		<input type="text" name="nome" required>
 		<br><br>
-		<label>Tipo de valor:</label><br>';
+		<label>Tipo de valor:</label><br>
                 <?php
 		$field = 'value_type';
 		$table = 'property';
@@ -284,7 +284,7 @@ class PropertyManage
                 <?php
                     $field = 'form_field_type';
                     $table = 'property';
-                    $array = getEnumValues($table, $field, $link);
+                    $array = $this->db->getEnumValues($table, $field);
                     foreach($array as $values)
                     {
                             //echo $values;
