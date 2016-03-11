@@ -3,7 +3,7 @@ require_once("custom/php/common.php");
 
 $db = new Db_Op();
 
-$capability = "manage properties";
+$capability = "manage_properties";
 
 //Verifica se algum utilizador está com sessão iniciada
 if ( is_user_logged_in() )
@@ -27,7 +27,7 @@ else
 ?>
     <html>
         <p>Não tem sessão iniciada.</p>
-        <p>Clique <a href="wp-login">aqui</a> para iniciar sessão.</p>
+        <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
     </html>
 <?php
 }
