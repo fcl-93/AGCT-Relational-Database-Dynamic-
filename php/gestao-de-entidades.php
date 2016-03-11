@@ -114,7 +114,7 @@ class entidade
 				<label>Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
-			print_r($stateEnumValues);
+			//print_r($stateEnumValues);
 			
 			foreach($stateEnumValues as $value)
 			{
