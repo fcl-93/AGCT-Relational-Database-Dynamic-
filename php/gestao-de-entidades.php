@@ -36,8 +36,7 @@
 							<td><?php echo $read_EntType['name']?></td>
 							<td><?php echo $read_EntType['state']?></td>
 							<td>
-								<li><a href="insercao-de-valores?estado=editar&ent_id=<?php $read_EntType['id'];?>">[editar]</a></li>	
-								<li><a href="insercao-de-valores?estado=desativar&ent_id=<?php $read_EntType['id'];?>">[desativar]</a></li>
+							<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[editar]</a><a href="insercao-de-valores?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[desativar]</a>
 							</td>
 						</tr>
 <?php 
