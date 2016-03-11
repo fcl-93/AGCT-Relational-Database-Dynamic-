@@ -18,12 +18,12 @@
 								<td> ID</td>
 								<td> Nome</td>
 								<td> Estado</td>
-								<td> A��o</td>
+								<td> Ação</td>
 							</tr>
 <?php				
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
 				//verifica se hÁ ou nÃo entidades
-				if($res_EntType)
+				if(!$res_EntType)
 				{
 					while($read_EntType = $res_EntType->fetch_assoc())
 					{
@@ -70,7 +70,7 @@
 							</html>	
 <?php 								
 						}
-?>						
+?>
 						<br>
 						<input type="hidden" name="estado" value="inserir">
 						<input type="submit" value="Inserir Componente">
@@ -87,7 +87,7 @@
 		{
 ?>
 			<html>
-				<p> O utilizador usa um role.</p>
+				<p> Não tem autorização para aceder a esta página.</p>
 			</html>
 <?php 
 		}		
@@ -96,7 +96,7 @@
 	{
 	?>
 		<html>
-			<p> O utilizador n�o se encontra logado.</p>
+			<p> O utilizador não se encontra logado.</p>
 		</html>
 	<?php
 	}
