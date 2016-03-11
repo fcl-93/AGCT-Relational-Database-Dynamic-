@@ -111,14 +111,16 @@ class PropertyManage
         
     private function apresentaTabela($tipo)
     {
+        echo "passei aqui";
     ?>
 <html>
     <table>
         <thead>
             <tr>
             <?php
-                if ($tipo === entity)
+                if ($tipo === "entity")
                 {
+                    echo "passei aqui2";
             ?>
                 <th>Entidade</th>
             <?php
