@@ -7,8 +7,8 @@ class PropertyManage
     private $capability;
    
     public function __construct(){
-        $db = new Db_Op();
-        $capability = "manage_properties";
+        $this->db = new Db_Op();
+        $this->$apability = "manage_properties";
         $this->executaScript();
     }
     
@@ -18,9 +18,9 @@ class PropertyManage
         if ( is_user_logged_in() )
         {
             // Verifica se o utilziador atual tem a capability necessária para esta componente
-            if(current_user_can($capability))
+            if(current_user_can($this->capability))
             {
-                verificaEstado();
+                $this->verificaEstado();
             }
             else
             {
@@ -59,15 +59,15 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "relation")
         {
-            estadoEntityRelation("relation");
+            $this->estadoEntityRelation("relation");
         }
         elseif ($_REQUEST["estado"] === "entity")
         {
-            estadoEntityRelation("entity");
+            $this->estadoEntityRelation("entity");
         }
         elseif ($_REQUEST["estado"] === "inserir")
         {
-            estadoInserir();
+            $this->estadoInserir();
         }
     }
 
@@ -84,7 +84,7 @@ class PropertyManage
             $querySelect.= "rel_type_id = NULL";
         }
 
-        $reusltSelect = $db->runQuery($querySelect);
+        $reusltSelect = $this->db->runQuery($querySelect);
 
         if ($resultSelect->num_rows == 0)
         {
@@ -104,9 +104,9 @@ class PropertyManage
 
     private function estadoEntityRelation($tipo)
     {
-        if(existePropriedade($tipo))
+        if($this->existePropriedade($tipo))
         {
-            apresentaTabelaForm($tipo);
+            $this->apresentaTabelaForm($tipo);
         }
     }
 
@@ -137,7 +137,7 @@ class PropertyManage
                     <tr>
                         <?php
                             $selecionaProp = "SELECT * FROM property WHERE rel_type_id = NULL";
-                            $resultSeleciona = $db->runQuery($selecionaProp);
+                            $resultSeleciona = $this->db->runQuery($selecionaProp);
                             $numLinhas = $resultSeleciona->num_rows();
                             while($resultSeleciona->fetch_assoc())
                             {
