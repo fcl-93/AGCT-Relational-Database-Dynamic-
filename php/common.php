@@ -25,7 +25,7 @@ class Db_Op
     public function runQuery($query)
     {
         echo $query;
-        print_r($this->mysqli);
+        var_dump($this->mysqli);
     	$result = $this->mysqli->query($query);
 	    if(!$result)
 	    {
