@@ -10,7 +10,6 @@ class Db_Op
     public function __construct()
     {
       $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-      var_dump(get_object_vars($this));
       if($this->mysqli->connect_errno)
       {
       	printf("Connect failed: %s\n", $mysqli->connect_error);
