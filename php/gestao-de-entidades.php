@@ -76,7 +76,7 @@
  			}
  			else if($_REQUEST['estado'] == 'ativar')
  			{
-				$res_EntTypeA = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
+				$res_EntTypeA = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
 				$read_EntTypeA = $res_EntTypeA->fetch_assoc();
 				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
  				echo 'A entidade '.$read_EntTypeA[name].' foi ativada';
@@ -84,7 +84,7 @@
  			}
  			else if($_REQUEST['estado'] == 'desativar')
  			{
- 				$res_EntTypeD = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
+ 				$res_EntTypeD = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
  				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
  				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
  				echo 'A entidade .'.$read_EntTypeD['name'].' foi desativada';
