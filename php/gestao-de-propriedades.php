@@ -111,6 +111,7 @@ class PropertyManage
         
     private function apresentaTabela($tipo)
     {
+        echo "passei aqui";
     ?>
 <html>
     <table>
@@ -119,6 +120,7 @@ class PropertyManage
             <?php
                 if ($tipo === "entity")
                 {
+                    echo "passei aqui2";
             ?>
                 <th>Entidade</th>
             <?php
