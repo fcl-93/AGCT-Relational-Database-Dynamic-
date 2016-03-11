@@ -8,7 +8,7 @@ class PropertyManage
    
     public function __construct(){
         $this->db = new Db_Op();
-        $this->$apability = "manage_properties";
+        $this->capability = "manage_properties";
         $this->executaScript();
     }
     
