@@ -81,7 +81,7 @@ class PropertyManage
         {
             $querySelect.= "rel_type_id = NULL";
         }
-        $reusltSelect = $this->db->runQuery($querySelect);
+        $resultSelect = $this->db->runQuery($querySelect);
 
         if ($resultSelect->num_rows == 0)
         {
