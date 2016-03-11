@@ -25,9 +25,9 @@ class Db_Op
     public function runQuery($query)
     {
     	if(substr($query,0,5) == "SELECT" ||
-    	   substr($query,0,5) == "SHOW"||
-    	   substr($query,0,5) == "DESCRIBE"||
-    	   substr($query,0,5) == "EXPLAIN")
+    	   substr($query,0,3) == "SHOW"||
+    	   substr($query,0,7) == "DESCRIBE"||
+    	   substr($query,0,6) == "EXPLAIN")
     	{
     		$result = $mysqli->query($query);
     		if($result == false)					//erro na query
