@@ -36,7 +36,18 @@
 							<td><?php echo $read_EntType['name']?></td>
 							<td><?php echo $read_EntType['state']?></td>
 							<td>
-							<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[editar]</a><a href="insercao-de-valores?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[desativar]</a>
+							<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
+<?php 						if($read_EntType['state'] === 'active')
+							{
+?>
+								<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
+<?php			 			}
+							else
+							{
+?>
+								<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
+<?php 						}
+?>
 							</td>
 						</tr>
 <?php 
@@ -58,6 +69,26 @@
 				
 			
 			$entity->form($bd); // object lead the method to print the form 
+ 			}
+ 			else if($_REQUEST['estado'] =='editar')
+ 			{
+ 				
+ 			}
+ 			else if($_REQUEST[estado] == 'ativar')
+ 			{
+				$res_EntTypeA = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
+				$read_EntTypeA = $res_EntTypeA->fetch_assoc()
+				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
+ 				echo 'A entidade '.$read_EntTypeA[name].' foi ativada';
+ 				echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
+ 			}
+ 			else if($_REQUEST['estado'] == 'desativar')
+ 			{
+ 				$res_EntTypeD = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
+ 				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
+ 				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
+ 				echo 'A entidade .'.$read_EntTypeD['name'].' foi desativada';
+ 				echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
  			}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
