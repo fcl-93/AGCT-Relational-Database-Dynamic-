@@ -166,9 +166,7 @@ class PropertyManage
                                 }
                                 else
                                 {
-                                    $nome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                                    $nome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                    $nome = $nome1."-".$nome2; 
+                                    $nome = $this->criaNomeRel();
                                 }
                                 $idEnt = $resEntRel["id"];
                                 $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
@@ -271,12 +269,13 @@ class PropertyManage
                         echo'
                         <label>Relação a que irá pertencer esta propriedade</label><br>
                         <select name="relacaoPertence" required>';
-                        $selecionaEntRel = "SELECT name, id FROM rel_type";
+                        $selecionaEntRel = "SELECT id FROM rel_type";
                     }
                     $result = $this->db->runQuery($selecionaEntRel);
                     while($guardaEntRel= $result->fetch_assoc())
                     {
-                        echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';    
+                        $nome = $this->criaNomeRel();                       
+                        echo '<option value="'.$guardaEntRel["id"].'">'.$nome.'</option>';    
                     }
                     echo '</select><br><br>';
                 ?>
@@ -287,7 +286,7 @@ class PropertyManage
                     $array = $this->db->getEnumValues($table, $field);
                     foreach($array as $values)
                     {
-                            echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
+                        echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                     }
                 ?>
 		<br>
@@ -299,14 +298,14 @@ class PropertyManage
                     $result = mysqli_query($link, $selecionaTipoUnidade);
                     while($guardaTipoUnidade = mysqli_fetch_assoc($result))
                     {
-                            echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+                        echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
                     }
                 ?>
 		</select><br><br>
 		<label>Ordem do campo no formulário</label><br>
-		<input type="text" name="ordem" min="1" required><br><br>';										//Verificar minimo
+		<input type="text" name="ordem" min="1" required><br><br>
 		<label>Tamanho do campo no formulário</label><br>
-                <input type="text" name="tamanho"><br><br>'; 															//Verificar obrigatório dependendo do tipo de campo
+                <input type="text" name="tamanho"><br><br>
 		<label>Obrigatório</label><br>
                 <input type="radio" name="obrigatorio" value="1" required>Sim
 		<br>
@@ -332,6 +331,16 @@ class PropertyManage
             </form>
         <html>
         <?php
+    }
+    
+    private function criaNomeRel()
+    {
+        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+        $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
+        $nome2 = $this->db->runQuery($queryNome2)->fetch_assoc()["name"];
+        $nome = $nome1."-".$nome2;
+        return $nome;
     }
 }
 
