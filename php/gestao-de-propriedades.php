@@ -75,11 +75,11 @@ class PropertyManage
         $querySelect = "SELECT * FROM property WHERE ";
         if ($tipo === "relation")
         {
-            $querySelect.= "rel_type_id != NULL";
+            $querySelect.= "rel_type_id != 0";
         }
         else
         {
-            $querySelect.= "ent_type_id != NULL";
+            $querySelect.= "ent_type_id != 0";
         }
         $resultSelect = $this->db->runQuery($querySelect);
             
