@@ -44,7 +44,6 @@ class PropertyManage
     
     private function verificaEstado()
     {
-        print_r($_REQUEST);
         if (empty($_REQUEST["estado"]))
         {
     ?>
@@ -73,7 +72,6 @@ class PropertyManage
 
     private function existePropriedade($tipo)
     {
-        echo "entrei aqui";
         $querySelect = "SELECT * FROM PROPERTY WHERE ";
         if ($tipo === "relation")
         {
@@ -83,7 +81,6 @@ class PropertyManage
         {
             $querySelect.= "rel_type_id = NULL";
         }
-        echo $querySelect;
         $reusltSelect = $this->db->runQuery($querySelect);
 
         if ($resultSelect->num_rows == 0)
