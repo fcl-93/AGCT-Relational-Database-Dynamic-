@@ -5,10 +5,13 @@
 	
 	if ( is_user_logged_in() )
 	{
-		if(current_user_can('manage_entities'))
+            echo "#1";
+            if(current_user_can('manage_entities'))
 		{
+                echo "#2";
 			if(empty($_REQUEST['estado']))
 			{
+                            echo "#3";
 				//Apresentar tabela
 ?>
 				<html>
@@ -18,11 +21,11 @@
 								<td> ID</td>
 								<td> Nome</td>
 								<td> Estado</td>
-								<td> Ação</td>
+								<td> Aï¿½ï¿½o</td>
 							</tr>
 <?php				
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se há ou não entidades
+				//verifica se hï¿½ ou nï¿½o entidades
 				if($res_EntType)
 				{
 					while($read_EntType = $res_EntType->fetch_assoc())
@@ -48,12 +51,12 @@
 				{
 ?>
 					<html>
-						<p> Não há componentes.</p>
+						<p> Nï¿½o hï¿½ componentes.</p>
 					</html>
 <?php 			}
 ?>				
 			<html>
-					<h3>Gestão de componentes - introdução</h3>
+					<h3>Gestï¿½o de componentes - introduï¿½ï¿½o</h3>
 					<form>
 						<label>Nome:</label>
 						<br>
@@ -85,20 +88,28 @@
 		}
 		else
 		{
+<<<<<<< HEAD
 ?>
 			<html>
 				<p> O utilizador usa um role.</p>
 			</html>
 <?php 
+=======
+			echo "#3";//user nï¿½o tem a capability
+>>>>>>> origin/master
 		}		
 	}
 	else
 	{
+<<<<<<< HEAD
 	?>
 		<html>
 			<p> O utilizador não se encontra logado.</p>
 		</html>
 	<?php
+=======
+		echo "#4";//user nï¿½o esta logado
+>>>>>>> origin/master
 	}
 	
  ?>
