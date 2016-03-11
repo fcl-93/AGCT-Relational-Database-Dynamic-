@@ -4,9 +4,9 @@
 	$bd = new Db_Op();
 	$bd->connectToDb();
 	
+	$result = $bd->runQuery("SELECT * FROM wordpress");
 	
-	
-	while($print = mysqli_fetch_assoc($bd->runQuery("SELECT * FROM wordpress")))
+	while($print = mysqli_fetch_assoc($result))
 	{
 		echo $print;
 	}

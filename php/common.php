@@ -27,7 +27,7 @@ class Db_Op
     	if(substr($query,0,5) == "SELECT" ||
     	   substr($query,0,3) == "SHOW"||
     	   substr($query,0,7) == "DESCRIBE"||
-    	   substr($query,0,6) == "EXPLAIN")
+    	   substr($query,0,5) == "EXPLAIN")
     	{
     		$result = $mysqli->query($query);
     		if($result == false)					//erro na query
