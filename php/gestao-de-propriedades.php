@@ -133,36 +133,66 @@ class PropertyManage
                 <tbody>
                     <tr>
                         <?php
-                            $selecionaProp = "SELECT * FROM property WHERE rel_type_id = NULL";
+                            $selecionaEnt = "SELECT name, id FROM ent_type";
+                            $resultSelEnt = $this->db->runQuery($selecionaEnt);
+                            $nome = $resultSelEnt->fetch_assoc()["name"];
+                            $idEnt = $resultSelEnt->fetch_assoc()["id"];
+                            $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
                             $resultSeleciona = $this->db->runQuery($selecionaProp);
                             $numLinhas = $resultSeleciona->num_rows();
+                        ?>
+                            <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+                        <?php
                             while($resultSeleciona->fetch_assoc())
                             {
-                                $ent_type_id = $resultSeleciona["ent_type_id"];
-                                $idProp = $resultSeleciona["id"];
-                                $nome = $resultSeleciona["ent_type_id"];
-                                $value_type = $resultSeleciona["value_type"];
-                                $form_field_name = $resultSeleciona["form_field_name"];
-                                $form_field_type = $resultSeleciona["form_field_type"];
-                                $unit_type_id = $resultSeleciona["unit_type_id"];
-                                $form_field_order = $resultSeleciona["form_field_order"];
-                                $form_field_size = $resultSeleciona["form_field_size"];
-                                $mandatory = $resultSeleciona["mandatory"];
-                                $state = $resultSeleciona["state"];                            
+                        ?>
+                                <td><?php echo $resultSeleciona["id"]; ?></td>
+                                <td><?php echo $resultSeleciona["name"]; ?></td>
+                                <td><?php echo $resultSeleciona["value_type"]; ?></td>
+                                <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
+                                <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
+                                <td>
+                                    <?php
+                                        if (empty($resultSeleciona["unit_type_id"]))
+                                        {
+                                            echo "-";
+                                        }
+                                        else
+                                        {
+                                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$resultSeleciona["unit_type_id"];
+                                        }
+                                     ?>
+                                </td>
+                                <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
+                                <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
+                                <td>
+                                    <?php 
+                                        if ($resultSeleciona["mandatory"] === 1)
+                                        {
+                                            echo "sim";
+                                        }
+                                        else
+                                        {
+                                            echo " não";
+                                        }
+                                     ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                        if ($resultSeleciona["state"] === "true")
+                                        {
+                                            echo "ativo";
+                                        }
+                                        else
+                                        {
+                                            echo "inativo";
+                                        }
+                                    ?>
+                                </td>
+                                <td>[editar][desativar]</td>             
+                        <?php
                             }
                         ?>
-                        <td rowspan="<?php echo $numLinhas?>"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                 </tbody>
             </table>
