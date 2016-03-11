@@ -52,35 +52,13 @@
 						<p> Não há componentes.</p>
 					</html>
 <?php 			}
-?>				
-			<html>
-					<h3>Gestão de Componentes - Introdução</h3>
-					<form>
-						<label>Nome:</label>
-						<br>
-						<input type="text" name="nome" required>
-						<br>	
-						<label>Estado:</label><br>
-<?php 
-						$stateEnumValues = $bd->getEnumValues('ent_type','state'); //this function is in common.php
-						foreach($enumTipos as $value)
-						{
-?>
-							<html>
-								<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
-							</html>	
-<?php 								
-						}
-?>
-						<br>
-						<input type="hidden" name="estado" value="inserir">
-						<input type="submit" value="Inserir Componente">
-					</form>
-			</html>
-<?php 		}
+				
+			$entity = new entidade();
+			$entity->form();
+ 		}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
-
+				//Validações php
 			}
 			
 		}
@@ -103,3 +81,46 @@
 	}
 	
  ?>
+
+<?php
+
+class entidade
+{
+	//This method will be responsable for the print of the form
+	public function form()
+	{
+?>
+		<html>
+			<h3>Gestão de Componentes - Introdução</h3>
+			<form>
+				<label>Nome:</label>
+				<br>
+				<input type="text" name="nome" required>
+				<br>
+				<label>Estado:</label><br>
+<?php 
+			$stateEnumValues = $bd->getEnumValues('ent_type','state'); //this function is in common.php
+			foreach($stateEnumValues as $value)
+			{
+?>
+				<html>
+					<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+				</html>
+<?php 
+			}
+?>
+				<br>
+				<input type="hidden" name="estado" value="inserir">
+				<input type="submit" value="Inserir Componente">
+				</form>
+				</html>
+<?php 	
+	}
+	//This method will do the server side validation
+	public function ssvalidation()
+	{
+	
+	}
+	
+} 
+?>
