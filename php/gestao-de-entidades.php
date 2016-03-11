@@ -36,17 +36,8 @@
 							<td><?php echo $read_EntType['name']?></td>
 							<td><?php echo $read_EntType['state']?></td>
 							<td>
-								<form>
-									<input type="hidden" name="ent_id" value="<?php $read_EntType['id']; ?>">
-									<input type="hidden" name="estado" value="editar">
-									<input type="submit" value="[editar]">
-								</form>
-								
-								<form>
-									<input type="hidden" name="ent_id" value="<?php $read_EntType['id']; ?>">
-									<input type="hidden" name="estado" value="desativar">
-									<input type="submit" value="[desativar]">
-								</form>
+								<li><a href="insercao-de-valores?estado=editar&ent_id=<?php $read_EntType['id'];?>">[editar]</a></li>	
+								<li><a href="insercao-de-valores?estado=desativar&ent_id=<?php $read_EntType['id'];?>">[desativar]</a></li>
 							</td>
 						</tr>
 <?php 
