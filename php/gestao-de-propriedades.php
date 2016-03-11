@@ -280,14 +280,13 @@ class PropertyManage
                     }
                     echo '</select><br><br>';
                 ?>
-		<label>Tipo do campo do formulário</label><br>';
+		<label>Tipo do campo do formulário</label><br>
                 <?php
                     $field = 'form_field_type';
                     $table = 'property';
                     $array = $this->db->getEnumValues($table, $field);
                     foreach($array as $values)
                     {
-                            //echo $values;
                             echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                     }
                 ?>
@@ -307,9 +306,9 @@ class PropertyManage
 		<label>Ordem do campo no formulário</label><br>
 		<input type="text" name="ordem" min="1" required><br><br>';										//Verificar minimo
 		<label>Tamanho do campo no formulário</label><br>
-		<input type="text" name="tamanho"><br><br>'; 															//Verificar obrigatório dependendo do tipo de campo
+                <input type="text" name="tamanho"><br><br>'; 															//Verificar obrigatório dependendo do tipo de campo
 		<label>Obrigatório</label><br>
-		<input type="radio" name="obrigatorio" value="1" required>Sim
+                <input type="radio" name="obrigatorio" value="1" required>Sim
 		<br>
 		<input type="radio" name="obrigatorio" value="2" required>Não
 		<br><br>
