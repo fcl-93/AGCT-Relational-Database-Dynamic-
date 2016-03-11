@@ -54,7 +54,7 @@
 <?php 			}
 				
 			$entity = new entidade();
-			$entity->form();
+			$entity->form($bd);
  		}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
@@ -87,7 +87,8 @@
 class entidade
 {
 	//This method will be responsable for the print of the form
-	public function form()
+	//this method will receive a Dp_OpObject (instance from the class in common)
+	public function form($Dp_OpObject)
 	{
 ?>
 		<html>
@@ -99,7 +100,7 @@ class entidade
 				<br>
 				<label>Estado:</label><br>
 <?php 
-			$stateEnumValues = $bd->getEnumValues('ent_type','state'); //this function is in common.php
+			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			foreach($stateEnumValues as $value)
 			{
 ?>
