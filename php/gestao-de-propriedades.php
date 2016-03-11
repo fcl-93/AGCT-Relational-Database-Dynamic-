@@ -166,7 +166,9 @@ class PropertyManage
                                 }
                                 else
                                 {
-                                    $nome = $this->criaNomeRel();
+                                    $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                                    $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                                    $nome = $this->criaNomeRel($queryNome1,$queryNome2);
                                 }
                                 $idEnt = $resEntRel["id"];
                                 $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
@@ -274,8 +276,10 @@ class PropertyManage
                     $result = $this->db->runQuery($selecionaEntRel);
                     while($guardaEntRel= $result->fetch_assoc())
                     {
-                        $nome = $this->criaNomeRel();                       
-                        echo '<option value="'.$guardaEntRel["id"].'">'.$nome.'</option>';    
+                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                        $this->criaNomeRel($queryNome1, $queryNome2);
+                        echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';    
                     }
                     echo '</select><br><br>';
                 ?>
@@ -333,10 +337,8 @@ class PropertyManage
         <?php
     }
     
-    private function criaNomeRel()
+    private function criaNomeRel($queryNome1, $queryNome2)
     {
-        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
         $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
         $nome2 = $this->db->runQuery($queryNome2)->fetch_assoc()["name"];
         $nome = $nome1."-".$nome2;
