@@ -23,7 +23,7 @@
 <?php				
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
 				//verifica se há ou não entidades
-				if(!$res_EntType)
+				if($res_EntType)
 				{
 					while($read_EntType = $res_EntType->fetch_assoc())
 					{
