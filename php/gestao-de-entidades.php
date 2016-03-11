@@ -1,14 +1,96 @@
 <?php
 	require_once("custom/php/common.php");
-
-	$bd = new Db_Op();
-	//$bd->connectToDb();
 	
-	$result = $bd->runQuery("SELECT * FROM wordpress");
+	$bd = new Db_op();
 	
-	while($print = mysqli_fetch_assoc($result))
+	if ( is_user_logged_in() )
 	{
-		echo $print;
+		if(current_user_can('manage_entities'))
+		{
+			if(empty($_REQUEST['estado']))
+			{
+				//Apresentar tabela
+?>
+				<html>
+					<table>
+						<tbody>
+							<tr>
+								<td> ID</td>
+								<td> Nome</td>
+								<td> Estado</td>
+								<td> Ação</td>
+							</tr>
+<?php				
+				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
+				//verifica se há ou não entidades
+				if(!$res_EntType)
+				{
+					while($read_EntType = $res_EntType->fetch_assoc())
+					{
+						//printa a restante tabela
+?>						
+						<tr>
+							<td><?php $read_EntType['id']; ?></td>
+							<td><?php $read_EntType['name']?></td>
+							<td><?php $read_EntType['state']?></td>
+							<td>[editar][desativar]</td>
+						</tr>
+<?php 
+					}	
+?>
+							</tbody>
+						</table>
+					</html>
+							
+<?php 			
+				}
+				else
+				{
+?>
+					<html>
+						<p> Não há componentes.</p>
+					</html>
+<?php 			}
+?>				
+			<html>
+					<h3>Gestão de componentes - introdução</h3>
+					<form>
+						<label>Nome:</label>
+						<br>
+						<input type="text" name="nome" required>
+						<br>	
+						<label>Estado:</label><br>
+<?php 
+						$stateEnumValues = getEnumValues('ent_type','state'); //this function is in common.php
+						foreach($enumTipos as $value)
+						{
+?>
+						<html>
+							<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+						</html>	
+<?php 								
+						}
+?>						
+						<br>
+						<input type="hidden" name="estado" value="inserir">
+						<input type="submit" value="Inserir Componente">
+					</form>
+			</html>
+<?php 		}
+			else if($_REQUEST['estado'] == 'inserir')
+			{
+
+			}
+			
+		}
+		else
+		{
+			//user não tem a capability
+		}		
+	}
+	else
+	{
+		//user não esta logado
 	}
 	
  ?>
