@@ -177,4 +177,7 @@ class PropertyManage
         }
     }
 }
+
+new PropertyManage();
+
 ?>
