@@ -61,7 +61,7 @@
 				
 				if($entity->ssvalidation()) //serverside validations
 				{
-					$sanitizeName = $bd->real_escape_string($_REQUEST['nome']);
+					$sanitizeName = $bd->userInputVal($_REQUEST['nome']);
 					$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
 					$res_querState = $bd->runQuery($queryInsert);
 					
