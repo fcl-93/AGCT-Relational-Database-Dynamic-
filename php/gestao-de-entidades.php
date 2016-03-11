@@ -65,9 +65,9 @@
 						foreach($enumTipos as $value)
 						{
 ?>
-						<html>
-							<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
-						</html>	
+							<html>
+								<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+							</html>	
 <?php 								
 						}
 ?>						
