@@ -72,7 +72,7 @@ class PropertyManage
 
     private function existePropriedade($tipo)
     {
-        $querySelect = "SELECT * FROM PROPERTY WHERE ";
+        $querySelect = "SELECT * FROM property WHERE ";
         if ($tipo === "relation")
         {
             $querySelect.= "ent_type_id = NULL";
