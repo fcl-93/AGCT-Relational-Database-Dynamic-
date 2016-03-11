@@ -40,8 +40,8 @@ function verificaEstado()
     <html>
         <p>Por favor escolha que tipo de propriedades quer gerir.</p>
         <ol>
-            <li><a href="gestao-de-propriedades?estado=relation">Relação</a></li>
-            <li><a href="gestao-de-propriedades?estado=entity">Entidade</a></li>
+            <li><a href="/gestao-de-propriedades?estado=relation">Relação</a></li>
+            <li><a href="/gestao-de-propriedades?estado=entity">Entidade</a></li>
         </ol>
     </html>
 <?php
