@@ -9,7 +9,6 @@ class Db_Op
     //This method will make the database connection
     public function __construct()
     {
-        echo "É suposto entrar aqui";
       $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       var_dump(get_object_vars($this));
       if($this->mysqli->connect_errno)
@@ -26,8 +25,6 @@ class Db_Op
     // run the result that will be returned is false.
     public function runQuery($query)
     {
-        echo $query;
-        var_dump(get_object_vars($this));
     	$result = $this->mysqli->query($query);
 	    if(!$result)
 	    {
