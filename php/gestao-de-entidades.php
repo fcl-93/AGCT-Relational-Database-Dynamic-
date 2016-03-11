@@ -92,7 +92,7 @@
  				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
  				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
 ?>			
-				<p>A entidade <?php echo $read_EntTypeA['name'] ?>  foi desativada</p>;
+				<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>;
  				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>;
 <?php 
  			}
