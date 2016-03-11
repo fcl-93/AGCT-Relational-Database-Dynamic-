@@ -34,18 +34,26 @@
 						<tr>
 							<td><?php echo $read_EntType['id']; ?></td>
 							<td><?php echo $read_EntType['name']?></td>
-							<td><?php echo $read_EntType['state']?></td>
-							<td>
+							
+							
 							<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 <?php 						if($read_EntType['state'] === 'active')
 							{
-?>
-								<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
-<?php			 			}
+								
+?>								
+								<td> Ativo </td>
+								<td>
+									<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
+								</td>
+<?php			 				
+							}
 							else
 							{
 ?>
-								<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
+								<td> Inativo </td>
+								<td>
+									<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
+								</td>	
 <?php 						}
 ?>
 							</td>
@@ -183,7 +191,7 @@ class entidade
 				{
 ?>
 					<html>
-						<input type="radio" name="atv_int" value="inctive" required>Desativo
+						<input type="radio" name="atv_int" value="inctive" required>Inativo
 						<br>
 					</html>
 <?php 				
