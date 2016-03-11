@@ -242,7 +242,7 @@ class PropertyManage
         if($tipo == "entity")
         {
             $verificaEntidades = "SELECT * FROM ent_type";
-            $numEnt = $this->db->runQuery($verificaEntidades)->num_rows();
+            $numEnt = $this->db->runQuery($verificaEntidades)->num_rows;
             if($numEnt === 0)
             {
             ?>
@@ -254,8 +254,8 @@ class PropertyManage
         }
         else
         {
-          $verificaEntidades = "SELECT * FROM rel_type";
-            $numEnt = $this->db->runQuery($verificaEntidades)->num_rows();
+            $verificaRelacoes = "SELECT * FROM rel_type";
+            $numEnt = $this->db->runQuery($verificaRelacoes)->num_rows;
             if($numEnt === 0)
             {
             ?>
