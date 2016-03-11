@@ -1,17 +1,17 @@
 <?php
 require_once("custom/php/common.php");
-
+    
 class PropertyManage
 {
     private $db;
     private $capability;
-   
+        
     public function __construct(){
         $this->db = new Db_Op();
         $this->capability = "manage_properties";
         $this->executaScript();
     }
-    
+        
     public function executaScript()
     {
         //Verifica se algum utilizador está com sessão iniciada
@@ -25,35 +25,35 @@ class PropertyManage
             else
             {
         ?>
-                <html>
-                    <p>Não tem autorização para aceder a esta página</p>
-                </html>
+<html>
+    <p>Não tem autorização para aceder a esta página</p>
+</html>
         <?php
             }
         }
         else
         {
         ?>
-            <html>
-                <p>Não tem sessão iniciada.</p>
-                <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
-            </html>
+<html>
+    <p>Não tem sessão iniciada.</p>
+    <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
+</html>
         <?php
         }
     }
-    
+        
     private function verificaEstado()
     {
         if (empty($_REQUEST["estado"]))
         {
     ?>
-        <html>
-            <p>Por favor escolha que tipo de propriedades quer gerir.</p>
-            <ul>
-                <li><a href="/gestao-de-propriedades?estado=entity">Entidade</a></li>
-                <li><a href="/gestao-de-propriedades?estado=relation">Relação</a></li>
-            </ul>
-        </html>
+<html>
+    <p>Por favor escolha que tipo de propriedades quer gerir.</p>
+    <ul>
+        <li><a href="/gestao-de-propriedades?estado=entity">Entidade</a></li>
+        <li><a href="/gestao-de-propriedades?estado=relation">Relação</a></li>
+    </ul>
+</html>
     <?php
         }
         elseif ($_REQUEST["estado"] === "relation")
@@ -69,7 +69,7 @@ class PropertyManage
             $this->estadoInserir();
         }
     }
-
+        
     private function existePropriedade($tipo)
     {
         $querySelect = "SELECT * FROM property WHERE ";
@@ -82,13 +82,13 @@ class PropertyManage
             $querySelect.= "rel_type_id = NULL";
         }
         $resultSelect = $this->db->runQuery($querySelect);
-
+            
         if ($resultSelect->num_rows == 0)
         {
     ?>
-            <html>
-                <p>Não existem propiedades especificadas para o tipo selecionado</p>
-            </html>    
+<html>
+    <p>Não existem propiedades especificadas para o tipo selecionado</p>
+</html>    
     <?php
             return false;
         }
@@ -96,67 +96,67 @@ class PropertyManage
         {
             return true;
         }
-
+            
     }
-
+        
     private function estadoEntityRelation($tipo)
     {
         if($this->existePropriedade($tipo))
         {
             $this->apresentaTabela($tipo);
-            
+                
         }
         $this->apresentaForm($tipo);
     }
-
+        
     private function apresentaTabela($tipo)
     {
     ?>
-        <html>
-            <table>
-                <thead>
-                    <tr>
+<html>
+    <table>
+        <thead>
+            <tr>
                         <?php
                             if ($tipo === entity)
                             {
                         ?>
-                                <th>Entidade</th>
+                <th>Entidade</th>
                         <?php
                             }
                             else
                             {
                         ?>
-                                <th>Relação</th>
-                        <?
-                            }
-                        ?>
-                        <th>ID</th>
-                        <th>Propriedade</th>
-                        <th>Tipo de valor</th>
-                        <th>Nome do campo no formulário</th>
-                        <th>Tipo do campo no formulário</th>
-                        <th>Tipo de unidade</th>
-                        <th>Ordem do campo no formulário</th>
-                        <th>Tamanho do campo no formulário</th>
-                        <th>Obrigatório</th>
-                        <th>Estado</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
+                <th>Relação</th>
+                <?
+                }
+                ?>
+                <th>ID</th>
+                <th>Propriedade</th>
+                <th>Tipo de valor</th>
+                <th>Nome do campo no formulário</th>
+                <th>Tipo do campo no formulário</th>
+                <th>Tipo de unidade</th>
+                <th>Ordem do campo no formulário</th>
+                <!--<th>Tamanho do campo no formulário</th>-->
+                <th>Obrigatório</th>
+                <th>Estado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
                         <?php
                             if ($tipo === "entity")
                             {
                                 $selecionaEntOrRel = "SELECT name, id FROM ent_type";
                                 $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
-                                
+                                    
                             }
                             else
                             {
                                 $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                                 $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
-                                
+                                    
                             }
                             while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                             {
@@ -175,17 +175,17 @@ class PropertyManage
                                 $resultSeleciona = $this->db->runQuery($selecionaProp);
                                 $numLinhas = $resultSeleciona->num_rows();
                             ?>
-                                <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+                <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                             <?php
                                 while($resultSeleciona->fetch_assoc())
                                 {
                             ?>
-                                    <td><?php echo $resultSeleciona["id"]; ?></td>
-                                    <td><?php echo $resultSeleciona["name"]; ?></td>
-                                    <td><?php echo $resultSeleciona["value_type"]; ?></td>
-                                    <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
-                                    <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
-                                    <td>
+                <td><?php echo $resultSeleciona["id"]; ?></td>
+                <td><?php echo $resultSeleciona["name"]; ?></td>
+                <td><?php echo $resultSeleciona["value_type"]; ?></td>
+                <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
+                <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
+                <td>
                                         <?php
                                             if (empty($resultSeleciona["unit_type_id"]))
                                             {
@@ -196,10 +196,10 @@ class PropertyManage
                                                 $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$resultSeleciona["unit_type_id"];
                                             }
                                          ?>
-                                    </td>
-                                    <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
-                                    <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
-                                    <td>
+                </td>
+                <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
+                <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
+                <td>
                                         <?php 
                                             if ($resultSeleciona["mandatory"] === 1)
                                             {
@@ -210,8 +210,8 @@ class PropertyManage
                                                 echo " não";
                                             }
                                          ?>
-                                    </td>
-                                    <td>
+                </td>
+                <td>
                                         <?php 
                                             if ($resultSeleciona["state"] === "true")
                                             {
@@ -222,20 +222,20 @@ class PropertyManage
                                                 echo "inativo";
                                             }
                                         ?>
-                                    </td>
-                                    <td>[editar][desativar]</td>             
+                </td>
+                <td>[editar][desativar]</td>             
                             <?php
                                 }
                             }
                         ?>
-                    </tr>
-                </tbody>
-            </table>
-        </html>
+            </tr>
+        </tbody>
+    </table>
+</html>
     <?php
         }
     }
-    
+        
     private function apresentaForm($tipo)
     {
         $existeEntRel = true;
@@ -246,11 +246,11 @@ class PropertyManage
             if($numEnt === 0)
             {
             ?>
-                <p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer entidades</p>
+<p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer entidades</p>
             <?php
                 $existeEntRel = false;
             }
-            
+                
         }
         else
         {
@@ -259,24 +259,24 @@ class PropertyManage
             if($numEnt === 0)
             {
             ?>
-                <p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer relações</p>
+<p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer relações</p>
             <?php
                 $existeEntRel = false;
             }
-              
+                
         }
         if ($existeEntRel)
         {
         ?>
-            <html>
-                <form>
-                <h3> Gestão de propriedades - introdução </h3>
-
-                <form method="POST">
-                    <label>Nome da Propriedade:</label><br>
-                    <input type="text" name="nome" required>
-                    <br><br>
-                    <label>Tipo de valor:</label><br>
+<html>
+    <form>
+        <h3> Gestão de propriedades - introdução </h3>
+                    
+        <form method="POST">
+            <label>Nome da Propriedade:</label><br>
+            <input type="text" name="nome" required>
+            <br><br>
+            <label>Tipo de valor:</label><br>
                     <?php
                     $field = 'value_type';
                     $table = 'property';
@@ -286,7 +286,7 @@ class PropertyManage
                         echo' <input type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                     }
                     ?>
-                    <br>
+            <br>
                     <?php
                         if ($tipo === "entity")
                         {
@@ -312,7 +312,7 @@ class PropertyManage
                         }
                         echo '</select><br><br>';
                     ?>
-                    <label>Tipo do campo do formulário</label><br>
+            <label>Tipo do campo do formulário</label><br>
                     <?php
                         $field = 'form_field_type';
                         $table = 'property';
@@ -322,10 +322,10 @@ class PropertyManage
                             echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                         }
                     ?>
-                    <br>
-                    <label>Tipo de unidade</label><br>
-                    <select name="tipoUnidade">
-                    <option value="NULL"></option>';
+            <br>
+            <label>Tipo de unidade</label><br>
+            <select name="tipoUnidade">
+                <option value="NULL"></option>';
                     <?php
                         $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
                         $result = mysqli_query($link, $selecionaTipoUnidade);
@@ -334,16 +334,16 @@ class PropertyManage
                             echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
                         }
                     ?>
-                    </select><br><br>
-                    <label>Ordem do campo no formulário</label><br>
-                    <input type="text" name="ordem" min="1" required><br><br>
-                    <label>Tamanho do campo no formulário</label><br>
-                    <input type="text" name="tamanho"><br><br>
-                    <label>Obrigatório</label><br>
-                    <input type="radio" name="obrigatorio" value="1" required>Sim
-                    <br>
-                    <input type="radio" name="obrigatorio" value="2" required>Não
-                    <br><br>
+            </select><br><br>
+            <label>Ordem do campo no formulário</label><br>
+            <input type="text" name="ordem" min="1" required><br><br>
+            <!--<label>Tamanho do campo no formulário</label><br>
+            <input type="text" name="tamanho"><br><br>-->
+            <label>Obrigatório</label><br>
+            <input type="radio" name="obrigatorio" value="1" required>Sim
+            <br>
+            <input type="radio" name="obrigatorio" value="2" required>Não
+            <br><br>
                     <?php
                         if ($tipo ==="entity")
                         {
@@ -354,19 +354,19 @@ class PropertyManage
                             $result = $this->db->runQuery($selecionaEntidades);
                             while($guardaEntidade = $result->fetch_assoc($result))
                             {
-                                    echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
+                                echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
                             }
                             echo '</select><br><br>';
                         }
                     ?>
-                    <input type="hidden" name="estado" value="inserir"><br>
-                    <input type="submit" value="Inserir propriedade">
-                </form>
-            <html>
+            <input type="hidden" name="estado" value="inserir"><br>
+            <input type="submit" value="Inserir propriedade">
+        </form>
+        <html>
             <?php
             }
     }
-    
+        
     private function criaNomeRel($queryNome1, $queryNome2)
     {
         $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
@@ -374,7 +374,7 @@ class PropertyManage
         $nome = $nome1."-".$nome2;
         return $nome;
     }
-    
+        
     private function estadoInserir()
     {
         echo '<h3>Gestão de propriedades - inserção</h3>';
@@ -418,10 +418,10 @@ class PropertyManage
             $queryInsere .=  '`rel_type_id`,'; 
         }
         $queryInsere .=  ' `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
-        if(!empty($_REQUEST["tamanho"]))
+        /*if(!empty($_REQUEST["tamanho"]))
 	{
             $queryInsere .= '`form_field_size`, ';
-        }
+        }*/
         $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
@@ -432,10 +432,10 @@ class PropertyManage
             $queryInsere .=  $_REQUEST["relacaoPertence"]; 
         }
         $queryInsere .= ',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
-        if(!empty($_REQUEST["tamanho"]))
+        /*if(!empty($_REQUEST["tamanho"]))
 	{
             $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
-	}
+	}*/
         $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["entidadeReferenciada"].')';
 	$insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
@@ -444,64 +444,64 @@ class PropertyManage
 	}
 	else
 	{
-		//obtem o último id que foi introduzido na BD
-		$id = $this->db->getMysqli()->insert_id ();
-		// constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
-		$form_field_name = $ent.$traco.$id.$traco.$nomeField;
-		// atualiza esse atributo
-		$atualiza = "UPDATE property SET form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
-		$atualiza = $this->db->runQuery($atualiza);
-		if(!$atualiza)
-		{
-			$this->db->getMysqli()->rollback();
-		}
-		else
-		{
-			$this->db->getMysqli()->commit();
-			echo 'Inseriu os dados de nova propriedade com sucesso.';
-			echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
-		}
+            //obtem o último id que foi introduzido na BD
+            $id = $this->db->getMysqli()->insert_id ();
+            // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
+            $form_field_name = $ent.$traco.$id.$traco.$nomeField;
+            // atualiza esse atributo
+            $atualiza = "UPDATE property SET form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
+            $atualiza = $this->db->runQuery($atualiza);
+            if(!$atualiza)
+            {
+                $this->db->getMysqli()->rollback();
+            }
+            else
+            {
+                $this->db->getMysqli()->commit();
+		echo 'Inseriu os dados de nova propriedade com sucesso.';
+		echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+            }
 	}
-        
+            
     }
-    
+        
     private function validarDados()
     {
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
-		echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
-		goBack();
-		echo '<br>';
-		return false;
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
+            goBack();
+            echo '<br>';
+            return false;
 	}
 	else if($_REQUEST["ordem"] < 1)
 	{
-		echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!<br>';
-		goBack();
-		echo '<br>';
-		return false;
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!<br>';
+            goBack();
+            echo '<br>';
+            return false;
 	}
-	if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
+	/*if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
 	{
-		echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos 
-			uma vez que indicou que o Tipo do campo do formulário era text<br>';
-		goBack();
-		echo '<br>';
-		return false;
-	}
+            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos 
+                uma vez que indicou que o Tipo do campo do formulário era text<br>';
+            goBack();
+            echo '<br>';
+            return false;
+	}*/
         // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
-	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
+	/*if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
 	{
-		echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
-		 aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
-		goBack();
-		echo '<br>';
-		return false;
-	}
+            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+                aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
+            goBack();
+            echo '<br>';
+            return false;
+        }*/
 	return true;
     }
 }
-
+    
 new PropertyManage();
-
+    
 ?>
