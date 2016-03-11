@@ -12,7 +12,7 @@
 				//Apresentar tabela
 				$res_EntType = $bd->runQuery("SELECT * FROM ent_type WHERE state like 'active'");
 				//verifica se há ou não entidades
-				if($res_EntType)
+				if($res_EntType->num_rows() > 0)
 				{
 ?>
 				<html>
