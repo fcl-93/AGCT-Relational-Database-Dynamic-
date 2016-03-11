@@ -434,7 +434,7 @@ class PropertyManage
         $queryInsere .= ',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
         if(!empty($_REQUEST["tamanho"]))
 	{
-            $queryInsere = ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
+            $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}
         $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["entidadeReferenciada"].')';
 	$insere = $this->db->runQuery($queryInsere);
