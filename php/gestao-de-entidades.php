@@ -77,7 +77,7 @@
  			else if($_REQUEST[estado] == 'ativar')
  			{
 				$res_EntTypeA = "SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id'];
-				$read_EntTypeA = $res_EntTypeA->fetch_assoc()
+				$read_EntTypeA = $res_EntTypeA->fetch_assoc();
 				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
  				echo 'A entidade '.$read_EntTypeA[name].' foi ativada';
  				echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
