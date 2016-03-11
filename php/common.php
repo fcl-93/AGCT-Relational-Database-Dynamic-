@@ -36,6 +36,11 @@ class Db_Op
 	    }
 
     }
+    //This method will receive a string and will apply 
+    public function userInputVal($string)
+    {
+    	return $this->mysqli->real_escape_string($string);
+    }
     
     //This method will disconnect a database connection
     public function disconnectToDb()
