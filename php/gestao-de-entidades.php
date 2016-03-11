@@ -14,6 +14,7 @@
 				//verifica se há ou não entidades
 				if($res_EntType->num_rows > 0)
 				{
+					
 ?>
 				<html>
 					<table>
@@ -27,7 +28,7 @@
 <?php				
 				
 					while($read_EntType = $res_EntType->fetch_assoc())
-					{
+					{print_r($read_EntType);
 						//printa a restante tabela
 ?>						
 						<tr>
