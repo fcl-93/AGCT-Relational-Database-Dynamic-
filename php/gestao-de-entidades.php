@@ -36,13 +36,13 @@
 							<td><?php echo $read_EntType['name']?></td>
 							
 							
-							<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 <?php 						if($read_EntType['state'] === 'active')
 							{
 								
 ?>								
 								<td> Ativo </td>
 								<td>
+									<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 									<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
 								</td>
 <?php			 				
@@ -52,6 +52,7 @@
 ?>
 								<td> Inativo </td>
 								<td>
+									<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 									<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
 								</td>	
 <?php 						}
@@ -89,8 +90,9 @@
 				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
 ?>
 				<html>
- 					<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>;
- 					<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>;
+ 					<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>
+ 					<br>
+ 					<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 				</html>
 <?php 		
  			}
@@ -100,8 +102,9 @@
  				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
  				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
 ?>			
-				<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>;
- 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>;
+				<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
+				<br>
+ 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 <?php 
  			}
 			else if($_REQUEST['estado'] == 'inserir')
