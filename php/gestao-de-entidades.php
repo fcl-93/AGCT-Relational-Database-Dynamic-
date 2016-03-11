@@ -2,7 +2,7 @@
 	require_once("custom/php/common.php");
 
 	$bd = new Db_Op();
-	$bd->connectToDb();
+	//$bd->connectToDb();
 	
 	$result = $bd->runQuery("SELECT * FROM wordpress");
 	
