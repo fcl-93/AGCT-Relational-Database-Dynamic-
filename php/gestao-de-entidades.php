@@ -2,7 +2,7 @@
 	require_once("custom/php/common.php");
 	
 	$bd = new Db_op();
-	
+	$entity = new entidade();
 	if ( is_user_logged_in() )
 	{
         if(current_user_can('manage_entities'))
@@ -53,12 +53,25 @@
 					</html>
 <?php 			}
 				
-			$entity = new entidade();
-			$entity->form($bd);
+			
+			$entity->form($bd); // object lead the method to print the form 
  		}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
-				//Validações php
+				
+				if($entity->ssvalidation()) //serverside validations
+				{
+					$sanitizeName = $bd->real_escape_string($_REQUEST['nome']);
+					$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
+					$res_querState = $bd->runQuery($queryInsert);
+					
+					echo 'Inseriu os dados de novo componente com sucesso.';
+					echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
+				}
+				else
+				{
+					goBack();
+				}
 			}
 			
 		}
@@ -107,7 +120,8 @@ class entidade
 			{
 ?>
 				<html>
-					<input type="radio" name="atv_int" value="<?php $value ?>" required><?php $value?>
+					<input type="radio" name="atv_int" value="<?php echo $value ?>" required><?php echo $value?>
+					<br>
 				</html>
 <?php 
 			}
@@ -122,7 +136,25 @@ class entidade
 	//This method will do the server side validation
 	public function ssvalidation()
 	{
-	
+		echo '<h3>Gestão de componentes - inserção</h3>';
+		if(empty($_REQUEST['nome']))
+		{
+?>
+			<html><p>O campo nome é de preenchimento obrigatório.</p></html>
+<?php 
+			return false;
+		}
+		elseif(empty($_REQUEST['atv_int']))
+		{
+?>
+			<html><p>Deve escolhe uma das opções do campo estado.</p></html>
+<?php 	
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 } 
