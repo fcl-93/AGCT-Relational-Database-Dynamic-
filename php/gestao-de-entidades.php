@@ -10,6 +10,10 @@
 			if(empty($_REQUEST['estado']))
 			{
 				//Apresentar tabela
+				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
+				//verifica se hÁ ou nÃo entidades
+				if(!$res_EntType)
+				{
 ?>
 				<html>
 					<table>
@@ -21,10 +25,7 @@
 								<td> Ação</td>
 							</tr>
 <?php				
-				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se hÁ ou nÃo entidades
-				if(!$res_EntType)
-				{
+				
 					while($read_EntType = $res_EntType->fetch_assoc())
 					{
 						//printa a restante tabela
