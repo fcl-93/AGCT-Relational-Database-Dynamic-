@@ -35,7 +35,17 @@
 							<td><?php echo $read_EntType['id']; ?></td>
 							<td><?php echo $read_EntType['name']?></td>
 							<td><?php echo $read_EntType['state']?></td>
-							<td>[editar][desativar]</td>
+							<td>
+								<form>
+									<input type="hidden" name="estado" value="editar">
+									<input type="submit" value="[editar]">
+								</form>
+								
+								<form>
+									<input type="hidden" name="estado" value="desativar">
+									<input type="submit" value="[desativar]">
+								</form>
+							</td>
 						</tr>
 <?php 
 					}	
@@ -56,7 +66,7 @@
 				
 			
 			$entity->form($bd); // object lead the method to print the form 
- 		}
+ 			}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
 				
@@ -140,8 +150,8 @@ class entidade
 			}
 ?>
 				<br>
-				<input type="hidden" name="estado" value="inserir">
-				<input type="submit" value="Inserir Componente">
+					<input type="hidden" name="estado" value="inserir">
+					<input type="submit" value="Inserir Componente">
 				</form>
 				</html>
 <?php 	
