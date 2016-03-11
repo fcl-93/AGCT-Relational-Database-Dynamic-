@@ -447,7 +447,7 @@ class PropertyManage
             //obtem o último id que foi introduzido na BD
             $id = $this->db->getMysqli()->insert_id;
             // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
-            $form_field_name = $ent.$traco.$id.$traco.$nomeField;
+            $form_field_name = $entRel.$traco.$id.$traco.$nomeField;
             // atualiza esse atributo
             $atualiza = "UPDATE property SET form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
             $atualiza = $this->db->runQuery($atualiza);
