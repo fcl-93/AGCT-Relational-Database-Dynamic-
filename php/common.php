@@ -9,8 +9,8 @@ class Db_Op
     //This method will make the database connection
     public function __contruct()
     {
-      $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-      if($mysqli->connect_errno)
+      $this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+      if($this->mysqli->connect_errno)
       {
       	printf("Connect failed: %s\n", $mysqli->connect_error);
       	exit();
@@ -24,10 +24,10 @@ class Db_Op
     // run the result that will be returned is false.
     public function runQuery($query)
     {
-    	$result = $mysqli->query($query);
+    	$result = $this->mysqli->query($query);
 	    if(!$result)
 	    {
-	    	echo "".$mysqli->error;
+	    	echo "".$this->mysqli->error;
 	    	exit();
 	    }
 	    else
@@ -40,7 +40,7 @@ class Db_Op
     //This method will disconnect a database connection
     public function disconnectToDb()
     {
-      $mysqli->close();
+      $this->mysqli->close();
     }
     
     //This method will receive a table name, a field name and will get all the value fron the field name. 
