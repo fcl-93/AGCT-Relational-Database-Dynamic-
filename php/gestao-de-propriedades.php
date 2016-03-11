@@ -425,7 +425,7 @@ class PropertyManage
         $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
-           $queryInsere .= $_REQUEST["componentePertence"]; 
+           $queryInsere .= $_REQUEST["entidadePertence"]; 
         }
         else
         {
@@ -436,7 +436,7 @@ class PropertyManage
 	{
             $queryInsere = ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}
-        $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["componenteReferenciado"].')';
+        $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["entidadeReferenciada"].')';
 	$insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
