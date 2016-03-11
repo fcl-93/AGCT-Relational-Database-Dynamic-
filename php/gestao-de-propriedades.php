@@ -6,7 +6,7 @@ class PropertyManage
     private $db;
     private $capability;
    
-    public function _constructor($param) {
+    public function __construct(){
         $db = new Db_Op();
         $capability = "manage_properties";
     }
