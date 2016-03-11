@@ -405,8 +405,8 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
 	// Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
-	$this->db->getMysqli->autocommit(false);
-	$this->db->getMysqli->begin_transaction();
+	$this->db->getMysqli()->autocommit(false);
+	$this->db->getMysqli()->begin_transaction();
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
         if(!empty($_REQUEST["entidadePertence"]))
@@ -457,7 +457,7 @@ class PropertyManage
 		}
 		else
 		{
-			$this->db->getMysqli->commit();
+			$this->db->getMysqli()->commit();
 			echo 'Inseriu os dados de nova propriedade com sucesso.';
 			echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
 		}

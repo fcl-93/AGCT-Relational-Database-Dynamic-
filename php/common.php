@@ -19,7 +19,7 @@ class Db_Op
     
     public function getMysqli()
     {
-        return $this->$mysqli;
+        return $this->mysqli;
     }
 	
     //This method will receive a String(query) and will process it 
