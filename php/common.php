@@ -24,6 +24,7 @@ class Db_Op
     // run the result that will be returned is false.
     public function runQuery($query)
     {
+        echo $query;
     	$result = $this->mysqli->query($query);
 	    if(!$result)
 	    {
