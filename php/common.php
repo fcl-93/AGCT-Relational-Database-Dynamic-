@@ -16,6 +16,11 @@ class Db_Op
       	exit();
       }
     }
+    
+    public function getMysqli()
+    {
+        return $mysqli;
+    }
 	
     //This method will receive a String(query) and will process it 
     //If the query received starts with 

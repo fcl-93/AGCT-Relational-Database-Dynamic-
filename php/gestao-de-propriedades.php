@@ -374,6 +374,132 @@ class PropertyManage
         $nome = $nome1."-".$nome2;
         return $nome;
     }
+    
+    private function estadoInserir()
+    {
+        echo '<h3>Gestão de propriedades - inserção</h3>';
+        if(!empty($_REQUEST["entidadePertence"]))
+        {
+            $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
+            $entRelResult = $this->db->runQuery($entRelQuery);
+            $entRelArray = $entRelResult->fetch_assoc();
+            // contrução do form_field_name
+            // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+            $entRel = $entRelArray["name"];
+        }
+        else
+        {
+            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.rel_type = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
+            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.rel_type = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
+            $entRel = criaNomeRel($queryNome1, $queryNome2);
+        }	
+	// Obtemos as suas 3 primeiras letras
+	$entRel = substr($entidade, 0 , 3);
+	$traco = '-';
+	$idProp = '';
+	// Garantimos que não há SQL injection através do campo nome
+	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome"]);
+	// Substituimos todos os carateres por carateres ASCII
+	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
+	// Substituimos todos pos espaços por underscore
+	$nomeField = str_replace(' ', '_', $nomeField);
+	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
+	// Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
+	$this->db->getMysqli->autocommit(false);
+	$this->db->getMysqli->begin_transaction();
+	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
+	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
+        if(!empty($_REQUEST["entidadePertence"]))
+        {
+           $queryInsere .=  '`ent_type_id`,'; 
+        }
+        else
+        {
+            $queryInsere .=  '`rel_type_id`,'; 
+        }
+        $queryInsere .=  ' `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
+        if(!empty($_REQUEST["tamanho"]))
+	{
+            $queryInsere .= '`form_field_size`, ';
+        }
+        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `comp_fk_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape($_REQUEST["nome"]).'\',';
+        if(!empty($_REQUEST["entidadePertence"]))
+        {
+           $queryInsere .= $_REQUEST["componentePertence"]; 
+        }
+        else
+        {
+            $queryInsere .=  $_REQUEST["relacaoPertence"]; 
+        }
+        $queryInsere .= ',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
+        if(!empty($_REQUEST["tamanho"]))
+	{
+            $queryInsere = ',"'.$this->db->getMysqli()->real_escape($_REQUEST["tamanho"]).'"';
+	}
+        $queryInsere .= ','.$this->db->getMysqli()->real_escape($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["componenteReferenciado"].')';
+	$insere = $this->db->runQuery($queryInsere);
+	if(!$insere)
+	{
+		$this->db->getMysqli()->rollback();
+	}
+	else
+	{
+		//obtem o último id que foi introduzido na BD
+		$id = $this->db->getMysqli()->insert_id ();
+		// constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
+		$form_field_name = $ent.$traco.$id.$traco.$nomeField;
+		// atualiza esse atributo
+		$atualiza = "UPDATE property SET form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
+		$atualiza = $this->db->runQuery($atualiza);
+		if(!$atualiza)
+		{
+			$this->db->getMysqli()->rollback();
+		}
+		else
+		{
+			$this->db->getMysqli->commit();
+			echo 'Inseriu os dados de nova propriedade com sucesso.';
+			echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+		}
+	}
+        
+    }
+    
+    private function validarDados()
+    {
+        if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
+	{
+		echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
+		goBack();
+		echo '<br>';
+		return false;
+	}
+	else if($_REQUEST["ordem"] < 1)
+	{
+		echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!<br>';
+		goBack();
+		echo '<br>';
+		return false;
+	}
+	if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
+	{
+		echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos 
+			uma vez que indicou que o Tipo do campo do formulário era text<br>';
+		goBack();
+		echo '<br>';
+		return false;
+	}
+        // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
+	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
+	{
+		echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+		 aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
+		goBack();
+		echo '<br>';
+		return false;
+	}
+	return true;
+    }
 }
 
 new PropertyManage();
