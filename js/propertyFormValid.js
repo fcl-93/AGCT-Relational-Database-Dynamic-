@@ -9,7 +9,7 @@ $().ready(function(){
                             required: true,
                             min:1
                         },
-                        mandatory:"required",
+                        mandatory:"required"
 		},
 		messages:{
 			name:"Por favor introduza o nome da propriedade.",
