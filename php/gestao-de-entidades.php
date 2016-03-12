@@ -2,8 +2,9 @@
 <html>
 	<head>
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
-		  <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
- 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+ 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script>
+ 		 <script type="text/css" src="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css"></script> 
 	</head>
 </html>
 <?php
