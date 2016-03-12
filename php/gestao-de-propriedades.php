@@ -802,7 +802,7 @@ class PropertyManage
         }
         $queryUpdate .= " WHERE id = ".$_REQUEST["idProp"];
 	$update = $this->db->runQuery($queryUpdate);
-        if ($update)
+        if (!$update)
         {
             echo 'Ocorreu um erro.';
             goBack();
