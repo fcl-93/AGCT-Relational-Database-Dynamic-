@@ -1,6 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+ 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/propertyFormValid.js"></script>
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
+	</head>
+</html>
 <?php
 require_once("custom/php/common.php");
-
 
 /**
  * Class that handle all the methods that are necessary to execute this component
@@ -325,9 +333,9 @@ class PropertyManage
         <html>
             <h3> Gestão de propriedades - introdução </h3>
 
-            <form method="POST">
+            <form id="insertForm" method="POST">
                 <label>Nome da Propriedade:</label><br>
-                    <input type="text" name="nome" required>
+                    <input id="name" type="text" name="nome" required>
                 <br><br>
                 <label>Tipo de valor:</label><br>
                         <?php
@@ -336,7 +344,7 @@ class PropertyManage
                         $array =$this->db->getEnumValues($table, $field);
                         foreach($array as $values)
                         {
-                            echo' <input type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
+                            echo' <input id="typeValue" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         ?>
                 <br>
@@ -345,14 +353,14 @@ class PropertyManage
                             {
                                 echo'
                                 <label>Entidade a que irá pertencer esta propriedade</label><br>
-                                <select name="entidadePertence" required>';
+                                <select id="entRel" name="entidadePertence" required>';
                                 $selecionaEntRel = "SELECT name, id FROM ent_type";
                             }
                             else
                             {
                                 echo'
                                 <label>Relação a que irá pertencer esta propriedade</label><br>
-                                <select name="relacaoPertence" required>';
+                                <select id="entRel" name="relacaoPertence" required>';
                                 $selecionaEntRel = "SELECT id FROM rel_type";
                             }
                             $result = $this->db->runQuery($selecionaEntRel);
@@ -375,7 +383,7 @@ class PropertyManage
                             $array = $this->db->getEnumValues($table, $field);
                             foreach($array as $values)
                             {
-                                echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
+                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                             }
                         ?>
                 <br>
@@ -387,24 +395,24 @@ class PropertyManage
                             $result = mysqli_query($link, $selecionaTipoUnidade);
                             while($guardaTipoUnidade = mysqli_fetch_assoc($result))
                             {
-                                echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+                                echo '<option id="unit" value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
                             }
                         ?>
                 </select><br><br>
                 <label>Ordem do campo no formulário</label><br>
-                <input type="text" name="ordem" min="1" required><br><br>
+                <input id="order" type="text" name="ordem" min="1" required><br><br>
                 <!--<label>Tamanho do campo no formulário</label><br>
-                <input type="text" name="tamanho"><br><br>-->
+                <input id="size" type="text" name="tamanho"><br><br>-->
                 <label>Obrigatório</label><br>
-                <input type="radio" name="obrigatorio" value="1" required>Sim
+                <input id="mandatory" type="radio" name="obrigatorio" value="1" required>Sim
                 <br>
-                <input type="radio" name="obrigatorio" value="2" required>Não
+                <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
                 <br><br>
                         <?php
                             if ($tipo ==="entity")
                             {
                                 echo '<label>Entidade referenciada por esta propriedade</label><br>
-                                <select name="entidadeReferenciada">
+                                <select id="entRef" name="entidadeReferenciada">
                                 <option value="NULL"></option>';
                                 $selecionaEntidades= "SELECT id, name FROM ent_type";
                                 $result = $this->db->runQuery($selecionaEntidades);
@@ -664,7 +672,7 @@ class PropertyManage
 
         <form method="POST">
             <label>Nome da Propriedade:</label><br>
-                <input type="text" name="nome" value="<?php echo $nome?>" required>
+                <input id="name" type="text" name="nome" value="<?php echo $nome?>" required>
             <br><br>
             <label>Tipo de valor:</label><br>
                     <?php
@@ -675,11 +683,11 @@ class PropertyManage
                     {
                         if ($values === $value_type)
                         {
-                            echo' <input type="radio" name="tipoValor" value="'.$values.'" checked="checked" required>'.$values.'<br>';
+                            echo' <input id="typeValue" type="radio" name="tipoValor" value="'.$values.'" checked="checked" required>'.$values.'<br>';
                         }
                         else
                         {
-                            echo' <input type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
+                            echo' <input id="typeValue" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         
                     }
@@ -690,14 +698,14 @@ class PropertyManage
                         {
                             echo'
                             <label>Entidade a que irá pertencer esta propriedade</label><br>
-                            <select name="entidadePertence" required>';
+                            <select id="entRel" name="entidadePertence" required>';
                             $selecionaEntRel = "SELECT name, id FROM ent_type";
                         }
                         else
                         {
                             echo'
                             <label>Relação a que irá pertencer esta propriedade</label><br>
-                            <select name="relacaoPertence" required>';
+                            <select id="entRel" name="relacaoPertence" required>';
                             $selecionaEntRel = "SELECT id FROM rel_type";
                         }
                         $result = $this->db->runQuery($selecionaEntRel);
@@ -729,17 +737,17 @@ class PropertyManage
                         {
                             if ($values === $form_field_type)
                             {
-                                echo' <input type="radio" name="tipoCampo" value="'.$values.'" checked="checked" required>'.$values.'<br>';
+                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'" checked="checked" required>'.$values.'<br>';
                             }
                             else
                             {
-                                echo' <input type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
+                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                             }
                         }
                     ?>
             <br>
             <label>Tipo de unidade</label><br>
-            <select name="tipoUnidade">
+            <select id="unit" name="tipoUnidade">
                 <option value="NULL"></option>';
                     <?php
                         $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
@@ -759,7 +767,7 @@ class PropertyManage
                     ?>
             </select><br><br>
             <label>Ordem do campo no formulário</label><br>
-            <input type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br><br>
+            <input id="order" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br><br>
             <!--<label>Tamanho do campo no formulário</label><br>
             <input type="text" name="tamanho"><br><br>-->
             <label>Obrigatório</label><br>
@@ -767,25 +775,25 @@ class PropertyManage
                 if ($mandatory)
                 {
         ?>       
-                    <input type="radio" name="obrigatorio" value="1" checked required>Sim
+                    <input id="mandatory" type="radio" name="obrigatorio" value="1" checked required>Sim
                     <br>
-                    <input type="radio" name="obrigatorio" value="2" required>Não
+                    <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
                     <br><br>
         <?php
                 }
                 else
                 {
         ?>       
-                    <input type="radio" name="obrigatorio" value="1" required>Sim
+                    <input id="mandatory" type="radio" name="obrigatorio" value="1" required>Sim
                     <br>
-                    <input type="radio" name="obrigatorio" value="2" checked required>Não
+                    <input id="mandatory" type="radio" name="obrigatorio" value="2" checked required>Não
                     <br><br>
         <?php   
                 }
             if ($tipo ==="entity")
             {
                 echo '<label>Entidade referenciada por esta propriedade</label><br>
-                <select name="entidadeReferenciada">
+                <select id="entRef" name="entidadeReferenciada">
                 <option value="NULL"></option>';
                 $selecionaEntidades= "SELECT id, name FROM ent_type";
                 $result = $this->db->runQuery($selecionaEntidades);
