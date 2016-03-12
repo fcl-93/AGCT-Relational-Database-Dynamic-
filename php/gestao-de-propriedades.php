@@ -113,6 +113,7 @@ class PropertyManage
      */
     private function existePropriedade($tipo)
     {
+        echo "c";
         $querySelect = "SELECT * FROM property WHERE ";
         if ($tipo === "relation")
         {
@@ -120,10 +121,13 @@ class PropertyManage
         }
         else
         {
+            
+        echo "d";
             $querySelect.= "ent_type_id != 0";
         }
         $resultSelect = $this->db->runQuery($querySelect);
-
+        
+        echo "e";
         if ($resultSelect->num_rows == 0)
         {
     ?>
@@ -135,6 +139,8 @@ class PropertyManage
         }
         else
         {
+            
+            echo "f";
             return true;
         }
     }
@@ -151,7 +157,6 @@ class PropertyManage
             $this->apresentaTabela($tipo);
 
         }
-        echo "c";
         $this->apresentaForm($tipo);
     }
 
