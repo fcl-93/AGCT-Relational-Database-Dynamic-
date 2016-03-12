@@ -347,7 +347,7 @@ class PropertyManage
                             echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         ?>
-                <br><label class="error" for="tipoValor"></label>
+                <label class="error" for="tipoValor"></label>
                 <br>
                         <?php
                             if ($tipo === "entity")
@@ -377,7 +377,7 @@ class PropertyManage
                             }
                             echo '</select><br><br>';
                         ?>
-                <br><label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
+                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
                             $field = 'form_field_type';
@@ -388,7 +388,7 @@ class PropertyManage
                                 echo' <input id="tipoCampo" type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                             }
                         ?>
-                <br><label class="error" for="tipoCampo"></label>
+                <label class="error" for="tipoCampo"></label>
                 <br>
                 <label>Tipo de unidade</label><br>
                 <select id="tipoUnidade" name="tipoUnidade">
@@ -402,10 +402,10 @@ class PropertyManage
                             }
                         ?>
                 </select><br><br>
-                <br><label class="error" for="tipoUnidade"></label>
+                <label class="error" for="tipoUnidade"></label>
                 <label>Ordem do campo no formulário</label><br>
                 <input id="ordem" type="text" name="ordem" min="1" required><br><br>
-                <br><label class="error" for="ordem"></label>
+                <label class="error" for="ordem"></label><br>
                 <!--<label>Tamanho do campo no formulário</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>-->
                 <label>Obrigatório</label><br>
@@ -413,7 +413,7 @@ class PropertyManage
                 <br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="2" required>Não
                 <br><br>
-                <br><label class="error" for="obrigatorio"></label>
+                <label class="error" for="obrigatorio"></label>
                         <?php
                             if ($tipo ==="entity")
                             {
@@ -429,7 +429,7 @@ class PropertyManage
                                 echo '</select><br><br>';
                             }
                         ?>
-                <br><label class="error" for="entidadeReferenciada"></label>
+                <label class="error" for="entidadeReferenciada"></label>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
             </form>
