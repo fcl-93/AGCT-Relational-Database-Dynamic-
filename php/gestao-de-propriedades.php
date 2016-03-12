@@ -70,7 +70,7 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='editar')
         {
-            $this->estadoEditar();
+            $this->apresentaForm("editar");
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -271,18 +271,32 @@ class PropertyManage
             }
 
         }
-        else
+        elseif ($tipo == "relation")
         {
             $verificaRelacoes = "SELECT * FROM rel_type";
             $numEnt = $this->db->runQuery($verificaRelacoes)->num_rows;
             if($numEnt === 0)
             {
             ?>
-<p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer relações</p>
+                <p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer relações</p>
             <?php
                 $existeEntRel = false;
             }
 
+        }
+        else
+        {
+            $queryProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
+            $prop = $this->db->runQuery($queryProp);
+            if(is_null($prop->fetch_assoc()["ent_type_id"]))
+            {
+                $tipoForm = "relation";
+            }
+            else
+            {
+                $tipoForm = "entity";
+            }
+            $nome = $prop->fetch_assoc()["name"];
         }
         if ($existeEntRel)
         {
@@ -292,7 +306,21 @@ class PropertyManage
 
         <form method="POST">
             <label>Nome da Propriedade:</label><br>
-            <input type="text" name="nome" required>
+<?php
+            if ($tipo === "editar")
+            {
+?>
+                <input type="text" name="nome" value="<?php echo $nome?>" required>
+<?php
+            }
+            else
+            {
+?>
+                <input type="text" name="nome" required>
+<?php
+            }
+?>
+
             <br><br>
             <label>Tipo de valor:</label><br>
                     <?php
