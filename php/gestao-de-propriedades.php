@@ -364,10 +364,7 @@ class PropertyManage
                                     $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
                                     $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
                                 }
-                                if($guardaEntRel["name"] === $nomeRelEnt)
-                                {
-                                    echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
-                                }
+                                echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
                             }
                             echo '</select><br><br>';
                         ?>
