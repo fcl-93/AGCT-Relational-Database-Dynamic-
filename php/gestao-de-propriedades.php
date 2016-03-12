@@ -577,6 +577,10 @@ class PropertyManage
         $value_type = $prop["value_type"];
         $form_field_type = $prop["form_field_type"];
         $unit_type_id = $prop["unit_type_id"];
+        if (is_null($unit_type_id))
+        {
+            $unit_type_id = 0;
+        }
         $form_field_order = $prop["form_field_order"];
         
         $queryUnit = "SELECT name FROM prop_unit_type WHERE id = ".$unit_type_id;
