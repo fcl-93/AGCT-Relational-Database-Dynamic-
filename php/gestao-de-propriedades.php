@@ -194,7 +194,6 @@ class PropertyManage
                 </tr>
             </thead>
             <tbody>
-                <tr>
                 <?php
                     if ($tipo === "entity")
                     {
@@ -223,6 +222,7 @@ class PropertyManage
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
                         $numLinhas = $resultSeleciona->num_rows;
                 ?>
+                <tr>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
                         while($arraySelec = $resultSeleciona->fetch_assoc())
