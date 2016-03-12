@@ -1,6 +1,13 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<script type="text/javascript" src="js/jquery-1.12.1.js"></script>
+		<script type="text/javascript" src="js/jquery.validate.js"></script>
+		<script type="text/javascript" src="js/enTypeFormValid.js"></script>
+	</head>
+</html>
 <?php
-	require_once("custom/php/common.php");
-	
+	require_once("custom/php/common.php");	
 	$bd = new Db_op();
 	$entity = new Entidade();
 	if ( is_user_logged_in() )
@@ -143,12 +150,12 @@ class Entidade
 ?>
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
-			<form>
-				<label>Nome:</label>
+			<form id="insertFrom">
+				<label for="nome">Nome:</label>
 				<br>
-				<input type="text" name="nome" required>
+				<input type="text" id="nome" name="nome">
 				<br>
-				<label>Estado:</label><br>
+				<label for="atv_int">Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
@@ -159,7 +166,7 @@ class Entidade
 				{
 ?>				
 					<html>
-						<input type="radio" name="atv_int" value="active" required>Ativo
+						<input type="radio" id="atv_int" name="atv_int" value="active" required>Ativo
 						<br>
 					</html>
 <?php 	
@@ -232,7 +239,7 @@ class Entidade
 ?>		
 		<html>
 			<h3>Gestão de Componentes - Edição</h3>
-				<form>
+				<form id="editForm">
 					<label>Nome:</label>
 					<br>
 					<input type="text" name="nome" value="<?php echo $read_EntToEdit['name'] ?>" required>
