@@ -788,37 +788,32 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        $queryUpdate = 'UPDATE `property`(`name`,`value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
+        $queryUpdate = 'UPDATE `property SET (name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type\''.$_REQUEST["tipoCampo"].'\',unit_type_id'.$_REQUEST["tipoUnidade"];
         /*if(!empty($_REQUEST["tamanho"]))
 	{
-            $queryUpdate .= '`form_field_size`, ';
-        }*/
-        $queryUpdate .=  '`form_field_order`, `mandatory`, `state`';
-        if (!empty($_REQUEST["entidadeReferenciada"]))
-        {
-            $queryUpdate .= ', `fk_ent_type_id`';
-        }
-        $queryUpdate .= ') SET (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
-        /*if(!empty($_REQUEST["tamanho"]))
-	{
-            $queryUpdate .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
+            $queryUpdate .= ',form_filed_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}*/
-        $queryUpdate .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
+        $queryUpdate .= ',form_field_order'.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).',mandatory='.$_REQUEST["obrigatorio"].',state="active"';
         
         if (!empty($_REQUEST["entidadeReferenciada"]))
         {
-            $queryUpdate .= ','.$_REQUEST["entidadeReferenciada"].')';
+            $queryUpdate .= ',fk_ent_type_id='.$_REQUEST["entidadeReferenciada"].')';
         }
         else
         {
             $queryUpdate .= ')';
         }
-        
 	$update = $this->db->runQuery($queryUpdate);
-        echo 'Atualizou os dados de nova propriedade com sucesso.';
-        echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
-
-	
+        if ($update)
+        {
+            echo 'Ocorreu um erro.';
+            goBack();
+        }
+        else
+        {
+            echo 'Atualizou os dados de nova propriedade com sucesso.';
+            echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+        }
     }
 }
 
