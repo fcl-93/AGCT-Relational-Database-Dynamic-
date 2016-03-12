@@ -344,10 +344,10 @@ class PropertyManage
                         $array =$this->db->getEnumValues($table, $field);
                         foreach($array as $values)
                         {
-                            echo' <input id="typeValue" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
+                            echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         ?>
-                <br><label class="error" for="typeValue"></label>
+                <br><label class="error" for="tipoValor"></label>
                 <br>
                         <?php
                             if ($tipo === "entity")
