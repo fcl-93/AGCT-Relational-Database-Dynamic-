@@ -26,14 +26,16 @@
 					
 ?>
 				<html>
-					<table>
-						<tbody>
+					<table id="table">
+						<thead>
 							<tr>
-								<td> ID</td>
-								<td> Nome</td>
-								<td> Estado</td>
-								<td> Ação</td>
+								<th> ID</th>
+								<th> Nome</th>
+								<th> Estado</th>
+								<th> Ação</th>
 							</tr>
+						</thead>
+						<tbody>
 <?php				
 				
 					while($read_EntType = $res_EntType->fetch_assoc())
