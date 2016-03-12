@@ -776,12 +776,14 @@ class PropertyManage
                             
                         }
                     ?>
-            </select><br><br>
-            <label class="error" for="tipoUnidade"></label>
+            </select>
+            <br>
+            <label class="error" for="tipoUnidade"></label><br>
             <label>Ordem do campo no formulário</label><br>
-            <input id="order" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br><br>
+            <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br>
             <!--<label>Tamanho do campo no formulário</label><br>
             <input type="text" name="tamanho"><br><br>-->
+            <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
         <?php
                 if ($mandatory)
@@ -790,7 +792,8 @@ class PropertyManage
                     <input id="mandatory" type="radio" name="obrigatorio" value="1" checked required>Sim
                     <br>
                     <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
-                    <br><br>
+                    <br>
+                    <label class="error" for="obrigatorio"></label><br>
         <?php
                 }
                 else
@@ -822,10 +825,10 @@ class PropertyManage
                     }
                     
                 }
-                echo '</select><br><br>';
+                echo '</select><br>';
             }
         ?>
-            <label class="error" for="entidadeReferenciada"></label>
+            <label class="error" for="entidadeReferenciada"></label><br>
             <input type="hidden" name="estado" value="update"><br>
             <input type="hidden" name="idProp" value="<?php echo $_REQUEST['prop_id']?>">
             <input type="submit" value="Inserir propriedade">
