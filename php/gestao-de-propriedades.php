@@ -679,8 +679,8 @@ class PropertyManage
 
         <form id="editForm" method="POST">
             <label>Nome da Propriedade:</label><br>
-                <input id="name" type="text" name="nome" value="<?php echo $nome?>" required>
-                <br><label class="error" for="nome"></label>
+                <input id="nome" type="text" name="nome" value="<?php echo $nome?>" required>
+            <br><label class="error" for="nome"></label>
             <br>
             <label>Tipo de valor:</label><br>
                     <?php
