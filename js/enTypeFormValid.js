@@ -9,5 +9,6 @@ $().ready(function(){
 			atv_int:"Por favor selecione o estado da entidade"
 		}
 	});
+	$("#editForm")
 		
 });

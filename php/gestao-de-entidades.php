@@ -249,6 +249,8 @@ class Entidade
 					<br>
 					<input type="text" name="nome" value="<?php echo $read_EntToEdit['name'] ?>" required>
 					<br>
+					<label class="error" for="nome"></label>
+					<br>
 <?php 
 		$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state');
 		foreach($stateEnumValues as $value)
@@ -289,6 +291,9 @@ class Entidade
 			  }
 		}//fim for each
 ?>
+			
+				<label class="error" for="atv_int"></label>
+				<br>
 				<input type="hidden" name="ent_id" value="<?php echo $read_EntToEdit['id'] ?>">
 				<input type="hidden" name="estado" value="alteracao">
 				<input type="submit" value="Alterar Componente">
