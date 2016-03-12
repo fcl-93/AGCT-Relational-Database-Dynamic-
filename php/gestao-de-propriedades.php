@@ -338,8 +338,8 @@ class PropertyManage
 
             <form id="insertForm" method="POST">
                 <label>Nome da Propriedade:</label><br>
-                    <input id="name" type="text" name="nome" required>
-                    <label class="error" for="name"></label>
+                    <input id="nome" type="text" name="nome" required>
+                    <label class="error" for="nome"></label>
                 <br><br>
                 <label>Tipo de valor:</label><br>
                         <?php

@@ -1,7 +1,7 @@
 $().ready(function(){
 	$("#insertForm").validate({
 		rules:{
-			name: "required",
+			nome: "required",
                         typeValue: "required",
                         entRel: "required",
                         formType: "required",
@@ -12,7 +12,7 @@ $().ready(function(){
                         mandatory:"required"
 		},
 		messages:{
-			name:"Por favor introduza o nome da propriedade.",
+			nome:"Por favor introduza o nome da propriedade.",
                         typeValue:"Por favor selecione um tipo de valor para a sua entidade.",
                         entRel:"Por favor selecione a entidade/relação a que irá pertencer esta propriedade.",
                         formType:"Por favor selecione um tipo de do campo do formulário.",
