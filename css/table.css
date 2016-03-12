@@ -26,10 +26,10 @@
   background: #acc8dd;
 }
 
-#table thead tr th.headerSortUp /*span*/ {
+#table thead tr th.headerSortUp span {
   background-image: url('up-arrow.png');
 }
-#table thead tr th.headerSortDown /*span*/ {
+#table thead tr th.headerSortDown span {
   background-image: url('down-arrow.png');
 }
 
