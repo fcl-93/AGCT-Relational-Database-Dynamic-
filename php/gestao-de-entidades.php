@@ -168,7 +168,7 @@ class Entidade
 				{
 ?>
 					<html>
-						<input type="radio" name="atv_int" value="inctive" required>Inativo
+						<input type="radio" name="atv_int" value="inactive" required>Inativo
 						<br>
 					</html>
 <?php 				
@@ -263,14 +263,14 @@ class Entidade
 			  	if($read_EntToEdit['state'] == 'inactive')
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inctive" checked="checked" required>Inativo
+					<input type="radio" name="atv_int" value="inactive" checked="checked" required>Inativo
 					<br>
 <?php 			
 			  	}
 			  	else 
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inctive" required>Inativo
+					<input type="radio" name="atv_int" value="inactive" required>Inativo
 					<br>	
 <?php 
 			  	}
@@ -293,9 +293,9 @@ class Entidade
 		if ($this->ssvalidation ($Dp_OpObject)) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
 		{
 			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
-			print_r($_REQUEST);
-			echo "UPDATE `ent_type` SET `name`=".$sanitizeName.",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."";
-			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."");
+		//	print_r($_REQUEST);
+		//	echo "UPDATE `ent_type` SET `name`=".$sanitizeName.",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."";
+			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$_REQUEST['ent_id']."");
 ?>
 			<p>Alterou os dados da entidade com sucesso.</p>
 			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
