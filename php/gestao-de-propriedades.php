@@ -85,7 +85,6 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "entity")
         {
-            echo "a";
             $this->estadoEntityRelation("entity");
         }
         elseif ($_REQUEST["estado"] === "inserir")
@@ -147,11 +146,13 @@ class PropertyManage
      */
     private function estadoEntityRelation($tipo)
     {
+        echo "b";
         if($this->existePropriedade($tipo))
         {
             $this->apresentaTabela($tipo);
 
         }
+        echo "c";
         $this->apresentaForm($tipo);
     }
 
@@ -161,6 +162,7 @@ class PropertyManage
      */
     private function apresentaTabela($tipo)
     {
+        echo "d";
     ?>
     <html>
         <table id="table">
