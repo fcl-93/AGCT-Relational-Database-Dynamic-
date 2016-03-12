@@ -600,6 +600,7 @@ class PropertyManage
                     $field = 'value_type';
                     $table = 'property';
                     $array =$this->db->getEnumValues($table, $field);
+                    echo $value_type;
                     foreach($array as $values)
                     {
                         if ($values === $value_type)
@@ -632,9 +633,12 @@ class PropertyManage
                         $result = $this->db->runQuery($selecionaEntRel);
                         while($guardaEntRel= $result->fetch_assoc())
                         {
-                            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                            $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                            if ($tipo === "relation")
+                            {
+                                $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                                $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                                $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                            }
                             if($guardaEntRel["name"] === $nomeRelEnt)
                             {
                                 echo '<option value="'.$guardaEntRel["id"].'" selected>'.$guardaEntRel["name"].'</option>';
