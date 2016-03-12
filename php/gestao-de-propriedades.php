@@ -219,13 +219,13 @@ class PropertyManage
                             </td>
                             
                 <?php
-                            if ($arraySelec["state"] === "true")
+                            if ($arraySelec["state"] === "active")
                             {
                 ?>
                                 <td>Ativo</td>;
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
-                                    <a href="gestao-de-entidades?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                                    <a href="gestao-de-propriedade?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
                                 </td>
                 <?php
                             }
@@ -235,7 +235,7 @@ class PropertyManage
                                 <td>Inativo</td>;
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
-                                    <a href="gestao-de-entidades?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
+                                    <a href="gestao-de-propriedade?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
                                 </td>
                 <?php
                             }
