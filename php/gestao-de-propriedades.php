@@ -520,7 +520,7 @@ class PropertyManage
     }
     private function estadoAtivarDesativar()
     {
-        $querySelNome = "SELECT nome FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
         $queryUpdate = "UPDATE property SET state=";
         if (!empty($_REQUEST["ativar"]))
         {
