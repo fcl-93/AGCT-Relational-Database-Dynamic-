@@ -19,6 +19,6 @@ $().ready(function(){
 			atv_int:"Por favor selecione o estado da entidade"
 		}
 	});
-	$("#table").tablesorter();
+	$("#table").tablesorter({widthFixed: true, widgets: ['zebra']}).tablesorterPager({container: $("#pager")}); 
 		
 });
