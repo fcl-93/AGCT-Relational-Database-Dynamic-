@@ -84,6 +84,7 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "entity")
         {
+            echo "a";
             $this->estadoEntityRelation("entity");
         }
         elseif ($_REQUEST["estado"] === "inserir")
