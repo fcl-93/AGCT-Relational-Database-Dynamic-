@@ -534,7 +534,7 @@ class PropertyManage
         }
         $queryUpdate .= "WHERE id =".$_REQUEST['prop_id'];
         $this->db->runQuery($queryUpdate);
-        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["nome"];
+        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
 ?>
         <html>
             <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
