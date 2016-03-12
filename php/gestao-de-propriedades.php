@@ -3,6 +3,7 @@
 	<head>
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+                <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script> 
  		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/propertyFormValid.js"></script>
  		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
                 <link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/table.css">
@@ -160,7 +161,6 @@ class PropertyManage
      */
     private function apresentaTabela($tipo)
     {
-        echo "d";
     ?>
     <html>
         <table id="table">
@@ -180,17 +180,17 @@ class PropertyManage
                 <?php
                     }
                 ?>
-                    <th>ID</th>
-                    <th>Propriedade</th>
-                    <th>Tipo de valor</th>
-                    <th>Nome do campo no formulário</th>
-                    <th>Tipo do campo no formulário</th>
-                    <th>Tipo de unidade</th>
-                    <th>Ordem do campo no formulário</th>
+                    <th><span>ID</span></th>
+                    <th><span>Propriedade</span></th>
+                    <th><span>Tipo de valor</span></th>
+                    <th><span>Nome do campo no formulário</span></th>
+                    <th><span>Tipo do campo no formulário</span></th>
+                    <th><span>Tipo de unidade</span></th>
+                    <th><span>Ordem do campo no formulário</span></th>
                     <!--<th>Tamanho do campo no formulário</th>-->
-                    <th>Obrigatório</th>
-                    <th>Estado</th>
-                    <th>Ação</th>
+                    <th><span>Obrigatório</span></th>
+                    <th><span>Estado</span></th>
+                    <th><span>Ação</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -264,7 +264,7 @@ class PropertyManage
                             if ($arraySelec["state"] === "active")
                             {
                 ?>
-                                <td>Ativo</td>;
+                                <td>Ativo</td>
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
@@ -274,7 +274,7 @@ class PropertyManage
                             else
                             {
                 ?>
-                                <td>Inativo</td>;
+                                <td>Inativo</td>
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
