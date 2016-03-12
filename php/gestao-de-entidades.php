@@ -81,7 +81,7 @@
  			}
  			else if($_REQUEST['estado'] =='editar')
  			{
- 				$entity->editEntity($_REQUEST[ent_id]);
+ 				$entity->editEntity($_REQUEST['ent_id'],$bd);
  			}
  			else if($_REQUEST['estado'] == 'ativar')
  			{
@@ -343,7 +343,7 @@ class Entidade
 	 */
 	public function insertEnt($Dp_OpPbject)
 	{
-		if($entity->ssvalidation()) 
+		if($this->ssvalidation()) 
 		{
 			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
 			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
