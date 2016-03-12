@@ -146,13 +146,11 @@ class PropertyManage
      */
     private function estadoEntityRelation($tipo)
     {
-        echo "b";
         if($this->existePropriedade($tipo))
         {
             $this->apresentaTabela($tipo);
 
         }
-        echo "c";
         $this->apresentaForm($tipo);
     }
 
