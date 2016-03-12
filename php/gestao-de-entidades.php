@@ -226,7 +226,7 @@ class Entidade
 	*/
 	public function editEntity($ent_id,$Dp_OpObject)
 	{
-		$res_EntEdit = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE id'".$ent_id."'");
+		$res_EntEdit = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE id='".$ent_id."'");
 		$read_EntToEdit = $res_EntEdit->fetch_assoc();
 		
 ?>		
