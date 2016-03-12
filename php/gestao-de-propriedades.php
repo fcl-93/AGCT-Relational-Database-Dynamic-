@@ -347,6 +347,7 @@ class PropertyManage
                             echo' <input id="typeValue" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         ?>
+                <label class="error" for="typeValue"></label>
                 <br>
                         <?php
                             if ($tipo === "entity")
@@ -376,6 +377,7 @@ class PropertyManage
                             }
                             echo '</select><br><br>';
                         ?>
+                <label class="error" for="entRel"></label>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
                             $field = 'form_field_type';
@@ -399,8 +401,10 @@ class PropertyManage
                             }
                         ?>
                 </select><br><br>
+                <label class="error" for="unit"></label>
                 <label>Ordem do campo no formulário</label><br>
                 <input id="order" type="text" name="ordem" min="1" required><br><br>
+                <label class="error" for="order"></label>
                 <!--<label>Tamanho do campo no formulário</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>-->
                 <label>Obrigatório</label><br>
@@ -408,6 +412,7 @@ class PropertyManage
                 <br>
                 <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
                 <br><br>
+                <label class="error" for="mandatory"></label>
                         <?php
                             if ($tipo ==="entity")
                             {
@@ -423,6 +428,7 @@ class PropertyManage
                                 echo '</select><br><br>';
                             }
                         ?>
+                <label class="error" for="entRef"></label>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
             </form>
