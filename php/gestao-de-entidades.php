@@ -150,7 +150,7 @@ class Entidade
 ?>
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
-			<form id="insertFrom">
+			<form id="insertForm">
 				<label for="nome">Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
@@ -166,7 +166,7 @@ class Entidade
 				{
 ?>				
 					<html>
-						<input type="radio" id="atv_int" name="atv_int" value="active" required>Ativo
+						<input type="radio" id="atv_int" name="atv_int" value="active" >Ativo
 						<br>
 					</html>
 <?php 	
@@ -175,7 +175,7 @@ class Entidade
 				{
 ?>
 					<html>
-						<input type="radio" name="atv_int" value="inactive" required>Inativo
+						<input type="radio" name="atv_int" value="inactive" >Inativo
 						<br>
 					</html>
 <?php 				
