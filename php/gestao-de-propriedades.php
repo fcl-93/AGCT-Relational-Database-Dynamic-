@@ -412,7 +412,7 @@ class PropertyManage
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1" required>Sim
                 <br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="2" required>Não
-                <br><br>
+                <br>
                 <label class="error" for="obrigatorio"></label><br>
                         <?php
                             if ($tipo ==="entity")
