@@ -2,8 +2,9 @@
 <html>
 	<head>
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
-		  <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
- 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+ 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script>
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
 	</head>
 </html>
 <?php
@@ -152,11 +153,13 @@ class Entidade
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
 			<form id="insertForm">
-				<label for="nome">Nome:</label>
+				<label>Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
 				<br>
-				<label for="atv_int">Estado:</label><br>
+				<label class="error" for="nome"></label>
+				<br>
+				<label>Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
@@ -176,13 +179,14 @@ class Entidade
 				{
 ?>
 					<html>
-						<input type="radio" name="atv_int" value="inactive" >Inativo
+						<input type="radio" id="atv_int" name="atv_int" value="inactive" >Inativo
 						<br>
 					</html>
 <?php 				
 				}
 			}
 ?>
+				<label class="error" for="atv_int"></label>
 				<br>
 					<input type="hidden" name="estado" value="inserir">
 					<input type="submit" value="Inserir Componente">
@@ -243,7 +247,9 @@ class Entidade
 				<form id="editForm">
 					<label>Nome:</label>
 					<br>
-					<input type="text" name="nome" value="<?php echo $read_EntToEdit['name'] ?>" required>
+					<input type="text" id="nome" name="nome" value="<?php echo $read_EntToEdit['name'] ?>">
+					<br>
+					<label class="error" for="nome"></label>
 					<br>
 <?php 
 		$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state');
@@ -254,14 +260,14 @@ class Entidade
 				if(	$read_EntToEdit['state'] == 'active' )
 				{
 ?>
-					<input type="radio" name="atv_int" value="active" checked="checked" required>Ativo
+					<input type="radio" id="atv_int" name="atv_int" value="active" checked="checked" >Ativo
 					<br>
 <?php 	
 				}
 				else
 				{
 ?>
-					<input type="radio" name="atv_int" value="active" required>Ativo
+					<input type="radio" id="atv_int" name="atv_int" value="active" >Ativo
 					<br>
 <?php 
 				}
@@ -271,20 +277,23 @@ class Entidade
 			  	if($read_EntToEdit['state'] == 'inactive')
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inactive" checked="checked" required>Inativo
+					<input type="radio" id="atv_int" name="atv_int" value="inactive" checked="checked" >Inativo
 					<br>
 <?php 			
 			  	}
 			  	else 
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inactive" required>Inativo
+					<input type="radio" id="atv_int" name="atv_int" value="inactive" >Inativo
 					<br>	
 <?php 
 			  	}
 			  }
 		}//fim for each
 ?>
+			
+				<label class="error" for="atv_int"></label>
+				<br>
 				<input type="hidden" name="ent_id" value="<?php echo $read_EntToEdit['id'] ?>">
 				<input type="hidden" name="estado" value="alteracao">
 				<input type="submit" value="Alterar Componente">
