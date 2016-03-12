@@ -2,7 +2,7 @@ $().ready(function(){
 	$("#insertForm").validate({
 		rules:{
 			nome: "required",
-                        typeValue: "required",
+                        tipoValor: "required",
                         entRel: "required",
                         formType: "required",
                         order: {
