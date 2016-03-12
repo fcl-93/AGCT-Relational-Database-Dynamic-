@@ -603,7 +603,7 @@ class PropertyManage
                     echo $value_type;
                     foreach($array as $values)
                     {
-                        if ($values === $value_type)
+                        if ($values == $value_type)
                         {
                             echo' <input type="radio" name="tipoValor" value="'.$values.'" checked required>'.$values.'<br>';
                         }
