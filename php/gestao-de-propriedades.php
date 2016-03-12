@@ -677,7 +677,7 @@ class PropertyManage
         <html>
         <h3> Gestão de propriedades - Edição </h3>
 
-        <form method="POST">
+        <form id="editForm" method="POST">
             <label>Nome da Propriedade:</label><br>
                 <input id="name" type="text" name="nome" value="<?php echo $nome?>" required>
                 <br><label class="error" for="nome"></label>
