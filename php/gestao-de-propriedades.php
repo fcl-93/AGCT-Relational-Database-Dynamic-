@@ -68,6 +68,14 @@ class PropertyManage
         {
             $this->estadoInserir();
         }
+        elseif($_REQUEST['estado'] =='editar')
+        {
+            $this->estadoEditar();
+        }
+        elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
+        {
+            $this->estadoAtivarDesativar();		
+        }
     }
 
     private function existePropriedade($tipo)
@@ -175,31 +183,31 @@ class PropertyManage
                 ?>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
-                        while($resultSeleciona->fetch_assoc())
+                        while($arraySelec = $resultSeleciona->fetch_assoc())
                         {
                 ?>
-                            <td><?php echo $resultSeleciona["id"]; ?></td>
-                            <td><?php echo $resultSeleciona["name"]; ?></td>
-                            <td><?php echo $resultSeleciona["value_type"]; ?></td>
-                            <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
-                            <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
+                            <td><?php echo $arraySelec["id"]; ?></td>
+                            <td><?php echo $arraySelec["name"]; ?></td>
+                            <td><?php echo $arraySelec["value_type"]; ?></td>
+                            <td><?php echo $arraySelec["form_field_name"]; ?></td>
+                            <td><?php echo $arraySelec["form_field_type"]; ?></td>
                             <td>
                 <?php
-                            if (empty($resultSeleciona["unit_type_id"]))
+                            if (empty($arraySelec["unit_type_id"]))
                             {
                                 echo "-";
                             }
                             else
                             {
-                                $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$resultSeleciona["unit_type_id"];
+                                $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$arraySelec["unit_type_id"];
                             }
                 ?>
                             </td>
-                            <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
-                            <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
+                            <td><?php echo $arraySelec["form_field_order"]; ?>                                </td>
+                            <!--<td><?//php echo $arraySelec["form_field_size"]; ?></td>-->
                             <td>
                 <?php
-                            if ($resultSeleciona["mandatory"] === 1)
+                            if ($arraySelec["mandatory"] === 1)
                             {
                                 echo "sim";
                             }
@@ -209,19 +217,31 @@ class PropertyManage
                             }
                  ?>
                             </td>
-                            <td>
+                            
                 <?php
-                            if ($resultSeleciona["state"] === "true")
+                            if ($arraySelec["state"] === "true")
                             {
-                                echo "ativo";
+                ?>
+                                <td>Ativo</td>;
+                                <td>
+                                    <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                                </td>
+                <?php
                             }
                             else
                             {
-                                echo "inativo";
+                ?>
+                                <td>Inativo</td>;
+                                <td>
+                                    <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
+                                </td>
+                <?php
                             }
                 ?>
                             </td>
-                            <td>[editar][desativar]</td>
+                            
                 <?php
                         }
                 ?>
@@ -497,6 +517,31 @@ class PropertyManage
             return false;
         }*/
 	return true;
+    }
+    private function estadoAtivarDesativar()
+    {
+        $querySelNome = "SELECT nome FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $queryUpdate = "UPDATE property SET state=";
+        if (!empty($_REQUEST["ativar"]))
+        {
+            $queryUpdate .= "'active'";
+            $estado = "ativada";
+        }
+        else
+        {
+            $queryUpdate .= "'inactive'";
+            $estado = "desativada";
+        }
+        $queryUpdate .= "WHERE id =".$_REQUEST['prop_id'];
+        $this->$db->runQuery($queryUpdate);
+        $nome = $this->$db->runQuery($querySelNome)->fetch_assoc()["nome"];
+?>
+        <html>
+            <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
+            <br>
+            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+        </html>
+<?php 
     }
 }
 
