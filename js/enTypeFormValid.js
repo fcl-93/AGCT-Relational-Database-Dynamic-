@@ -1,5 +1,5 @@
 $().ready(function(){
-	$(#insertForm).validate({
+	$("#insertForm").validate({
 		rules:{
 			nome:"required",
 			atv_int: "required"
