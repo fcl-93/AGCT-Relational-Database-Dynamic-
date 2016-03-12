@@ -40,6 +40,7 @@ class PropertyManage
             if(current_user_can($this->capability))
             {
                 $this->verificaEstado();
+                
             }
             else
             {
@@ -338,6 +339,7 @@ class PropertyManage
             <form id="insertForm" method="POST">
                 <label>Nome da Propriedade:</label><br>
                     <input id="name" type="text" name="nome" required>
+                    <label class="error" for="name"></label>
                 <br><br>
                 <label>Tipo de valor:</label><br>
                         <?php
