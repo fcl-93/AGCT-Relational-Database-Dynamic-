@@ -533,8 +533,8 @@ class PropertyManage
             $estado = "desativada";
         }
         $queryUpdate .= "WHERE id =".$_REQUEST['prop_id'];
-        $this->$db->runQuery($queryUpdate);
-        $nome = $this->$db->runQuery($querySelNome)->fetch_assoc()["nome"];
+        $this->db->runQuery($queryUpdate);
+        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["nome"];
 ?>
         <html>
             <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
