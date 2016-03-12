@@ -157,7 +157,7 @@ class Entidade
 				<br>
 				<input type="text" id="nome" name="nome">
 				<br>
-				<label for="atv_int">Estado:</label><br>
+				<label class="error" for="atv_int">Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
