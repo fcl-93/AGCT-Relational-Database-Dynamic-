@@ -563,6 +563,34 @@ class PropertyManage
      */
     private function validarDados()
     {
+        if (empty($_REQUEST["nome"]))
+        {
+            echo "Por favor introduza o nome da propriedade.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["tipoValor"]))
+        {
+            echo "Por favor selecione um tipo de valor para a sua entidade.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["tipoCampo"]))
+        {
+            echo "Por favor selecione um tipo do campo do formulário.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["obrigatorio"]))
+        {
+            echo "Por favor indique se esta propriedade deve ou não ser obrigatória.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
             echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
