@@ -31,10 +31,10 @@
 					<table id="table">
 						<thead>
 							<tr>
-								<th> <span>ID</span></th>
-								<th> <span>Nome</span></th>
-								<th> <span>Estado</span></th>
-								<th> <span>Ação</span></th>
+								<th>>ID</th>
+								<th> Nome</th>
+								<th> Estado</th>
+								<th> Ação</th>
 							</tr>
 						</thead>
 						<tbody>
