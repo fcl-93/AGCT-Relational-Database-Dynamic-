@@ -1,15 +1,9 @@
 
 
 #table {
- /* margin: 0 auto;
+  margin: 0 auto;
   font-size: 1.2em;
   margin-bottom: 15px;
-  */
-  
-    margin: 0  !important;
-    border: 1px solid !important;
-    padding: 1px !important;
-    font-size: 11px  !important;
 }
 
 #table thead {
@@ -48,4 +42,11 @@
 }
 #table tbody tr td.lalign {
   text-align: left;
+}
+
+#table td, #table th {
+    margin: 0  !important;
+    border: 1px solid !important;
+    padding: 1px !important;
+    font-size: 11px  !important;
 }
