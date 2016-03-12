@@ -3,8 +3,10 @@
 	<head>
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script> 
  		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script>
  		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/table.css">
 	</head>
 </html>
 <?php
@@ -26,14 +28,16 @@
 					
 ?>
 				<html>
-					<table>
-						<tbody>
+					<table id="table">
+						<thead>
 							<tr>
-								<td> ID</td>
-								<td> Nome</td>
-								<td> Estado</td>
-								<td> Ação</td>
+								<th> <span>ID</span></th>
+								<th> <span>Nome</span></th>
+								<th> <span>Estado</span></th>
+								<th> <span>Ação</span></th>
 							</tr>
+						</thead>
+						<tbody>
 <?php				
 				
 					while($read_EntType = $res_EntType->fetch_assoc())

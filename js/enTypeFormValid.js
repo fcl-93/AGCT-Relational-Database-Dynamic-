@@ -28,5 +28,6 @@ $().ready(function(){
 			
 		}
 	});
+	$("#table").tablesorter();
 		
 });
