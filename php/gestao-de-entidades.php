@@ -156,9 +156,10 @@ class Entidade
 				<label for="nome">Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
+				<br>
 				<label id ="nome" class="error" ></label>
 				<br>
-				<label class="error" for="atv_int">Estado:</label><br>
+				<label for="atv_int">Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
@@ -185,6 +186,8 @@ class Entidade
 				}
 			}
 ?>
+				<br>
+				<label id="atv_int" class="error" ></label>
 				<br>
 					<input type="hidden" name="estado" value="inserir">
 					<input type="submit" value="Inserir Componente">
