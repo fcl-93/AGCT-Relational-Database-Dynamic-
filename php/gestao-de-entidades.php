@@ -247,7 +247,7 @@ class Entidade
 				<form id="editForm">
 					<label>Nome:</label>
 					<br>
-					<input type="text" name="nome" value="<?php echo $read_EntToEdit['name'] ?>" required>
+					<input type="text" name="nome" value="<?php echo $read_EntToEdit['name'] ?>">
 					<br>
 					<label class="error" for="nome"></label>
 					<br>
@@ -260,14 +260,14 @@ class Entidade
 				if(	$read_EntToEdit['state'] == 'active' )
 				{
 ?>
-					<input type="radio" name="atv_int" value="active" checked="checked" required>Ativo
+					<input type="radio" name="atv_int" value="active" checked="checked" >Ativo
 					<br>
 <?php 	
 				}
 				else
 				{
 ?>
-					<input type="radio" name="atv_int" value="active" required>Ativo
+					<input type="radio" name="atv_int" value="active" >Ativo
 					<br>
 <?php 
 				}
@@ -277,14 +277,14 @@ class Entidade
 			  	if($read_EntToEdit['state'] == 'inactive')
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inactive" checked="checked" required>Inativo
+					<input type="radio" name="atv_int" value="inactive" checked="checked" >Inativo
 					<br>
 <?php 			
 			  	}
 			  	else 
 			  	{
 ?>
-					<input type="radio" name="atv_int" value="inactive" required>Inativo
+					<input type="radio" name="atv_int" value="inactive" >Inativo
 					<br>	
 <?php 
 			  	}
