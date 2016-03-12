@@ -170,13 +170,13 @@ class PropertyManage
                     if ($tipo === "entity")
                     {
                 ?>
-                    <th>Entidade</th>
+                    <th><span>Entidade</span></th>
                 <?php
                     }
                     else
                     {
                 ?>
-                    <th>Relação</th>
+                    <th><span>Relação</span></th>
                 <?php
                     }
                 ?>
@@ -283,12 +283,9 @@ class PropertyManage
                             }
                 ?>
                             </td>
-                            
-                <?php
-                        }
-                ?>
                 </tr>
                 <?php
+                        }
                     }
                 ?>
             </tbody>
