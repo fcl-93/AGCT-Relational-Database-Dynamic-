@@ -42,7 +42,7 @@
 ?>								
 								<td> Ativo </td>
 								<td>
-									<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
+									<a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 									<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
 								</td>
 <?php			 				
@@ -52,7 +52,7 @@
 ?>
 								<td> Inativo </td>
 								<td>
-									<a href="insercao-de-valores?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
+									<a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
 									<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
 								</td>	
 <?php 						}
