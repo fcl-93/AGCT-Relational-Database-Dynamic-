@@ -791,17 +791,17 @@ class PropertyManage
         $queryUpdate = 'UPDATE `property`(`name`,`value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
         /*if(!empty($_REQUEST["tamanho"]))
 	{
-            $queryInsere .= '`form_field_size`, ';
+            $queryUpdate .= '`form_field_size`, ';
         }*/
         $queryUpdate .=  '`form_field_order`, `mandatory`, `state`';
         if (!empty($_REQUEST["entidadeReferenciada"]))
         {
-            $queryInsere .= ', `fk_ent_type_id`';
+            $queryUpdate .= ', `fk_ent_type_id`';
         }
         $queryUpdate .= ') SET (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
         /*if(!empty($_REQUEST["tamanho"]))
 	{
-            $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
+            $queryUpdate .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}*/
         $queryUpdate .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
         
