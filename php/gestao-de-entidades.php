@@ -153,13 +153,13 @@ class Entidade
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
 			<form id="insertForm">
-				<label for="nome">Nome:</label>
+				<label>Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
 				<br>
-				<label id ="nome" class="error" ></label>
+				<label class="error" for="nome"></label>
 				<br>
-				<label for="atv_int">Estado:</label><br>
+				<label>Estado:</label><br>
 <?php 
 			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
@@ -179,15 +179,14 @@ class Entidade
 				{
 ?>
 					<html>
-						<input type="radio" name="atv_int" value="inactive" >Inativo
+						<input type="radio" id="atv_int" name="atv_int" value="inactive" >Inativo
 						<br>
 					</html>
 <?php 				
 				}
 			}
 ?>
-				<br>
-				<label id="atv_int" class="error" ></label>
+				<label class="error" for="atv_int"></label>
 				<br>
 					<input type="hidden" name="estado" value="inserir">
 					<input type="submit" value="Inserir Componente">
