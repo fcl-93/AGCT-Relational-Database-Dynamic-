@@ -605,7 +605,7 @@ class PropertyManage
                     {
                         if ($values === $value_type)
                         {
-                            echo' <input type="radio" name="tipoValor" value="'.$values.'" required checked>'.$values.'<br>';
+                            echo' <input type="radio" name="tipoValor" value="'.$values.'" checked required>'.$values.'<br>';
                         }
                         else
                         {
@@ -659,7 +659,7 @@ class PropertyManage
                         {
                             if ($values === $form_field_type)
                             {
-                                echo' <input type="radio" name="tipoValor" value="'.$values.'" required checked>'.$values.'<br>';
+                                echo' <input type="radio" name="tipoValor" value="'.$values.'" checked required>'.$values.'<br>';
                             }
                             else
                             {
