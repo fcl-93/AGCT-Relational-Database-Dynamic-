@@ -4,7 +4,7 @@
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
  		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script>
- 		 <style type="text/css" src="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css"></style> 
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
 	</head>
 </html>
 <?php
