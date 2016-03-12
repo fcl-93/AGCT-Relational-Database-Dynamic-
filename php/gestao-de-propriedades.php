@@ -336,7 +336,7 @@ class PropertyManage
                 <label>Nome da Propriedade:</label><br>
                     <input id="nome" type="text" name="nome" required>
                     <br><label class="error" for="nome"></label>
-                <br><br>
+                <br>
                 <label>Tipo de valor:</label><br>
                         <?php
                         $field = 'value_type';
@@ -347,21 +347,21 @@ class PropertyManage
                             echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
                         }
                         ?>
-                <br><label class="error" for="tipoValor"></label>
+                <label class="error" for="tipoValor"></label>
                 <br>
                         <?php
                             if ($tipo === "entity")
                             {
                                 echo'
                                 <label>Entidade a que irá pertencer esta propriedade</label><br>
-                                <select id="entRel" name="entidadePertence" required>';
+                                <select id="entidadePertence" name="entidadePertence" required>';
                                 $selecionaEntRel = "SELECT name, id FROM ent_type";
                             }
                             else
                             {
                                 echo'
                                 <label>Relação a que irá pertencer esta propriedade</label><br>
-                                <select id="entRel" name="relacaoPertence" required>';
+                                <select id="relacaoPertence" name="relacaoPertence" required>';
                                 $selecionaEntRel = "SELECT id FROM rel_type";
                             }
                             $result = $this->db->runQuery($selecionaEntRel);
@@ -377,7 +377,7 @@ class PropertyManage
                             }
                             echo '</select><br><br>';
                         ?>
-                <br><label class="error" for="entRel"></label>
+                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
                             $field = 'form_field_type';
@@ -385,39 +385,40 @@ class PropertyManage
                             $array = $this->db->getEnumValues($table, $field);
                             foreach($array as $values)
                             {
-                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
+                                echo' <input id="tipoCampo" type="radio" name="tipoCampo" value="'.$values.'" required>'.$values.'<br>';
                             }
                         ?>
+                <label class="error" for="tipoCampo"></label>
                 <br>
                 <label>Tipo de unidade</label><br>
-                <select name="tipoUnidade">
+                <select id="tipoUnidade" name="tipoUnidade">
                     <option value="NULL"></option>';
                         <?php
                             $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
                             $result = mysqli_query($link, $selecionaTipoUnidade);
                             while($guardaTipoUnidade = mysqli_fetch_assoc($result))
                             {
-                                echo '<option id="unit" value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+                                echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
                             }
                         ?>
                 </select><br><br>
-                <br><label class="error" for="unit"></label>
+                <label class="error" for="tipoUnidade"></label>
                 <label>Ordem do campo no formulário</label><br>
-                <input id="order" type="text" name="ordem" min="1" required><br><br>
-                <br><label class="error" for="order"></label>
+                <input id="ordem" type="text" name="ordem" min="1" required><br>
+                <label class="error" for="ordem"></label><br>
                 <!--<label>Tamanho do campo no formulário</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>-->
                 <label>Obrigatório</label><br>
-                <input id="mandatory" type="radio" name="obrigatorio" value="1" required>Sim
+                <input id="obrigatorio" type="radio" name="obrigatorio" value="1" required>Sim
                 <br>
-                <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
-                <br><br>
-                <br><label class="error" for="mandatory"></label>
+                <input id="obrigatorio" type="radio" name="obrigatorio" value="2" required>Não
+                <br>
+                <label class="error" for="obrigatorio"></label><br>
                         <?php
                             if ($tipo ==="entity")
                             {
                                 echo '<label>Entidade referenciada por esta propriedade</label><br>
-                                <select id="entRef" name="entidadeReferenciada">
+                                <select id="entidadeReferenciada" name="entidadeReferenciada">
                                 <option value="NULL"></option>';
                                 $selecionaEntidades= "SELECT id, name FROM ent_type";
                                 $result = $this->db->runQuery($selecionaEntidades);
@@ -428,7 +429,7 @@ class PropertyManage
                                 echo '</select><br><br>';
                             }
                         ?>
-                <br><label class="error" for="entRef"></label>
+                <label class="error" for="entidadeReferenciada"></label>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
             </form>
