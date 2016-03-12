@@ -290,9 +290,9 @@ class Entidade
 	 */
 	public function changeEnt($Dp_OpObject) 
 	{
-		if ($this->ssvalidation ($Dp_OpPbject)) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
+		if ($this->ssvalidation ($Dp_OpObject)) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
 		{
-			$sanitizeName = $$Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
 			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`=".$_REQUEST['nome'].",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."");
 ?>
 			<p>Alterou os dados da entidade com sucesso.</p>
