@@ -28,6 +28,5 @@ $().ready(function(){
 			
 		}
 	});
-	$("#table").tablesorter();
 		
 });
