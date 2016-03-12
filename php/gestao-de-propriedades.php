@@ -287,8 +287,8 @@ class PropertyManage
         else
         {
             $queryProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
-            $prop = $this->db->runQuery($queryProp);
-            if(is_null($prop->fetch_assoc()["ent_type_id"]))
+            $prop = $this->db->runQuery($queryProp)->fetch_assoc();
+            if(is_null($prop["ent_type_id"]))
             {
                 $tipoForm = "relation";
             }
@@ -296,7 +296,7 @@ class PropertyManage
             {
                 $tipoForm = "entity";
             }
-            $nome = $prop->fetch_assoc()["name"];
+            $nome = $prop["name"];
         }
         if ($existeEntRel)
         {
