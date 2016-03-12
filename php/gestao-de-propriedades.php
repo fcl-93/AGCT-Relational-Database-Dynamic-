@@ -70,7 +70,7 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='editar')
         {
-            $this->apresentaForm("editar");
+            $this->estadoEditar();
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -271,7 +271,7 @@ class PropertyManage
             }
 
         }
-        elseif ($tipo == "relation")
+        else
         {
             $verificaRelacoes = "SELECT * FROM rel_type";
             $numEnt = $this->db->runQuery($verificaRelacoes)->num_rows;
@@ -284,20 +284,7 @@ class PropertyManage
             }
 
         }
-        else
-        {
-            $queryProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
-            $prop = $this->db->runQuery($queryProp)->fetch_assoc();
-            if(is_null($prop["ent_type_id"]))
-            {
-                $tipoForm = "relation";
-            }
-            else
-            {
-                $tipoForm = "entity";
-            }
-            $nome = $prop["name"];
-        }
+        
         if ($existeEntRel)
         {
         ?>
@@ -306,21 +293,7 @@ class PropertyManage
 
         <form method="POST">
             <label>Nome da Propriedade:</label><br>
-<?php
-            if ($tipo === "editar")
-            {
-?>
-                <input type="text" name="nome" value="<?php echo $nome?>" required>
-<?php
-            }
-            else
-            {
-?>
                 <input type="text" name="nome" required>
-<?php
-            }
-?>
-
             <br><br>
             <label>Tipo de valor:</label><br>
                     <?php
@@ -353,7 +326,7 @@ class PropertyManage
                         {
                             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
                             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                            $this->criaNomeRel($queryNome1, $queryNome2);
+                            $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
                             echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
                         }
                         echo '</select><br><br>';
@@ -570,6 +543,191 @@ class PropertyManage
             <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
         </html>
 <?php 
+    }
+    
+    private function estadoEditar() {
+        $queryProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
+        $prop = $this->db->runQuery($queryProp)->fetch_assoc();
+        if(is_null($prop["ent_type_id"]))
+        {
+            $tipo = "relation";
+            $rel_type_id = $prop["rel_type_id"];
+            $queryRel = "SELECT * FROM rel_type WHERE id = ".$rel_type_id;
+            $ent1 = $this->db->runQuery($queryNome1)->fetch_assoc()["ent_type1_id"];
+            $ent2 = $this->db->runQuery($queryNome1)->fetch_assoc()["ent_type2_id"];
+            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent2;
+            $nomeRelEnt = $this->criaNomeRel($queryNome1, $queryNome2);
+        }
+        else
+        {
+            $tipo = "entity";
+            $ent_type_id = $prop["ent_type_id"];
+            $queryEnt = "SELECT name FROM ent_type WHERE id = ".$ent_type_id;
+            $nomeRelEnt = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
+            $fk_ent_type_id = $prop["fk_ent_type_id"];
+            $queryEntRef = "SELECT name FROM ent_type WHERE id = ".$fk_ent_type_id;
+            $nomeEntRef = $this->db->runQuery($queryEntRef)->fetch_assoc()["name"];
+        }
+        $nome = $prop["name"];
+        $value_type = $prop["value_type"];
+        $form_field_type = $prop["form_field_type"];
+        $unit_type_id = $prop["unit_type_id"];
+        $form_field_order = $prop["form_field_order"];
+        
+        $queryUnit = "SELECT name FROM prop_unit_type WHERE id = ".$unit_type_id;
+        $unit = $this->db->runQuery($queryUnit)->fetch_assoc()["name"];
+        
+        $mandatory = $prop["mandatory"];
+?>
+        <html>
+        <h3> Gestão de propriedades - Edição </h3>
+
+        <form method="POST">
+            <label>Nome da Propriedade:</label><br>
+                <input type="text" name="nome" value="<?php echo $nome?>" required>
+            <br><br>
+            <label>Tipo de valor:</label><br>
+                    <?php
+                    $field = 'value_type';
+                    $table = 'property';
+                    $array =$this->db->getEnumValues($table, $field);
+                    foreach($array as $values)
+                    {
+                        if ($values === $value_type)
+                        {
+                            echo' <input type="radio" name="tipoValor" value="'.$values.'" required checked>'.$values.'<br>';
+                        }
+                        else
+                        {
+                            echo' <input type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
+                        }
+                        
+                    }
+                    ?>
+            <br>
+                    <?php
+                        if ($tipo === "entity")
+                        {
+                            echo'
+                            <label>Entidade a que irá pertencer esta propriedade</label><br>
+                            <select name="entidadePertence" required>';
+                            $selecionaEntRel = "SELECT name, id FROM ent_type";
+                        }
+                        else
+                        {
+                            echo'
+                            <label>Relação a que irá pertencer esta propriedade</label><br>
+                            <select name="relacaoPertence" required>';
+                            $selecionaEntRel = "SELECT id FROM rel_type";
+                        }
+                        $result = $this->db->runQuery($selecionaEntRel);
+                        while($guardaEntRel= $result->fetch_assoc())
+                        {
+                            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                            $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                            if($guardaEntRel["name"] === $nomeRelEnt)
+                            {
+                                echo '<option value="'.$guardaEntRel["id"].'" selected>'.$guardaEntRel["name"].'</option>';
+                            }
+                            else
+                            {
+                                echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
+                            }
+                        }
+                        echo '</select><br><br>';
+                    ?>
+            <label>Tipo do campo do formulário</label><br>
+                    <?php
+                        $field = 'form_field_type';
+                        $table = 'property';
+                        $array = $this->db->getEnumValues($table, $field);
+                        foreach($array as $values)
+                        {
+                            if ($values === $value_type)
+                            {
+                                echo' <input type="radio" name="tipoValor" value="'.$values.'" required checked>'.$values.'<br>';
+                            }
+                            else
+                            {
+                                echo' <input type="radio" name="tipoValor" value="'.$values.'" required>'.$values.'<br>';
+                            }
+                        }
+                    ?>
+            <br>
+            <label>Tipo de unidade</label><br>
+            <select name="tipoUnidade">
+                <option value="NULL"></option>';
+                    <?php
+                        $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
+                        $result = $this->db->runQuery($selecionaTipoUnidade);
+                        while($guardaTipoUnidade = $result->fetch_assoc())
+                        {
+                            if ($guardaTipoUnidade["id"] === $unit_type_id)
+                            {
+                                echo '<option value="'.$unit_type_id["id"].'" selected>'.$unit.'</option>';
+                            }
+                            else 
+                            {
+                                echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+                            }
+                            
+                        }
+                    ?>
+            </select><br><br>
+            <label>Ordem do campo no formulário</label><br>
+            <input type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br><br>
+            <!--<label>Tamanho do campo no formulário</label><br>
+            <input type="text" name="tamanho"><br><br>-->
+            <label>Obrigatório</label><br>
+        <?php
+                if ($mandatory)
+                {
+        ?>       
+                    <input type="radio" name="obrigatorio" value="1" checked required>Sim
+                    <br>
+                    <input type="radio" name="obrigatorio" value="2" required>Não
+                    <br><br>
+        <?php
+                }
+                else
+                {
+        ?>       
+                    <input type="radio" name="obrigatorio" value="1" required>Sim
+                    <br>
+                    <input type="radio" name="obrigatorio" value="2" checked required>Não
+                    <br><br>
+        <?php   
+                }
+            if ($tipo ==="entity")
+            {
+                echo '<label>Entidade referenciada por esta propriedade</label><br>
+                <select name="entidadeReferenciada">
+                <option value="NULL"></option>';
+                $selecionaEntidades= "SELECT id, name FROM ent_type";
+                $result = $this->db->runQuery($selecionaEntidades);
+                while($guardaEntidade = $result->fetch_assoc())
+                {
+                    if ($guardaEntidade["id"] === $fk_ent_type_id)
+                    {
+                        echo '<option value="'.$guardaEntidade["id"].'" selected>'.$guardaEntidade["name"].'</option>';
+                    }
+                    else
+                    {
+                        echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
+                    }
+                    
+                }
+                echo '</select><br><br>';
+            }
+        ?>
+            <input type="hidden" name="estado" value="update"><br>
+            <input type="submit" value="Inserir propriedade">
+        </form>
+        <html>
+ <?php       
+        
     }
 }
 
