@@ -113,132 +113,131 @@ class PropertyManage
     {
         echo "passei aqui";
     ?>
-<html>
-    <table>
-        <thead>
-            <tr>
-            <?php
-                if ($tipo === "entity")
-                {
-                    echo "passei aqui2";
-            ?>
-                <th>Entidade</th>
-            <?php
-                }
-                else
-                {
-            ?>
-                <th>Relação</th>
-            <?
-                }
-            ?>
-            passei 3
-                <th>ID</th>
-                <th>Propriedade</th>
-                <th>Tipo de valor</th>
-                <th>Nome do campo no formulário</th>
-                <th>Tipo do campo no formulário</th>
-                <th>Tipo de unidade</th>
-                <th>Ordem do campo no formulário</th>
-                <!--<th>Tamanho do campo no formulário</th>-->
-                <th>Obrigatório</th>
-                <th>Estado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                passei 4
-            <?php
-                if ($tipo === "entity")
-                {
-                    echo "passei 5";
-                    $selecionaEntOrRel = "SELECT name, id FROM ent_type";
-                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
-                }
-                else
-                {
-                    $selecionaEntOrRel = "SELECT name, id FROM rel_type";
-                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
-                }
-                while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
-                {
+    <html>
+        <table>
+            <thead>
+                <tr>
+                <?php
                     if ($tipo === "entity")
                     {
-                        $nome = $resEntRel["name"];
+                        echo "passei aqui2";
+                ?>
+                    <th>Entidade</th>
+                <?php
                     }
                     else
                     {
-                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                        $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                ?>
+                    <th>Relação</th>
+                <?php
                     }
-                    $idEnt = $resEntRel["id"];
-                    $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
-                    $resultSeleciona = $this->db->runQuery($selecionaProp);
-                    $numLinhas = $resultSeleciona->num_rows();
-            ?>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
-            <?php
-                    while($resultSeleciona->fetch_assoc())
+                ?>
+                passei 3
+                    <th>ID</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
+                    <!--<th>Tamanho do campo no formulário</th>-->
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    passei 4
+                <?php
+                    if ($tipo === "entity")
                     {
-            ?>
-                        <td><?php echo $resultSeleciona["id"]; ?></td>
-                        <td><?php echo $resultSeleciona["name"]; ?></td>
-                        <td><?php echo $resultSeleciona["value_type"]; ?></td>
-                        <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
-                        <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
-                        <td>
-            <?php
-                        if (empty($resultSeleciona["unit_type_id"]))
-                        {
-                            echo "-";
-                        }
-                        else
-                        {
-                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$resultSeleciona["unit_type_id"];
-                        }
-            ?>
-                        </td>
-                        <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
-                        <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
-                        <td>
-            <?php
-                        if ($resultSeleciona["mandatory"] === 1)
-                        {
-                            echo "sim";
-                        }
-                        else
-                        {
-                            echo " não";
-                        }
-             ?>
-                        </td>
-                        <td>
-            <?php
-                        if ($resultSeleciona["state"] === "true")
-                        {
-                            echo "ativo";
-                        }
-                        else
-                        {
-                            echo "inativo";
-                        }
-            ?>
-                        </td>
-                        <td>[editar][desativar]</td>
-            <?php
+                        echo "passei 5";
+                        $selecionaEntOrRel = "SELECT name, id FROM ent_type";
+                        $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
                     }
-            ?>
-            </tr>
-            <?php
-                }
-            ?>
-        </tbody>
-    </table>
-</html>
+                    else
+                    {
+                        $selecionaEntOrRel = "SELECT name, id FROM rel_type";
+                        $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
+                    }
+                    while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
+                    {
+                        if ($tipo === "entity")
+                        {
+                            $nome = $resEntRel["name"];
+                        }
+                        else
+                        {
+                            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                            $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                        }
+                        $idEnt = $resEntRel["id"];
+                        $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
+                        $resultSeleciona = $this->db->runQuery($selecionaProp);
+                        $numLinhas = $resultSeleciona->num_rows();
+                ?>
+                        <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+                <?php
+                        while($resultSeleciona->fetch_assoc())
+                        {
+                ?>
+                            <td><?php echo $resultSeleciona["id"]; ?></td>
+                            <td><?php echo $resultSeleciona["name"]; ?></td>
+                            <td><?php echo $resultSeleciona["value_type"]; ?></td>
+                            <td><?php echo $resultSeleciona["form_field_name"]; ?></td>
+                            <td><?php echo $resultSeleciona["form_field_type"]; ?></td>
+                            <td>
+                <?php
+                            if (empty($resultSeleciona["unit_type_id"]))
+                            {
+                                echo "-";
+                            }
+                            else
+                            {
+                                $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$resultSeleciona["unit_type_id"];
+                            }
+                ?>
+                            </td>
+                            <td><?php echo $resultSeleciona["form_field_order"]; ?>                                </td>
+                            <td><?php echo $resultSeleciona["form_field_size"]; ?></td>
+                            <td>
+                <?php
+                            if ($resultSeleciona["mandatory"] === 1)
+                            {
+                                echo "sim";
+                            }
+                            else
+                            {
+                                echo " não";
+                            }
+                 ?>
+                            </td>
+                            <td>
+                <?php
+                            if ($resultSeleciona["state"] === "true")
+                            {
+                                echo "ativo";
+                            }
+                            else
+                            {
+                                echo "inativo";
+                            }
+                ?>
+                            </td>
+                            <td>[editar][desativar]</td>
+                <?php
+                        }
+                ?>
+                </tr>
+                <?php
+                    }
+                ?>
+            </tbody>
+        </table>
+    </html>
     <?php
-        }
     }
 
     private function apresentaForm($tipo)
@@ -251,7 +250,7 @@ class PropertyManage
             if($numEnt === 0)
             {
             ?>
-<p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer entidades</p>
+                <p>Não poderá inserir propriedades uma vez que ainda não foram criadas quaisquer entidades</p>
             <?php
                 $existeEntRel = false;
             }
