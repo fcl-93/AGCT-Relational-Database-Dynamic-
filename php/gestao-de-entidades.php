@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<script type="text/javascript" src="custom/js/jquery-1.12.1.js"></script>
-		<script type="text/javascript" src="custom/js/jquery.validate.js"></script>
-		<script type="text/javascript" src="custom/js/enTypeFormValid.js"></script>
+		<script type="text/javascript" src="/var/www/html/custom/js/jquery-1.12.1.js"></script>
+		<script type="text/javascript" src="/var/www/html/custom/js/jquery.validate.js"></script>
+		<script type="text/javascript" src="/var/www/html/custom/js/enTypeFormValid.js"></script>
 	</head>
 </html>
 <?php
