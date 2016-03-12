@@ -111,7 +111,6 @@ class PropertyManage
 
     private function apresentaTabela($tipo)
     {
-        echo "passei aqui";
     ?>
     <html>
         <table>
@@ -120,7 +119,6 @@ class PropertyManage
                 <?php
                     if ($tipo === "entity")
                     {
-                        echo "passei aqui2";
                 ?>
                     <th>Entidade</th>
                 <?php
@@ -132,7 +130,6 @@ class PropertyManage
                 <?php
                     }
                 ?>
-                passei 3
                     <th>ID</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
@@ -148,11 +145,9 @@ class PropertyManage
             </thead>
             <tbody>
                 <tr>
-                    passei 4
                 <?php
                     if ($tipo === "entity")
                     {
-                        echo "passei 5";
                         $selecionaEntOrRel = "SELECT name, id FROM ent_type";
                         $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
                     }
@@ -176,7 +171,7 @@ class PropertyManage
                         $idEnt = $resEntRel["id"];
                         $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
-                        $numLinhas = $resultSeleciona->num_rows();
+                        $numLinhas = $resultSeleciona->num_rows;
                 ?>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
