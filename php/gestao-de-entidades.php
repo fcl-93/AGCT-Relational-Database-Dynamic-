@@ -204,8 +204,8 @@ class Entidade
 		}
 		else
 		{
-			$sanitizeName = $$Dp_OpObject->userInputVal($_REQUEST['nome']);
-			$res_checkRep = $$Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
+			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$res_checkRep = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
 			if($res_checkRep->num_rows)
 			{
 ?>
@@ -290,7 +290,7 @@ class Entidade
 	 */
 	public function changeEnt($Dp_OpObject) 
 	{
-		if ($this->ssvalidation ()) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
+		if ($this->ssvalidation ($Dp_OpPbject)) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
 		{
 			$sanitizeName = $$Dp_OpObject->userInputVal($_REQUEST['nome']);
 			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`=".$_REQUEST['nome'].",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."");
@@ -343,7 +343,7 @@ class Entidade
 	 */
 	public function insertEnt($Dp_OpPbject)
 	{
-		if($this->ssvalidation()) 
+		if($this->ssvalidation($Dp_OpPbject)) 
 		{
 			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
 			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
