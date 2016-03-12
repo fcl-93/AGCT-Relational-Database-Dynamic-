@@ -336,7 +336,7 @@ class PropertyManage
                 <label>Nome da Propriedade:</label><br>
                     <input id="nome" type="text" name="nome" required>
                     <br><label class="error" for="nome"></label>
-                <br><br>
+                <br>
                 <label>Tipo de valor:</label><br>
                         <?php
                         $field = 'value_type';
@@ -404,7 +404,7 @@ class PropertyManage
                 </select><br><br>
                 <label class="error" for="tipoUnidade"></label>
                 <label>Ordem do campo no formulário</label><br>
-                <input id="ordem" type="text" name="ordem" min="1" required><br><br>
+                <input id="ordem" type="text" name="ordem" min="1" required><br>
                 <label class="error" for="ordem"></label><br>
                 <!--<label>Tamanho do campo no formulário</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>-->
@@ -413,7 +413,7 @@ class PropertyManage
                 <br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="2" required>Não
                 <br><br>
-                <label class="error" for="obrigatorio"></label>
+                <label class="error" for="obrigatorio"></label><br>
                         <?php
                             if ($tipo ==="entity")
                             {
