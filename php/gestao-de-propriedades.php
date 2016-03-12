@@ -522,7 +522,7 @@ class PropertyManage
     {
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
         $queryUpdate = "UPDATE property SET state=";
-        if (!empty($_REQUEST["ativar"]))
+        if ($_REQUEST["estado"] === "ativar")
         {
             $queryUpdate .= "'active'";
             $estado = "ativada";
