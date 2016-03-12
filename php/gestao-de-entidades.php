@@ -2,7 +2,7 @@
 	require_once("custom/php/common.php");
 	
 	$bd = new Db_op();
-	$entity = new entidade();
+	$entity = new Entidade();
 	if ( is_user_logged_in() )
 	{
         if(current_user_can('manage_entities'))
@@ -77,64 +77,29 @@
 <?php 			}
 				
 			
-			$entity->form($bd); // object lead the method to print the form 
+				$entity->form($bd); // object lead the method to print the form 
  			}
  			else if($_REQUEST['estado'] =='editar')
  			{
- 				
+ 				$entity->editEntity($_REQUEST[ent_id]);
  			}
  			else if($_REQUEST['estado'] == 'ativar')
  			{
-				$res_EntTypeA = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
-				$read_EntTypeA = $res_EntTypeA->fetch_assoc();
-				$bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
-?>
-				<html>
- 					<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>
- 					<br>
- 					<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
-				</html>
-<?php 		
+				$entity->enableEnt($bd);
  			}
  			else if($_REQUEST['estado'] == 'desativar')
  			{
- 				$res_EntTypeD = $bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
- 				$read_EntTypeD = $res_EntTypeD->fetch_assoc();
- 				$bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
-?>			
-				<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
-				<br>
- 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
-<?php 
+ 				$entity->disableEnt($bd);
+ 			}
+ 			else if($_REQUEST['estado']=='alteracao')
+ 			{
+ 				$entity->changeEnt($bd);
+ 				
  			}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
+				$entity->insertEnt($bd);
 				
-				if($entity->ssvalidation()) //serverside validations
-				{
-					$sanitizeName = $bd->userInputVal($_REQUEST['nome']);
-					$res_checkRep = $bd->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
-					if($res_checkRep->num_rows)
-					{
-?>
-						<html><p>Já existe uma entidade do tipo que está a criar.</p></html>
-<?php 
-						goBack();
-					}
-					else 
-					{
-						$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
-						$res_querState = $bd->runQuery($queryInsert);
-						
-						echo 'Inseriu os dados de novo componente com sucesso.';
-						echo 'Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar';
-					}
-					
-				}
-				else
-				{
-					goBack();
-				}
 			}
 			
 		}
@@ -159,11 +124,20 @@
  ?>
 
 <?php
-
-class entidade
+/**
+ * Very importante $Dp_OpObject is an object from the class in common Dp_Op.
+ * This method present in this class will handle all the operations that we can do in 
+ * Entity page.
+ * @author fabio
+ *
+ */
+class Entidade
 {
-	//This method will be responsable for the print of the form
-	//this method will receive a Dp_OpObject (instance from the class in common)
+	/**
+	 * This method will be responsable for the print of the form
+	 * this method will receive a  Dp_OpObject (instance from the class 
+	 * Dp_Op in common that allow database operation)
+	*/
 	public function form($Dp_OpObject)
 	{
 ?>
@@ -208,8 +182,10 @@ class entidade
 				</html>
 <?php 	
 	}
-	//This method will do the server side validation
-	public function ssvalidation()
+	/**
+	 * This method will do the server side validation
+	 */
+	public function ssvalidation($Dp_OpObject)
 	{
 		echo '<h3>Gestão de componentes - inserção</h3>';
 		if(empty($_REQUEST['nome']))
@@ -228,9 +204,160 @@ class entidade
 		}
 		else
 		{
+			$sanitizeName = $$Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$res_checkRep = $$Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
+			if($res_checkRep->num_rows)
+			{
+?>
+				<html><p>Já existe uma entidade do tipo que está a introduzir.</p></html>
+<?php 
+				return false;
+			}
+			else
+			{
 				return true;
+			}
 		}
 	}
+	/**
+	 * This method will be responsable for populated the form for the user to be able to  edit a selected entity
+	 * this method will receive a Dp_OpObject (instance from the class Dp_Op in common that allow database operation)
+	 * and it will receive the id from the selected entity
+	*/
+	public function editEntity($ent_id,$Dp_OpObject)
+	{
+		$res_EntEdit = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE id'".$ent_id."'");
+		$read_EntToEdit = $res_EntEdit->fetch_assoc();
+		
+?>		
+		<html>
+			<h3>Gestão de Componentes - Edição</h3>
+				<form>
+					<label>Nome:</label>
+					<br>
+					<input type="text" name="nome" required><?php echo $read_EntToEdit ?>
+					<br>
+<?php 
+		$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state');
+		foreach($stateEnumValues as $value)
+		{
+			if($value == 'active')
+			{
+				if(	$read_EntToEdit['state'] == 'active' )
+				{
+?>
+					<input type="radio" name="atv_int" value="active" checked="checked" required>Ativo
+					<br>
+<?php 	
+				}
+				else
+				{
+?>
+					<input type="radio" name="atv_int" value="active" required>Ativo
+					<br>
+<?php 
+				}
+			  }
+			  else 
+			  {
+			  	if($read_EntToEdit['state'] == 'inactive')
+			  	{
+?>
+					<input type="radio" name="atv_int" value="inctive" checked="checked" required>Inativo
+					<br>
+<?php 			
+			  	}
+			  	else 
+			  	{
+?>
+					<input type="radio" name="atv_int" value="inctive" required>Inativo
+					<br>	
+<?php 
+			  	}
+			  }
+		}//fim for each
+?>
+				<input type="hidden" name="ent_id" value="<?php echo $read_EntToEdit['id'] ?>">
+				<input type="hidden" name="estado" value="alteracao">
+				<input type="submit" value="Alterar Componente">
+			</form>
+		</html>
+<?php 	}
+		
+	/**
+	 *  This method will check if is everything ok with the submited data and if really is
+	 *  it will update the existing entity
+	 */
+	public function changeEnt($Dp_OpObject) 
+	{
+		if ($this->ssvalidation ()) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
+		{
+			$sanitizeName = $$Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`=".$_REQUEST['nome'].",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."");
+?>
+			<p>Alterou os dados da entidade com sucesso.</p>
+			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+<?php 
+		}
+		else
+		{
+			goBack ();
+		}
+	}
+
+	/**
+	 * This method will disable an enttity when we click in desactivar button 
+	 * @param unknown $Dp_OpObject
+	 */
+	public function disableEnt($Dp_OpObject)
+	{
+		$res_EntTypeD = $Dp_OpObject->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+		$read_EntTypeD = $res_EntTypeD->fetch_assoc();
+		$Dp_OpObject->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
+?>
+			<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
+			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+<?php 		
+	}
 	
-} 
+	/**
+	 * This method will enable the entity when we click in then activate button 
+	 * @param unknown $Dp_OpObject
+	 */
+	public function enableEnt($Dp_OpObject)
+	{
+		$res_EntTypeA = $Dp_OpObject->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+		$read_EntTypeA = $res_EntTypeA->fetch_assoc();
+		$Dp_OpObject->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
+?>
+		<html>
+		 	<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>
+		 	<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+		</html>
+<?php 		
+	}
+	
+	/**
+	 * This method will insert a new entity in the database
+	 * @param unknown $Dp_OpPbject
+	 */
+	public function insertEnt($Dp_OpPbject)
+	{
+		if($entity->ssvalidation()) 
+		{
+			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
+			$res_querState = $Dp_OpObject->runQuery($queryInsert);
+?>
+				<p>Inseriu os dados de uma nova entidade com sucesso</p>
+				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+<?php 	
+		}
+		else
+		{
+			goBack();
+		}
+
+	}
+}
 ?>
