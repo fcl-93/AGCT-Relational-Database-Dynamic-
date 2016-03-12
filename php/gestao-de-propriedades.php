@@ -66,11 +66,17 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "inserir")
         {
+            $this->validarDados();
             $this->estadoInserir();
         }
         elseif($_REQUEST['estado'] =='editar')
         {
             $this->estadoEditar();
+        }
+        elseif($_REQUEST['estado'] =='update')
+        {
+             $this->validarDados();
+            $this->estadoUpdate();
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -441,7 +447,12 @@ class PropertyManage
 	{
             $queryInsere .= '`form_field_size`, ';
         }*/
-        $queryInsere .=  '`form_field_order`, `mandatory`, `state`, `fk_ent_type_id`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
+        $queryInsere .=  '`form_field_order`, `mandatory`, `state`';
+        if (!empty($_REQUEST["entidadeReferenciada"]))
+        {
+            $queryInsere .= ', `fk_ent_type_id`';
+        }
+        $queryInsere .= ') VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
            $queryInsere .= $_REQUEST["entidadePertence"];
@@ -455,8 +466,16 @@ class PropertyManage
 	{
             $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
 	}*/
-        $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active",'.$_REQUEST["entidadeReferenciada"].')';
-	$insere = $this->db->runQuery($queryInsere);
+        $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
+	if (!empty($_REQUEST["entidadeReferenciada"]))
+        {
+            $queryInsere .=  ','.$_REQUEST["entidadeReferenciada"].')';
+        }
+        else
+        {
+            $queryInsere .=  ')';
+        }
+        $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
 		$this->db->getMysqli()->rollback();
@@ -599,8 +618,7 @@ class PropertyManage
                     <?php
                     $field = 'value_type';
                     $table = 'property';
-                    $array =$this->db->getEnumValues($table, $field);
-                    echo $value_type;
+                    $array =$this->db->getEnumValues($table, $field);                    
                     foreach($array as $values)
                     {
                         if ($values === $value_type)
@@ -740,6 +758,67 @@ class PropertyManage
         <html>
  <?php       
         
+    }
+    
+    private function estadoUpdate() {
+        echo '<h3>Gestão de propriedades - Atualização</h3>';
+                if(!empty($_REQUEST["entidadePertence"]))
+        {
+            $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
+            $entRelResult = $this->db->runQuery($entRelQuery);
+            $entRelArray = $entRelResult->fetch_assoc();
+            // contrução do form_field_name
+            // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+            $entRel = $entRelArray["name"];
+        }
+        else
+        {
+            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.rel_type = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
+            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.rel_type = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
+            $entRel = criaNomeRel($queryNome1, $queryNome2);
+        }
+	// Obtemos as suas 3 primeiras letras
+	$entRel = substr($entRel, 0 , 3);
+	$traco = '-';
+	$idProp = '';
+	// Garantimos que não há SQL injection através do campo nome
+	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome"]);
+	// Substituimos todos os carateres por carateres ASCII
+	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
+	// Substituimos todos pos espaços por underscore
+	$nomeField = str_replace(' ', '_', $nomeField);
+	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
+        $queryUpdate = 'UPDATE `property`(`name`,`value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
+        /*if(!empty($_REQUEST["tamanho"]))
+	{
+            $queryInsere .= '`form_field_size`, ';
+        }*/
+        $queryUpdate .=  '`form_field_order`, `mandatory`, `state`';
+        if (!empty($_REQUEST["entidadeReferenciada"]))
+        {
+            $queryInsere .= ', `fk_ent_type_id`';
+        }
+        $queryUpdate .= ') SET (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
+        /*if(!empty($_REQUEST["tamanho"]))
+	{
+            $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
+	}*/
+        $queryUpdate .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
+        
+        if (!empty($_REQUEST["entidadeReferenciada"]))
+        {
+            $queryUpdate .= ','.$_REQUEST["entidadeReferenciada"].')';
+        }
+        else
+        {
+            $queryUpdate .= ')';
+        }
+        
+	$update = $this->db->runQuery($queryUpdate);
+        echo 'Atualizou os dados de nova propriedade com sucesso.';
+        echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+
+	
     }
 }
 
