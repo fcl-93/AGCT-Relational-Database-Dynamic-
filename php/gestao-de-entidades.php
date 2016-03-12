@@ -2,8 +2,9 @@
 <html>
 	<head>
 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
-		  <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
- 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+ 		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/enTypeFormValid.js"></script>
+ 		 <script type="text/css" src="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css"></script> 
 	</head>
 </html>
 <?php
@@ -152,7 +153,7 @@ class Entidade
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
 			<form id="insertForm">
-				<label for="nome">Nome:</label>
+				<label class="error" for="nome">Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
 				<br>
