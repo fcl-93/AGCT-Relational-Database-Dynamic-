@@ -153,9 +153,10 @@ class Entidade
 		<html>
 			<h3>Gestão de Componentes - Introdução</h3>
 			<form id="insertForm">
-				<label class="error" for="nome">Nome:</label>
+				<label for="nome">Nome:</label>
 				<br>
 				<input type="text" id="nome" name="nome">
+				<label id ="nome" class="error" ></label>
 				<br>
 				<label class="error" for="atv_int">Estado:</label><br>
 <?php 
