@@ -3,21 +3,23 @@ $().ready(function(){
 		rules:{
 			nome: "required",
                         tipoValor: "required",
-                        entRel: "required",
-                        formType: "required",
-                        order: {
+                        relacaoPertence: "required",
+                        entidadePertence: "required",
+                        tipoCampo: "required",
+                        ordem: {
                             required: true,
                             min:1
                         },
-                        mandatory:"required"
+                        obrigatorio:"required"
 		},
 		messages:{
 			nome:"Por favor introduza o nome da propriedade.",
-                        typeValue:"Por favor selecione um tipo de valor para a sua entidade.",
-                        entRel:"Por favor selecione a entidade/relação a que irá pertencer esta propriedade.",
-                        formType:"Por favor selecione um tipo de do campo do formulário.",
-                        order:"Por favor introduza um valor superior a 0.",
-                        mandatory:"Por favor indique se esta propriedade deve ou não ser obrigatória."
+                        tipoValor:"Por favor selecione um tipo de valor para a sua entidade.",
+                        relacaoPertence:"Por favor selecione a relação a que irá pertencer esta propriedade.",
+                        entidadePertence:"Por favor selecione a relação a que irá pertencer esta propriedade.",
+                        tipoCampo:"Por favor selecione um tipo de do campo do formulário.",
+                        ordem:"Por favor introduza um valor superior a 0.",
+                        obrigatorio:"Por favor indique se esta propriedade deve ou não ser obrigatória."
 		}
 	});
 	$("#editForm").validate({
