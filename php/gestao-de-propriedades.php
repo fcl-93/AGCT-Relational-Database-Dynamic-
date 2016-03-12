@@ -132,6 +132,7 @@ class PropertyManage
             <?
                 }
             ?>
+            passei 3
                 <th>ID</th>
                 <th>Propriedade</th>
                 <th>Tipo de valor</th>
@@ -147,6 +148,7 @@ class PropertyManage
         </thead>
         <tbody>
             <tr>
+                passei 4
                         <?php
                             if ($tipo === "entity")
                             {
