@@ -603,9 +603,9 @@ class PropertyManage
                     echo $value_type;
                     foreach($array as $values)
                     {
-                        if ($values == $value_type)
+                        if ($values === $value_type)
                         {
-                            echo' <input type="radio" name="tipoValor" value="'.$values.'" checked required>'.$values.'<br>';
+                            echo' <input type="radio" name="tipoValor" value="'.$values.'" checked="checked" required>'.$values.'<br>';
                         }
                         else
                         {
@@ -659,7 +659,7 @@ class PropertyManage
                         {
                             if ($values === $form_field_type)
                             {
-                                echo' <input type="radio" name="tipoValor" value="'.$values.'" checked required>'.$values.'<br>';
+                                echo' <input type="radio" name="tipoValor" value="'.$values.'" checked="checked" required>'.$values.'<br>';
                             }
                             else
                             {
