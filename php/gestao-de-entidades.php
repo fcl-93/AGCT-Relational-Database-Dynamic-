@@ -235,7 +235,7 @@ class Entidade
 				<form>
 					<label>Nome:</label>
 					<br>
-					<input type="text" name="nome" required><?php echo $read_EntToEdit ?>
+					<input type="text" name="nome" required><?php echo $read_EntToEdit['name'] ?>
 					<br>
 <?php 
 		$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state');
