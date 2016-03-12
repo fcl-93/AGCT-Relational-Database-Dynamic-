@@ -553,8 +553,8 @@ class PropertyManage
             $tipo = "relation";
             $rel_type_id = $prop["rel_type_id"];
             $queryRel = "SELECT * FROM rel_type WHERE id = ".$rel_type_id;
-            $ent1 = $this->db->runQuery($queryNome1)->fetch_assoc()["ent_type1_id"];
-            $ent2 = $this->db->runQuery($queryNome1)->fetch_assoc()["ent_type2_id"];
+            $ent1 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type1_id"];
+            $ent2 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type2_id"];
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent2;
             $nomeRelEnt = $this->criaNomeRel($queryNome1, $queryNome2);
@@ -566,6 +566,10 @@ class PropertyManage
             $queryEnt = "SELECT name FROM ent_type WHERE id = ".$ent_type_id;
             $nomeRelEnt = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
             $fk_ent_type_id = $prop["fk_ent_type_id"];
+            if (is_null($fk_ent_type_id))
+            {
+                $fk_ent_type_id = 0;
+            }
             $queryEntRef = "SELECT name FROM ent_type WHERE id = ".$fk_ent_type_id;
             $nomeEntRef = $this->db->runQuery($queryEntRef)->fetch_assoc()["name"];
         }
@@ -645,7 +649,7 @@ class PropertyManage
                         $array = $this->db->getEnumValues($table, $field);
                         foreach($array as $values)
                         {
-                            if ($values === $value_type)
+                            if ($values === $form_field_type)
                             {
                                 echo' <input type="radio" name="tipoValor" value="'.$values.'" required checked>'.$values.'<br>';
                             }
