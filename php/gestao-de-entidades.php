@@ -341,10 +341,11 @@ class Entidade
 	 * This method will insert a new entity in the database
 	 * @param unknown $Dp_OpPbject
 	 */
-	public function insertEnt($Dp_OpPbject)
+	public function insertEnt($Dp_OpObject)
 	{
-		if($this->ssvalidation($Dp_OpPbject)) 
+		if($this->ssvalidation($Dp_OpObject)) 
 		{
+			print_R($_REQUEST);
 			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
 			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
 			$res_querState = $Dp_OpObject->runQuery($queryInsert);
