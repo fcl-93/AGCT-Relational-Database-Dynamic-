@@ -92,7 +92,6 @@ class Unidade
 		else
 		{
 ?>
-Ola
 			<html>
 				<table id="table">
 					<thead>
@@ -162,12 +161,14 @@ Ola
 	public function insertState(){
 		if($this->ssvalidation())
 		{
+			print_r($_REQUEST);
 ?>
 			<p>Clique em para <?php goBack(); ?></p>
 <?php 
 		}
 		else
 		{
+			print_r($_REQUEST);
 			$sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
 			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".$sanitizedName."')");
 ?>

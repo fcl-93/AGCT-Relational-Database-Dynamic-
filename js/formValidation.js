@@ -24,7 +24,7 @@ $().ready(function(){
 	//insertion form in page gestão de unidades
 	//$("").validate({
 		
-	});
+//	});
 	
 	
 	
