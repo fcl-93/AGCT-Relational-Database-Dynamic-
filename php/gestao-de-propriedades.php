@@ -206,18 +206,19 @@ class PropertyManage
                     }
                     while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                     {
+                        $idEntRel = $resEntRel["id"];
                         if ($tipo === "entity")
                         {
                             $nome = $resEntRel["name"];
+                            $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEntRel;
                         }
                         else
                         {
                             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                             $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                            $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                         }
-                        $idEnt = $resEntRel["id"];
-                        $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEnt;
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
                         $numLinhas = $resultSeleciona->num_rows;
                 ?>
