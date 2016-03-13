@@ -137,30 +137,22 @@ class ValoresPermitidos
 							echo '</td>';	
 
 							
-											//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
+							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
 							while($propAllowedArray =$propAllowed->fetch_assoc())
 							{											
 								if($propAllowed->num_rows == 0)
 								{	
-									echo '<td colspan=4>';
-									echo "Não há valores permitidos definidos";
-									echo '</td>';	
-								}
+?>
+									<td colspan=4> Não há valores permitidos definidos </td>	
+<?php 							}
 								else
 								{
-									echo '<td>';
-									echo $propAllowedArray['id'];
-									echo '</td>';
-									echo '<td>';
-									echo $propAllowedArray['value'];
-									echo '</td>';
-									echo '<td>';
-									echo $propAllowedArray['state'];
-									echo '</td>';
-									echo '<td>';
-									echo '[editar]';
-									echo '[desativar]';
-									echo '</td>';
+?> 
+									<td> $propAllowedArray['id'];</td>
+									<td> $propAllowedArray['value'];</td>
+									<td> $propAllowedArray['state'];</td>
+									<td>[editar][desativar]</td>';
+<?php 							
 								}		
 							}
 ?>	
