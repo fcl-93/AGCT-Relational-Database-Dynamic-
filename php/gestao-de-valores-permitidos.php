@@ -105,9 +105,9 @@ class ValoresPermitidos
 								
 								//Checks if the name has been written before
 								$conta = 0;
-								for($i = 0; $i < count($array); $i++)
+								for($i = 0; $i < count($savePrintedNames); $i++)
 								{
-									if($array[$i] == $read_entName['name'])
+									if($savePrintedNames[$i] == $read_entName['name'])
 									{
 										$conta++;
 									}
@@ -120,7 +120,7 @@ class ValoresPermitidos
 									
 <?php 
 									echo $read_entName['name'];
-									$array[] = $read_entName['name'];
+									$savePrintedNames[] = $read_entName['name'];
 								}
 								else
 								{
