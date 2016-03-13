@@ -334,7 +334,7 @@ class PropertyManage
         <html>
             <h3> Gestão de propriedades - introdução </h3>
 
-            <form id="insertForm" method="POST">
+            <form id="insertProp" method="POST">
                 <label>Nome da Propriedade:</label><br>
                     <input id="nome" type="text" name="nome" required>
                     <br><label class="error" for="nome"></label>
@@ -707,7 +707,7 @@ class PropertyManage
         <html>
         <h3> Gestão de propriedades - Edição </h3>
 
-        <form id="editForm" method="POST">
+        <form id="editProp" method="POST">
             <label>Nome da Propriedade:</label><br>
                 <input id="nome" type="text" name="nome" value="<?php echo $nome?>" required>
             <br><label class="error" for="nome"></label>
