@@ -117,7 +117,7 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
+								echo '<td rowspan='.$acerta->num_rows.'>';	
 								echo $nomeComponente['name'];
 								$array[] = $nomeComponente['name'];
 							}
@@ -127,20 +127,20 @@ class ValoresPermitidos
 
 							}
 
-							echo '<td rowspan='.mysqli_num_rows($propAllowed).'>';
+							echo '<td rowspan='.$propAllowed->num_rows.'>';
 							echo ''.$valoresEnum['id'];
 							echo '</td>';
 							//Nome da propriedade
-							echo '<td rowspan='.mysqli_num_rows($propAllowed).'>';
+							echo '<td rowspan='.$propAllowed->num_rows.'>';
 							echo '<a href="gestao-de-valores-permitidos?estado=introducao&propriedade='.$valoresEnum['id'].'">['.$valoresEnum['name'].']</a>';
 							//echo '['.$valoresEnum['name'].']';
 							echo '</td>';	
 
 							
 											//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
-							while($propAllowedArray = mysqli_fetch_assoc($propAllowed))
+							while($propAllowedArray =$propAllowed->fetch_assoc())
 							{											
-								if(mysqli_num_rows($propAllowed) == 0)
+								if($propAllowed->num_rows == 0)
 								{	
 									echo '<td colspan=4>';
 									echo "Não há valores permitidos definidos";
