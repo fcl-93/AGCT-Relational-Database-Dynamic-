@@ -471,6 +471,8 @@ class PropertyManage
         {
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.ent_type1_id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.ent_type2_id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
+            echo  $queryNome1 ;
+            echo  $queryNome2 ;
             $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
