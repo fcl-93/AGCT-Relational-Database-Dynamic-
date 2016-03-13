@@ -474,6 +474,7 @@ class PropertyManage
             $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
+        echo "entRel".$entRel;
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
 	$idProp = '';
