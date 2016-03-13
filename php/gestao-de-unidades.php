@@ -17,7 +17,7 @@ class Unidade
 	 * Contructor
 	 */
 	public function __construct(){
-		$this->$bd = new Db_Op();
+		$this->bd = new Db_Op();
 		$this->tablePrint();
 	}
 	/**
