@@ -14,7 +14,7 @@ class ValoresPermitidos
 	 * Contructor
 	 */
 	public function __construct(){
-		$this->bd = new Dp_Op();
+		$this->bd = new Db_Op();
 		$this->checkUser();
 	}
 	/**
@@ -25,7 +25,7 @@ class ValoresPermitidos
 
 		if(is_user_logged_in())
 		{
-			if(current_user_can('manage_allowed_values)'))
+			if(current_user_can('manage_allowed_values'))
 			{
 				if(empty($_REQUEST))
 				{
