@@ -563,6 +563,34 @@ class PropertyManage
      */
     private function validarDados()
     {
+        if (empty($_REQUEST["nome"]))
+        {
+            echo "Por favor introduza o nome da propriedade.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["tipoValor"]))
+        {
+            echo "Por favor selecione um tipo de valor para a sua entidade.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["tipoCampo"]))
+        {
+            echo "Por favor selecione um tipo do campo do formulário.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
+        if (empty($_REQUEST["obrigatorio"]))
+        {
+            echo "Por favor indique se esta propriedade deve ou não ser obrigatória.";
+            goBack();
+            echo '<br>';
+            return false;
+        }
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
             echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
@@ -679,8 +707,8 @@ class PropertyManage
 
         <form id="editForm" method="POST">
             <label>Nome da Propriedade:</label><br>
-                <input id="name" type="text" name="nome" value="<?php echo $nome?>" required>
-                <br><label class="error" for="nome"></label>
+                <input id="nome" type="text" name="nome" value="<?php echo $nome?>" required>
+            <br><label class="error" for="nome"></label>
             <br>
             <label>Tipo de valor:</label><br>
                     <?php
@@ -776,12 +804,14 @@ class PropertyManage
                             
                         }
                     ?>
-            </select><br><br>
-            <label class="error" for="tipoUnidade"></label>
+            </select>
+            <br>
+            <label class="error" for="tipoUnidade"></label><br>
             <label>Ordem do campo no formulário</label><br>
-            <input id="order" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br><br>
+            <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>" required><br>
             <!--<label>Tamanho do campo no formulário</label><br>
             <input type="text" name="tamanho"><br><br>-->
+            <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
         <?php
                 if ($mandatory)
@@ -790,7 +820,8 @@ class PropertyManage
                     <input id="mandatory" type="radio" name="obrigatorio" value="1" checked required>Sim
                     <br>
                     <input id="mandatory" type="radio" name="obrigatorio" value="2" required>Não
-                    <br><br>
+                    <br>
+                    <label class="error" for="obrigatorio"></label><br>
         <?php
                 }
                 else
@@ -822,10 +853,10 @@ class PropertyManage
                     }
                     
                 }
-                echo '</select><br><br>';
+                echo '</select><br>';
             }
         ?>
-            <label class="error" for="entidadeReferenciada"></label>
+            <label class="error" for="entidadeReferenciada"></label><br>
             <input type="hidden" name="estado" value="update"><br>
             <input type="hidden" name="idProp" value="<?php echo $_REQUEST['prop_id']?>">
             <input type="submit" value="Inserir propriedade">
