@@ -85,77 +85,85 @@ class ValoresPermitidos
 					<tbody>
 <?php
 						$savePrintedNames = array();
-						while($read_Prop = $res_NProp->fetch_assoc())
+						while($valoresEnum = $res_NProp->fetch_assoc())
 						{
 ?>
 							<tr>
-<?php
-								// gets all enum value for the property we will print now
-								$res_EnumToPrint = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$read_Prop['id']); 
-							
-								//get the entity name and id for the preperty that we will print
-								$result_entName =	$this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_Prop['ent_type_id']); 
-								$read_entName = $result_entName->fetch_assoc();
-								
-								//rowspan reconstruction if there is any repeated entity
-								$res_fit = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent_tp WHERE ent_tp.id = ".$read_entName['id']." AND  ent_type_id = ".$read_entName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");	
-								$read_fit = $res_fit->fetch_assoc();
-								
-								$this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_Prop['ent_type_id']." AND value_type = 'enum'");				
-								
-								//Checks if the name has been written before
-								$conta = 0;
-								for($i = 0; $i < count($savePrintedNames); $i++)
+<?php 				
+							$queryPropAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$valoresEnum['id'];
+							$propAllowed = mysqli_query($link,$queryPropAllowed);
+
+							$queryGetValores = "SELECT id, name FROM ent_type WHERE id = ".$valoresEnum['ent_type_id'];
+							$nomeComponente = mysqli_query($link,$queryGetValores);
+							$nomeComponente = mysqli_fetch_assoc($nomeComponente);
+
+							//Acerto dos rowspan caso exista valores repetidos como tv.
+							$acertaRowSpan = "SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as comp WHERE comp.id = ".$nomeComponente['id']." AND  prop.ent_type_id = ".$nomeComponente['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id";
+							$acerta = mysqli_query($link,$acertaRowSpan);
+
+							$verificaNumComp = "SELECT * FROM property WHERE ent_type_id = ".$valoresEnum['ent_type_id']." AND value_type = 'enum'";
+							//echo $verificaNumComp;
+							$getVerificaComp = mysqli_query($link,$verificaNumComp);
+
+							//Verifica se o nome que vou escrever já foi escrito alguma vez
+							$conta = 0;
+							for($i = 0; $i < count($array); $i++)
+							{
+								if($array[$i] == $nomeComponente['name'])
 								{
-									if($savePrintedNames[$i] == $read_entName['name'])
-									{
-										$conta++;
-									}
+									$conta++;
 								}
-								//the entity name I'm strating to write has never writtem before							
-								if($conta == 0)
-								{
-?>				
-					enttrou
-									<td rowspan="<?php echo $read_fit->num_rows;?>">
-									
-<?php 
-									echo $read_entName['name'];
-									$savePrintedNames[] = $read_entName['name'];
+							}
+
+							if($conta == 0)
+							{
+								echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
+								echo $nomeComponente['name'];
+								$array[] = $nomeComponente['name'];
+							}
+							else
+							{
+								//echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
+
+							}
+
+							echo '<td rowspan='.mysqli_num_rows($propAllowed).'>';
+							echo ''.$valoresEnum['id'];
+							echo '</td>';
+							//Nome da propriedade
+							echo '<td rowspan='.mysqli_num_rows($propAllowed).'>';
+							echo '<a href="gestao-de-valores-permitidos?estado=introducao&propriedade='.$valoresEnum['id'].'">['.$valoresEnum['name'].']</a>';
+							//echo '['.$valoresEnum['name'].']';
+							echo '</td>';	
+
+							
+											//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
+							while($propAllowedArray = mysqli_fetch_assoc($propAllowed))
+							{											
+								if(mysqli_num_rows($propAllowed) == 0)
+								{	
+									echo '<td colspan=4>';
+									echo "Não há valores permitidos definidos";
+									echo '</td>';	
 								}
 								else
 								{
-									?>entrou 2<?php 
-								}
-								
-?>			
-								<td rowspan="<?php echo $res_EnumToPrint->num_rows; ?>"><?php echo $read_Prop['id'];  ?></td>
-
-
-								<!-- Nome da propriedade-->
-								<td rowspan="<?php echo $res_EnumToPrint->num_rows; ?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade='<?php echo $read_Prop['id'];?>'">['<?php echo $read_Prop['name']; ?>']</a></td>
-<?php 								
-								
-									
-								while($read_EnumToPrint = $res_EnumToPrint->fetch_assoc())
-								{
-									if($res_EnumToPrint->numrows == 0)
-									{
-?>
-										<td colspan=4>Não há valores permitidos definidos</td>
-<?php 
-									}
-									else
-									{
-?>
-										<td><?php echo $read_EnumToPrint['id'];?></td>
-										<td><?php $read_EnumToPrint['value'];?></td>
-										<td><?php $read_EnumToPrint['state'];?></td>
-										<td>[editar][desativar]</td>
-						</tr>
-<?php 
-									}
-								}
+									echo '<td>';
+									echo $propAllowedArray['id'];
+									echo '</td>';
+									echo '<td>';
+									echo $propAllowedArray['value'];
+									echo '</td>';
+									echo '<td>';
+									echo $propAllowedArray['state'];
+									echo '</td>';
+									echo '<td>';
+									echo '[editar]';
+									echo '[desativar]';
+									echo '</td>';
+									echo '</tr>';
+								}		
+							}
 ?>	
 							</tr>
 <?php 
