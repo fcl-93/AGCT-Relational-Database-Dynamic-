@@ -98,7 +98,6 @@ class ValoresPermitidos
 								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
 								$read_EntName = $res_Ent->fetch_assoc();
 								
-								print_r($read_PropWEnum);
 								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
@@ -133,24 +132,25 @@ class ValoresPermitidos
 
 <?php 							
 							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
-							while($read_EnumValues =$res_Enum->fetch_assoc())
-							{											
-								if($res_Enum->num_rows == 0)
-								{	
+							if($res_Enum->num_rows == 0)
+							{
 ?>
-									<td colspan=4> Não há valores permitidos definidos </td>	
-<?php 							}
-								else
-								{
-?> 
-									<td><?php  $read_EnumValues['id'];?></td>
-									<td><?php $read_EnumValues['value'];?></td>
-									<td><?php $read_EnumValues['state'];?></td>
-									<td>[editar][desativar]</td>';
-<?php 							
-								}		
+								<td colspan=4> Não há valores permitidos definidos </td>
+<?php 
 							}
-?>	
+							else
+							{
+								while($read_EnumValues =$res_Enum->fetch_assoc())
+								{											
+?>
+										<td><?php  $read_EnumValues['id'];?></td>
+										<td><?php $read_EnumValues['value'];?></td>
+										<td><?php $read_EnumValues['state'];?></td>
+										<td>[editar][desativar]</td>';							
+<?php 								
+								}
+							}
+	
 							</tr>
 <?php 
 						}
