@@ -25,7 +25,7 @@ class Unidade
 	 * previously in the database
 	 */
 	public function tablePrint(){
-		$res_Unit = $this->$bd->runQuery("SELECT * FROM prop_unit_type ORDER BY name ASC");
+		$res_Unit = $this->bd->runQuery("SELECT * FROM prop_unit_type ORDER BY name ASC");
 		$row_NumUnit = $res_Unit->num_rows;
 		if($row_NumUnit  == 0)
 		{
@@ -39,6 +39,7 @@ class Unidade
 		else
 		{
 ?>
+Ola
 			<html>
 				<table>
 					<thead>
