@@ -96,8 +96,11 @@ class RelationManage
     private function estadoEmpty() {
         if($this->checkEntidades())
         {
-            $this->checkRelations();
-            $this->createTable();
+            if($this->checkRelations())
+            {
+                $this->createTable();
+            }
+            $this->formInsert();
         }
     }
     
