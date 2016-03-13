@@ -31,6 +31,7 @@ class Unidade
 		{
 ?>
 			<html>
+			Ola
 				<p>Não há tipos de unidades</p>
 			</html>
 <?php 
@@ -39,6 +40,7 @@ class Unidade
 		else
 		{
 ?>
+Ola
 			<html>
 				<table>
 					<thead>
