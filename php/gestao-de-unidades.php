@@ -18,6 +18,7 @@ class Unidade
 	 */
 	public function __construct(){
 		$this->$bd = new Db_Op();
+		$this->tablePrint();
 	}
 	/**
 	 * This method will print the table that shows all the unit values that you've inserted 
