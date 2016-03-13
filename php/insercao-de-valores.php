@@ -150,3 +150,5 @@ class InsertValues{
     
     
 }
+// instantiation of an object from the class PropertyManage. This instantiation is responsable to get the script work as expected.
+new InsertValues();
