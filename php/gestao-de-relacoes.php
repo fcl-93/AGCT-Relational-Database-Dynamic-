@@ -281,7 +281,7 @@ class RelationManage
         while ($nome = $resNome->fetch_assoc())
         {
 ?>
-            <option value="<?php echo $resNome["id"];?>"><?php echo $resNome["name"];?></option>
+            <option value="<?php echo $nome["id"];?>"><?php echo $nome["name"];?></option>
 <?php        
         }
     }
