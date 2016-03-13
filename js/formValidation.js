@@ -71,7 +71,16 @@ $().ready(function(){
                         obrigatorio:"Por favor indique se esta propriedade deve ou não ser obrigatória."
 		}
 	});
-	
+	$("#insertRelation").validate({
+		rules:{
+			ent1: "required",
+                        ent2: "required"
+		},
+		messages:{
+			ent1: "Deve selecionar uma entidade em ambos os campos.",
+                        ent2: "Deve selecionar uma entidade em ambos os campos."
+		}
+	});
 	
 	
 	
