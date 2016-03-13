@@ -99,7 +99,7 @@ class ValoresPermitidos
 								$read_EntName = $res_Ent->fetch_assoc();
 								
 								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
-								$res_NumProps= "SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['$ent_type_id']." AND value_type = 'enum'";
+								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['$ent_type_id']." AND value_type = 'enum'");
 								
 								
 								
@@ -116,7 +116,7 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$res_Enum->num_rows.'>';	
+								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
 								echo $read_EntName['name'];
 								$printedNames[] = $read_EntName['name'];
 							}
