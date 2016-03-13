@@ -105,7 +105,7 @@ class InsertValues{
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
                     //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="insercao-de-valores?estado=introducao&comp='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
+                    echo'<li><a href="insercao-de-valores?estado=introducao&ent='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
             }
 ?>
             
@@ -121,16 +121,117 @@ class InsertValues{
 
             $executaCustForm = $this->db->runQuery($queryCustForm);
             // guarda um array associativo que recebe a informação da query, 
-            while($arrayEntity = $executaEntity->fetch_assoc())
+            while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
                     //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="insercao-de-valores?estado=introducao&form='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
+                    echo'<li><a href="insercao-de-valores?estado=introducao&form='.$arrayCustForm['id'].'">['.$arrayCustForm['name'].']</a>';
             }
 ?>   
             </ul>
             
 <?php
         }
+    }
+    
+    /**
+     * This method is responsible to control the flow execution when state is "introducao"
+     */
+    private function estadoIntroducao() {
+        if (!$_REQUEST["ent"])
+        {
+            $tipo = "ent";
+        }
+        else {
+            $tipo = "form";
+        }
+        
+        $_SESSION[$tipo."_id"] = $_REQUEST[$tipo];
+        
+        // need to get the name form the entity or from the form according with the selection form the last state
+        if ($tipo === "ent"){
+            $queryNome = "SELECT name FROM ent_type WHERE id = ".$_SESSION[$tipo."_id"];
+        }
+        else{
+            $queryNome = "SELECT name FROM ent_type WHERE id = ".$_SESSION[$tipo."_id"];
+        }
+        $name = $this->db->runQuery($queryNome);
+        $_SESSION[$tipo."_name"] = $_REQUEST[$name];
+?>
+        <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?></h3>
+        <form name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="insercao-de-valores?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
+<?php
+       if ($tipo === "ent"){
+           $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active'";
+       }
+       else {
+           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+                   . "WHERE cfhp.rel_type_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+       }
+       $execQueryProp = $this->db->runQuery($queryProp);
+       while ($arrayProp = $execQueryProp->fetch_assoc())
+       {
+?>
+            <label><?php echo $arrayProp["name"];?></label>
+<?php
+            switch ($arrayProp["value_type"])
+            {
+                case "text":
+                    if ($arrayProp["form_field_type"] === "text")
+                    {
+?>
+                        <input type="text" name="<?php echo $arrayProp["form_field_name"];?>">
+<?php
+                    }
+                    else if ($arrayProp["form_field_type"] === "textbox")
+                    {
+?>
+                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>">
+<?php
+                    }                    
+                    break;
+                case "bool":
+?>
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Sim">
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Não">
+<?php                    
+                    break;
+                case "int" || "double":
+?>
+                    <input type="text" name="<?php echo $arrayProp["form_field_name"];?>">
+<?php
+                    break;
+                case "enum":
+                    if ($arrayProp["form_field_type"] === "radio")
+                    {
+?>
+                        <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>">
+<?php
+                    }
+                    else if ($arrayProp["form_field_type"] === "checkbox")
+                    {
+?>
+                        <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>">
+<?php
+                    }
+                    else if ($arrayProp["form_field_type"] === "selectbox")
+                    {
+?>
+                        <select name="<?php echo $arrayProp["form_field_name"];?>">
+                        
+                        </select>
+<?php
+                    }
+                    break;
+                default :
+                    break;
+            }
+       }
+?>
+              
+<?php
+        
+        
+        
     }
     
     /**
