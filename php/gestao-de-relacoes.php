@@ -276,7 +276,7 @@ class RelationManage
     }
     
     private function getEntities() {
-        $queryEnt = "SELECT id, name FROM ent_type WHERE id = ".$id;
+        $queryEnt = "SELECT id, name FROM ent_type";
         $resNome = $this->db->runQuery($queryEnt);
         while ($nome = $resNome->fetch_assoc())
         {
