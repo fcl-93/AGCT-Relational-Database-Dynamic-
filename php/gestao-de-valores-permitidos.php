@@ -161,7 +161,6 @@ class ValoresPermitidos
 									echo '[editar]';
 									echo '[desativar]';
 									echo '</td>';
-									echo '</tr>';
 								}		
 							}
 ?>	
