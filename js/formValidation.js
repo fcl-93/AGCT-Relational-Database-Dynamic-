@@ -25,6 +25,7 @@ $().ready(function(){
 	//$("").validate({
 		
 //	});
+        //insertion form in page gestão de propriedades.php
         $("#insertProp").validate({
 		rules:{
 			nome: "required",
@@ -48,6 +49,7 @@ $().ready(function(){
                         obrigatorio:"Por favor indique se esta propriedade deve ou não ser obrigatória."
 		}
 	});
+        //edition form in page gestão de propriedades.php
 	$("#editProp").validate({
 		rules:{
 			nome: "required",
@@ -71,7 +73,17 @@ $().ready(function(){
                         obrigatorio:"Por favor indique se esta propriedade deve ou não ser obrigatória."
 		}
 	});
-	
+        //insertion form in page gestão de relacoes.php
+	$("#insertRelation").validate({
+		rules:{
+			ent1: "required",
+                        ent2: "required"
+		},
+		messages:{
+			ent1: "Deve selecionar uma entidade em ambos os campos.",
+                        ent2: "Deve selecionar uma entidade em ambos os campos."
+		}
+	});
 	
 	
 	
