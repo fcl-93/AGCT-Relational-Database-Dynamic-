@@ -106,7 +106,7 @@ class ValoresPermitidos
 								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
-							for($i = 0; $i < count($array); $i++)
+							for($i = 0; $i < count($printedNames); $i++)
 							{
 								if($printedNames[$i] == $read_EntName['name'])
 								{
@@ -126,9 +126,9 @@ class ValoresPermitidos
 
 							}
 ?>
-							<td rowspan="<?php echo $read_EntName->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
-							<td rowspan="<?php echo $read_EntName->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
 
 <?php 							
 							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
