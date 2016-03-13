@@ -150,7 +150,7 @@ class ValoresPermitidos
 <?php 								
 								}
 							}
-	
+?>
 							</tr>
 <?php 
 						}
