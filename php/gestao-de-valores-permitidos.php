@@ -100,7 +100,7 @@ class ValoresPermitidos
 								
 								print_r($read_PropWEnum);
 								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
-								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['$ent_type_id']." AND value_type = 'enum'");
+								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
 								
 								
