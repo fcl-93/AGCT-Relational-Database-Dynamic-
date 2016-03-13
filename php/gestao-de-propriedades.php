@@ -3,7 +3,7 @@
 	<head>
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script>
- 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/propertyFormValid.js"></script>
+ 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/formValidation.js"></script>
  		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
                 <link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/table.css">
 	</head>
@@ -334,7 +334,7 @@ class PropertyManage
         <html>
             <h3> Gestão de propriedades - introdução </h3>
 
-            <form id="insertForm" method="POST">
+            <form id="insertProp" method="POST">
                 <label>Nome da Propriedade:</label><br>
                     <input id="nome" type="text" name="nome" required>
                     <br><label class="error" for="nome"></label>
@@ -707,7 +707,7 @@ class PropertyManage
         <html>
         <h3> Gestão de propriedades - Edição </h3>
 
-        <form id="editForm" method="POST">
+        <form id="editProp" method="POST">
             <label>Nome da Propriedade:</label><br>
                 <input id="nome" type="text" name="nome" value="<?php echo $nome?>" required>
             <br><label class="error" for="nome"></label>
