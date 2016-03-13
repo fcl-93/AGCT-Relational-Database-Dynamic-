@@ -14,7 +14,7 @@ class ValoresPermitidos
 	 * Contructor
 	 */
 	public function __construct(){
-		$this->bd = new Dp_Op();
+		$this->bd = new Db_Op();
 		$this->checkUser();
 	}
 	/**
