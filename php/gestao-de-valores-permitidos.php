@@ -84,7 +84,7 @@ class ValoresPermitidos
 					</thead>
 					<tbody>
 <?php
-						$savePrintedNames = array();
+						$array = array();
 						while($valoresEnum = $res_NProp->fetch_assoc())
 						{
 ?>
@@ -161,7 +161,6 @@ class ValoresPermitidos
 									echo '[editar]';
 									echo '[desativar]';
 									echo '</td>';
-									echo '</tr>';
 								}		
 							}
 ?>	
