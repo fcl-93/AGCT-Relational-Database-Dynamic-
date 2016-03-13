@@ -138,6 +138,7 @@ class ValoresPermitidos
 									
 								while($read_EnumToPrint = $res_EnumToPrint->fetch_assoc())
 								{
+								echo print_r($read_EnumToPrint);
 									if($res_EnumToPrint->numrows == 0)
 									{
 ?>
