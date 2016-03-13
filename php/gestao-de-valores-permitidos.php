@@ -98,7 +98,7 @@ class ValoresPermitidos
 								$read_entName = $result_entName->fetch_assoc();
 								
 								//rowspan reconstruction if there is any repeated entity
-								$res_fit = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, entity_type as ent_tp WHERE ent_tp.id = ".$read_entName['id']." AND  ent_type_id = ".$read_entName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");	
+								$res_fit = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent_tp WHERE ent_tp.id = ".$read_entName['id']." AND  ent_type_id = ".$read_entName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");	
 								$read_fit = $res_fit->fetch_assoc();
 								
 								$this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_Prop['ent_type_id']." AND value_type = 'enum'");				
