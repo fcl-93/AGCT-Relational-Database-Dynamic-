@@ -1,11 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
+		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script> 
+		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/formValidation.js"></script>
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
+ 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/table.css">
+ 	</head>
+</html>
 <?php 
 require_once("custom/php/common.php");
+
+
 //instance of a new object from class Unidade the website will run here
 	$novaUnidade = new Unidade();
 
 
 /**
- * 
+ * Class has all the method that are responsable for the management of the entity_type page
  * @author fabio
  *
  */
@@ -18,8 +31,48 @@ class Unidade
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
-		$this->tablePrint();
+		$this->checkUser();
 	}
+	
+	/**
+	 * This method will check if the user as the permission to acess this page
+	 * and will handle all the Requests states
+	 */
+	public function checkUser()
+	{
+		if(is_user_logged_in())
+		{
+			if(current_user_can('manage_unit_types'))
+			{
+				if(empty($_REQUEST))
+				{
+					$this->tablePrint();
+				}
+				else if($_REQUEST['estado'] == 'inserir') 
+				{
+					$this->insertState();
+				}
+			}
+			else
+			{
+?>
+				<html>
+					<p>Não tem autorização para a aceder a esta página.</p>
+				</html>
+<?php 
+			}
+		}
+		else 
+		{
+?>
+			<html>
+				<p>Não tem sessão iniciada.</p>
+			</html>
+<?php 
+		}
+		
+	}
+	
 	/**
 	 * This method will print the table that shows all the unit values that you've inserted 
 	 * previously in the database
@@ -41,7 +94,7 @@ class Unidade
 ?>
 Ola
 			<html>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Id</th>
@@ -73,8 +126,10 @@ Ola
 	public function insertFormPrint(){
 ?>
 		<h3>Gestão de unidades - introdução</h3>
-			<form  method="post">
-				<label>Inserir nova unidade:</label> <input type="text" id ="nome" name="nome"/>
+			<form id="insertForm" method="post">
+				<label>Inserir nova unidade:</label> 
+				<br>
+				<input type="text" id ="nome" name="nome"/>
 				<br>
 				<label class="error" for="nome"></label>
 				<input type ="hidden" name ="estado" value ="inserir"/>
@@ -83,13 +138,47 @@ Ola
 <?php 
 	}
 	/**
-	 * Validations server side for the user submissions
+	 * Check if the tried yo submit with an empty field.
 	 */
-	public function ssvalidation(){}
+	public function ssvalidation(){
+		if(empty($_REQUEST['nome']))
+		{
+?>
+			<html>
+				<p>O campo nome é de preenchimento obrigatório.</p>
+			</html>
+<?php
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 	/**
 	 * If everything is ok with the input this method will eun the query to insert the user input into the database
 	 */
-	public function insertState(){}
+	public function insertState(){
+		if($this->ssvalidation())
+		{
+?>
+			<p>Clique em para <?php goBack(); ?></p>
+<?php 
+		}
+		else
+		{
+			$sanitizedName =  $this->bd->userInputVal($string);
+			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".$sanitizedName."')");
+?>
+			<html>
+				<h3>Gestão de unidades - introdução</h3>
+				<p>Inseriu os dados de novo tipo de unidade com sucesso.</p>
+				<p>Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.</p>
+			</html>
+<?php 
+		}
+		
+	}
 	
 }
 ?>
