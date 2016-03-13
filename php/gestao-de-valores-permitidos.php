@@ -64,7 +64,8 @@ class ValoresPermitidos
 	 */
 	public function tablePrint()
 	{
-		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum'"); // gets all properties with enum in value_type.
+		// gets all properties with enum in value_type.
+		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum'"); 
 		$num_Prop = $res_NProp->num_rows;
 		if($num_Prop > 0)
 		{
@@ -84,32 +85,30 @@ class ValoresPermitidos
 					</thead>
 					<tbody>
 <?php
-						$array = array();
-						while($valoresEnum = $res_NProp->fetch_assoc())
+						$printedNames = array();
+						while($read_PropWEnum = $res_NProp->fetch_assoc())
 						{
 ?>
 							<tr>
 <?php 				
-							$queryPropAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$valoresEnum['id'];
-							$propAllowed = $this->bd->runQuery($queryPropAllowed);
-
-							$queryGetValores = "SELECT id, name FROM ent_type WHERE id = ".$valoresEnum['ent_type_id'];
-							$nomeComponente = $this->bd->runQuery($queryGetValores);
-							$nomeComponente = $nomeComponente->fetch_assoc();
-
-							//Acerto dos rowspan caso exista valores repetidos como tv.
-							$acertaRowSpan = "SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as comp WHERE comp.id = ".$nomeComponente['id']." AND  prop.ent_type_id = ".$nomeComponente['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id";
-							$acerta = $this->bd->runQuery($acertaRowSpan);
-
-							$verificaNumComp = "SELECT * FROM property WHERE ent_type_id = ".$valoresEnum['ent_type_id']." AND value_type = 'enum'";
-							//echo $verificaNumComp;
-							$getVerificaComp = $this->bd->runQuery($verificaNumComp);
-
+								//Get all enum values for the property that in will start printing now
+								$res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$read_PropWEnum['id']);
+								
+								//Get the entity name and id that is related to the property we are printing
+								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
+								$read_EntName = $res_Ent->fetch_assoc();
+								
+								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
+								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
+								
+								
+								
+								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
-							for($i = 0; $i < count($array); $i++)
+							for($i = 0; $i < count($printedNames); $i++)
 							{
-								if($array[$i] == $nomeComponente['name'])
+								if($printedNames[$i] == $read_EntName['name'])
 								{
 									$conta++;
 								}
@@ -117,45 +116,41 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$acerta->num_rows.'>';	
-								echo $nomeComponente['name'];
-								$array[] = $nomeComponente['name'];
+								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
+								echo $read_EntName['name'];
+								$printedNames[] = $read_EntName['name'];
 							}
 							else
 							{
 								//echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
 
 							}
-
-							echo '<td rowspan='.$propAllowed->num_rows.'>';
-							echo ''.$valoresEnum['id'];
-							echo '</td>';
-							//Nome da propriedade
-							echo '<td rowspan='.$propAllowed->num_rows.'>';
-							echo '<a href="gestao-de-valores-permitidos?estado=introducao&propriedade='.$valoresEnum['id'].'">['.$valoresEnum['name'].']</a>';
-							//echo '['.$valoresEnum['name'].']';
-							echo '</td>';	
-
-							
-							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
-							while($propAllowedArray =$propAllowed->fetch_assoc())
-							{											
-								if($propAllowed->num_rows == 0)
-								{	
 ?>
-									<td colspan=4> Não há valores permitidos definidos </td>	
-<?php 							}
-								else
-								{
-?> 
-									<td> $propAllowedArray['id'];</td>
-									<td> $propAllowedArray['value'];</td>
-									<td> $propAllowedArray['state'];</td>
-									<td>[editar][desativar]</td>';
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
+							<!-- Nome da propriedade -->
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
+
 <?php 							
-								}		
+							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
+							if($res_Enum->num_rows == 0)
+							{
+?>
+								<td colspan=4> Não há valores permitidos definidos </td>
+<?php 
 							}
-?>	
+							else
+							{
+								while($read_EnumValues =$res_Enum->fetch_assoc())
+								{											
+?>
+										<td><?php  $read_EnumValues['id'];?></td>
+										<td><?php $read_EnumValues['value'];?></td>
+										<td><?php $read_EnumValues['state'];?></td>
+										<td>[editar][desativar]</td>';							
+<?php 								
+								}
+							}
+?>
 							</tr>
 <?php 
 						}
