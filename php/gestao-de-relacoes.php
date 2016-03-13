@@ -117,7 +117,7 @@ class RelationManage
         }
         else
         {
-            echo 'Inseriu os dados de nova propriedade com sucesso.';
+            echo 'Inseriu os dados de nova relação com sucesso.';
             echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
         }
     } 
@@ -207,8 +207,8 @@ class RelationManage
                     <td><?php echo $this->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->getEntityName($rel["ent_type2_id"]);?></td>
                     <td>
-                        <a href="gestao-de-relacoes?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
-                        <a href="gestao-de-relacoes?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                        <a href="gestao-de-relacoes?estado=editar&prop_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                        <a href="gestao-de-relacoes?estado=desativar&prop_id=<?php echo $rel['id'];?>">[Desativar]</a>
                     </td>
                 </tr>
 <?php
