@@ -73,7 +73,7 @@ class ValoresPermitidos
 				<table>
 					<thead>
 						<tr>
-							<th>Componente</th>
+							<th>Entidade</th>
 							<th>Id</th>
 							<th>Propriedade</th>
 							<th>Id</th>
@@ -115,7 +115,8 @@ class ValoresPermitidos
 								//the entity name I'm strating to write has never writtem before							
 								if($conta == 0)
 								{
-?>
+?>				
+					enttrou
 									<td rowspan="<?php echo $read_fit->num_rows;?>">
 									
 <?php 
@@ -124,7 +125,7 @@ class ValoresPermitidos
 								}
 								else
 								{
-									
+									?>entrou 2<?php 
 								}
 								
 ?>			
