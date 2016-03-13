@@ -94,14 +94,29 @@ class RelationManage
      * This method is responsible to control the flow execution when state is empty
      */
     private function estadoEmpty() {
-        
+        if($this->checkEntidades())
+        {
+            $this->checkRelations();
+            $this->createTable();
+        }
     }
     
     /**
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        
+        $queryInsert = "INSERT INTO `rel_type`(`ent_type1_id`, `ent_type2_id`) VALUES (".$_REQUEST["ent1"].",".["ent2"].")";
+        $insert = $this->db->runQuery($queryInsert);
+        if(!$insert)
+        {
+            echo "Ocorreu um erro ao intoduzir a nova relação.";
+            goBack();
+        }
+        else
+        {
+            echo 'Inseriu os dados de nova propriedade com sucesso.';
+            echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+        }
     } 
     
     /**
@@ -130,7 +145,18 @@ class RelationManage
      * @return boolean (true if there are entities otherwise it will return false)
      */
     private function checkEntidades() {
-        
+        $querySelEnt = "SELECT * FROM ent_type";
+        $ent = $this->db->runQuery($querySelEnt);
+        if($ent->num_rows >= 2){
+            return true;
+        }
+        else
+        {
+    ?>
+            <p>Não existem entidades que se possam relacionar.</p>
+    <?php
+            return false;
+        }
     }
     
     /**
@@ -138,21 +164,83 @@ class RelationManage
      * @return boolean (true if there are relations otherwise it will return false)
      */
     private function checkRelations() {
-        
+        $querySelEnt = "SELECT * FROM rel_type";
+        $ent = $this->db->runQuery($querySelEnt);
+        if($ent->num_rows > 0){
+            return true;
+        }
+        else
+        {
+    ?>
+            <p>Não há tipos de relações.</p>
+    <?php
+            return false;
+        }
     }
     
     /**
      * This method creates the table that presents to the user all the relations type already created
      */
     private function createTable() {
-        
+?>
+        <table id="table">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Entidade 1</span></th>
+                    <th><span>Entidade 2</span></th>
+                    <th><span>Ação</span></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+            $querySelRel = "SELECT * FROM rel_type";                    
+            $resSelRel = $this->db->runQuery($querySelRel);
+            while ($rel = $resSelRel->fetch_assoc())
+            {
+?>
+                <tr>
+                    <td><?php echo $rel["id"];?></td>
+                    <td><?php echo $this->getEntityName($rel["ent_type1_id"]);?></td>
+                    <td><?php echo $this->getEntityName($rel["ent_type2_id"]);?></td>
+                    <td>
+                        <a href="gestao-de-relacoes?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
+                        <a href="gestao-de-relacoes?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                    </td>
+                </tr>
+<?php
+            }
+?>
+            </tbody>
+        </table>
+<?php       
     }
     
     /**
      * This method creates the form that user must fill to insert a new relation type
      */
     private function formInsert() {
-        
+?>
+        <h3>Gestão de relações - introdução </h3>
+        <form id="insertRelation" method="POST">
+            <label>Entidade 1</label><br>
+            <select id="ent1" name="ent1">
+<?php
+                $this->getEntities();
+?>
+            </select><br>
+            <label class="error" for="ent1"></label><br>
+            <label>Entidade 2</label><br>
+            <select id="ent2" name="ent2">
+<?php
+                $this->getEntities();
+?>                
+            </select><br>
+            <label class="error" for="ent2"></label><br>
+            <input type="hidden" name="estado" value="inserir"><br>
+            <input type="submit" value="Inserir tipo de relação">
+        </form>
+<?php
     }
     
     /**
@@ -167,7 +255,32 @@ class RelationManage
      * @return boolean (true if all the data is in correct format)
      */
     private function validarDados() {
-        
+        if (empty($_REQUEST["ent1"]) || empty($_REQUEST["ent2"]))
+        {
+            echo '<p>Deve selecionar uma entidade em ambos os campos!<p>';
+        }
+    }
+    
+    /**
+     * Method that returns the entity name with the given ID
+     * @param int $id of the entity
+     * @return string the name od the entity
+     */
+    private function getEntityName($id) {
+        $queryEnt = "SELECT name FROM ent_type WHERE id = ".$id;
+        $nome = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
+        return $nome;
+    }
+    
+    private function getEntities() {
+        $queryEnt = "SELECT id, name FROM ent_type WHERE id = ".$id;
+        $resNome = $this->db->runQuery($queryEnt);
+        while ($nome = $resNome->fetch_assoc())
+        {
+?>
+            <option value="<?php echo $resNome["id"];?>"><?php echo $resNome["name"];?></option>
+<?php        
+        }
     }
 }
 
