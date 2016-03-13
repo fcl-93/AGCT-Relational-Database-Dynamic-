@@ -132,6 +132,7 @@ Ola
 				<input type="text" id ="nome" name="nome"/>
 				<br>
 				<label class="error" for="nome"></label>
+				<br>
 				<input type ="hidden" name ="estado" value ="inserir"/>
 				<input type="submit" name="submit" value ="Inserir tipo de unidade"/>
 			</form>
@@ -167,7 +168,7 @@ Ola
 		}
 		else
 		{
-			$sanitizedName =  $this->bd->userInputVal($string);
+			$sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
 			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".$sanitizedName."')");
 ?>
 			<html>
