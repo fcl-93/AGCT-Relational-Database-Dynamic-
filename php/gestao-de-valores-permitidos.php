@@ -1,7 +1,7 @@
 <?php
 
 require_once("custom/php/common.php");
-$addValues = ValoresPermitidos();
+$addValues = new ValoresPermitidos();
 /**
  *
  * @author fabio
