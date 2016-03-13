@@ -886,7 +886,7 @@ class PropertyManage
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
-	$idProp = '';
+	$idProp = $_REQUEST["idProp"];
 	// Garantimos que não há SQL injection através do campo nome
 	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome"]);
 	// Substituimos todos os carateres por carateres ASCII
@@ -904,6 +904,14 @@ class PropertyManage
         if (!empty($_REQUEST["entidadeReferenciada"]))
         {
             $queryUpdate .= ',fk_ent_type_id='.$_REQUEST["entidadeReferenciada"];
+        }
+        if (!empty($_REQUEST["entidadePertence"]))
+        {
+            $queryUpdate .= ',ent_type_id='.$_REQUEST["entidadePertence"];
+        }
+        else
+        {
+            $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence"];
         }
         $queryUpdate .= " WHERE id = ".$_REQUEST["idProp"];
 	$update = $this->db->runQuery($queryUpdate);
