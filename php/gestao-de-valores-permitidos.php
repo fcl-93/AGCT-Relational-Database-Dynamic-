@@ -96,7 +96,7 @@ class ValoresPermitidos
 								
 								//Get the entity name and id that is related to the property we are printing
 								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
-								$read_EntName = $res_Ent->fech_assoc();
+								$read_EntName = $res_Ent->fetch_assoc();
 								
 								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
 								$res_NumProps= "SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['$ent_type_id']." AND value_type = 'enum'";

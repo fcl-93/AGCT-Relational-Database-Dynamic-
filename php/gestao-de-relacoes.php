@@ -269,6 +269,9 @@ class RelationManage
         return $nome;
     }
     
+    /**
+     * This method inserts in the selectboxes all the entities that exists in DB
+     */
     private function getEntities() {
         $queryEnt = "SELECT id, name FROM ent_type";
         $resNome = $this->db->runQuery($queryEnt);
@@ -280,7 +283,7 @@ class RelationManage
         }
     }
 }
-
+//instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
 new RelationManage();
 
 ?>
