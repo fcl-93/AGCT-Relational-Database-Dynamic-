@@ -81,7 +81,7 @@ class InsertValues{
 ?>
         <h3>Inserção de valores - escolher entidade/formulário customizado</h3>
 <?php
-        $entidades = $this->db->runQuery("SELECT * FROM component ORDER BY name ASC");
+        $entidades = $this->db->runQuery("SELECT * FROM ent_type ORDER BY name ASC");
         $row_cnt = $entidades->num_rows;
         //check if there are any entities in the DB
         if($row_cnt == 0)
