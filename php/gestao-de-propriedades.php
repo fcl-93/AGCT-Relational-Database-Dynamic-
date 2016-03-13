@@ -79,8 +79,10 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "inserir")
         {
-            $this->validarDados();
-            $this->estadoInserir();
+            if($this->validarDados())
+            {
+                 $this->estadoInserir();
+            }
         }
         elseif($_REQUEST['estado'] =='editar')
         {
@@ -88,8 +90,11 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='update')
         {
-             $this->validarDados();
-            $this->estadoUpdate();
+            if($this->validarDados())
+            {
+                 $this->estadoUpdate();
+            }
+           
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
