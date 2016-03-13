@@ -91,19 +91,19 @@ class ValoresPermitidos
 							<tr>
 <?php 				
 							$queryPropAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$valoresEnum['id'];
-							$propAllowed = mysqli_query($link,$queryPropAllowed);
+							$propAllowed = $this->bd->runQuery($queryPropAllowed);
 
 							$queryGetValores = "SELECT id, name FROM ent_type WHERE id = ".$valoresEnum['ent_type_id'];
-							$nomeComponente = mysqli_query($link,$queryGetValores);
-							$nomeComponente = mysqli_fetch_assoc($nomeComponente);
+							$nomeComponente = $this->bd->runQuery($queryGetValores);
+							$nomeComponente = $nomeComponente->fetch_assoc();
 
 							//Acerto dos rowspan caso exista valores repetidos como tv.
 							$acertaRowSpan = "SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as comp WHERE comp.id = ".$nomeComponente['id']." AND  prop.ent_type_id = ".$nomeComponente['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id";
-							$acerta = mysqli_query($link,$acertaRowSpan);
+							$acerta = $this->bd->runQuery($acertaRowSpan);
 
 							$verificaNumComp = "SELECT * FROM property WHERE ent_type_id = ".$valoresEnum['ent_type_id']." AND value_type = 'enum'";
 							//echo $verificaNumComp;
-							$getVerificaComp = mysqli_query($link,$verificaNumComp);
+							$getVerificaComp = $this->bd->runQuery($verificaNumComp);
 
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
