@@ -201,7 +201,7 @@ class PropertyManage
                     }
                     else
                     {
-                        $selecionaEntOrRel = "SELECT name, id FROM rel_type";
+                        $selecionaEntOrRel = "SELECT id FROM rel_type";
                         $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
                     }
                     while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
