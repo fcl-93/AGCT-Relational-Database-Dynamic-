@@ -108,7 +108,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        $queryInsert = "INSERT INTO `rel_type`(`ent_type1_id`, `ent_type2_id`) VALUES (".$_REQUEST["ent1"].",".["ent2"].")";
+        $queryInsert = "INSERT INTO `rel_type`(`ent_type1_id`, `ent_type2_id`) VALUES (".$_REQUEST["ent1"].",".$_REQUEST["ent2"].")";
         $insert = $this->db->runQuery($queryInsert);
         if(!$insert)
         {
