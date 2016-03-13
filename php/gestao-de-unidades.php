@@ -159,7 +159,7 @@ class Unidade
 	 * If everything is ok with the input this method will eun the query to insert the user input into the database
 	 */
 	public function insertState(){
-		if($this->ssvalidation())
+		if(!$this->ssvalidation())
 		{
 			print_r($_REQUEST);
 ?>
