@@ -242,6 +242,7 @@ class PropertyManage
                             else
                             {
                                 $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$arraySelec["unit_type_id"];
+                                echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
                             }
                 ?>
                             </td>
