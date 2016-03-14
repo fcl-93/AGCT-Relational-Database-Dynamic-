@@ -209,7 +209,7 @@ class InsertValues{
                     <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="false">Não<br><br>
 <?php                    
                     break;
-                case "int" || "double":
+                case ("int" || "double"):
                     echo "Sou int/double";
 ?>
                     <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
