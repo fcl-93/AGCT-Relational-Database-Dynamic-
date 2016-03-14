@@ -126,7 +126,7 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$res_Enum->num_rows.'>';	
+								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
 								echo $read_EntName['name'];
 								$printedNames[] = $read_EntName['name'];
 							}
@@ -152,7 +152,7 @@ class ValoresPermitidos
 							{
 								while($read_EnumValues = $res_Enum->fetch_assoc())
 								{											
-?>
+?>									
 										<td><?php  echo $read_EnumValues['id'];?></td>
 										<td><?php echo $read_EnumValues['value'];?></td>
 										<td><?php echo $read_EnumValues['state'];?></td>
@@ -172,7 +172,8 @@ class ValoresPermitidos
 <?php 
 										}
 ?>										
-										</td>							
+										</td>		
+									</tr>					
 <?php 								
 								}
 							}
