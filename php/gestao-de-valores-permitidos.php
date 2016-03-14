@@ -156,7 +156,6 @@ class ValoresPermitidos
 								while($read_EnumValues = $res_Enum->fetch_assoc())
 								{			
 ?>									
-									<tr>
 										<td><?php  echo $read_EnumValues['id'];?></td>
 										<td><?php echo $read_EnumValues['value'];?></td>
 										<td><?php echo $read_EnumValues['state'];?></td>
@@ -176,8 +175,8 @@ class ValoresPermitidos
 <?php 
 										}
 ?>										
-										</td>		
-									</tr>
+										</td>
+									</tr>		
 <?php 								
 								}
 							}
