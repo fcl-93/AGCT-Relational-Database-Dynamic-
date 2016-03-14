@@ -165,13 +165,13 @@ class ValoresPermitidos
 										if($read_EnumValues['state'] === 'active')
 										{
 ?>
-											<a href="gestao-de-entidades?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+											<a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
 <?php 
 										}
 										else 
 										{
 ?>
-											<a href="gestao-de-entidades?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+											<a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
 <?php 
 										}
 ?>										
