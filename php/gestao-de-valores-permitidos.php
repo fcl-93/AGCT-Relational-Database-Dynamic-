@@ -158,7 +158,23 @@ class ValoresPermitidos
 ?>									
 										<td><?php  echo $read_EnumValues['id'];?></td>
 										<td><?php echo $read_EnumValues['value'];?></td>
-										<td><?php echo $read_EnumValues['state'];?></td>
+										<td>
+<?php 			
+										if($read_EnumValues['state'] == 'active')
+										{
+?>
+											Ativo
+<?php 
+										}
+										else 
+										{
+?>	
+											Inativo
+<?php 											
+										}
+										
+?>										
+										</td>
 										<td>
 										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>">[Editar]</a>  
 <?php 
