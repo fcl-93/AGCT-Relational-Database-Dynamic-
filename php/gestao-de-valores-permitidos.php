@@ -10,6 +10,7 @@ $addValues = new ValoresPermitidos();
 class ValoresPermitidos
 {
 	private $bd;
+	//private $_SESSION;
 	/**
 	 * Contructor
 	 */
@@ -214,7 +215,10 @@ class ValoresPermitidos
 <?php 
 		if($this->ssvalidation())
 		{
+			echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
+
 			print_r($_SESSION);
+
 			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
 ?>
 		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
