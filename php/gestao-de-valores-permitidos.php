@@ -128,9 +128,9 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								//$num=$res_NumProps->num_rows;
+								echo $res_NumProps->num_rows;
 ?>
-								<td rowspan='.<?php echo $res_NumProps->num_rows; ?>.'><?php echo $read_EntName['name'];?>
+								<td rowspan='.<?php echo $res_NumProps->num_rows; ?>.'><?php echo $read_EntName['name'];?></td>
 <?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
@@ -140,7 +140,6 @@ class ValoresPermitidos
 
 							}
 ?>
-						<tr>
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
@@ -178,10 +177,8 @@ class ValoresPermitidos
 										}
 ?>										
 										</td>		
-														
 <?php 								
 								}
-							echo '</tr>';	
 							}
 ?>
 							</tr>
