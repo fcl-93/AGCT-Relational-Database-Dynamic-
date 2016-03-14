@@ -138,7 +138,7 @@ class InsertValues{
      * This method creates the dynamic form created from the proiperties associated to the entiity or form selected before
      */
     private function estadoIntroducao() {
-        if (!$_REQUEST["ent"])
+        if (!empty($_REQUEST["ent"]))
         {
             $tipo = "ent";
         }
