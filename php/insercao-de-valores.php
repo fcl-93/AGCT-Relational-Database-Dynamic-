@@ -61,7 +61,7 @@ class InsertValues{
         }
         elseif ($_REQUEST["estado"] === "introducao")
         {
-            $this->estadoInserir();
+            $this->estadoIntroducao();
             
         }
         elseif($_REQUEST['estado'] =='validar')
@@ -134,7 +134,8 @@ class InsertValues{
     }
     
     /**
-     * This method is responsible to control the flow execution when state is "introducao"
+     * This method is responsible to control the flow execution when state is "introducao".
+     * This method creates the dynamic form created from the proiperties associated to the entiity or form selected before
      */
     private function estadoIntroducao() {
         if (!$_REQUEST["ent"])
@@ -170,6 +171,9 @@ class InsertValues{
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
        {
+            $queryUn = "SELECT * FROM prop_unit_type, property AS prop WHERE id = ".$arrayProp["unit_type_id"];
+            $resUn = $this->db->runQuery($queryUn);
+            $un = $resUn->fetch_assoc();
 ?>
             <label><?php echo $arrayProp["name"];?></label>
 <?php
@@ -179,13 +183,13 @@ class InsertValues{
                     if ($arrayProp["form_field_type"] === "text")
                     {
 ?>
-                        <input type="text" name="<?php echo $arrayProp["form_field_name"];?>">
+                        <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
 <?php
                     }
                     else if ($arrayProp["form_field_type"] === "textbox")
                     {
 ?>
-                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>">
+                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
 <?php
                     }                    
                     break;
@@ -197,34 +201,56 @@ class InsertValues{
                     break;
                 case "int" || "double":
 ?>
-                    <input type="text" name="<?php echo $arrayProp["form_field_name"];?>">
+                    <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
 <?php
                     break;
                 case "enum":
-                    if ($arrayProp["form_field_type"] === "radio")
-                    {
-?>
-                        <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>">
-<?php
-                    }
-                    else if ($arrayProp["form_field_type"] === "checkbox")
-                    {
-?>
-                        <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>">
-<?php
-                    }
-                    else if ($arrayProp["form_field_type"] === "selectbox")
+                    $querySelVal = "SELECT * FROM prop_allowed_value WHERE state = 'active' AND property_id = ".$arrayProp["id"];
+                    $relSelVal = $this->db->runQuery($querySelVal);
+                    if ($arrayProp["form_field_type"] === "selectbox")
                     {
 ?>
                         <select name="<?php echo $arrayProp["form_field_name"];?>">
-                        
+<?php
+                    }
+                    while ($allowVal = $relSelVal->fetch_assoc())
+                    {
+                        if ($arrayProp["form_field_type"] === "radio")
+                        {
+?>
+                            <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?>
+<?php
+                        }
+                        else if ($arrayProp["form_field_type"] === "checkbox")
+                        {
+?>
+                            <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?>
+<?php
+                        }
+                        else if ($arrayProp["form_field_type"] === "selectbox")
+                        {
+?>
+                            <option value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?></option> <?php echo $un["name"];?>
+<?php
+                        }
+                    }
+                    if ($arrayProp["form_field_type"] === "selectbox")
+                    {
+?>
                         </select>
 <?php
                     }
                     break;
+                case "ent_ref":
+                    break;
                 default :
                     break;
             }
+?>
+            <input type="text" name="nomeInst">
+            <input hidden="hidden" name="estado" value="validar">
+            <input type="submit" value="Submeter">
+<?php
        }
 ?>
               
