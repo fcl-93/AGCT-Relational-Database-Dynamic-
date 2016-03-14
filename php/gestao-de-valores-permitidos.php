@@ -126,7 +126,7 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
+								echo '<td rowspan='.$res_Enum->num_rows.'>';	
 								echo $read_EntName['name'];
 								$printedNames[] = $read_EntName['name'];
 							}
