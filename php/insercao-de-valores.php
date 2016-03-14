@@ -249,7 +249,7 @@ class InsertValues{
                         </select>
 <?php
                     }
-                    echo '<br>';
+                    echo '<br><br>';
                     break;
                 case "ent_ref":
                     break;
