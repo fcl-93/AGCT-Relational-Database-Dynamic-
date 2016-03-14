@@ -114,7 +114,7 @@ class ValoresPermitidos
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
 								
-								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+								//$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
 								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
@@ -140,6 +140,7 @@ class ValoresPermitidos
 
 							}
 ?>
+						<tr>
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
@@ -180,6 +181,7 @@ class ValoresPermitidos
 														
 <?php 								
 								}
+							echo '</tr>';	
 							}
 ?>
 							</tr>
