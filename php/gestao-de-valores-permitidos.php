@@ -113,7 +113,7 @@ class ValoresPermitidos
 								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
-								
+								//Get all the enum values that we wil print this is only the number.
 								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
 															
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
@@ -246,10 +246,9 @@ class ValoresPermitidos
 <?php 
 		if($this->ssvalidation())
 		{
-			echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
-
-			print_r($_SESSION);
-	$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
+			//echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
+			$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);
+			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')");
 ?>
 		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
 		<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
@@ -263,7 +262,33 @@ class ValoresPermitidos
 	
 
 	public function editForm(){}
-	public function activate(){}
-	public function desactivate(){}
+	/**
+	 * This method will activate the enum.
+	 */
+	public function activate(){
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$read_enumName = $res_enumName->fetch_assoc();
+?>
+	<html>
+	 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+	 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
+	</html>
+<?php
+	}
+	/**
+	 * This method will desactivate the enum values
+	 */
+	public function desactivate(){
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$read_enumName = $res_enumName->fetch_assoc();
+?>
+		<html>
+		 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
+		</html>
+<?php
+	}
 	
 }
