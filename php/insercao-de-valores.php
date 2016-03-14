@@ -153,10 +153,10 @@ class InsertValues{
             $queryNome = "SELECT name FROM ent_type WHERE id = ".$_SESSION[$tipo."_id"];
         }
         else{
-            $queryNome = "SELECT name FROM ent_type WHERE id = ".$_SESSION[$tipo."_id"];
+            $queryNome = "SELECT name FROM custom_form WHERE id = ".$_SESSION[$tipo."_id"];
         }
         $name = $this->db->runQuery($queryNome);
-        $_SESSION[$tipo."_name"] = $_REQUEST[$name];
+        $_SESSION[$tipo."_name"] = $name->fetch_assoc()["name"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?></h3>
         <form name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="insercao-de-valores?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
