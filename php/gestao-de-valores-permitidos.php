@@ -114,6 +114,8 @@ class ValoresPermitidos
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
 								
+								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
 							for($i = 0; $i < count($printedNames); $i++)
@@ -126,9 +128,9 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								$num=$res_NumProps->num_rows;
+								//$num=$res_NumProps->num_rows;
 ?>
-								<td rowspan='.<?php echo $num+1; ?>.'><?php echo $read_EntName['name'];?>
+								<td rowspan='.<?php echo $acerta; ?>.'><?php echo $read_EntName['name'];?>
 <?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
