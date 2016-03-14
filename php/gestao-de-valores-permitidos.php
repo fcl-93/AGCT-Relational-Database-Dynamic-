@@ -130,7 +130,7 @@ class ValoresPermitidos
 							{
 								//$num=$res_NumProps->num_rows;
 ?>
-								<td rowspan='.<?php echo $acerta->num_rows+1; ?>.'><?php echo $read_EntName['name'];?>
+								<td rowspan='.<?php echo $res_NumProps->num_rows; ?>.'><?php echo $read_EntName['name'];?>
 <?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
@@ -156,7 +156,7 @@ class ValoresPermitidos
 							{
 								while($read_EnumValues = $res_Enum->fetch_assoc())
 								{											
-?>									
+?>									<tr>
 										<td><?php  echo $read_EnumValues['id'];?></td>
 										<td><?php echo $read_EnumValues['value'];?></td>
 										<td><?php echo $read_EnumValues['state'];?></td>
