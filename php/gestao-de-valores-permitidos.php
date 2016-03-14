@@ -130,7 +130,7 @@ class ValoresPermitidos
 							if($conta == 0)
 							{
 ?>
-								<td rowspan='.<?php echo $res_NumProps->num_rows; ?>.'><?php echo $read_EntName['name'];?></td>
+								<td rowspan='.<?php echo $acerta->num_rows; ?>.'><?php echo $read_EntName['name'];?></td>
 <?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
