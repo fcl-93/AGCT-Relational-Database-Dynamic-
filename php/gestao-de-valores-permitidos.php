@@ -126,8 +126,10 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
-								echo $read_EntName['name'];
+								$num=$res_NumProps->num_rows;
+?>
+								<td rowspan='.<?php echo $num+1; ?>.'><?php $read_EntName['name']?>
+<?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
 							else
