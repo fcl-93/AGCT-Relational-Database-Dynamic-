@@ -33,7 +33,7 @@ class ValoresPermitidos
 				}
 				else if($_REQUEST['estado'] == 'introducao') 
 				{
-					
+					$this->insertionForm();
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
@@ -102,8 +102,6 @@ class ValoresPermitidos
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
 								
-								
-								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
 							for($i = 0; $i < count($printedNames); $i++)
@@ -170,13 +168,59 @@ class ValoresPermitidos
 <?php 						
 		}
 	}
+	/**
+	 * This method will print the for to insert new enum values.
+	 */
+	public function insertionForm()
+	{
+		$_SESSION['property_id'] = $_REQUEST['propriedade'];//
+?>
+		<h3>Gestão de valores permitidos - introdução</h3><br>
+			<form>
+				<label>Valor: </label>
+				<input type="text" name="valor" required>
+				<label id="valor" for="valor"></label>
+				<input type="hidden" name="estado" value="inserir">
+				<input type="submit" value="Inserir valor permitido">
+			</form>
+<?php 
+	}
+		
+	/**
+	 * Check if the value of the form is empty or not
+	 */
+	public function ssvalidation()
+	{
+		if(empty($_REQUEST['valor']))
+		{
+?>
+			<html>
+				<p>O campo nome é de preenchimento obrigatório.</p>
+			</html>
+<?php 
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
+	}
 	
-	public function insertionForm(){}
+	public function insertState()
+	{
+		if($this->ssvalidation())
+		{
+			
+		}
+		else 
+		{
+			goBack();
+		}
+	}
 	
+
 	public function editFrom(){}
 	public function activate(){}
 	public function desactivate(){}
-	public function ssvalidation(){}
-	public function insertState(){}
 	
 }
