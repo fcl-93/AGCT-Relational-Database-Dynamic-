@@ -267,11 +267,11 @@ class ValoresPermitidos
 	 */
 	public function activate(){
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 	<html>
-	 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+	 	<p>O valor <?php echo $read_enumName['value'] ?> foi ativado</p>
 	 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 	</html>
 <?php
@@ -281,11 +281,11 @@ class ValoresPermitidos
 	 */
 	public function desactivate(){
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 		<html>
-		 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
 		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 		</html>
 <?php
