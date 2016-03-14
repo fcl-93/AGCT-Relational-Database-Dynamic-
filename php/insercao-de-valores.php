@@ -214,7 +214,6 @@ class InsertValues{
 <?php
                     break;
                 case "enum":
-                    echo "Sou enum";
                     $querySelVal = "SELECT * FROM prop_allowed_value WHERE state = 'active' AND property_id = ".$arrayProp["id"];
                     $relSelVal = $this->db->runQuery($querySelVal);
                     if ($arrayProp["form_field_type"] === "selectbox")
