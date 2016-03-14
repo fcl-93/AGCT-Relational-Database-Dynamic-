@@ -188,7 +188,6 @@ class InsertValues{
             switch ($arrayProp["value_type"])
             {
                 case "text":
-                    echo "Sou text";
                     if ($arrayProp["form_field_type"] === "text")
                     {
 ?>
@@ -203,7 +202,6 @@ class InsertValues{
                     }                    
                     break;
                 case "bool":
-                    echo "Sou bool";
 ?>
                     <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="true">Sim<br>
                     <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="false">Não<br><br>
@@ -211,7 +209,6 @@ class InsertValues{
                     break;
                 case "int":
                 case "double":
-                    echo "Sou int/double";
 ?>
                     <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
 <?php
@@ -231,13 +228,13 @@ class InsertValues{
                         if ($arrayProp["form_field_type"] === "radio")
                         {
 ?>
-                            <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br><br>
+                            <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br>
 <?php
                         }
                         else if ($arrayProp["form_field_type"] === "checkbox")
                         {
 ?>
-                            <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br><br>
+                            <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br>
 <?php
                         }
                         else if ($arrayProp["form_field_type"] === "selectbox")
@@ -250,15 +247,14 @@ class InsertValues{
                     if ($arrayProp["form_field_type"] === "selectbox")
                     {
 ?>
-                        </select><br>
+                        </select>
 <?php
                     }
+                    echo '<br>';
                     break;
                 case "ent_ref":
-                    echo "Sou ent_ref";
                     break;
                 default :
-                    echo "Não sou";
                     break;
             }
        }
