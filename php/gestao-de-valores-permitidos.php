@@ -130,7 +130,7 @@ class ValoresPermitidos
 							{
 								//$num=$res_NumProps->num_rows;
 ?>
-								<td rowspan='.<?php echo $acerta->num_rows; ?>.'><?php echo $read_EntName['name'];?>
+								<td rowspan='.<?php echo $acerta->num_rows+1; ?>.'><?php echo $read_EntName['name'];?>
 <?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
