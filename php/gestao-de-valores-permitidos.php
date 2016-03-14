@@ -39,6 +39,18 @@ class ValoresPermitidos
 				{
 					$this->insertState();
 				}
+				else if($_REQUEST['estado'] == 'ativar')
+	 			{
+					$this->activate();
+	 			}
+	 			else if($_REQUEST['estado'] == 'desativar')
+	 			{
+	 				$this->desactivate();
+	 			}
+	 			else if($_REQUEST['estado']=='alteracao')
+	 			{
+	 				$this->editForm();	 				
+	 			}
 			}
 			else 
 			{
@@ -138,13 +150,29 @@ class ValoresPermitidos
 							}
 							else
 							{
-								while($read_EnumValues =$res_Enum->fetch_assoc())
+								while($read_EnumValues = $res_Enum->fetch_assoc())
 								{											
 ?>
-										<td><?php  $read_EnumValues['id'];?></td>
-										<td><?php $read_EnumValues['value'];?></td>
-										<td><?php $read_EnumValues['state'];?></td>
-										<td>[editar][desativar]</td>';							
+										<td><?php  echo $read_EnumValues['id'];?></td>
+										<td><?php echo $read_EnumValues['value'];?></td>
+										<td><?php echo $read_EnumValues['state'];?></td>
+										<td>
+										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>">[Editar]</a>  
+<?php 
+										if($read_EnumValues['state'] === 'active')
+										{
+?>
+											<a href="gestao-de-entidades?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+<?php 
+										}
+										else 
+										{
+?>
+											<a href="gestao-de-entidades?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+<?php 
+										}
+?>										
+										</td>							
 <?php 								
 								}
 							}
@@ -230,7 +258,7 @@ class ValoresPermitidos
 	}
 	
 
-	public function editFrom(){}
+	public function editForm(){}
 	public function activate(){}
 	public function desactivate(){}
 	
