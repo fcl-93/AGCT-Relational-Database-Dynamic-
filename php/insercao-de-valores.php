@@ -203,8 +203,8 @@ class InsertValues{
                     break;
                 case "bool":
 ?>
-                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Sim"><br>
-                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Não"><br><br>
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="true">Sim<br>
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="false">Não<br><br>
 <?php                    
                     break;
                 case "int" || "double":
@@ -256,7 +256,8 @@ class InsertValues{
             }
        }
 ?>
-            <input type="text" name="nomeInst">
+            <label>Nome para instância da entidade</label><br>
+            <input type="text" name="nomeInst"><br><br>
             <input hidden="hidden" name="estado" value="validar">
             <input type="submit" value="Submeter">           
         </form>
