@@ -10,7 +10,6 @@ $addValues = new ValoresPermitidos();
 class ValoresPermitidos
 {
 	private $bd;
-	//private $_SESSION;
 	/**
 	 * Contructor
 	 */
@@ -214,16 +213,11 @@ class ValoresPermitidos
 		<h3>Gestão de valores permitidos - inserção</h3>
 <?php 
 		if($this->ssvalidation())
-<<<<<<< HEAD
 		{
 			echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
 
-=======
-		{
->>>>>>> branch 'master' of https://github.com/vmcbaptista/AGCT-Relational-Dynamic-Database.git
 			print_r($_SESSION);
-
-			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
+	$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
 ?>
 		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
 		<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
