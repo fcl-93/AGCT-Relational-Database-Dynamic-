@@ -195,7 +195,7 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<p>O campo nome é de preenchimento obrigatório.</p>
+				<p>O campo valor é de preenchimento obrigatório.</p>
 			</html>
 <?php 
 			return false;
@@ -208,9 +208,17 @@ class ValoresPermitidos
 	
 	public function insertState()
 	{
+?>
+		<h3>Gestão de valores permitidos - inserção</h3>
+<?php 
 		if($this->ssvalidation())
 		{
-			
+			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
+?>
+		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
+		<br>
+		<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
 		}
 		else 
 		{
