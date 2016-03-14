@@ -188,6 +188,7 @@ class InsertValues{
             switch ($arrayProp["value_type"])
             {
                 case "text":
+                    echo "Sou text";
                     if ($arrayProp["form_field_type"] === "text")
                     {
 ?>
@@ -202,17 +203,20 @@ class InsertValues{
                     }                    
                     break;
                 case "bool":
+                    echo "Sou bool";
 ?>
                     <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="true">Sim<br>
                     <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="false">Não<br><br>
 <?php                    
                     break;
                 case "int" || "double":
+                    echo "Sou int/double";
 ?>
                     <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
 <?php
                     break;
                 case "enum":
+                    echo "Sou enum";
                     $querySelVal = "SELECT * FROM prop_allowed_value WHERE state = 'active' AND property_id = ".$arrayProp["id"];
                     $relSelVal = $this->db->runQuery($querySelVal);
                     if ($arrayProp["form_field_type"] === "selectbox")
@@ -250,8 +254,10 @@ class InsertValues{
                     }
                     break;
                 case "ent_ref":
+                    echo "Sou ent_ref";
                     break;
                 default :
+                    echo "Não sou";
                     break;
             }
        }
