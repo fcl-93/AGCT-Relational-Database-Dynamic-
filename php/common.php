@@ -21,7 +21,12 @@ $VAL_CLIENT_SIDE=0;
 </html>
  <?php
  
-//This class will handle all the operations related to the database
+
+/**
+ * This class will handle all the operations related to the database
+ * @author fabio
+ *
+ */
 class Db_Op
 {
     //DB_HOST,DB_USER,DB_PASSWORD,DB_NAME these are contants present in the wordpress

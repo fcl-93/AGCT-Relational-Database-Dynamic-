@@ -33,12 +33,24 @@ class ValoresPermitidos
 				}
 				else if($_REQUEST['estado'] == 'introducao') 
 				{
-					
+					$this->insertionForm();
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
-					
+					$this->insertState();
 				}
+				else if($_REQUEST['estado'] == 'ativar')
+	 			{
+					$this->activate();
+	 			}
+	 			else if($_REQUEST['estado'] == 'desativar')
+	 			{
+	 				$this->desactivate();
+	 			}
+	 			else if($_REQUEST['estado']=='alteracao')
+	 			{
+	 				$this->editForm();	 				
+	 			}
 			}
 			else 
 			{
@@ -102,7 +114,7 @@ class ValoresPermitidos
 								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
 								
 								
-								
+								//$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
 								
 							//Verifica se o nome que vou escrever já foi escrito alguma vez
 							$conta = 0;
@@ -116,8 +128,10 @@ class ValoresPermitidos
 
 							if($conta == 0)
 							{
-								echo '<td rowspan='.$res_NumProps->num_rows.'>';	
-								echo $read_EntName['name'];
+								//$num=$res_NumProps->num_rows;
+?>
+								<td rowspan='.<?php echo $res_NumProps->num_rows; ?>.'><?php echo $read_EntName['name'];?>
+<?php 	
 								$printedNames[] = $read_EntName['name'];
 							}
 							else
@@ -126,6 +140,7 @@ class ValoresPermitidos
 
 							}
 ?>
+						<tr>
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
@@ -140,15 +155,33 @@ class ValoresPermitidos
 							}
 							else
 							{
-								while($read_EnumValues =$res_Enum->fetch_assoc())
+								while($read_EnumValues = $res_Enum->fetch_assoc())
 								{											
+?>									
+										<td><?php  echo $read_EnumValues['id'];?></td>
+										<td><?php echo $read_EnumValues['value'];?></td>
+										<td><?php echo $read_EnumValues['state'];?></td>
+										<td>
+										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>">[Editar]</a>  
+<?php 
+										if($read_EnumValues['state'] === 'active')
+										{
 ?>
-										<td><?php  $read_EnumValues['id'];?></td>
-										<td><?php $read_EnumValues['value'];?></td>
-										<td><?php $read_EnumValues['state'];?></td>
-										<td>[editar][desativar]</td>';							
+											<a href="gestao-de-entidades?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+<?php 
+										}
+										else 
+										{
+?>
+											<a href="gestao-de-entidades?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+<?php 
+										}
+?>										
+										</td>		
+														
 <?php 								
 								}
+							echo '</tr>';	
 							}
 ?>
 							</tr>
@@ -170,13 +203,70 @@ class ValoresPermitidos
 <?php 						
 		}
 	}
+	/**
+	 * This method will print the for to insert new enum values.
+	 */
+	public function insertionForm()
+	{
+		$_SESSION['property_id'] = $_REQUEST['propriedade'];//
+		print_r($_SESSION);
+?>
+		<h3>Gestão de valores permitidos - introdução</h3><br>
+			<form>
+				<label>Valor: </label>
+				<input type="text" name="valor">
+				<label id="valor" for="valor"></label>
+				<input type="hidden" name="estado" value="inserir">
+				<input type="submit" value="Inserir valor permitido">
+			</form>
+<?php 
+	}
+		
+	/**
+	 * Check if the value of the form is empty or not
+	 */
+	public function ssvalidation()
+	{
+		if(empty($_REQUEST['valor']))
+		{
+?>
+			<html>
+				<p>O campo valor é de preenchimento obrigatório.</p>
+			</html>
+<?php 
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
+	}
 	
-	public function insertionForm(){}
+	public function insertState()
+	{
+?>
+		<h3>Gestão de valores permitidos - inserção</h3>
+<?php 
+		if($this->ssvalidation())
+		{
+			echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
+
+			print_r($_SESSION);
+	$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')");
+?>
+		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
+		<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
+		}
+		else 
+		{
+			goBack();
+		}
+	}
 	
-	public function editFrom(){}
+
+	public function editForm(){}
 	public function activate(){}
 	public function desactivate(){}
-	public function ssvalidation(){}
-	public function insertState(){}
 	
 }
