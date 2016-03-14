@@ -162,7 +162,7 @@ class InsertValues{
         <form name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="insercao-de-valores?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
 <?php
        if ($tipo === "ent"){
-           $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active'";
+           $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
