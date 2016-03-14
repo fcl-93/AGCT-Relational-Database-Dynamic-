@@ -171,7 +171,7 @@ class InsertValues{
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
        {
-            $queryUn = "SELECT name FROM prop_unit_type AS put WHERE put.id = ".$arrayProp["unit_type_id"];
+            $queryUn = "SELECT put.name FROM prop_unit_type AS put WHERE put.id = ".$arrayProp["unit_type_id"];
             $resUn = $this->db->runQuery($queryUn);
             $un = $resUn->fetch_assoc();
 ?>

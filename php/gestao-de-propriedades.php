@@ -392,8 +392,8 @@ class PropertyManage
                     <option value="NULL"></option>';
                         <?php
                             $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
-                            $result = mysqli_query($link, $selecionaTipoUnidade);
-                            while($guardaTipoUnidade = mysqli_fetch_assoc($result))
+                            $result = $this->db->runQuery($selecionaTipoUnidade);
+                            while($guardaTipoUnidade = $result->fetch_assoc())
                             {
                                 echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
                             }
