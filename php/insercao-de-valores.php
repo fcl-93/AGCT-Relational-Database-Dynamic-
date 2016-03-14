@@ -183,7 +183,7 @@ class InsertValues{
            }
            
 ?>
-            <label><?php echo $arrayProp["name"];?></label>
+            <label><?php echo $arrayProp["name"];?></label><br>
 <?php
             switch ($arrayProp["value_type"])
             {
@@ -191,25 +191,25 @@ class InsertValues{
                     if ($arrayProp["form_field_type"] === "text")
                     {
 ?>
-                        <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
+                        <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
 <?php
                     }
                     else if ($arrayProp["form_field_type"] === "textbox")
                     {
 ?>
-                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
+                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
 <?php
                     }                    
                     break;
                 case "bool":
 ?>
-                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Sim">
-                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Não">
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Sim"><br>
+                    <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="Não"><br><br>
 <?php                    
                     break;
                 case "int" || "double":
 ?>
-                    <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?>
+                    <input type="text" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
 <?php
                     break;
                 case "enum":
@@ -226,13 +226,13 @@ class InsertValues{
                         if ($arrayProp["form_field_type"] === "radio")
                         {
 ?>
-                            <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?>
+                            <input type="radio" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br><br>
 <?php
                         }
                         else if ($arrayProp["form_field_type"] === "checkbox")
                         {
 ?>
-                            <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?>
+                            <input type="checkbox" name="<?php echo $arrayProp["form_field_name"];?>" value="<?php echo $allowVal["value"];?>"><?php echo $allowVal["value"];?> <?php echo $un["name"];?><br><br>
 <?php
                         }
                         else if ($arrayProp["form_field_type"] === "selectbox")
@@ -245,7 +245,7 @@ class InsertValues{
                     if ($arrayProp["form_field_type"] === "selectbox")
                     {
 ?>
-                        </select>
+                        </select><br>
 <?php
                     }
                     break;
@@ -254,18 +254,13 @@ class InsertValues{
                 default :
                     break;
             }
+       }
 ?>
             <input type="text" name="nomeInst">
             <input hidden="hidden" name="estado" value="validar">
-            <input type="submit" value="Submeter">
-<?php
-       }
-?>
-              
-<?php
-        
-        
-        
+            <input type="submit" value="Submeter">           
+        </form>
+<?php  
     }
     
     /**
