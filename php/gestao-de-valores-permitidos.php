@@ -178,7 +178,7 @@ class ValoresPermitidos
 		<h3>Gestão de valores permitidos - introdução</h3><br>
 			<form>
 				<label>Valor: </label>
-				<input type="text" name="valor" required>
+				<input type="text" name="valor">
 				<label id="valor" for="valor"></label>
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
