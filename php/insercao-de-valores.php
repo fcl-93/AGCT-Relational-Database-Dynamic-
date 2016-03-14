@@ -258,8 +258,8 @@ class InsertValues{
             }
        }
 ?>
-            <label>Nome para instância da entidade</label><br>
-            <input type="text" name="nomeInst"><br><br>
+            <!-- <label>Nome para instância da entidade</label><br>
+            <input type="text" name="nomeInst"><br><br> -->
             <input hidden="hidden" name="estado" value="validar">
             <input type="submit" value="Submeter">           
         </form>
