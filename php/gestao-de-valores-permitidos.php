@@ -265,7 +265,6 @@ class ValoresPermitidos
 			{
 ?>
 				<p>	O valor que está a tentar introduzir já se encontra registado.</p>
-				<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
 				return false;
 			}
@@ -277,7 +276,6 @@ class ValoresPermitidos
 				{
 ?>
 					<p>	O valor que está a tentar introduzir já se encontra registado.</p>
-					<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
 					return false;	
 				}
