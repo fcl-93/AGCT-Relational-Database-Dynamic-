@@ -37,7 +37,14 @@ class gereForms
 				{
 					
 				}
-				
+				else if($_REQUEST['estado'] == 'ativar')
+				{
+					$this->activate();
+				}
+				else if($_REQUEST['estado'] == 'desativar')
+				{
+					$this->desactivate();
+				}
 			}
 			else
 			{
@@ -77,6 +84,7 @@ class gereForms
 						<tr>
 							<th>Id</th>
 							<th>Nome do formulário customizado</th>
+							<th>Ação<th>
 						</tr>
 					</thead>
 					<tbody>
@@ -86,8 +94,23 @@ class gereForms
 ?>
 							<tr>
 								<td><?php echo $readForm['id']; ?></td>
+								<td><?php echo $readForm['name']; ?></td>
 								<td>
-									<a href="?estado=editar_form&id='<?php echo $readForm['id']; ?>'"><?php echo $readForm['name']; ?></a>
+									<a href="?estado=editar_form&id='<?php echo $readForm['id']; ?>'">[Editar]</a>
+<?php 
+										if($readForm['state'] === 'active')
+										{
+?>
+											<a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
+<?php 
+										}
+										else 
+										{
+?>
+											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
+<?php 
+										}
+?>
 								</td>
 							</tr>
 <?php 
@@ -126,9 +149,9 @@ class gereForms
 		<html>
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
-				<label>Nome do formulário customizado:</label><input type="text" name="nome" required>
+				<label>Nome do formulário customizado:</label> <input type="text" name="nome" required>
 				<label id="nome" class="error" for="nome"></label>
-				<br>
+				<br><br>
 
 				<table id="table">
 					<thead>
@@ -260,5 +283,34 @@ class gereForms
 	{
 		
 	}
+	
+	/**
+	 * This method will activate the enum.
+	 */
+	public function activate(){
+		$this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$_REQUEST['form_id']);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+		$read_formName = $res_formName->fetch_assoc();
+		?>
+		<html>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado</p>
+		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		</html>
+	<?php
+		}
+		/**
+		 * This method will desactivate the enum values
+		 */
+		public function desactivate(){
+			$this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$_REQUEST['form_id']);
+			$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+			$read_formName = $res_formName->fetch_assoc();
+	?>
+			<html>
+			 	<p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
+			 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+			</html>
+<?php
+		}
 }
 ?>
