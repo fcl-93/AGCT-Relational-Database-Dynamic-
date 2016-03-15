@@ -110,7 +110,11 @@ class gereForms
 		<h3>Gestão de formulários customizados - Introdução</h3>
 <?php 
 		//Get all ent_types that have at least one ent_type_id this will unecessary entities from the table form
+<<<<<<< HEAD
 		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type, property WHERE property.ent_type_id=ent_type.id");
+=======
+		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type, property WHERE property.ent_type_id=ent_type");
+>>>>>>> branch 'master' of https://github.com/vmcbaptista/AGCT-Relational-Dynamic-Database.git
 		if($resEnt->num_rows == 0)
 		{
 ?>	
