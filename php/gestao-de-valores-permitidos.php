@@ -278,13 +278,20 @@ class ValoresPermitidos
 			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);//for both if's the value input
 			//for the edit submission
 			
-			$resCheckEnum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']." AND value='".$sanitizedName."'");
-			if(($_REQUEST['estado'] == 'alteracao') && ($resCheckEnum->num_rows != 0))
+			if($_REQUEST['estado'] == 'alteracao')
 			{
+				$resCheckEnum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']." AND value='".$sanitizedName."'");
+				if($resCheckEnum->num_rows != 0)
+				{
 ?>
-				<p>	O valor que está a tentar introduzir já se encontra registado.</p>
+					<p>	O valor que está a tentar introduzir já se encontra registado.</p>
 <?php 
-				return false;
+					return false;
+				}
+				else
+				{
+					return true;
+				}
 			}
 			else
 			{
