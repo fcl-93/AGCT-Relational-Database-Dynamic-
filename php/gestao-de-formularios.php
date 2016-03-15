@@ -59,7 +59,7 @@ class gereForms
 	
 	public function tablePrint(){
 		$resForm = $this->bd->runQuery("SELECT * FROM custom_form ORDER BY name ASC");
-		if($resNumForm->num_rows == 0)
+		if($resForm->num_rows == 0)
 		{
 ?>	
 			<html>
