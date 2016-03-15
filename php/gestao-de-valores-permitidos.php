@@ -232,7 +232,6 @@ class ValoresPermitidos
 			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
-				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
 				<br>
