@@ -303,7 +303,7 @@ class InsertValues{
            }
            else {
                if (empty ($_REQUEST[$arrayProp["form_field_name"]])) {
-                   $_REQUEST[$arrayProp["form_field_name"]] = "NULL";
+                   $_REQUEST[$arrayProp["form_field_name"]] = NULL;
                }
                $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
                switch ($arrayProp["value_type"]) {
