@@ -1,10 +1,13 @@
 <?php
 require_once("custom/php/common.php");
 
+$gerencia = new gereForms();
+
 class gereForms
 {
 	private $bd;
 	private $numProp; //printed properties in the table
+	
 	public function __construct(){
 		$this->bd = new Db_Op();
 		$this->checkUser();
