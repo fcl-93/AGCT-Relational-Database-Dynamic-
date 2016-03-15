@@ -196,11 +196,12 @@ class gereForms
 								</td>
 								<td><?php echo $readGetProps['state']; ?></td>
 								<td><input type="checkbox" name="idProp<?php echo $number;?>" value="<?php echo $readGetProps['id'];?>"></td>
-<?php 
 								
+								<td><input type="text" name="ordem<?php echo $number; ?>"></td>
+<?php 
+												
 							}
 ?>						
-							</td>
 						</tr>
 <?php 						
 					}
