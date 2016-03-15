@@ -232,11 +232,12 @@ class ValoresPermitidos
 			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
-				<label id="valor" for="valor"></label>
+				
 				
 				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
+				<br><label id="valor" for="valor"></label>
 			</form>
 <?php 
 	}
@@ -322,10 +323,11 @@ class ValoresPermitidos
 			<form id="editForm">
 				<label>Valor: </label>
 				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
-				<label id="valor" for="valor"></label>
+				
 				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
 				<input type="hidden" name="estado" value="alteracao">
-				<input type="submit" value="Inserir valor permitido">
+				<input type="submit" value="Inserir valor permitido">~
+				<br><label id="valor" for="valor"></label>
 			</form>
 <?php 
 	}
