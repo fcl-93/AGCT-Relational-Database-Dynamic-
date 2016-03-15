@@ -360,11 +360,17 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
+                if (is_null($_REQUEST[$arrayProp['form_field_name']])){
+                    $valor = "Não introduziu nenhum valor";
+                }
+                else{
+                    $valor = $_REQUEST[$arrayProp['form_field_name']];
+                }
 ?>
                         <li>
 <?php
                         //imprime o valor que o utilizador introduzio no formulario anterior para cada propriedade
-                            echo $arrayProp['name'].": ".$_REQUEST[$arrayProp['form_field_name']];
+                            echo $arrayProp['name'].": ".$valor;
 ?> 
                             <input type='hidden' name="<?php echo $arrayProp['form_field_name'];?>" value="<?php $_REQUEST[$arrayProp['form_field_name']]?>">
                         </li>
