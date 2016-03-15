@@ -168,7 +168,7 @@ class InsertValues{
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
@@ -354,7 +354,7 @@ class InsertValues{
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        $goBack = false;
@@ -478,7 +478,7 @@ class InsertValues{
     private function identificaEntidade($formId) {
         $guardaEnt = array();
         $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$formId."and prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.id = cfhp.property_id AND prop.state = 'active'";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
             $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
