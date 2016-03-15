@@ -85,7 +85,7 @@ class gereForms
 							<th>Id</th>
 							<th>Nome do formulário customizado</th>
 							<th>Estado</th>
-							<th>Ação<th>
+							<th>Ação</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -147,6 +147,7 @@ class gereForms
 	{
 ?>
 		<h3>Gestão de formulários customizados - Introdução</h3>
+		<br>
 <?php 
 		//Get all ent_types that have at least one ent_type_id this will unecessary entities from the table form
 		$resEnt = $this->bd->runQuery("SELECT DISTINCT ent_type.id, ent_type.name FROM ent_type , property WHERE property.ent_type_id=ent_type.id");
