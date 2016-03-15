@@ -140,11 +140,13 @@ class InsertValues{
     private function estadoIntroducao() {
         if (!empty($_REQUEST["ent"]))
         {
-            $tipo = "ent";
+            $_SESSION["tipo"] = "ent";
         }
         else {
-            $tipo = "form";
+            $_SESSION["tipo"] = "form";
         }
+        
+        $tipo = $_SESSION["tipo"];
         
         $_SESSION[$tipo."_id"] = $_REQUEST[$tipo];
         
@@ -277,13 +279,7 @@ class InsertValues{
      * This method is responsible to control the flow execution when state is "validar"
      */
     private function estadoValidar() {
-         if (!empty($_REQUEST["ent"]))
-        {
-            $tipo = "ent";
-        }
-        else {
-            $tipo = "form";
-        }
+        $tipo = $_SESSION["tipo"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?> - validar</h3>
 <?php
