@@ -265,6 +265,7 @@ class InsertValues{
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
+        print_r($_REQUEST);
         $tipo = $_SESSION["tipo"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>
