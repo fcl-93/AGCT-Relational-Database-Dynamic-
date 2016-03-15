@@ -236,7 +236,7 @@ class ValoresPermitidos
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
 				<br>
-				<label id="valor" for="valor"></label>
+				<label id="valor" class="error" for="valor"></label>
 			</form>
 <?php 
 	}
@@ -256,7 +256,7 @@ class ValoresPermitidos
 					<input type="hidden" name="estado" value="alteracao">
 					<input type="submit" value="Inserir valor permitido">
 					<br>
-					<label id="valor" for="valor"></label>
+					<label id="valor" class="error" for="valor"></label>
 				</form>
 	<?php 
 		}
