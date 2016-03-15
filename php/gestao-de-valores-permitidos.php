@@ -271,7 +271,7 @@ class ValoresPermitidos
 			}
 			else
 			{
-				$res_CheckPropEnums = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$_SESSION['property_id']." AND value=".$sanitizedName);
+				$res_CheckPropEnums = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$_SESSION['property_id']." AND value='".$sanitizedName."'");
 				//for the insert submission
 				if($_REQUEST['estado'] == 'inserir' && $res_CheckPropEnums->num_rows)
 				{
