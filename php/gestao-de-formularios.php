@@ -111,6 +111,7 @@ class gereForms
 <?php 
 		//Get all ent_types that have at least one ent_type_id this will unecessary entities from the table form
 		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type, property WHERE property.ent_type_id=ent_type.id");
+
 		if($resEnt->num_rows == 0)
 		{
 ?>	
