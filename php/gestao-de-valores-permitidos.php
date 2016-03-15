@@ -232,16 +232,34 @@ class ValoresPermitidos
 			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
-				
-				
 				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
-				<br><label id="valor" for="valor"></label>
+				<br>
+				<label id="valor" for="valor"></label>
 			</form>
 <?php 
 	}
-		
+	/**
+	 * This method will print the form and fill it with the properties from the selected enum.
+	 */
+	public function editForm(){
+		$res_EnumName=$this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$read_EnumName = $res_EnumName->fetch_assoc();
+		?>
+			<h3>Gestão de valores permitidos - introdução</h3><br>
+				<form id="editForm">
+					<label>Valor: </label>
+					<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
+					
+					<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
+					<input type="hidden" name="estado" value="alteracao">
+					<input type="submit" value="Inserir valor permitido">
+					<br>
+					<label id="valor" for="valor"></label>
+				</form>
+	<?php 
+		}
 	/**
 	 * Check if the value of the form is empty or not
 	 */
@@ -312,25 +330,7 @@ class ValoresPermitidos
 		}
 	}
 	
-	/**
-	 * This method will print the form and fill it with the properties from the selected enum.
-	 */
-	public function editForm(){
-		$res_EnumName=$this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
-		$read_EnumName = $res_EnumName->fetch_assoc();
-?>
-		<h3>Gestão de valores permitidos - introdução</h3><br>
-			<form id="editForm">
-				<label>Valor: </label>
-				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
-				
-				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
-				<input type="hidden" name="estado" value="alteracao">
-				<input type="submit" value="Inserir valor permitido">~
-				<br><label id="valor" for="valor"></label>
-			</form>
-<?php 
-	}
+
 	
 	/**
 	 * This method will check if the edition that we are trying to make in the enum is of and if it 
