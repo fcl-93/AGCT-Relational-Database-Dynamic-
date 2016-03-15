@@ -168,7 +168,7 @@ class InsertValues{
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
-                   . "WHERE cfhp.rel_type_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
@@ -273,6 +273,10 @@ class InsertValues{
         //creation of transaction because we will insert values in more than one tables
         $this->db->getMysqli()->autocommit(false);
         $this->db->getMysqli()->begin_transaction();
+        if ($tipo === "form")
+        {
+            $this->identificaEntidade($_SESSION[$tipo."_id"]);
+        }
         if ($tipo === "ent") {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$_SESSION[$tipo."_id"].")";
             $resInsertInst = $this->db->runQuery($queryInsertInst);
@@ -329,11 +333,7 @@ class InsertValues{
                     }
                 }
             }
-        
-        
         }
-
-       
     }
     
     /**
@@ -349,7 +349,7 @@ class InsertValues{
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
-                   . "WHERE cfhp.rel_type_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        $goBack = false;
@@ -466,6 +466,20 @@ class InsertValues{
         return $un;
     }
     
+    /**
+     * Identifies all the entities that are involved in a given form
+     * @return an array of all the enities
+     */
+    private function identificaEntidade($formId) {
+        $guardaEnt = array();
+        $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+                   . "WHERE cfhp.custom_form_id = ".$formId."and prop.id = cfhp.property_id AND prop.state = 'active'";
+        $resQuerySelProp = $this->db->runQuery($querySelProp);
+        while ($prop = $resQuerySelProp->fetch_assoc()) {
+            
+        }
+        return $guardaEnt;
+    }
     
 }
 // instantiation of an object from the class PropertyManage. This instantiation is responsable to get the script work as expected.
