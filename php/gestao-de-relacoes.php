@@ -120,21 +120,55 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "editar"
      */
     private function estadoEditar() {
-        
+        $this->formEdit();
     }
     
     /**
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
-        
+        $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"];
+        $update = $this->db->runQuery($queryUpdate);
+        if(!$update)
+        {
+            echo "Ocorreu um erro ao editar a relação.";
+            goBack();
+        }
+        else
+        {
+            echo 'Atualizou os dados da relação com sucesso.';
+            echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+        }
     }
     
     /**
      * This method is responsible to control the flow execution when state is "ativar" or "desativar"
      */
     private function estadoAtivarDesativar() {
-        
+        $getNomes = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id']);
+        $idNome1 = $getNomes->fetch_assoc()["ent_type1_id"];
+        $idNome2 = $getNomes->fetch_assoc()["ent_type2_id"];
+        $queryUpdate = "UPDATE rel_type SET state=";
+        if ($_REQUEST["estado"] === "ativar")
+        {
+            $queryUpdate .= "'active'";
+            $estado = "ativada";
+        }
+        else
+        {
+            $queryUpdate .= "'inactive'";
+            $estado = "desativada";
+        }
+        $queryUpdate .= "WHERE id =".$_REQUEST['rel_id'];
+        $this->db->runQuery($queryUpdate);
+        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
+?>
+        <html>
+            <p>A relação <?php echo $this->getEntityName($idNome1)."-".$this->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
+            <br>
+            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+        </html>
+<?php 
     }
     
     /**
@@ -200,10 +234,29 @@ class RelationManage
                     <td><?php echo $rel["id"];?></td>
                     <td><?php echo $this->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->getEntityName($rel["ent_type2_id"]);?></td>
-                    <td>
-                        <a href="gestao-de-relacoes?estado=editar&prop_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                        <a href="gestao-de-relacoes?estado=desativar&prop_id=<?php echo $rel['id'];?>">[Desativar]</a>
-                    </td>
+<?php
+            if ($arraySelec["state"] === "active")
+            {
+?>
+                <td>Ativo</td>
+                <td>
+                    <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                    <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                </td>
+<?php
+            }
+            else
+            {
+?>
+                <td>Inativo</td>
+                <td>
+                    <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                    <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                </td>
+<?php
+            }
+?>
+            </td>
                 </tr>
 <?php
             }
@@ -244,7 +297,29 @@ class RelationManage
      * This method creates the form that user must fill to edit a relation type
      */
     private function formEdit() {
-        
+        $queryRelEdit = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"];
+        $relEdit = $queryRelEdit->fetch_assoc();
+?>
+        <h3>Gestão de relações - edição </h3>
+        <form id="insertRelation" method="POST">
+            <label>Entidade 1</label><br>
+            <select id="ent1" name="ent1">
+<?php
+                $this->getEntitiesEdit($relEdit["ent_type1_id"]);
+?>
+            </select><br>
+            <label class="error" for="ent1"></label><br>
+            <label>Entidade 2</label><br>
+            <select id="ent2" name="ent2">
+<?php
+                $this->getEntitiesEdit($relEdit["ent_type2_id"]);
+?>                
+            </select><br>
+            <label class="error" for="ent2"></label><br>
+            <input type="hidden" name="estado" value="inserir"><br>
+            <input type="submit" value="Inserir tipo de relação">
+        </form>
+<?php
     }
     
     /**
@@ -280,6 +355,27 @@ class RelationManage
 ?>
             <option value="<?php echo $nome["id"];?>"><?php echo $nome["name"];?></option>
 <?php        
+        }
+    }
+    
+    /**
+     * This method inserts in the selectboxes all the entities that exists in DB
+     */
+    private function getEntitiesEdit($idSel) {
+        $queryEnt = "SELECT id, name FROM ent_type";
+        $resNome = $this->db->runQuery($queryEnt);
+        while ($nome = $resNome->fetch_assoc())
+        {
+            if ($idSel == $nome["id"]) {
+?>
+                <option value="<?php echo $nome["id"];?>" selected="selected"><?php echo $nome["name"];?></option>
+<?php        
+            }
+            else {
+?>
+                <option value="<?php echo $nome["id"];?>"><?php echo $nome["name"];?></option>
+<?php   
+            }
         }
     }
 }
