@@ -101,13 +101,16 @@ class gereForms
 			$this->intForm();
 		}
 	}
-
+	/**
+	 * Prints the form composed by a table to create customized forms.
+	 */
 	public function intForm()
 	{
 ?>
 		<h3>Gestão de formulários customizados - Introdução</h3>
 <?php 
-		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type");
+		//Get all ent_types that have at least one ent_type_id this will unecessary entities from the table form
+		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type, property WHERE property.ent_type_id=ent_type");
 		if($resEnt->num_rows == 0)
 		{
 ?>	
@@ -122,14 +125,10 @@ class gereForms
 		<html>
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
-				<label>Nome do formulário customizado:</label><br>
-<<<<<<< HEAD
-				<input type="text" name="nome" required>
+				<label>Nome do formulário customizado:</label><input type="text" name="nome" required>
+				<label id="nome" class="error" for="nome"></label>
 				<br>
-				
-=======
-				<input type="text" name="nome" required><br>
->>>>>>> branch 'master' of https://github.com/vmcbaptista/AGCT-Relational-Dynamic-Database.git
+
 				<table id="table">
 					<thead>
 						<tr>
@@ -241,9 +240,24 @@ class gereForms
 <?php 	
 		}
 	}
-	public function ssvalidation(){}
+	/**
+	 * 
+	 */
+	public function ssvalidation(){
+		if($_REQUEST['estado'] == 'inserir' && empty($_REQUEST['nome']))
+		{
+?>
+			<html>	
+				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
+			</html>
+<?php	
+			return false;
+		}	
+	}
 	
 	public function formEdit()
-	{}
+	{
+		
+	}
 }
 ?>
