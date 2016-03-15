@@ -270,14 +270,116 @@ class InsertValues{
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        
+       
     }
     
     /**
      * This method is responsible to control the flow execution when state is "validar"
      */
     private function estadoValidar() {
-        
+         if (!empty($_REQUEST["ent"]))
+        {
+            $tipo = "ent";
+        }
+        else {
+            $tipo = "form";
+        }
+?>
+        <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?> - validar</h3>
+<?php
+        if ($tipo === "ent"){
+           $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
+       }
+       else {
+           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+                   . "WHERE cfhp.rel_type_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
+       }
+       $execQueryProp = $this->db->runQuery($queryProp);
+       $goBack = false;
+       while ($arrayProp = $execQueryProp->fetch_assoc()) {
+           if ($arrayProp["mandatory"] === 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
+?>
+                <p>O campo <?php echo $arrayProp["name"];?></p> é de preenchimento obrigatório!;
+<?php
+                goBack();
+                $goBack = true;
+                break;
+           }
+           else {
+               $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
+               switch ($arrayProp["value_type"]) {
+                   case "int":
+                       if(ctype_digit($propVal))
+                        {
+                            $propVal = (int)$propVal;
+                            //quando o request tem um int e trata o int,actualiza esse valor com esse valor tratado
+                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                        }
+                        else
+                        {
+?>
+                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+<?php
+                            goBack();
+                            $goBack = true;
+                            break;
+                        }
+                       break;
+                   case "double":
+                       if(is_numeric($propVal))
+                        {
+                            $propVal = floatval($propVal);
+                            //quando o request tem um double e trata o double,actualiza esse valor com esse valor tratado
+                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                        }
+                        else
+                        {
+?>
+                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+<?php
+                            goBack();
+                            $goBack = true;
+                            break;
+                        }
+                       break;
+                   default:
+                        $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                       break;
+               }
+           } 
+       }
+       
+       if (!$goBack) {
+?>
+            <form method="POST"  action="insercao-de-valores?estado=inserir&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"]?>">
+                <p>Estamos prestes a inserir os dados abaixo na base de dados. Confirma que os dados estão correctos e pretende submeter os mesmos?</p>
+                <ul>
+                    <li><?php echo $_SESSION[$tipo."name"];?></li>
+                    <ul>
+<?php
+            $execQueryProp = $this->db->runQuery($queryProp);
+            while ($arrayProp = $execQueryProp->fetch_assoc()) {
+?>
+                        <li>
+<?php
+                        //imprime o valor que o utilizador introduzio no formulario anterior para cada propriedade
+                            echo $arrayProp['name'].": ".$_REQUEST[$arrayProp['form_field_name']];
+?> 
+                            <input type='hidden' name="<?php echo $arrayProp['form_field_name'];?>" value="<?php $_REQUEST[$arrayProp['form_field_name']]?>">
+                        </li>
+<?php
+            }
+?>
+                    </ul>
+                </ul>
+               <input type="hidden" name="estado" value="inserir">
+               <input type="submit" value="Submeter">
+            </form>
+<?php
+        }
+       
+       
+       
     }
     
     
