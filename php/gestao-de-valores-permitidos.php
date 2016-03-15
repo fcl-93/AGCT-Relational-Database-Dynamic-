@@ -294,6 +294,8 @@ class ValoresPermitidos
 				<label>Valor: </label>
 				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
 				<label id="valor" for="valor"></label>
+				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
+				
 				<input type="hidden" name="estado" value="alteracao">
 				<input type="submit" value="Inserir valor permitido">
 			</form>
