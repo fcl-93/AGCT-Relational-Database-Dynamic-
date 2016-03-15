@@ -173,9 +173,9 @@ class gereForms
 									else
 									{
 										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']."'");
-										while ($res_UnitName->fetch_assoc())
+										while ($read_UnitName = $res_UnitName->fetch_assoc())
 										{
-											echo $res_UnitName['name'];
+											echo $read_UnitName['name'];
 										}
 									}
 ?>
