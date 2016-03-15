@@ -47,9 +47,13 @@ class ValoresPermitidos
 	 			{
 	 				$this->desactivate();
 	 			}
-	 			else if($_REQUEST['estado']=='alteracao')
+	 			else if($_REQUEST['estado']=='editar')
 	 			{
 	 				$this->editForm();	 				
+	 			}
+	 			else if($_REQUEST['estado'] == 'alteracao')
+	 			{
+	 				$this->changeEnum();
 	 			}
 			}
 			else 
@@ -83,7 +87,7 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
@@ -158,20 +162,36 @@ class ValoresPermitidos
 ?>									
 										<td><?php  echo $read_EnumValues['id'];?></td>
 										<td><?php echo $read_EnumValues['value'];?></td>
-										<td><?php echo $read_EnumValues['state'];?></td>
+										<td>
+<?php 			
+										if($read_EnumValues['state'] == 'active')
+										{
+?>
+											Ativo
+<?php 
+										}
+										else 
+										{
+?>	
+											Inativo
+<?php 											
+										}
+										
+?>										
+										</td>
 										<td>
 										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>">[Editar]</a>  
 <?php 
 										if($read_EnumValues['state'] === 'active')
 										{
 ?>
-											<a href="gestao-de-entidades?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+											<a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
 <?php 
 										}
 										else 
 										{
 ?>
-											<a href="gestao-de-entidades?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+											<a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
 <?php 
 										}
 ?>										
@@ -209,7 +229,7 @@ class ValoresPermitidos
 		print_r($_SESSION);
 ?>
 		<h3>Gestão de valores permitidos - introdução</h3><br>
-			<form>
+			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
 				<label id="valor" for="valor"></label>
@@ -238,7 +258,9 @@ class ValoresPermitidos
 			return true;
 		}
 	}
-	
+	/**
+	 * This method will handle the insertion state if the user input is ok
+	 */
 	public function insertState()
 	{
 ?>
@@ -260,18 +282,56 @@ class ValoresPermitidos
 		}
 	}
 	
-
-	public function editForm(){}
+	/**
+	 * This method will print the form and fill it with the properties from the selected enum.
+	 */
+	public function editForm(){
+		$res_EnumName=$this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$read_EnumName = $res_EnumName->fetch_assoc();
+?>
+		<h3>Gestão de valores permitidos - introdução</h3><br>
+			<form id="editForm">
+				<label>Valor: </label>
+				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
+				<label id="valor" for="valor"></label>
+				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
+				
+				<input type="hidden" name="estado" value="alteracao">
+				<input type="submit" value="Inserir valor permitido">
+			</form>
+<?php 
+	}
+	
+	/**
+	 * This method will check if the edition that we are trying to make in the enum is of and if it 
+	 * is it will submit.
+	 */
+	public function changeEnum(){
+		if($this->ssvalidation())
+		{
+			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
+			$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
+			//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
+?>
+			<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
+			<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
+		}
+		else
+		{
+			goBack();
+		}
+	}
 	/**
 	 * This method will activate the enum.
 	 */
 	public function activate(){
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 	<html>
-	 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+	 	<p>O valor <?php echo $read_enumName['value'] ?> foi ativado</p>
 	 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 	</html>
 <?php
@@ -281,11 +341,11 @@ class ValoresPermitidos
 	 */
 	public function desactivate(){
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT name FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 		<html>
-		 	<p>O valor <?php echo $read_enumName['name'] ?> foi ativada</p>
+		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
 		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 		</html>
 <?php
