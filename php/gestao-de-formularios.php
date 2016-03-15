@@ -150,7 +150,7 @@ class gereForms
 						//echo "SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.form_field_size, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE p.ent_type_id = e.id AND e.name LIKE ".$readEnt['name']." ORDER BY p.name ASC";
 ?>						
 						<tr>
-							<td rowspan="<?php echo $resGetProps->num_rows ?>" style="vertical-align: top;">'<?php echo $readEnt["name"]?>'</td>		
+							<td rowspan="<?php echo $res_GetProps->num_rows ?>" style="vertical-align: top;">'<?php echo $readEnt["name"]?>'</td>		
 <?php 							
 							
 							while($readGetProps = $res_GetProps->fetch_assoc())
@@ -173,9 +173,9 @@ class gereForms
 									else
 									{
 										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']."'");
-										while ($res_UnitName->fetch_assoc())
+										while ($read_UnitName = $res_UnitName->fetch_assoc())
 										{
-											echo $res_UnitName['name'];
+											echo $read_UnitName['name'];
 										}
 									}
 ?>
