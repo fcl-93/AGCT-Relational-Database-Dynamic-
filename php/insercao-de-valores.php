@@ -175,7 +175,7 @@ class InsertValues{
        {
            
            
-           $un = $this->obtemUnidade($arrayProp["unit_type_id"]);
+           $un = $this->obtemUnidades($arrayProp["unit_type_id"]);
            
 ?>
             <label><?php echo $arrayProp["name"];?></label><br>
@@ -362,7 +362,7 @@ class InsertValues{
                     $valor = $_REQUEST[$arrayProp['form_field_name']];
                 }
                 
-                $un = obtemValor($_REQUEST[$arrayProp['unit_type_id']])
+                $un = obtemUnidades($_REQUEST[$arrayProp['unit_type_id']])
 ?>
                         <li>
 <?php
