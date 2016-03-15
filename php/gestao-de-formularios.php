@@ -124,7 +124,7 @@ class gereForms
 				<input type="hidden" name="estado" value="inserir">
 				<label>Nome do formulário customizado:</label><br>
 				<input type="text" name="nome" required><br>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
