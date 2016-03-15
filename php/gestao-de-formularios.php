@@ -10,6 +10,7 @@ class gereForms
 	
 	public function __construct(){
 		$this->bd = new Db_Op();
+		$this->numProp = 0;
 		$this->checkUser();
 	}
 	
@@ -36,7 +37,14 @@ class gereForms
 				{
 					
 				}
-				
+				else if($_REQUEST['estado'] == 'ativar')
+				{
+					$this->activate();
+				}
+				else if($_REQUEST['estado'] == 'desativar')
+				{
+					$this->desactivate();
+				}
 			}
 			else
 			{
@@ -71,11 +79,13 @@ class gereForms
 		{
 ?>
 			<html>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Id</th>
 							<th>Nome do formulário customizado</th>
+							<th>Estado</th>
+							<th>Ação</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -85,8 +95,38 @@ class gereForms
 ?>
 							<tr>
 								<td><?php echo $readForm['id']; ?></td>
+								<td><?php echo $readForm['name']; ?></td>
 								<td>
-									<a href="?estado=editar_form&id='<?php echo $readForm['id']; ?>'"><?php echo $readForm['name']; ?></a>
+<?php
+									if($readForm['state'] === 'active')
+									{
+?>
+										Ativo
+<?php 
+									}
+									else
+									{
+?>
+										Inativo
+<?php 								}
+?>
+								</td>
+								<td>
+									<a href="gestao-de-formularios?estado=editar_form&form_id='<?php echo $readForm['id']; ?>'">[Editar]</a>
+<?php 
+										if($readForm['state'] === 'active')
+										{
+?>
+											<a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
+<?php 
+										}
+										else 
+										{
+?>
+											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
+<?php 
+										}
+?>
 								</td>
 							</tr>
 <?php 
@@ -100,13 +140,18 @@ class gereForms
 			$this->intForm();
 		}
 	}
-
+	/**
+	 * Prints the form composed by a table to create customized forms.
+	 */
 	public function intForm()
 	{
 ?>
 		<h3>Gestão de formulários customizados - Introdução</h3>
+		<br>
 <?php 
-		$resEnt = $this->bd->runQuery("SELECT * FROM ent_type");
+		//Get all ent_types that have at least one ent_type_id this will unecessary entities from the table form
+		$resEnt = $this->bd->runQuery("SELECT DISTINCT ent_type.id, ent_type.name FROM ent_type , property WHERE property.ent_type_id=ent_type.id");
+
 		if($resEnt->num_rows == 0)
 		{
 ?>	
@@ -121,9 +166,11 @@ class gereForms
 		<html>
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
-				<label>Nome do formulário customizado:</label><br>
-				<input type="text" name="nome" required><br>
-				<table>
+				<label>Nome do formulário customizado:</label> <input type="text" name="nome" required>
+				<label id="nome" class="error" for="nome"></label>
+				<br><br>
+
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
@@ -145,14 +192,16 @@ class gereForms
 <?php 
 					while($readEnt = $resEnt->fetch_assoc())
 					{
-						$res_GetProps = $this->bd->runQuery("SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.form_field_size, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE p.ent_type_id = e.id AND e.name LIKE ".$readEnt['name']." ORDER BY p.name ASC");
+						$res_GetProps = $this->bd->runQuery("SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order,  p.mandatory, p.state FROM property AS p, ent_type AS e WHERE p.ent_type_id = e.id AND e.name LIKE '".$readEnt['name']."' ORDER BY p.name ASC");
+						//echo "SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.form_field_size, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE p.ent_type_id = e.id AND e.name LIKE ".$readEnt['name']." ORDER BY p.name ASC";
 ?>						
 						<tr>
-							<td rowspan="<?php echo $resGetProps->num_rows ?>" style="vertical-align: top;">'.$readEnt["name"].'</td>		
+							<td rowspan="<?php echo $res_GetProps->num_rows ?>" style="vertical-align: top;">'<?php echo $readEnt["name"]?>'</td>		
 <?php 							
+							
 							while($readGetProps = $res_GetProps->fetch_assoc())
 							{
-								$numProp++;
+								$this->numProp++;
 ?>								
 								<td><?php echo $readGetProps['id'];  ?></td>
 								<td><?php echo $readGetProps['name'];?></td>
@@ -169,18 +218,17 @@ class gereForms
 									}
 									else
 									{
-										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']);
-										while ($res_UnitName->fetch_assoc())
+										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']."'");
+										while ($read_UnitName = $res_UnitName->fetch_assoc())
 										{
-											echo $res_UnitName['name'];
+											echo $read_UnitName['name'];
 										}
 									}
 ?>
 								</td>
 								<td><?php echo $readGetProps['form_field_order'];  ?></td>
-								<td><?php echo $readGetProps['form_field_size'];  ?></td>
-								<td><?php echo $readGetProps['id'];  ?></td>
-								<td><?php echo $readGetProps['id'];  ?></td>							
+								<!--<td><?php echo $readGetProps['form_field_size'];  ?></td>-->
+								<td>?</td>					
 								<td>
 <?php 	
 								if($readGetProps['mandatory'] == 1)
@@ -191,16 +239,36 @@ class gereForms
 								{
 									echo 'Não';
 								}
-?><
+?>
 								</td>
-								<td><?php echo $readGetProps['state']; ?></td>
-								<td><input type="checkbox" name="idProp<?php echo $number;?>" value="<?php echo $readGetProps['id'];?>"></td>
+								<td>
+<?php
+								if($readGetProps['state'] == 'active' )
+								{
+?>
+									Ativo									
 <?php 
+								}
+								else
+								{
+?>
+									Inativo
+<?php 									
+								}
+?>
 								
+								
+								
+								</td>
+								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
+								
+								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
+							</tr>
+<?php 
+												
 							}
 ?>						
-							</td>
-						</tr>
+						
 <?php 						
 					}
 ?>
@@ -213,9 +281,53 @@ class gereForms
 <?php 	
 		}
 	}
-	public function ssvalidation(){}
+	/**
+	 * 
+	 */
+	public function ssvalidation(){
+		if($_REQUEST['estado'] == 'inserir' && empty($_REQUEST['nome']))
+		{
+?>
+			<html>	
+				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
+			</html>
+<?php	
+			return false;
+		}	
+	}
 	
 	public function formEdit()
-	{}
+	{
+		
+	}
+	
+	/**
+	 * This method will activate the enum.
+	 */
+	public function activate(){
+		$this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$_REQUEST['form_id']);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+		$read_formName = $res_formName->fetch_assoc();
+		?>
+		<html>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado</p>
+		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		</html>
+	<?php
+		}
+		/**
+		 * This method will desactivate the enum values
+		 */
+		public function desactivate(){
+			$this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$_REQUEST['form_id']);
+			$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+			$read_formName = $res_formName->fetch_assoc();
+	?>
+			<html>
+			 	<p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
+			 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+			</html>
+<?php
+		}
 }
 ?>
