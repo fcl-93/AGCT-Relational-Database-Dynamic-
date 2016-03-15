@@ -167,14 +167,12 @@ class InsertValues{
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
        }
        else {
-           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
        {
-           
-           
            $un = $this->obtemUnidades($arrayProp["unit_type_id"]);
            
 ?>
@@ -275,62 +273,69 @@ class InsertValues{
         $this->db->getMysqli()->begin_transaction();
         if ($tipo === "form")
         {
-            $this->identificaEntidade($_SESSION[$tipo."_id"]);
+            $arrayEnt = $this->identificaEntidade($_SESSION[$tipo."_id"]);
+            foreach ($arrayEnt as $ent) {
+                $this->insertEntityValues($ent);
+            }
         }
-        if ($tipo === "ent") {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$_SESSION[$tipo."_id"].")";
-            $resInsertInst = $this->db->runQuery($queryInsertInst);
-            if(!$resInsertInst) {
-                    $this->db->getMysqli()->rollback();
+        else {
+            $this->insertEntityValues($_SESSION[$tipo."_id"]);
+        }
+    }
+    
+    private function insertEntityValues($idEnt) {
+        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt.")";
+        $resInsertInst = $this->db->runQuery($queryInsertInst);
+        if(!$resInsertInst) {
+            $this->db->getMysqli()->rollback();
 ?>
-                    <p>Erro na criação da instância.</p>
+            <p>Erro na criação da instância.</p>
 <?php				
+        }
+        else {
+            $idEntForm = $this->db->getMysqli()->insert_id;
+            $propriedadesEnt = $this->db->runQuery("SELECT * FROM `property` WHERE state = 'active' AND ent_type_id = ".$idEnt);
+            if(!$propriedadesEnt) {
+                $this->db->getMysqli()->rollback();
+?>
+                <p>Erro na selação da propriedade.</p>
+<?php
             }
             else {
-                $idEntForm = $this->db->getMysqli()->insert_id;
-                $propriedadesEnt = $this->db->runQuery("SELECT * FROM `property` WHERE state = 'active' AND ent_type_id = ".$_SESSION[$tipo."_id"]."");
-                if(!$propriedadesEnt) {
-                    $this->db->getMysqli()->rollback();
-?>
-                    <p>Erro na selação da propriedade.</p>
-<?php
-                }
-                else {
-                    
-                    $sucesso = false;
-                    while($propriedades = $propriedadesEnt->fetch_assoc())
-                    {
-                        $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
-                        if(!$insertVal)
-                        {								
-                            $this->db->getMysqli()->rollback();
-?>
-                            <p>Erro na atribuição do valor à propriedade.</p>
-<?php
-                            $sucesso = false;
-                        }
-                        else
-                        {
-                            $this->db->getMysqli()->commit();
-                            $sucesso = true;
-                        }								
-                    }
-                    if($sucesso == true)
-                    {
-?>
-                        <p>Inseriu o(s) valor(es) com sucesso.</p></br>
-                        <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
-<?php
-                    }
+                $sucesso = false;
+                while($propriedades = $propriedadesEnt->fetch_assoc())
+                {
+                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
+                    if(!$insertVal)
+                    {								
+                        $this->db->getMysqli()->rollback();
+?>
+                        <p>Erro na atribuição do valor à propriedade.</p>
+<?php
+                        $sucesso = false;
+                    }
                     else
                     {
+                        $this->db->getMysqli()->commit();
+                        $sucesso = true;
+                    }								
+                }
+                if($sucesso == true)
+                {
 ?>
-                        <p>Lamentamos, mas ocorreu um erro.</p>
+                    <p>Inseriu o(s) valor(es) com sucesso.</p></br>
+                    <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
 <?php
-                        goBack();
-                    }
+                }
+
+                else
+                {
+?>
+                    <p>Lamentamos, mas ocorreu um erro.</p>
+<?php
+                    goBack();
                 }
             }
         }
@@ -348,7 +353,7 @@ class InsertValues{
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
        }
        else {
-           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]."and prop.id = cfhp.property_id AND prop.state = 'active'";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
@@ -472,11 +477,15 @@ class InsertValues{
      */
     private function identificaEntidade($formId) {
         $guardaEnt = array();
-        $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop, AS cfhp "
+        $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$formId."and prop.id = cfhp.property_id AND prop.state = 'active'";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
-            
+            $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
+            $resQuerySelEnt = $this->db->runQuery($querySelEnt);
+            while ($ent = $resQuerySelEnt->fetch_assoc()) {
+                array_push($guardaEnt, $ent["id"]);
+            }
         }
         return $guardaEnt;
     }
