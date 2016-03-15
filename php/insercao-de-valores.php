@@ -286,7 +286,7 @@ class InsertValues{
        $execQueryProp = $this->db->runQuery($queryProp);
        $goBack = false;
        while ($arrayProp = $execQueryProp->fetch_assoc()) {
-           if ($arrayProp["mandatory"] === 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
+           if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
                 <p>O campo <?php echo $arrayProp["name"];?></p> é de preenchimento obrigatório!;
 <?php
@@ -312,7 +312,7 @@ class InsertValues{
                         else
                         {
 ?>
-                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+                            <p>Certifique-se que introduziu um número inteiro no campo <?php echo $arrayProp['name'];?>.</p>
 <?php
                             goBack();
                             $goBack = true;

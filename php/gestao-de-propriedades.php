@@ -245,7 +245,7 @@ class PropertyManage
                             <!--<td><?//php echo $arraySelec["form_field_size"]; ?></td>-->
                             <td>
                 <?php
-                            if ($arraySelec["mandatory"] === 1)
+                            if ($arraySelec["mandatory"] == 1)
                             {
                                 echo "sim";
                             }
