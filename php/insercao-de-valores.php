@@ -161,7 +161,7 @@ class InsertValues{
         $_SESSION[$tipo."_name"] = $name->fetch_assoc()["name"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?></h3>
-        <form name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="insercao-de-valores?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
+        <form method="POST" name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="insercao-de-valores?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
 <?php
        if ($tipo === "ent"){
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
@@ -354,10 +354,10 @@ class InsertValues{
        
        if (!$goBack) {
 ?>
-            <form method="POST"  action="insercao-de-valores?estado=inserir&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"]?>">
+            <form method="POST" action="insercao-de-valores?estado=inserir&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"]?>">
                 <p>Estamos prestes a inserir os dados abaixo na base de dados. Confirma que os dados estão correctos e pretende submeter os mesmos?</p>
                 <ul>
-                    <li><?php echo $_SESSION[$tipo."_name"];?></li>
+                    <li><?php echo $_SESSION[$tipo."_name"];?>
                     <ul>
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
@@ -380,6 +380,7 @@ class InsertValues{
             }
 ?>
                     </ul>
+                    </li>
                 </ul>
                <input type="hidden" name="estado" value="inserir">
                <input type="submit" value="Submeter">
