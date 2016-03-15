@@ -303,9 +303,11 @@ class InsertValues{
            }
            else {
                if (empty ($_REQUEST[$arrayProp["form_field_name"]])) {
-                   $_REQUEST[$arrayProp["form_field_name"]] = NULL;
+                   $propVal = NULL;
                }
-               $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
+               else {
+                   $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
+               }
                switch ($arrayProp["value_type"]) {
                    case "int":
                        if(ctype_digit($propVal))
