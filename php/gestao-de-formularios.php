@@ -181,8 +181,7 @@ class gereForms
 								</td>
 								<td><?php echo $readGetProps['form_field_order'];  ?></td>
 								<!--<td><?php echo $readGetProps['form_field_size'];  ?></td>-->
-								<td><?php echo $readGetProps['id'];  ?></td>
-								<td><?php echo $readGetProps['id'];  ?></td>							
+								<td>?</td>					
 								<td>
 <?php 	
 								if($readGetProps['mandatory'] == 1)
