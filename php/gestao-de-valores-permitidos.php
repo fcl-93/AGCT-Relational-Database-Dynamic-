@@ -309,6 +309,7 @@ class ValoresPermitidos
 		{
 			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
 			$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
+			echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
 ?>
 			<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
 			<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
