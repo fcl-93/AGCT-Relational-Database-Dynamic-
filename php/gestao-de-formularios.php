@@ -123,8 +123,10 @@ class gereForms
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
 				<label>Nome do formulário customizado:</label><br>
-				<input type="text" name="nome" required><br>
-				<table>
+				<input type="text" name="nome" required>
+				<br>
+				
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
@@ -195,7 +197,25 @@ class gereForms
 								}
 ?>
 								</td>
-								<td><?php echo $readGetProps['state']; ?></td>
+								<td>
+<?php
+								if($readGetProps['state'] == 'active' )
+								{
+?>
+									Ativo									
+<?php 
+								}
+								else
+								{
+?>
+									Inativo
+<?php 									
+								}
+?>
+								
+								
+								
+								</td>
 								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
