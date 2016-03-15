@@ -10,6 +10,7 @@ class gereForms
 	
 	public function __construct(){
 		$this->bd = new Db_Op();
+		$this->numProp = 0;
 		$this->checkUser();
 	}
 	
@@ -154,7 +155,7 @@ class gereForms
 							
 							while($readGetProps = $res_GetProps->fetch_assoc())
 							{
-								$numProp++;
+								$this->numProp++;
 ?>								
 								<td><?php echo $readGetProps['id'];  ?></td>
 								<td><?php echo $readGetProps['name'];?></td>
@@ -171,7 +172,7 @@ class gereForms
 									}
 									else
 									{
-										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']);
+										$res_UnitName = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = '".$readGetProps['unit_type_id']."'");
 										while ($res_UnitName->fetch_assoc())
 										{
 											echo $res_UnitName['name'];
@@ -195,9 +196,9 @@ class gereForms
 ?><
 								</td>
 								<td><?php echo $readGetProps['state']; ?></td>
-								<td><input type="checkbox" name="idProp<?php echo $number;?>" value="<?php echo $readGetProps['id'];?>"></td>
+								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
-								<td><input type="text" name="ordem<?php echo $number; ?>"></td>
+								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
 <?php 
 												
 							}
