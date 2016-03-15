@@ -193,17 +193,18 @@ class gereForms
 								{
 									echo 'Não';
 								}
-?><
+?>
 								</td>
 								<td><?php echo $readGetProps['state']; ?></td>
 								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
+							</tr>
 <?php 
 												
 							}
 ?>						
-						</tr>
+						
 <?php 						
 					}
 ?>
