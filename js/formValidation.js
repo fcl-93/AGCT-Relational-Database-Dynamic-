@@ -1,24 +1,28 @@
 $().ready(function(){
-	//insertion form in page gestão de entidades.php
+	//insertion form 
 	$("#insertForm").validate({
 		rules:{
 			nome:"required",
-			atv_int: "required"
+			atv_int: "required",
+			valor: "required"
 		},
 		messages:{
 			nome:"Por favor introduza o nome da entidade",
-			atv_int:"Por favor selecione o estado da entidade"
+			atv_int:"Por favor selecione o estado da entidade",
+			valor: "Por favor introduza um novo valor para o enum selecionado"
 		}
 	});
-	//edition form in page gestão de entidades.php
+	//edition form 
 	$("#editForm").validate({
 		rules:{
 			nome:"required",
-			atv_int: "required"
+			atv_int: "required",
+			valor: "required"
 		},
 		messages:{
 			nome:"Por favor introduza o nome da entidade",
-			atv_int:"Por favor selecione o estado da entidade"
+			atv_int:"Por favor selecione o estado da entidade",
+			valor: "Por favor introduza um novo valor para o enum selecionado"
 		}
 	});
 	//insertion form in page gestão de unidades

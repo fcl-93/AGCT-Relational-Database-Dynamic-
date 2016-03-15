@@ -87,7 +87,7 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
@@ -229,7 +229,7 @@ class ValoresPermitidos
 		print_r($_SESSION);
 ?>
 		<h3>Gestão de valores permitidos - introdução</h3><br>
-			<form>
+			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
 				<label id="valor" for="valor"></label>
@@ -290,7 +290,7 @@ class ValoresPermitidos
 		$read_EnumName = $res_EnumName->fetch_assoc();
 ?>
 		<h3>Gestão de valores permitidos - introdução</h3><br>
-			<form>
+			<form id="editForm">
 				<label>Valor: </label>
 				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
 				<label id="valor" for="valor"></label>
@@ -311,7 +311,7 @@ class ValoresPermitidos
 		{
 			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
 			$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
-			echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
+			//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
 ?>
 			<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
 			<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
