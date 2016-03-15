@@ -51,6 +51,10 @@ class ValoresPermitidos
 	 			{
 	 				$this->editForm();	 				
 	 			}
+	 			else if($_REQUEST['estado'] == 'alteracao')
+	 			{
+	 				$this->changeEnum();
+	 			}
 			}
 			else 
 			{
@@ -254,7 +258,9 @@ class ValoresPermitidos
 			return true;
 		}
 	}
-	
+	/**
+	 * This method will handle the insertion state if the user input is ok
+	 */
 	public function insertState()
 	{
 ?>
@@ -276,8 +282,44 @@ class ValoresPermitidos
 		}
 	}
 	
-
-	public function editForm(){}
+	/**
+	 * This method will print the form and fill it with the properties from the selected enum.
+	 */
+	public function editForm(){
+		$res_EnumName=$this->bd->runQuery("SELECT value FROM WHERE id=".$_REQUEST['enum_id']);
+		$read_EnumName = $res_EnumName->fetch_assoc();
+?>
+		<h3>Gestão de valores permitidos - introdução</h3><br>
+			<form>
+				<label>Valor: </label>
+				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
+				<label id="valor" for="valor"></label>
+				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id'];?>.">
+				<input type="hidden" name="estado" value="alteracao">
+				<input type="submit" value="Inserir valor permitido">
+			</form>
+<?php 
+	}
+	
+	/**
+	 * This method will check if the edition that we are trying to make in the enum is of and if it 
+	 * is it will submit.
+	 */
+	public function changeEnum(){
+		if($this->ssvalidation())
+		{
+			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
+			$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
+?>
+			<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
+			<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
+		}
+		else
+		{
+			goBack();
+		}
+	}
 	/**
 	 * This method will activate the enum.
 	 */
