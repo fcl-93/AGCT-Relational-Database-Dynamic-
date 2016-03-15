@@ -79,11 +79,12 @@ class gereForms
 		{
 ?>
 			<html>
-				<table>
+				<table id="table">
 					<thead>
 						<tr>
 							<th>Id</th>
 							<th>Nome do formulário customizado</th>
+							<th>Estado</th>
 							<th>Ação<th>
 						</tr>
 					</thead>
@@ -95,7 +96,21 @@ class gereForms
 							<tr>
 								<td><?php echo $readForm['id']; ?></td>
 								<td><?php echo $readForm['name']; ?></td>
-								<td><?php echo $readForm['state'];?></td>
+								<td>
+<?php
+									if($readForm['state'] === 'active')
+									{
+?>
+										Ativo
+<?php 
+									}
+									else
+									{
+?>
+										Inativo
+<?php 								}
+?>
+								</td>
 								<td>
 									<a href="gestao-de-formularios?estado=editar_form&form_id='<?php echo $readForm['id']; ?>'">[Editar]</a>
 <?php 
