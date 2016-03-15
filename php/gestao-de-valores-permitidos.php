@@ -286,7 +286,7 @@ class ValoresPermitidos
 	 * This method will print the form and fill it with the properties from the selected enum.
 	 */
 	public function editForm(){
-		$res_EnumName=$this->bd->runQuery("SELECT value FROM WHERE id=".$_REQUEST['enum_id']);
+		$res_EnumName=$this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
 		$read_EnumName = $res_EnumName->fetch_assoc();
 ?>
 		<h3>Gestão de valores permitidos - introdução</h3><br>
