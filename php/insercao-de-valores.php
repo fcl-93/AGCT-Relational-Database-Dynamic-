@@ -302,50 +302,52 @@ class InsertValues{
                 break;
            }
            else {
-               if (!empty ($_REQUEST[$arrayProp["form_field_name"]])){
-                   $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
-                   switch ($arrayProp["value_type"]) {
-                       case "int":
-                           if(ctype_digit($propVal))
-                            {
-                                $propVal = (int)$propVal;
-                                //quando o request tem um int e trata o int,actualiza esse valor com esse valor tratado
-                                $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
-                            }
-                            else
-                            {
-?>
-                                <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
-<?php
-                                goBack();
-                                $goBack = true;
-                            }
-                           break;
-                       case "double":
-                           if(is_numeric($propVal))
-                            {
-                                $propVal = floatval($propVal);
-                                //quando o request tem um double e trata o double,actualiza esse valor com esse valor tratado
-                                $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
-                            }
-                            else
-                            {
-?>
-                                <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
-<?php
-                                goBack();
-                                $goBack = true;
-                            }
-                           break;
-                       default:
-                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
-                           break;
-                   }
-                   if ($goBack) {
-                       break;
-                   }
+               if (empty ($_REQUEST[$arrayProp["form_field_name"]])) {
+                   $_REQUEST[$arrayProp["form_field_name"]] = "NULL";
                }
-           } 
+               $propVal = $this->db->getMysqli()->real_escape_string($_REQUEST[$arrayProp["form_field_name"]]);
+               switch ($arrayProp["value_type"]) {
+                   case "int":
+                       if(ctype_digit($propVal))
+                        {
+                            $propVal = (int)$propVal;
+                            //quando o request tem um int e trata o int,actualiza esse valor com esse valor tratado
+                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                        }
+                        else
+                        {
+?>
+                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+<?php
+                            goBack();
+                            $goBack = true;
+                        }
+                       break;
+                   case "double":
+                       if(is_numeric($propVal))
+                        {
+                            $propVal = floatval($propVal);
+                            //quando o request tem um double e trata o double,actualiza esse valor com esse valor tratado
+                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                        }
+                        else
+                        {
+?>
+                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+<?php
+                            goBack();
+                            $goBack = true;
+                        }
+                       break;
+                   default:
+                        $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                       break;
+               }
+               if ($goBack) {
+                   break;
+               }
+           }
+           
        }
        
        if (!$goBack) {
@@ -353,7 +355,7 @@ class InsertValues{
             <form method="POST"  action="insercao-de-valores?estado=inserir&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"]?>">
                 <p>Estamos prestes a inserir os dados abaixo na base de dados. Confirma que os dados estão correctos e pretende submeter os mesmos?</p>
                 <ul>
-                    <li><?php echo $_SESSION[$tipo."name"];?></li>
+                    <li><?php echo $_SESSION[$tipo."_name"];?></li>
                     <ul>
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
