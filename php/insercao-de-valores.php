@@ -267,7 +267,7 @@ class InsertValues{
     private function estadoInserir() {
         $tipo = $_SESSION["tipo"];
 ?>
-        <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>";
+        <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>
 <?php						
         //creation of transaction because we will insert values in more than one tables
         $this->db->getMysqli()->autocommit(false);
@@ -314,8 +314,8 @@ class InsertValues{
                     if($sucesso == true)
                     {
 ?>
-                        <p>Inseriu o(s) valor(es) com sucesso.</p></br>";
-                        <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&comp=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
+                        <p>Inseriu o(s) valor(es) com sucesso.</p></br>
+                        <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
 <?php
                     }
 
