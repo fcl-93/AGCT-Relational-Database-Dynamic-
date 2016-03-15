@@ -123,9 +123,13 @@ class gereForms
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
 				<label>Nome do formulário customizado:</label><br>
+<<<<<<< HEAD
 				<input type="text" name="nome" required>
 				<br>
 				
+=======
+				<input type="text" name="nome" required><br>
+>>>>>>> branch 'master' of https://github.com/vmcbaptista/AGCT-Relational-Dynamic-Database.git
 				<table id="table">
 					<thead>
 						<tr>
