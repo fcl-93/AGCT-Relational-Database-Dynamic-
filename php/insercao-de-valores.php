@@ -437,7 +437,7 @@ class InsertValues{
                         //imprime o valor que o utilizador introduzio no formulario anterior para cada propriedade
                             echo $arrayProp['name'].": ".$valor." ".$un["name"];
 ?> 
-                            <input type='hidden' name="<?php echo $arrayProp['form_field_name'];?>" value="<?php $_REQUEST[$arrayProp['form_field_name']]?>">
+                            <input type='hidden' name="<?php echo $arrayProp['form_field_name'];?>" value="<?php echo $_REQUEST[$arrayProp['form_field_name']];?>">
                         </li>
 <?php
             }
