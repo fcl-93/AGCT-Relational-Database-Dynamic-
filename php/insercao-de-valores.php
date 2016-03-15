@@ -267,13 +267,13 @@ class InsertValues{
     private function estadoInserir() {
         $tipo = $_SESSION["tipo"];
 ?>
-        <h3>Inserção de valores - ".$_SESSION["comp_name"]." - inserção </h3>";
+        <h3>Inserção de valores - <?php $_SESSION[$tipo."_name"] ?> - inserção </h3>";
 <?php						
         //creation of transaction because we will insert values in more than one tables
         $this->db->getMysqli()->autocommit(false);
         $this->db->getMysqli()->begin_transaction();
         if ($tipo === "ent") {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `component_id`) VALUES (NULL,".$_SESSION[$tipo."_id"].")";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$_SESSION[$tipo."_id"].")";
             $resInsertInst = $this->db->runQuery($queryInsertInst);
             if(!$resInsertInst) {
                     $this->db->getMysqli()->rollback();
