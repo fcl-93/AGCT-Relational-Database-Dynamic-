@@ -180,7 +180,7 @@ class ValoresPermitidos
 ?>										
 										</td>
 										<td>
-										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>">[Editar]</a>  
+										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
 <?php 
 										if($read_EnumValues['state'] === 'active')
 										{
@@ -226,13 +226,15 @@ class ValoresPermitidos
 	public function insertionForm()
 	{
 		$_SESSION['property_id'] = $_REQUEST['propriedade'];//
-		print_r($_SESSION);
+		//print_r($_SESSION);
 ?>
 		<h3>Gestão de valores permitidos - introdução</h3><br>
 			<form id="insertForm">
 				<label>Valor: </label>
 				<input type="text" name="valor">
 				<label id="valor" for="valor"></label>
+				
+				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
 				<input type="hidden" name="estado" value="inserir">
 				<input type="submit" value="Inserir valor permitido">
 			</form>
@@ -255,7 +257,35 @@ class ValoresPermitidos
 		}
 		else 
 		{
-			return true;
+			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);//for both if's the value input
+			//for the edit submission
+			
+			$resCheckEnum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']." AND value=".$sanitizedName);
+			if(($_REQUEST['estato'] == 'alteracao') && ($resCheckEnum->num_rows != 0))
+			{
+?>
+				<p>	O valor que está a tentar introduzir já se encontra registado.</p>
+				<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
+				return false;
+			}
+			else
+			{
+				$res_CheckPropEnums = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$_SESSION['property_id']." AND value=".$_sanitizedInput);
+				//for the insert submission
+				if($_REQUEST['estado'] == 'inserir' && $res_CheckPropEnums->num_rows)
+				{
+?>
+					<p>	O valor que está a tentar introduzir já se encontra registado.</p>
+					<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+<?php 
+					return false;	
+				}
+				else
+				{
+					return true;
+				}
+			}	
 		}
 	}
 	/**
@@ -270,6 +300,7 @@ class ValoresPermitidos
 		{
 			//echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
 			$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);
+			
 			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')");
 ?>
 		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
@@ -295,7 +326,6 @@ class ValoresPermitidos
 				<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
 				<label id="valor" for="valor"></label>
 				<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
-				
 				<input type="hidden" name="estado" value="alteracao">
 				<input type="submit" value="Inserir valor permitido">
 			</form>
@@ -308,14 +338,15 @@ class ValoresPermitidos
 	 */
 	public function changeEnum(){
 		if($this->ssvalidation())
-		{
-			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
-			$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
-			//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
+		{	
+				$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);
+				$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
+				//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
 ?>
-			<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
-			<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+				<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
+				<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
+
 		}
 		else
 		{
