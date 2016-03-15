@@ -173,16 +173,9 @@ class InsertValues{
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
        {
-           if(!is_null($arrayProp["unit_type_id"]))
-           {
-                $queryUn = "SELECT put.name FROM prop_unit_type AS put WHERE put.id = ".$arrayProp["unit_type_id"];
-                $resUn = $this->db->runQuery($queryUn);
-                $un = $resUn->fetch_assoc();
-           }
-           else
-           {
-               $un["name"] = "";
-           }
+           
+           
+           $un = $this->obtemUnidades($arrayProp["unit_type_id"]);
            
 ?>
             <label><?php echo $arrayProp["name"];?></label><br>
@@ -368,11 +361,13 @@ class InsertValues{
                 else{
                     $valor = $_REQUEST[$arrayProp['form_field_name']];
                 }
+                
+                $un = $this->obtemUnidades($arrayProp['unit_type_id'])
 ?>
                         <li>
 <?php
                         //imprime o valor que o utilizador introduzio no formulario anterior para cada propriedade
-                            echo $arrayProp['name'].": ".$valor;
+                            echo $arrayProp['name'].": ".$valor." ".$un["name"];
 ?> 
                             <input type='hidden' name="<?php echo $arrayProp['form_field_name'];?>" value="<?php $_REQUEST[$arrayProp['form_field_name']]?>">
                         </li>
@@ -392,6 +387,19 @@ class InsertValues{
        
     }
     
+    private function obtemUnidades ($idUnit) {
+        if(!is_null($idUnit))
+        {
+             $queryUn = "SELECT put.name FROM prop_unit_type AS put WHERE put.id = ".$idUnit;
+             $resUn = $this->db->runQuery($queryUn);
+             $un = $resUn->fetch_assoc();
+        }
+        else
+        {
+            $un["name"] = "";
+        }
+        return $un;
+    }
     
     
 }
