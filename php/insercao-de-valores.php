@@ -267,7 +267,7 @@ class InsertValues{
     private function estadoInserir() {
         $tipo = $_SESSION["tipo"];
 ?>
-        <h3>Inserção de valores - <?php $_SESSION[$tipo."_name"] ?> - inserção </h3>";
+        <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>";
 <?php						
         //creation of transaction because we will insert values in more than one tables
         $this->db->getMysqli()->autocommit(false);
@@ -282,7 +282,7 @@ class InsertValues{
 <?php				
             }
             else {
-                $idEntForm = $this->db->getMysqli()->insert_id();
+                $idEntForm = $this->db->getMysqli()->insert_id;
                 $propriedadesEnt = $this->db->runQuery("SELECT * FROM `property` WHERE state = 'active' AND ent_type_id = ".$_SESSION[$tipo."_id"]."");
                 if(!$propriedadesEnt) {
                     $this->db->getMysqli()->rollback();
