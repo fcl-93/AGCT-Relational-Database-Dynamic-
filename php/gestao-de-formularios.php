@@ -296,7 +296,7 @@ class gereForms
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-		if($_REQUEST['estado'] == 'inserir')
+		if($_REQUEST['estado'] == 'inserir' || $_REQUEST['estado'] == 'updateForm')
 		{
                     
                     if(empty($_REQUEST['nome']))
