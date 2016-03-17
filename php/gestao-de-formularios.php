@@ -315,6 +315,7 @@ class gereForms
 				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
 			</html>
 <?php	
+                            return false;
 			}
                         else if( $control == true)
                         {
