@@ -389,7 +389,7 @@ class gereForms
                 <?php
 				while($read_Props = $res_getProp->fetch_assoc())
 				{
-					$numProp++;
+					$this->numProp++;
              ?>
 					<td><?php echo $read_Props["id"];?></td>
 					<td><?php echo $read_Props["name"];?></td>
@@ -432,7 +432,7 @@ class gereForms
 					</td>
 					<td><?php echo $read_Props["state"]; ?></td>
 <?php
-						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_property AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['id']." AND cfhp.property_id = ".$read_Props["id"]);
+						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_prop AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['form_id']." AND cfhp.property_id = ".$read_Props["id"]);
 
 
 						if($read_Props->num_rows == 1)
@@ -451,7 +451,7 @@ class gereForms
 <?php
                                                 }
 ?>
-						<input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
+						<input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
                             </tr>	
 <?php
                                 }
