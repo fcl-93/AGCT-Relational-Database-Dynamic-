@@ -73,10 +73,13 @@ class RelationManage
         }
         elseif($_REQUEST['estado'] =='update')
         {
+            echo "#1";
             if($this->validarDados())
             {
+                echo "#2";
                  $this->estadoUpdate();
             }
+            echo "#3";
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -127,6 +130,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
+        echo "#4";
         $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
