@@ -85,6 +85,7 @@ class gereForms
 				<p>Não existem formulários costumizados</p>
 			</html>
 <?php 
+                        $this->intForm();
 		}
 		else
 		{
