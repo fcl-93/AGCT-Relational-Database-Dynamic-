@@ -33,7 +33,6 @@ class gereForms
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
-					echo 4;
 					$this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
@@ -85,6 +84,7 @@ class gereForms
 				<p>Não existem formulários costumizados</p>
 			</html>
 <?php 
+                        $this->intForm();
 		}
 		else
 		{
@@ -298,8 +298,22 @@ class gereForms
 	public function ssvalidation(){
 		if($_REQUEST['estado'] == 'inserir')
 		{
+                    
+                    if(empty($_REQUEST['nome']))
+                    {
+?>
+			<html>	
+				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
+			</html>
+<?php	
+                            return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
 			 //Check if the user selected some scheckbox
-                        $control = true;
+                        /*$control = true;
                         for ($i = 1; i<= $_SESSION['propSelected'];$i++)
                         {
                             if(empty($_REQUEST['idProp'.$i]))
@@ -308,15 +322,7 @@ class gereForms
                             }
                         }
                         
-                        if(empty($_REQUEST['nome']))
-			{
-?>
-			<html>	
-				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
-			</html>
-<?php	
-			}
-                        else if( $control == true)
+                        if( $control == false)
                         {
                         
 ?>
@@ -331,7 +337,7 @@ class gereForms
 			else
 			{
 				return true;
-			}
+			}*/
 			
 			
 		}	
@@ -396,7 +402,7 @@ class gereForms
 			{
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
-					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
 					{
                                             $control = false;
 ?>						
