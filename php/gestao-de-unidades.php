@@ -82,7 +82,7 @@ class Unidade
 		{
 ?>
 			<html>
-				<table class="table">
+                            <table id="sortedTable" class="table">
 					<thead>
 						<tr>
 							<th>Id</th>

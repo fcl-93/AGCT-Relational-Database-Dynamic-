@@ -297,7 +297,7 @@ class gereForms
 	public function ssvalidation(){
 		if($_REQUEST['estado'] == 'inserir')
 		{
-			if(empty($_REQUEST['nome'])
+			if(empty($_REQUEST['nome']))
 			{
 ?>
 			<html>	
