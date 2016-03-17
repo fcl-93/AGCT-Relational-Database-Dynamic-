@@ -6,6 +6,7 @@ $VAL_CLIENT_SIDE=0; // variable that controls the client side validations. If 1 
 <html>
 	<head>
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
+            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script>
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/tableSorter.js"></script>
 <?php
         if ($VAL_CLIENT_SIDE)
