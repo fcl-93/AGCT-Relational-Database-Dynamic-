@@ -574,11 +574,12 @@ class InsertValues{
 <?php
             }
             else {
-            foreach ($arrayEntidades as $id => $nome) {
+                foreach ($arrayEntidades as $id => $nome) {
 ?>
                         <li>Nome para instância da entidade <?php echo $nome; ?>: <?php echo $_REQUEST["nomeInst_".$id];?></label><br>
                         <input type="hidden" name="nomeInst_<?php echo $id; ?>" value="<?php echo $_REQUEST["nomeInst_".$id];?>"><br><br>
 <?php
+                }
             }
 ?>
                     </ul>
