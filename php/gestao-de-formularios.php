@@ -31,7 +31,7 @@ class gereForms
 				{
 					$this->tablePrint();
 				}
-				else if($_REQUEST['estado']== 'inserir')
+				else if($_REQUEST['estado'] == 'inserir')
 				{
 					$this->insertState();
 				}
