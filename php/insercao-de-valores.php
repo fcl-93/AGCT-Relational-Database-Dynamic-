@@ -251,7 +251,7 @@ class InsertValues{
                     <select name="<?php echo $arrayProp['form_field_name'];?>">
 <?php
                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_SESSION[$tipo."_id"]." = ent_type_id AND value_type = 'en_ref'");
+                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_SESSION[$tipo."_id"]." = ent_type_id AND value_type = 'ent_ref'");
 
                     while($FK = $selecionaFK->fetch_assoc())
                     {
