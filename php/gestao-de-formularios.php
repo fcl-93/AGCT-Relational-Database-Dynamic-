@@ -308,43 +308,39 @@ class gereForms
 <?php	
                             return false;
                     }
-                    else
+                    //number of check boxes
+                    $controlaCheck = 0;
+                    for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                     {
-                        return true;
-                    }
-			 //Check if the user selected some scheckbox
-                        /*$control = true;
-                        for ($i = 1; i<= $_SESSION['propSelected'];$i++)
-                        {
-                            if(empty($_REQUEST['idProp'.$i]))
-                            { 		
-                               $control == false;
+                            if(empty($_REQUEST["idProp".$i]))
+                            {
+                                    $controlaCheck++;
                             }
-                        }
+                    }
+                    if($controlaCheck == $_SESSION['propSelected'])
+                    {
                         
-                        if( $control == false)
-                        {
-                        
-?>
-				<html>
-					<p>Deve selecionar pelo menos um campo para introduzir.</p>
-					<p>um novo formulário</p>
-				</html>
-				
-<?php
-				return false;
-			}
-			else
-			{
-				return true;
-			}*/
-			
-			
-		}	
-		else 
-		{
-			return true;
-		}
+                            echo "ERRO! Deve selecionar pelo menos 1 propriedade para o seu formulário!<br>";
+                            goBack();
+                            return false;
+                    }
+                    //
+                    for($i = 1; $i <= $_SESSION['propSelected']; $i++)
+                    {
+                            if((!is_numeric($_REQUEST["ordem".$i]) || $_REQUEST["ordem".$i] < 1) && isset($_REQUEST["idProp".$i]))
+                            {
+                                    echo "ERRO! O campo ordem deve ser numérico e superior a 0!<br>";
+                                    goBack();
+                                    return false;
+                            }
+                    }
+                    return true;
+
+                }	
+                else 
+                {
+                    return true;
+                }
 	}
 	
 	public function formEdit()
