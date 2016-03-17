@@ -630,14 +630,14 @@ class InsertValues{
                 $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
                 $resQuerySelEnt = $this->db->runQuery($querySelEnt);
                 while ($ent = $resQuerySelEnt->fetch_assoc()) {
-                    $guardaEnt["id"] = $ent["name"]
+                    $guardaEnt["id"] = $ent["name"];
                 }    
             }
             else {
                 $querySelRel = "SELECT * FROM rel_type WHERE id = ".$prop["rel_type_id"];
                 $resQuerySelRel = $this->db->runQuery($querySelRel);
                 while ($rel = $resQuerySelRel->fetch_assoc()) {
-                   $guardaRel["id"] = $rel["id"]
+                   $guardaRel["id"] = $rel["id"];
                 }
             }
         }
