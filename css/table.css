@@ -1,51 +1,51 @@
 
 
-#table {
+.table {
   margin: 0 auto;
   font-size: 1.2em;
   margin-bottom: 15px;
 }
 
-#table thead {
+.table thead {
   cursor: pointer;
   background: #c9dff0;
 }
-#table thead tr th {
+.table thead tr th {
   font-weight: bold;
   padding: 12px 30px;
   padding-left: 42px;
 }
-#table thead tr th span {
+.table thead tr th span {
   background-image: url('bg.gif');
   padding-right: 20px;
   background-repeat: no-repeat;
   background-position: 100% 100%;
 }
 
-#table thead tr th.headerSortUp, #table thead tr th.headerSortDown {
+.table thead tr th.headerSortUp, #table thead tr th.headerSortDown {
   background: #acc8dd;
 }
 
-#table thead tr th.headerSortUp span {
+.table thead tr th.headerSortUp span {
   background-image: url('asc.gif');
 }
-#table thead tr th.headerSortDown span {
+.table thead tr th.headerSortDown span {
   background-image: url('desc.gif');
 }
 
 
-#table tbody tr {
+.table tbody tr {
   color: #555;
 }
-#table tbody tr td {
+.table tbody tr td {
   text-align: center;
   padding: 15px 10px;
 }
-#table tbody tr td.lalign {
+.table tbody tr td.lalign {
   text-align: left;
 }
 
-#table td, #table th {
+.table td, .table th {
     margin: 0  !important;
     border: 1px solid !important;
     padding: 1px !important;

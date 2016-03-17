@@ -157,7 +157,7 @@ class PropertyManage
     {
     ?>
     <html>
-        <table id="table">
+        <table class="table">
             <thead>
                 <tr>
                 <?php

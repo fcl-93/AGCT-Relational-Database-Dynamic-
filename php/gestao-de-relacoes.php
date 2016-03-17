@@ -214,7 +214,7 @@ class RelationManage
      */
     private function createTable() {
 ?>
-        <table id="table">
+            <table id="sortedTable" class="table">
             <thead>
                 <tr>
                     <th><span>ID</span></th>

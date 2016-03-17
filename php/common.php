@@ -1,15 +1,17 @@
 <?php
-$VAL_CLIENT_SIDE=0;
+$VAL_CLIENT_SIDE=0; // variable that controls the client side validations. If 1 enables that validation
 ?>
  
  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
+            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/tableSorter.js"></script>
 <?php
         if ($VAL_CLIENT_SIDE)
         {
 ?>
-            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
+            
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script>
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/formValidation.js"></script>
 <?php
