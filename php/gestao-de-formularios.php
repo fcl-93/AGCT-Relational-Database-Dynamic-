@@ -351,12 +351,12 @@ class gereForms
 	{
 		$this->numProp = 0;
                 $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['form_id']);
-                $nome = $res_Nome->fetch_assoc();
+                $read_Name = $res_Nome->fetch_assoc();
  ?>
 <html>
         	<form method="POST">
                     <input type="hidden" name="estado" value="editar_form">
-                    <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $nome; ?>">
+                    <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $read_Name['name']; ?>">
                         
                     <table  class="table">
                         <thead>
