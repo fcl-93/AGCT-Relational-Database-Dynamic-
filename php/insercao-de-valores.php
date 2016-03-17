@@ -373,6 +373,7 @@ class InsertValues{
     }
     */
     private function insertEntityValues($idEnt) {
+        $tipo = $_SESSION["tipo"];
         $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
