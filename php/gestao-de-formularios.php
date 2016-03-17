@@ -90,7 +90,7 @@ class gereForms
 ?>
 
 			<html>
-				<table id="table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Id</th>
@@ -180,7 +180,7 @@ class gereForms
 				<label id="nome" class="error" for="nome"></label>
 				<br><br>
 
-				<table id="table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
