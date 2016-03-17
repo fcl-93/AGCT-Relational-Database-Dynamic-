@@ -124,7 +124,7 @@ class gereForms
 ?>
 								</td>
 								<td>
-									<a href="gestao-de-formularios?estado=editar_form&form_id='<?php echo $readForm['id']; ?>'">[Editar]</a>
+									<a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
 <?php 
 										if($readForm['state'] === 'active')
 										{
