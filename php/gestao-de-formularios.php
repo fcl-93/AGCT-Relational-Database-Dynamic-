@@ -39,9 +39,13 @@ class gereForms
 				{
 					$this->formEdit();
 				}
+                                else if($_REQUEST['estado'] == 'updateForm')
+                                {
+                                    $this->updateForm();
+                                }
 				else if ($_REQUEST['estado'] == 'updateForm')
 				{
-					
+                                    $this->updateForm();
 				}
 				else if($_REQUEST['estado'] == 'ativar')
 				{
@@ -346,14 +350,15 @@ class gereForms
                     return true;
                 }
 	}
-	
-	public function formEdit()
-	{
+	/**
+         * Ths will fill all the field in the form to edit the selected dynamic form.
+         */
+	public function formEdit(){
 		$this->numProp = 0;
                 $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['form_id']);
                 $read_Name = $res_Nome->fetch_assoc();
  ?>
-<html>
+                <html>
         	<form method="POST">
                     <input type="hidden" name="estado" value="editar_form">
                     <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $read_Name['name']; ?>">
@@ -532,6 +537,7 @@ class gereForms
 							<p>A inserção de do novo formulário falhou</p>
 						</html>
 <?php 					
+                                                goBack();
 						$this->bd->getMysqli()->rollback();
 					}
 
@@ -556,7 +562,61 @@ class gereForms
 			goBack();	
 		}
 	}
-		
-	
+        
+        public function updateForm(){
+            if($this->ssvalidation())
+            {
+                $this->bd->getMysqli()->autocommit(false);
+		$this->bd->getMysqli()->begin_transaction();
+                if(!$this->bd->runQuery("UPDATE custom_form  SET name = '".$this->bd->userInputVal($_REQUEST["nome"])."' WHERE id = ".$_REQUEST['form_id'].""))
+                {
+                    //erro a fazer update ao form
+                    $this->bd->getMysqli()->rollback();
+                }
+                else 
+                {
+                    $id = $_REQUEST['form_id'];
+                    $control = true;
+                    if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
+                    {
+                        //erro a fazer update ao form
+                         $this->bd->getMysqli()->rollback();
+                    }
+                    else
+                    {
+                        for($i = 1; $i <= $_SESSION['propSelected']; $i++)
+                            {
+                                    if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i])) 
+                                    {
+                                            
+                                            
+                                            if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
+                                            {
+                                                   //erro a fazer update ao form
+                                                   $this->bd->getMysqli()->rollback();
+                                            }
+                                    }
+                            }
+                            if($control)
+                            {
+                                $this->bd->commit();
+?>
+                                                <p>Atualizou o seu formulário com sucesso</p>
+                                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+<?php
+                            }
+                    }
+                    
+                }
+                
+                
+            }
+            else
+            {
+                   
+                goBack();            
+            }
+
+        }
 }
 ?>
