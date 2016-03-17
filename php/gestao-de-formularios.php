@@ -298,6 +298,16 @@ class gereForms
 	public function ssvalidation(){
 		if($_REQUEST['estado'] == 'inserir')
 		{
+                    
+                    if(empty($_REQUEST['nome']))
+                    {
+?>
+			<html>	
+				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
+			</html>
+<?php	
+                            return false;
+                    }
 			 //Check if the user selected some scheckbox
                         $control = true;
                         for ($i = 1; i<= $_SESSION['propSelected'];$i++)
@@ -308,16 +318,7 @@ class gereForms
                             }
                         }
                         
-                        if(empty($_REQUEST['nome']))
-			{
-?>
-			<html>	
-				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
-			</html>
-<?php	
-                            return false;
-			}
-                        else if( $control == true)
+                        if( $control == false)
                         {
                         
 ?>
