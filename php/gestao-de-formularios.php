@@ -37,7 +37,7 @@ class gereForms
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
 				{
-					
+					$this->formEdit();
 				}
 				else if ($_REQUEST['estado'] == 'updateForm')
 				{
@@ -350,12 +350,12 @@ class gereForms
 	public function formEdit()
 	{
 		$this->numProp = 0;
-                $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['id']);
+                $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['form_id']);
                 $nome = $res_Nome->fetch_assoc();
  ?>
         	<form method="POST">
                     <input type="hidden" name="estado" value="editar_form">
-                    <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $nome; ?>"
+                    <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $nome; ?>">
                         
                     <table  class="table">
                         <thead>
