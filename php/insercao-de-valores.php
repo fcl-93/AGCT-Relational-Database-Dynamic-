@@ -301,7 +301,6 @@ class InsertValues{
         }
     }
 ?>
-?>
             <input hidden="hidden" name="estado" value="validar">
             <input type="submit" value="Submeter">           
         </form>
@@ -544,6 +543,11 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
+                if ($tipo === "form") {
+                    $getEntidade = "SELECT * FROM ent_type WHERE id = ".$arrayProp["ent_type_id"];
+                    $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $arrayEntidades[$entidade["id"]] = $entidade["name"];  
+                }
                 if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
@@ -562,9 +566,21 @@ class InsertValues{
                         </li>
 <?php
             }
+            if ($tipo === "ent")
+            {
 ?>
                         <li>Nome para instância da entidade: <?php echo $_REQUEST["nomeInst"];?></li>
                         <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
+<?php
+            }
+            else {
+            foreach ($arrayEntidades as $id => $nome) {
+?>
+                        <li>Nome para instância da entidade <?php echo $nome; ?>: <?php echo $_REQUEST["nomeInst_".$id];?></label><br>
+                        <input type="hidden" name="nomeInst_<?php echo $id; ?>" value="<?php echo $_REQUEST["nomeInst_".$id];?>"><br><br>
+<?php
+            }
+?>
                     </ul>
                     </li>
                 </ul>
