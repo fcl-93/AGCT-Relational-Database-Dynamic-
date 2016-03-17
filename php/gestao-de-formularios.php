@@ -295,14 +295,33 @@ class gereForms
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-		if($_REQUEST['estado'] == 'inserir' && empty($_REQUEST['nome']))
+		if($_REQUEST['estado'] == 'inserir')
 		{
+			if(empty($_REQUEST['nome'])
+			{
 ?>
 			<html>	
 				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
 			</html>
 <?php	
-			return false;
+			}
+			else if($_SESSION['propSelected'] == 0)
+			{
+?>
+				<html>
+					<p>Deve selecionar pelo menos um campo para introduzir.</p>
+					<p>um novo formulário</p>
+				</html>
+				
+<?php
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+			
 		}	
 		else 
 		{
