@@ -171,13 +171,24 @@ class InsertValues{
                    . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active' ORDER BY cfhp.field_order ASC";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
+       $arrayEntidades = array(); //array that will store all the entities that ar involved in the custom_form
        while ($arrayProp = $execQueryProp->fetch_assoc())
        {
            $un = $this->obtemUnidades($arrayProp["unit_type_id"]);
            
+           if ($tipo === "ent") {
 ?>
             <label><?php echo $arrayProp["name"];?></label><br>
 <?php
+           }
+           else {
+               $getEntidade = "SELECT * FROM ent_type WHERE id = ".$$arrayProp["ent_type_id"];
+               $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
+               $arrayEntidades[$entidade["id"]]=$entidade["name"];
+?>
+            <label><?php echo $entidade["name"]."-".$arrayProp["name"];?></label><br>
+<?php   
+           }
             switch ($arrayProp["value_type"])
             {
                 case "text":
@@ -274,11 +285,23 @@ class InsertValues{
                 default :
                     break;
             }
-       }
+        }
+        if ($tipo === "ent") {
 ?>
-                    
             <label>Nome para instância da entidade</label><br>
             <input type="text" name="nomeInst"><br><br>
+<?php
+        }
+        else {
+            foreach ($arrayEntidades as $id => $nome) {
+?>
+            <label>Nome para instância da entidade <?php echo $nome; ?></label><br>
+            <input type="text" name="nomeInst_<?php echo $id; ?>"><br><br>
+<?php
+        }
+    }
+?>
+?>
             <input hidden="hidden" name="estado" value="validar">
             <input type="submit" value="Submeter">           
         </form>
