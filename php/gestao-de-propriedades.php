@@ -164,27 +164,27 @@ class PropertyManage
                     if ($tipo === "entity")
                     {
                 ?>
-                    <th><span>Entidade</span></th>
+                    <th>Entidade</th>
                 <?php
                     }
                     else
                     {
                 ?>
-                    <th><span>Relação</span></th>
+                    <th>Relação</th>
                 <?php
                     }
                 ?>
-                    <th><span>ID</span></th>
-                    <th><span>Propriedade</span></th>
-                    <th><span>Tipo de valor</span></th>
-                    <th><span>Nome do campo no formulário</span></th>
-                    <th><span>Tipo do campo no formulário</span></th>
-                    <th><span>Tipo de unidade</span></th>
-                    <th><span>Ordem do campo no formulário</span></th>
+                    <th>ID</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
                     <!--<th>Tamanho do campo no formulário</th>-->
-                    <th><span>Obrigatório</span></th>
-                    <th><span>Estado</span></th>
-                    <th><span>Ação</span></th>
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
