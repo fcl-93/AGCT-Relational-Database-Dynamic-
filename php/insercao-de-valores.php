@@ -168,7 +168,7 @@ class InsertValues{
        }
        else {
            $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active'";
+                   . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active' ORDER BY cfhp.field_order ASC";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
        while ($arrayProp = $execQueryProp->fetch_assoc())
@@ -276,6 +276,7 @@ class InsertValues{
             }
        }
 ?>
+                    
             <label>Nome para instância da entidade</label><br>
             <input type="text" name="nomeInst"><br><br>
             <input hidden="hidden" name="estado" value="validar">
