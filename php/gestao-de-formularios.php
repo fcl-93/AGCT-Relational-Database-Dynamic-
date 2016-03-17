@@ -33,6 +33,7 @@ class gereForms
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
+					echo 4;
 					$this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
@@ -295,14 +296,33 @@ class gereForms
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-		if($_REQUEST['estado'] == 'inserir' && empty($_REQUEST['nome']))
+		if($_REQUEST['estado'] == 'inserir')
 		{
+			if(empty($_REQUEST['nome']))
+			{
 ?>
 			<html>	
 				<p>Deve introduzir o nome para um novo formulário costumizado.</p>
 			</html>
 <?php	
-			return false;
+			}
+			else if($_SESSION['propSelected'] == 0)
+			{
+?>
+				<html>
+					<p>Deve selecionar pelo menos um campo para introduzir.</p>
+					<p>um novo formulário</p>
+				</html>
+				
+<?php
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+			
 		}	
 		else 
 		{
@@ -350,6 +370,7 @@ class gereForms
 	public function insertState(){
 		if($this->ssvalidation())
 		{
+			echo 1;
 			//Begin Transaction
 			$this->bd->getMysqli()->autocommit(false);
 			$this->bd->getMysqli()->begin_transaction();
@@ -365,8 +386,8 @@ class gereForms
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
 					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
-					{
-?>	
+					{echo 2;
+?>						
 						<html>
 							<p>A inserção de do novo formulário falhou</p>
 						</html>
@@ -375,7 +396,8 @@ class gereForms
 					}
 					else 
 					{
-?>
+						echo 3;
+?>		
 						<html>
 							<p>Inseriu um novo formulário com sucesso</p>
 							<p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
