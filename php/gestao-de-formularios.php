@@ -324,6 +324,7 @@ class gereForms
                             <p> Deve selecionar pelo menos uma propriedade para o seu formulário <p>
                         </html>
 <?php
+                        return false;
                     }
                     //
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
