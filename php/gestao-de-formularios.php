@@ -43,10 +43,6 @@ class gereForms
                                 {
                                     $this->updateForm();
                                 }
-				else if ($_REQUEST['estado'] == 'updateForm')
-				{
-                                    $this->updateForm();
-				}
 				else if($_REQUEST['estado'] == 'ativar')
 				{
 					$this->activate();
@@ -580,6 +576,7 @@ class gereForms
                     if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
                     {
                         //erro a fazer update ao form
+                         $control = false;
                          $this->bd->getMysqli()->rollback();
                     }
                     else
@@ -593,6 +590,7 @@ class gereForms
                                             if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
                                             {
                                                    //erro a fazer update ao form
+                                                 $control = false;
                                                    $this->bd->getMysqli()->rollback();
                                             }
                                     }
