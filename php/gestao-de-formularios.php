@@ -298,7 +298,17 @@ class gereForms
 	public function ssvalidation(){
 		if($_REQUEST['estado'] == 'inserir')
 		{
-			if(empty($_REQUEST['nome']))
+			 //Check if the user selected some scheckbox
+                        $control = true;
+                        for ($i = 1; i<= $_SESSION['propSelected'];$i++)
+                        {
+                            if(empty($_REQUEST['idProp'.$i]))
+                            { 		
+                               $control == false;
+                            }
+                        }
+                        
+                        if(empty($_REQUEST['nome']))
 			{
 ?>
 			<html>	
@@ -306,8 +316,9 @@ class gereForms
 			</html>
 <?php	
 			}
-			else if($_SESSION['propSelected'] == 0)
-			{
+                        else if( $control == true)
+                        {
+                        
 ?>
 				<html>
 					<p>Deve selecionar pelo menos um campo para introduzir.</p>
@@ -370,7 +381,7 @@ class gereForms
 	public function insertState(){
 		if($this->ssvalidation())
 		{
-                    echo $_SESSION['propSelected'];
+                    //echo $_SESSION['propSelected'];
 			//Begin Transaction
 			$this->bd->getMysqli()->autocommit(false);
 			$this->bd->getMysqli()->begin_transaction();
