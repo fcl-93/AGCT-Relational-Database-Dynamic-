@@ -357,7 +357,7 @@ class gereForms
         	<form method="POST">
                     <input type="hidden" name="estado" value="editar_form">
                     <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $read_Name['name']; ?>">
-                        
+                    <br>
                     <table  class="table">
                         <thead>
                             <tr>
