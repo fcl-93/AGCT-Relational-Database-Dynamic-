@@ -373,7 +373,7 @@ class InsertValues{
     }
     */
     private function insertEntityValues($idEnt) {
-        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", ".$_REQUEST["nomeInst"].")";
+        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
             $this->db->getMysqli()->rollback();
