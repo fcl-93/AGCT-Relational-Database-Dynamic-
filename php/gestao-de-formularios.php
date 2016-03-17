@@ -370,7 +370,6 @@ class gereForms
 	public function insertState(){
 		if($this->ssvalidation())
 		{
-			echo 1;
 			//Begin Transaction
 			$this->bd->getMysqli()->autocommit(false);
 			$this->bd->getMysqli()->begin_transaction();
@@ -380,13 +379,14 @@ class gereForms
 			$this->bd->runQuery("INSERT INTO `custom_form`(`id`, `name`, `state`)VALUES(NULL,'".$sanitizedInput."','active')");
 		
 			$getLastId = $this->bd->getMysqli()->insert_id;
-			
+			$control = true;
 			for($i = 1; $i <= $_SESSION['propSelected'] ; $i++)
 			{
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
 					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
-					{echo 2;
+					{
+                                            $control = false;
 ?>						
 						<html>
 							<p>A inserção de do novo formulário falhou</p>
@@ -394,9 +394,13 @@ class gereForms
 <?php 					
 						$this->bd->getMysqli()->rollback();
 					}
-					else 
-					{
-						echo 3;
+
+					
+				}
+			}
+                        
+			if($control == true)
+                        {
 ?>		
 						<html>
 							<p>Inseriu um novo formulário com sucesso</p>
@@ -404,11 +408,7 @@ class gereForms
 						</html>
 <?php 
 						$this->bd->getMysqli()->commit();
-					}
-					
-				}
 			}
-			
 		
 		}
 		else 
