@@ -559,6 +559,9 @@ class gereForms
 		}
 	}
         
+        /**
+         * This method will update the dataform a selected form
+         */
         public function updateForm(){
             if($this->ssvalidation())
             {
@@ -597,11 +600,12 @@ class gereForms
                             }
                             if($control)
                             {
-                                $this->bd->commit();
 ?>
                                                 <p>Atualizou o seu formulário com sucesso</p>
                                                 <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+                                                
 <?php
+$this->bd->getMysqli()->commit();   
                             }
                     }
                     
