@@ -33,6 +33,7 @@ class gereForms
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
+					echo 4;
 					$this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
@@ -369,6 +370,7 @@ class gereForms
 	public function insertState(){
 		if($this->ssvalidation())
 		{
+			echo 1;
 			//Begin Transaction
 			$this->bd->getMysqli()->autocommit(false);
 			$this->bd->getMysqli()->begin_transaction();
@@ -384,8 +386,8 @@ class gereForms
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
 					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
-					{
-?>	
+					{echo 2;
+?>						
 						<html>
 							<p>A inserção de do novo formulário falhou</p>
 						</html>
@@ -394,7 +396,8 @@ class gereForms
 					}
 					else 
 					{
-?>
+						echo 3;
+?>		
 						<html>
 							<p>Inseriu um novo formulário com sucesso</p>
 							<p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
