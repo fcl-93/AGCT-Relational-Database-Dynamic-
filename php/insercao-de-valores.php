@@ -373,6 +373,7 @@ class InsertValues{
     }
     */
     private function insertEntityValues($idEnt) {
+        $tipo = $_SESSION["tipo"];
         $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
@@ -395,13 +396,13 @@ class InsertValues{
                 $sucesso = false;
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
-                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`, `entity_name`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login.",'".$_REQUEST["nomeInst"]."')");
+                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
                     if(!$insertVal)
                     {								
                         $this->db->getMysqli()->rollback();
 ?>
-                        <p>Erro na atribuição do valor à propriedade <?php echo $_REQUEST[$propriedades["name"]];?>.</p>
+                        <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
 <?php
                         $sucesso = false;
                     }
