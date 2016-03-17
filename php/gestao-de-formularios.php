@@ -601,21 +601,17 @@ class gereForms
                             if($control)
                             {
 ?>
-                                                <p>Atualizou o seu formulário com sucesso</p>
-                                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+                                <p>Atualizou o seu formulário com sucesso</p>
+                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
                                                 
 <?php
-$this->bd->getMysqli()->commit();   
+                                $this->bd->getMysqli()->commit();   
                             }
-                    }
-                    
+                    }   
                 }
-                
-                
             }
             else
             {
-                   
                 goBack();            
             }
 
