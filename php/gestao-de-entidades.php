@@ -1,14 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.1.js"></script> 
-		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.validate.js"></script> 
-		 <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script> 
-		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/formValidation.js"></script>
- 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/screen.css">
- 		<link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/table.css">
- 	</head>
-</html>
 <?php
 
 	require_once("custom/php/common.php");	
@@ -28,7 +17,7 @@
 					
 ?>
 				<html>
-					<table id="table">
+                                    <table id="sortedTable" class="table">
 						<thead>
 							<tr>
 								<th> <span>ID</span></th>
