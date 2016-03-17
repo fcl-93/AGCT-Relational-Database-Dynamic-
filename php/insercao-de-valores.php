@@ -242,9 +242,34 @@ class InsertValues{
                         </select>
 <?php
                     }
-                    echo '<br><br>';
+?>
+                    <br><br>
+<?php
                     break;
                 case "ent_ref":
+ ?>
+                    <select name="<?php echo $arrayProp['form_field_name'];?>">
+<?php
+                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_SESSION[$tipo."_id"]." = ent_type_id AND value_type = 'en_ref'");
+
+                    while($FK = $selecionaFK->fetch_assoc())
+                    {
+                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+
+                        //array associativo que guarda o resultado que vem da query 
+                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                        {
+                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+?>
+                        <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                        }
+                    }
+?>
+                    </select></br>
+<?php
                     break;
                 default :
                     break;
@@ -348,7 +373,7 @@ class InsertValues{
     }
     */
     private function insertEntityValues($idEnt) {
-        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt.")";
+        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", ".$_REQUEST["nomeInst"].")";
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
             $this->db->getMysqli()->rollback();
@@ -479,6 +504,8 @@ class InsertValues{
                    break;
                }
            }
+           
+           $_REQUEST["nomeInst"] = $this->db->getMysqli()->real_escape_string($_REQUEST["nomeInst"]);
            
        }
        
