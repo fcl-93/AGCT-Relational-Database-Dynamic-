@@ -353,6 +353,7 @@ class gereForms
                 $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['form_id']);
                 $nome = $res_Nome->fetch_assoc();
  ?>
+<html>
         	<form method="POST">
                     <input type="hidden" name="estado" value="editar_form">
                     <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $nome; ?>">
@@ -435,7 +436,7 @@ class gereForms
 						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_prop AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['form_id']." AND cfhp.property_id = ".$read_Props["id"]);
 
 
-						if($read_Props->num_rows == 1)
+						if($res_Checkd->num_rows == 1)
 						{
 							$arrayChecks = $read_Props->fetch->assoc();
 ?>
@@ -461,6 +462,7 @@ class gereForms
                 <table>
             <input type="submit" value="Atualizar formulário">
         </form>
+                                </html>
 <?php
 	$_SESSION['propSelected'] = $this->numProp;
 
