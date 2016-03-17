@@ -442,15 +442,18 @@ class gereForms
 							$arrayChecks = $res_Checkd->fetch_assoc();
                                                                 
 ?>
-							<td><input type="checkbox" name="idProp<?php echo $numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
-							<td><input type="text" name="ordem<?php echo $numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+                                        
+							
+                                        
+							<td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
+							<td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
 <?php
                                                 }
 						else
 						{
 ?>
-                                                        <td><input type="checkbox" name="idProp<?php echo $numProp;?>" value="<?php echo $read_Props["id"];?>"></td>';
-                                                        <td><input type="text" name="ordem<?php echo $numProp ?>"></td>
+                                                        <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>';
+                                                        <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
 <?php
                                                 }
 ?>
