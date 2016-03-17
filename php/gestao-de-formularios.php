@@ -418,7 +418,8 @@ class gereForms
 					</td>
                                         
                                         <td><?php echo $read_Props["form_field_order"]; ?></td>
-					<td><?php echo '?'; ?>// echo $read_Props["form_field_size"]; ?></td>
+                                        <!-- // echo $read_Props["form_field_size"]; ?-->
+					<td><?php echo '?'; ?></td>
 					<td>
 <?php					
                                         if($read_Props["mandatory"] == 1)
@@ -438,7 +439,7 @@ class gereForms
 
 						if($res_Checkd->num_rows == 1)
 						{
-							$arrayChecks = $read_Props->fetch->assoc();
+							$arrayChecks = $res_Checkd->fetch->assoc();
 ?>
 							<td><input type="checkbox" name="idProp<?php echo $numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
 							<td><input type="text" name="ordem<?php echo $numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
