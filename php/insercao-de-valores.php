@@ -182,7 +182,7 @@ class InsertValues{
 <?php
            }
            else {
-               $getEntidade = "SELECT * FROM ent_type WHERE id = ".$$arrayProp["ent_type_id"];
+               $getEntidade = "SELECT * FROM ent_type WHERE id = ".$arrayProp["ent_type_id"];
                $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
                $arrayEntidades[$entidade["id"]]=$entidade["name"];
 ?>
