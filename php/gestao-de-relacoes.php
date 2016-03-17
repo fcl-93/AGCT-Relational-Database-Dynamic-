@@ -166,7 +166,7 @@ class RelationManage
         <html>
             <p>A relação <?php echo $this->getEntityName($idNome1)."-".$this->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
             <br>
-            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+            <p>Clique em <a href="/gestao-de-relacoes"/>Continuar</a> para avançar</p>
         </html>
 <?php 
     }
@@ -317,8 +317,8 @@ class RelationManage
 ?>                
             </select><br>
             <label class="error" for="ent2"></label><br>
-            <input type="hidden" name="estado" value="inserir"><br>
-            <input type="submit" value="Inserir tipo de relação">
+            <input type="hidden" name="estado" value="update"><br>
+            <input type="submit" value="Alterar tipo de relação">
         </form>
 <?php
     }
