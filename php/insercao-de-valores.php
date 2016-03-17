@@ -403,6 +403,7 @@ class InsertValues{
         else {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."')";
         }
+        echo $queryInsertInst;
         
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
