@@ -324,8 +324,8 @@ class InsertValues{
             $arrayEntRel = $this->idEntRel($_SESSION[$tipo."_id"]);
             $arrayEnt = $arrayEntRel[0];
             $arrayRel = $arrayEntRel[1];
-            foreach ($arrayEnt as $ent) {
-                $this->insertEntityValues($ent);
+            foreach ($arrayEnt as $id=>$ent) {
+                $this->insertEntityValues($id);
             }
             /*foreach ($arrayRel as $rel) {
                 $this->insertRelValues($rel);
