@@ -39,7 +39,7 @@ class gereForms
 				{
 					
 				}
-				else if ($_REQUEST['estado'] == 'atualizar_form_custom')
+				else if ($_REQUEST['estado'] == 'updateForm')
 				{
 					
 				}
@@ -319,19 +319,23 @@ class gereForms
                     }
                     if($controlaCheck == $_SESSION['propSelected'])
                     {
-                        
-                            echo "ERRO! Deve selecionar pelo menos 1 propriedade para o seu formulário!<br>";
-                            goBack();
-                            return false;
+?>   
+                        <html>
+                            <p> Deve selecionar pelo menos uma propriedade para o seu formulário <p>
+                        </html>
+<?php
                     }
                     //
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                     {
                             if((!is_numeric($_REQUEST["ordem".$i]) || $_REQUEST["ordem".$i] < 1) && isset($_REQUEST["idProp".$i]))
                             {
-                                    echo "ERRO! O campo ordem deve ser numérico e superior a 0!<br>";
-                                    goBack();
-                                    return false;
+?> 
+                                <html>
+                                    <p>O campo ordem deve ser numérico e deve introduzir um valor superior a zero</p><br>
+                                </html>
+<?php    
+                                return false;
                             }
                     }
                     return true;
@@ -345,8 +349,123 @@ class gereForms
 	
 	public function formEdit()
 	{
-		
-	}
+		$this->numProp = 0;
+                $res_Nome = $this->bd->runQuery("SELECT name FROM custom_form WHERE id = ".$_REQUEST['id']);
+                $nome = $res_Nome->fetch_assoc();
+ ?>
+        	<form method="POST">
+                    <input type="hidden" name="estado" value="editar_form">
+                    <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $nome; ?>"
+                        
+                    <table  class="table">
+                        <thead>
+                            <tr>
+                                <th>Entidade</th>
+                                <th>Id</th>
+                                <th>Propriedade</th>
+                                <th>Tipo de valor</th>
+                                <th>Nome do campo no formulário</th>
+                                <th>Tipo do campo no formulário</th>
+                                <th>Tipo de unidade</th>
+                                <th>Ordem do campo no formulário</th>
+                                <th>Tamanho do campo no formulário</th>
+                                <th>Obrigatório</th>
+                                <th>Estado</th>
+                                <th>Escolher</th>
+                                <th>Ordem</th>
+                            </tr>
+                        </thead>
+                        <tbody>    
+<?php			
+                        $res_Ent = $this->bd->runQuery('SELECT * FROM ent_type');
+			while($arrayRes = $res_Ent->fetch_assoc())
+			{
+				$res_getProp = $this->bd->runQuery("SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE  p.component_id = e.id AND e.name LIKE '".$arrayRes["name"]."' ORDER BY p.name ASC");
+				                                
+				$numLinhas = $res_getProp->num_rows;
+                ?>
+                            <tr>
+				<td colspan="1" rowspan="'<?php echo $numLinhas; ?>.'" style="vertical-align: top;"><?php echo $arrayRes['name']; ?></td>
+                <?php
+				while($read_Props = $res_getProp->fetch_assoc())
+				{
+					$numProp++;
+             ?>
+					<td><?php echo $read_Props["id"];?></td>
+					<td><?php echo $read_Props["name"];?></td>
+					<td><?php echo $read_Props["value_type"];?></td>
+					<td><?php echo $read_Props["form_field_name"];?></td>
+					<td><?php echo $read_Props["form_field_type"];?></td>
+					<td>
+<?php
+                                        if(is_null($read_Props["unit_type_id"]))
+					{
+?>
+						-
+<?php
+                                        }
+					else
+					{
+						$res_Unit = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id = ".$read_Props["unit_type_id"]);
+												
+						while($arrayNome = $res_Unit->fetch_assoc())
+						{
+							echo $arrayNome['name'];
+						}
+					}
+?>
+					</td>
+                                        
+                                        <td><?php echo $read_Props["form_field_order"]; ?></td>
+					<td><?php echo '?'; ?>// echo $read_Props["form_field_size"]; ?></td>
+					<td>
+<?php					
+                                        if($read_Props["mandatory"] == 1)
+					{
+						echo 'Sim';
+					}
+					else
+					{
+						echo 'Não';
+					}
+?>                                        
+					</td>
+					<td><?php echo $read_Props["state"]; ?></td>
+<?php
+						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_property AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['id']." AND cfhp.property_id = ".$read_Props["id"]);
+
+
+						if($read_Props->num_rows == 1)
+						{
+							$arrayChecks = $read_Props->fetch->assoc();
+?>
+							<td><input type="checkbox" name="idProp<?php echo $numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
+							<td><input type="text" name="ordem<?php echo $numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+<?php
+                                                }
+						else
+						{
+?>
+                                                        <td><input type="checkbox" name="idProp<?php echo $numProp;?>" value="<?php echo $read_Props["id"];?>"></td>';
+                                                        <td><input type="text" name="ordem<?php echo $numProp ?>"></td>
+<?php
+                                                }
+?>
+						<input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
+                            </tr>	
+<?php
+                                }
+			}
+ ?>
+                        </tbody>
+                <table>
+            <input type="submit" value="Atualizar formulário">
+        </form>
+<?php
+	$_SESSION['propSelected'] = $this->numProp;
+
+        }
+                                                
 	
 	/**
 	 * This method will activate the custom form the user selected.
