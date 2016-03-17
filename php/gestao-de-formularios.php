@@ -308,8 +308,12 @@ class gereForms
 <?php	
                             return false;
                     }
+                    else
+                    {
+                        return true;
+                    }
 			 //Check if the user selected some scheckbox
-                        $control = true;
+                        /*$control = true;
                         for ($i = 1; i<= $_SESSION['propSelected'];$i++)
                         {
                             if(empty($_REQUEST['idProp'.$i]))
@@ -333,7 +337,7 @@ class gereForms
 			else
 			{
 				return true;
-			}
+			}*/
 			
 			
 		}	
