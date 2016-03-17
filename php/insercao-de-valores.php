@@ -161,7 +161,7 @@ class InsertValues{
         $_SESSION[$tipo."_name"] = $name->fetch_assoc()["name"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?></h3>
-        <form method="POST" name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="?estado=validar&ent=<?php echo $_SESSION[$tipo."_id"];?>">
+        <form method="POST" name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="?estado=validar&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">
 <?php
        if ($tipo === "ent"){
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
@@ -301,7 +301,6 @@ class InsertValues{
         }
     }
 ?>
-?>
             <input hidden="hidden" name="estado" value="validar">
             <input type="submit" value="Submeter">           
         </form>
@@ -325,8 +324,8 @@ class InsertValues{
             $arrayEntRel = $this->idEntRel($_SESSION[$tipo."_id"]);
             $arrayEnt = $arrayEntRel[0];
             $arrayRel = $arrayEntRel[1];
-            foreach ($arrayEnt as $ent) {
-                $this->insertEntityValues($ent);
+            foreach ($arrayEnt as $id=>$ent) {
+                $this->insertEntityValues($id);
             }
             /*foreach ($arrayRel as $rel) {
                 $this->insertRelValues($rel);
@@ -398,7 +397,14 @@ class InsertValues{
     */
     private function insertEntityValues($idEnt) {
         $tipo = $_SESSION["tipo"];
-        $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
+        if ($tipo === "ent") {
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
+        }
+        else {
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."')";
+        }
+        echo $queryInsertInst;
+        
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
             $this->db->getMysqli()->rollback();
@@ -420,21 +426,23 @@ class InsertValues{
                 $sucesso = false;
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
+                    if (!empty($_REQUEST[$propriedades['form_field_name']])) {
                     $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
-                    if(!$insertVal)
-                    {								
-                        $this->db->getMysqli()->rollback();
+                        if(!$insertVal)
+                        {								
+                            $this->db->getMysqli()->rollback();
 ?>
-                        <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
+                            <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
 <?php
-                        $sucesso = false;
+                            $sucesso = false;
+                        }
+                        else
+                        {
+                            $this->db->getMysqli()->commit();
+                            $sucesso = true;
+                        }	
                     }
-                    else
-                    {
-                        $this->db->getMysqli()->commit();
-                        $sucesso = true;
-                    }								
                 }
                 if($sucesso == true)
                 {
@@ -529,9 +537,15 @@ class InsertValues{
                    break;
                }
            }
-           
-           $_REQUEST["nomeInst"] = $this->db->getMysqli()->real_escape_string($_REQUEST["nomeInst"]);
-           
+           if ($tipo === "form") {
+               $getEntidade = "SELECT * FROM ent_type WHERE id = ".$arrayProp["ent_type_id"];
+               $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
+               $arrayEntidades[$entidade["id"]] = $entidade["name"];  
+               $_REQUEST["nomeInst_".$entidade["id"]] = $this->db->getMysqli()->real_escape_string($_REQUEST["nomeInst_".$entidade["id"]]);
+           }
+           else {
+                $_REQUEST["nomeInst"] = $this->db->getMysqli()->real_escape_string($_REQUEST["nomeInst"]);
+           }
        }
        
        if (!$goBack) {
@@ -562,9 +576,22 @@ class InsertValues{
                         </li>
 <?php
             }
+            if ($tipo === "ent")
+            {
 ?>
                         <li>Nome para instância da entidade: <?php echo $_REQUEST["nomeInst"];?></li>
                         <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
+<?php
+            }
+            else {
+                foreach ($arrayEntidades as $id => $nome) {
+?>
+                        <li>Nome para instância da entidade <?php echo $nome; ?>: <?php echo $_REQUEST["nomeInst_".$id];?>
+                        <input type="hidden" name="nomeInst_<?php echo $id; ?>" value="<?php echo $_REQUEST["nomeInst_".$id];?>">
+<?php
+                }
+            }
+?>
                     </ul>
                     </li>
                 </ul>
@@ -600,18 +627,18 @@ class InsertValues{
                    . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active'";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
-            if (empty($prop[rel_type_id])){
+            if (empty($prop["rel_type_id"])){
                 $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
                 $resQuerySelEnt = $this->db->runQuery($querySelEnt);
                 while ($ent = $resQuerySelEnt->fetch_assoc()) {
-                    array_push($guardaEnt, $ent["id"]);
+                    $guardaEnt[$ent["id"]] = $ent["name"];
                 }    
             }
             else {
                 $querySelRel = "SELECT * FROM rel_type WHERE id = ".$prop["rel_type_id"];
                 $resQuerySelRel = $this->db->runQuery($querySelRel);
                 while ($rel = $resQuerySelRel->fetch_assoc()) {
-                    array_push($guardaRel, $rel["id"]);
+                   $guardaRel[$rel["id"]] = $rel["id"];
                 }
             }
         }
