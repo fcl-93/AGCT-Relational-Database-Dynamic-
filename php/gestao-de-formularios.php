@@ -380,7 +380,7 @@ class gereForms
                         $res_Ent = $this->bd->runQuery('SELECT * FROM ent_type');
 			while($arrayRes = $res_Ent->fetch_assoc())
 			{
-				$res_getProp = $this->bd->runQuery("SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE  p.component_id = e.id AND e.name LIKE '".$arrayRes["name"]."' ORDER BY p.name ASC");
+				$res_getProp = $this->bd->runQuery("SELECT p.id, p.name, p.value_type, p.form_field_name, p.form_field_type, p.unit_type_id, p.form_field_order, p.mandatory, p.state FROM property AS p, ent_type AS e WHERE  p.ent_type_id = e.id AND e.name LIKE '".$arrayRes["name"]."' ORDER BY p.name ASC");
 				                                
 				$numLinhas = $res_getProp->num_rows;
                 ?>
