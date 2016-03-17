@@ -425,7 +425,7 @@ class InsertValues{
                 $sucesso = false;
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
-                    if (!empty($_REQUEST[$propriedades['form_field_name']]) {
+                    if (!empty($_REQUEST[$propriedades['form_field_name']])) {
                     $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
                         if(!$insertVal)
