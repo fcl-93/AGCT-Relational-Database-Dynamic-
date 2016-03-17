@@ -386,7 +386,7 @@ class gereForms
 				$numLinhas = $res_getProp->num_rows;
                 ?>
                             <tr>
-				<td colspan="1" rowspan="'<?php echo $numLinhas; ?>.'" style="vertical-align: top;"><?php echo $arrayRes['name']; ?></td>
+				<td colspan="1" rowspan="<?php echo $numLinhas; ?>" style="vertical-align: top;"><?php echo $arrayRes['name']; ?></td>
                 <?php
 				while($read_Props = $res_getProp->fetch_assoc())
 				{
