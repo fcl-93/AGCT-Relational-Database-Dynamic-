@@ -161,7 +161,6 @@ class RelationManage
         }
         $queryUpdate .= "WHERE id =".$_REQUEST['rel_id'];
         $this->db->runQuery($queryUpdate);
-        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
 ?>
         <html>
             <p>A relação <?php echo $this->getEntityName($idNome1)."-".$this->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
@@ -220,6 +219,7 @@ class RelationManage
                     <th><span>ID</span></th>
                     <th><span>Entidade 1</span></th>
                     <th><span>Entidade 2</span></th>
+                    <th><span>Estado</span></th>
                     <th><span>Ação</span></th>
                 </tr>
             </thead>
@@ -297,7 +297,7 @@ class RelationManage
      * This method creates the form that user must fill to edit a relation type
      */
     private function formEdit() {
-        $queryRelEdit = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"];
+        $queryRelEdit = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"]);
         $relEdit = $queryRelEdit->fetch_assoc();
 ?>
         <h3>Gestão de relações - edição </h3>
