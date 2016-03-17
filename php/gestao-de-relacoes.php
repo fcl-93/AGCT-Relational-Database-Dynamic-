@@ -146,8 +146,9 @@ class RelationManage
      */
     private function estadoAtivarDesativar() {
         $getNomes = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id']);
-        $idNome1 = $getNomes->fetch_assoc()["ent_type1_id"];
-        $idNome2 = $getNomes->fetch_assoc()["ent_type2_id"];
+        $nomes = $getNomes->fetch_assoc();
+        $idNome1 = $nomes["ent_type1_id"];
+        $idNome2 = $nomes["ent_type2_id"];
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "ativar")
         {
@@ -235,7 +236,7 @@ class RelationManage
                     <td><?php echo $this->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->getEntityName($rel["ent_type2_id"]);?></td>
 <?php
-            if ($arraySelec["state"] === "active")
+            if ($rel["state"] === "active")
             {
 ?>
                 <td>Ativo</td>
