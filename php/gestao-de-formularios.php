@@ -402,7 +402,7 @@ class gereForms
 			{
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
-					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
 					{
                                             $control = false;
 ?>						
