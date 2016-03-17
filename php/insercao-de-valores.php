@@ -401,7 +401,7 @@ class InsertValues{
                     {								
                         $this->db->getMysqli()->rollback();
 ?>
-                        <p>Erro na atribuição do valor à propriedade.</p>
+                        <p>Erro na atribuição do valor à propriedade <?php echo $_REQUEST[$propriedades["name"]];?>.</p>
 <?php
                         $sucesso = false;
                     }
