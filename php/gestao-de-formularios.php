@@ -370,6 +370,7 @@ class gereForms
 	public function insertState(){
 		if($this->ssvalidation())
 		{
+                    echo $_SESSION['propSelected'];
 			//Begin Transaction
 			$this->bd->getMysqli()->autocommit(false);
 			$this->bd->getMysqli()->begin_transaction();
