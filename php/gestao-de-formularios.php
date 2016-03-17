@@ -7,7 +7,9 @@ class gereForms
 {
 	private $bd;
 	private $numProp; //printed properties in the table
-	
+	/**
+	 * Constructor
+	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
 		$this->numProp = 0;
@@ -31,7 +33,7 @@ class gereForms
 				}
 				else if($_REQUEST['estado']== 'inserir')
 				{
-				
+					$this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
 				{
@@ -69,6 +71,10 @@ class gereForms
 		}
 	}
 	
+	/**
+	 * This method will print the table that will be showing the forms and their state 
+	 * in this table the user will be able to desactivate a edit forms.
+	 */
 	public function tablePrint(){
 		$resForm = $this->bd->runQuery("SELECT * FROM custom_form ORDER BY name ASC");
 		if($resForm->num_rows == 0)
@@ -84,7 +90,7 @@ class gereForms
 ?>
 
 			<html>
-				<table id="table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Id</th>
@@ -148,8 +154,7 @@ class gereForms
 	/**
 	 * Prints the form composed by a table to create customized forms.
 	 */
-	public function intForm()
-	{
+	public function intForm(){
 ?>
 		<h3>Gestão de formulários customizados - Introdução</h3>
 		<br>
@@ -175,7 +180,7 @@ class gereForms
 				<label id="nome" class="error" for="nome"></label>
 				<br><br>
 
-				<table id="table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
@@ -269,8 +274,7 @@ class gereForms
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
 							</tr>
-<?php 
-												
+<?php 				
 							}
 ?>						
 						
@@ -285,9 +289,10 @@ class gereForms
 		</html>
 <?php 	
 		}
+		$_SESSION['propSelected'] = $this->numProp;
 	}
 	/**
-	 * 
+	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
 		if($_REQUEST['estado'] == 'inserir' && empty($_REQUEST['nome']))
@@ -299,6 +304,10 @@ class gereForms
 <?php	
 			return false;
 		}	
+		else 
+		{
+			return true;
+		}
 	}
 	
 	public function formEdit()
@@ -307,7 +316,7 @@ class gereForms
 	}
 	
 	/**
-	 * This method will activate the enum.
+	 * This method will activate the custom form the user selected.
 	 */
 	public function activate(){
 		$this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$_REQUEST['form_id']);
@@ -320,10 +329,10 @@ class gereForms
 		</html>
 	<?php
 		}
-		/**
-		 * This method will desactivate the enum values
-		 */
-		public function desactivate(){
+	/**
+	  * This method will desactivate the custom form the user selected
+	  */
+	public function desactivate(){
 			$this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$_REQUEST['form_id']);
 			$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
 			$read_formName = $res_formName->fetch_assoc();
@@ -334,5 +343,58 @@ class gereForms
 			</html>
 <?php
 		}
+	
+	/**
+	 * This method will handle the insertion that a user will make in the database.
+	 */
+	public function insertState(){
+		if($this->ssvalidation())
+		{
+			//Begin Transaction
+			$this->bd->getMysqli()->autocommit(false);
+			$this->bd->getMysqli()->begin_transaction();
+			
+			//Starts the insertion in the "database"
+			$sanitizedInput = $this->bd->userInputVal($_REQUEST["nome"]);
+			$this->bd->runQuery("INSERT INTO `custom_form`(`id`, `name`, `state`)VALUES(NULL,'".$sanitizedInput."','active')");
+		
+			$getLastId = $this->bd->getMysqli()->insert_id;
+			
+			for($i = 1; $i <= $_SESSION['propSelected'] ; $i++)
+			{
+				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
+				{
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
+					{
+?>	
+						<html>
+							<p>A inserção de do novo formulário falhou</p>
+						</html>
+<?php 					
+						$this->bd->getMysqli()->rollback();
+					}
+					else 
+					{
+?>
+						<html>
+							<p>Inseriu um novo formulário com sucesso</p>
+							<p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+						</html>
+<?php 
+						$this->bd->getMysqli()->commit();
+					}
+					
+				}
+			}
+			
+		
+		}
+		else 
+		{
+			goBack();	
+		}
+	}
+		
+	
 }
 ?>
