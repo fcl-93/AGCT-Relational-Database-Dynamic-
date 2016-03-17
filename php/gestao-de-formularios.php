@@ -33,7 +33,6 @@ class gereForms
 				}
 				else if($_REQUEST['estado'] == 'inserir')
 				{
-					echo 4;
 					$this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'editar_form')
@@ -403,7 +402,7 @@ class gereForms
 			{
 				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
 				{
-					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_property`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->runQuery($_REQUEST["ordem".$i])."')"))
 					{
                                             $control = false;
 ?>						
