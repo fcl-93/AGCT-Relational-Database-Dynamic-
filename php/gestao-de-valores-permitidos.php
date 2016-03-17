@@ -87,7 +87,7 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<table id="table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>Entidade</th>
