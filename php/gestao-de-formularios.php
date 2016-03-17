@@ -14,6 +14,10 @@ class gereForms
 		$this->checkUser();
 	}
 	
+	/**
+	 *  This method will check if the user as the permission to acess this page
+	 * and will handle all the Requests states
+	 */
 	public function checkUser(){
 		$capability = 'manage_custom_forms';
 	
@@ -78,6 +82,7 @@ class gereForms
 		else
 		{
 ?>
+
 			<html>
 				<table id="table">
 					<thead>
@@ -166,7 +171,7 @@ class gereForms
 		<html>
 			<form method="POST">
 				<input type="hidden" name="estado" value="inserir">
-				<label>Nome do formulário customizado:</label> <input type="text" name="nome" required>
+				<label>Nome do formulário customizado:</label> <input type="text" name="nome">
 				<label id="nome" class="error" for="nome"></label>
 				<br><br>
 
