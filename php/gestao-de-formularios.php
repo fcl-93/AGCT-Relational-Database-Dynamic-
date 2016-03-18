@@ -3,6 +3,12 @@ require_once("custom/php/common.php");
 
 $gerencia = new gereForms();
 
+/**
+ This method present in this class will handle all the operations that we can do in 
+ * the page gestão de formularios
+ *  @author fabio
+ * 
+ */
 class gereForms
 {
 	private $bd;
@@ -43,10 +49,6 @@ class gereForms
                                 {
                                     $this->updateForm();
                                 }
-				else if ($_REQUEST['estado'] == 'updateForm')
-				{
-                                    $this->updateForm();
-				}
 				else if($_REQUEST['estado'] == 'ativar')
 				{
 					$this->activate();
@@ -300,7 +302,7 @@ class gereForms
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-		if($_REQUEST['estado'] == 'inserir')
+		if($_REQUEST['estado'] == 'inserir' || $_REQUEST['estado'] == 'updateForm')
 		{
                     
                     if(empty($_REQUEST['nome']))
@@ -328,6 +330,7 @@ class gereForms
                             <p> Deve selecionar pelo menos uma propriedade para o seu formulário <p>
                         </html>
 <?php
+                        return false;
                     }
                     //
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
@@ -360,7 +363,7 @@ class gereForms
  ?>
                 <html>
         	<form method="POST">
-                    <input type="hidden" name="estado" value="editar_form">
+                    <input type="hidden" name="estado" value="updateForm">
                     <label>Nome do formulário customizado:</label><input type="text" name="nome" value="<?php echo $read_Name['name']; ?>">
                     <br>
                     <table  class="table">
@@ -563,6 +566,9 @@ class gereForms
 		}
 	}
         
+        /**
+         * This method will update the dataform a selected form
+         */
         public function updateForm(){
             if($this->ssvalidation())
             {
@@ -580,6 +586,7 @@ class gereForms
                     if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
                     {
                         //erro a fazer update ao form
+                         $control = false;
                          $this->bd->getMysqli()->rollback();
                     }
                     else
@@ -593,27 +600,25 @@ class gereForms
                                             if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
                                             {
                                                    //erro a fazer update ao form
+                                                 $control = false;
                                                    $this->bd->getMysqli()->rollback();
                                             }
                                     }
                             }
                             if($control)
                             {
-                                $this->bd->commit();
 ?>
-                                                <p>Atualizou o seu formulário com sucesso</p>
-                                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+                                <p>Atualizou o seu formulário com sucesso</p>
+                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+                                                
 <?php
+                                $this->bd->getMysqli()->commit();   
                             }
-                    }
-                    
+                    }   
                 }
-                
-                
             }
             else
             {
-                   
                 goBack();            
             }
 
