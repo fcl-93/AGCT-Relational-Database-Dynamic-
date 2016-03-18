@@ -261,33 +261,33 @@ class InsertValues{
  ?>
                     <select name="<?php echo $arrayProp['form_field_name'];?>">
 <?php
-                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_SESSION[$tipo."_id"]." = ent_type_id AND value_type = 'ent_ref'");
-
-                    while($FK = $selecionaFK->fetch_assoc())
-                    {
-                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-
-                        //array associativo que guarda o resultado que vem da query 
-                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                    if ($tipo === "form") {
+                        $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"]);
+                    }
+                    else {
+                        $idEntidades[0] = $_SESSION[$tipo."_id"];
+                    }
+                    foreach ($idEntidades as $idEnt) {
+                        //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                        $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'");
+                        $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$idEnt." = id")->fetch_assoc()["name"];
+                        while($FK = $selecionaFK->fetch_assoc())
                         {
-                            if ($tipo === "form")
-                            {
-                                $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"]);
-                                foreach ($idEntidades as $idEnt) {
-                                    if ($FK['fk_ent_type_id'] === $idEnt)
-                                    {
+                            // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                            $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                            if ($FK['fk_ent_type_id'] == $idEnt) {
 ?>
-                                        <option value="instPorCriar">Entidade que estou a criar</option>
+                                <option value="instPorCriar"><?php echo $nomeEntRef;?> que está a criar</option>
 <?php
-                                    }
-                                }
                             }
-                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+                            //array associativo que guarda o resultado que vem da query 
+                            while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                            {
+                                //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
 ?>
-                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+                                <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
 <?php
+                            }
                         }
                     }
 ?>
