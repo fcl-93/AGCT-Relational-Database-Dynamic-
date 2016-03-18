@@ -272,9 +272,21 @@ class InsertValues{
                         //array associativo que guarda o resultado que vem da query 
                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                         {
+                            if ($tipo === "form")
+                            {
+                                $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"]);
+                                foreach ($idEntidades as $idEnt) {
+                                    if ($FK['fk_ent_type_id'] === $idEnt)
+                                    {
+?>
+                                        <option value="instPorCriar">Entidade que estou a criar</option>
+<?php
+                                    }
+                                }
+                            }
                             //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
 ?>
-                        <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
 <?php
                         }
                     }
@@ -311,7 +323,6 @@ class InsertValues{
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        print_r($_REQUEST);
         $tipo = $_SESSION["tipo"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>
@@ -426,7 +437,6 @@ class InsertValues{
         else {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."')";
         }
-        echo $queryInsertInst;
         
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
@@ -492,7 +502,7 @@ class InsertValues{
        while ($arrayProp = $execQueryProp->fetch_assoc()) {
            if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
-                <p>O campo <?php echo $arrayProp["name"];?></p> é de preenchimento obrigatório!;
+                <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
 <?php
                 goBack();
                 $goBack = true;
