@@ -85,22 +85,7 @@ class InsereRelacoes
 	 * will be associated to wich relation
 	 */
 	public function tablePrint()
-        {
-?>
-                        <html>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Tipo de relação</th>
-                                        <th>Entidade 1</th>
-                                        <th>Entidade 2</th>
-                                        <th>Estado</th>
-                                        <th>Ação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-<?php                                    
+        {                                
                                 $res_Rel = $this->bd->runQuery("SELECT * From relation");
                                  if($res_Rel->num_rows == 0)
                                  {
@@ -112,7 +97,22 @@ class InsereRelacoes
                                  }
                                  else
                                  {
-                                     while($readRelations = $res_Rel->fetch_assoc()){
+?>                                     
+                            <html>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Tipo de relação</th>
+                                            <th>Entidade 1</th>
+                                            <th>Entidade 2</th>
+                                            <th>Estado</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+<?php
+                                    while($readRelations = $res_Rel->fetch_assoc()){
                                          $res_EntPart = $this->bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$readRelations['rel_type_id']);
                                          $read_EntPart = $res_EntPart->fetch_assoc();
 ?>                      
