@@ -353,7 +353,7 @@ class InsertValues{
             $arrayRel = $arrayEntRel[1];
             $i = 0;
             foreach ($arrayEnt as $id=>$ent) {
-                $controlo[$i] = $this->insertEntityValues($id);
+                    $controlo[$i] = $this->insertEntityValues($id);
             }
             $sucesso = true;
             foreach ($controlo as $value) {
@@ -476,7 +476,16 @@ class InsertValues{
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
                     if (!empty($_REQUEST[$propriedades['form_field_name']])) {
-                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
+                        if ($_REQUEST[$propriedades['form_field_name']] === "instPorCriar") {
+                            $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEntForm." = ent_type_id AND value_type = 'ent_ref'";
+                            $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
+                            $querySelUltRef = "SELECT * FROM entity WHERE entity_id = ".$fk." ORDER BY id DESC LIMIT 1";
+                            $selUltRef = $this->db->runQuery($querySelUltRef);
+                            $ultRef = $selUltRef->fetch_assoc();
+                            $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
+                        }
+                        $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) "
+                            . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
                         if(!$insertVal)
                         {								
@@ -659,7 +668,8 @@ class InsertValues{
         $guardaEnt = array();
         $guardaRel = array();
         $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id";
+                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id "
+                . "ORDER BY prop.fk_ent_type_id DESC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
             if (empty($prop["rel_type_id"])){
