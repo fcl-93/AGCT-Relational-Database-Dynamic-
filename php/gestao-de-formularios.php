@@ -3,6 +3,12 @@ require_once("custom/php/common.php");
 
 $gerencia = new gereForms();
 
+/**
+ This method present in this class will handle all the operations that we can do in 
+ * the page gestão de formularios
+ *  @author fabio
+ * 
+ */
 class gereForms
 {
 	private $bd;
