@@ -330,6 +330,7 @@ class InsertValues{
                 $pertence = true;
             }
         }
+        return $pertence;
     }
 
     
