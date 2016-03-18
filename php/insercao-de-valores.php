@@ -324,15 +324,38 @@ class InsertValues{
             $arrayEntRel = $this->idEntRel($_SESSION[$tipo."_id"]);
             $arrayEnt = $arrayEntRel[0];
             $arrayRel = $arrayEntRel[1];
+            $i = 0;
             foreach ($arrayEnt as $id=>$ent) {
-                $this->insertEntityValues($id);
+                $controlo[$i] = $this->insertEntityValues($id);
+            }
+            $sucesso = true;
+            foreach ($controlo as $value) {
+                if ($sucesso === true && $value === false)
+                {
+                    $sucesso = false;
+                }
             }
             /*foreach ($arrayRel as $rel) {
                 $this->insertRelValues($rel);
             }*/
         }
         else {
-            $this->insertEntityValues($_SESSION[$tipo."_id"]);
+            $sucesso = $this->insertEntityValues($_SESSION[$tipo."_id"]);
+        }
+        if($sucesso == true)
+        {
+?>
+            <p>Inseriu o(s) valor(es) com sucesso.</p></br>
+            <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
+<?php
+        }
+
+        else
+        {
+?>
+            <p>Lamentamos, mas ocorreu um erro.</p>
+<?php
+            goBack();
         }
     }
     
@@ -444,23 +467,9 @@ class InsertValues{
                         }	
                     }
                 }
-                if($sucesso == true)
-                {
-?>
-                    <p>Inseriu o(s) valor(es) com sucesso.</p></br>
-                    <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
-<?php
-                }
-
-                else
-                {
-?>
-                    <p>Lamentamos, mas ocorreu um erro.</p>
-<?php
-                    goBack();
-                }
             }
         }
+        return $sucesso;
     }
     
     /**
