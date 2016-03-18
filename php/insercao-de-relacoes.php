@@ -42,23 +42,21 @@ class InsereRelacoes
 				}
 				else if($_REQUEST['estado'] == 'associar')
 				{
+                                    $this->associar();
 				}
                                 else if($_REQUEST['estado'] == 'introducao')
                                 {
                                 }
 				else if($_REQUEST['estado'] == 'inserir')
 				{
+                                    $this->insertState();
 				}
 				else if($_REQUEST['estado'] == 'desativar')
 				{
 				}
                                 else if($_REQUEST['estado'] == 'ativar')
                                 {
-                                    
-                                }
-                                else if ($_REQUEST['estado'] == 'updateAttrRel')
-                                {
-                                    $this->updateValues();
+                                    $this->activate();
                                 }
 			}
 			else
@@ -200,8 +198,9 @@ class InsereRelacoes
                                         $_SESSION['valueNumber'] = $checkBoxNumber;
                                         
     ?>  
-                                       
-                                       <input type="hidden" name="estado" value="updateAttrRel"/>
+                                        
+                                       <input type="hidden" name="flag" value="editar"/>
+                                       <input type="hidden" name="estado" value="inserir"/>
                                        <input type="submit" value="Atualizar Valores"/>
                                     </tbody>
                                 </table>
@@ -212,20 +211,7 @@ class InsereRelacoes
             
         }
         
-        /**
-         * This method will update the new submited values for the relation attributes
-         */
-        public function updateValues()
-        {
-            if($this->ssvalidation())
-            {
-                
-            }
-            else 
-            {
-                goBack();
-            }
-        }
+       
         
 	/**
 	 * Server side validation when JQuery is disabled
@@ -271,11 +257,42 @@ class InsereRelacoes
             return true;
         }
 	/**
-         * Ths will fill all the field in the form to edit the selected dynamic form.
+         * Associates the newy creaed value and associates it with another 
+         * existing value.
          */
-	public function formEdit(){ 
-            
-            
+	public function associar(){
+            $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=". $_REQUEST['ent']." OR ent_type2_id=". $_REQUEST['ent']);
+ ?>          
+            <h3>Inserção de Relações - Tipos de relação</h3>
+            <html>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php
+                        while($read_RelTypes = $res_RelTypes->fetch_assoc())
+                        {
+                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type1_id']);
+                            $read_name1 = $res_name1->fetch_assoc(); 
+                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type2_id']);
+                            $read_name1 = $res_name2->fetch_assoc(); 
+?>
+                            <tr>
+                                
+                            </tr>
+<?php
+                        }
+?>
+                    </tbody>
+                </table>
+            </html>
+ <?php         
         }
         
                                                 
@@ -283,16 +300,41 @@ class InsereRelacoes
 	/**
 	 * This method will activate the custom form the user selected.
 	 */
-	public function activate(){}
+	public function activate(){
+            
+        }
 	
 	/**
 	 * This method will handle the insertion that a user will make in the database.
 	 */
-	public function insertState(){}
+	public function insertState()
+        {
+            if($this->ssvalidation())
+            {
+                if($_REQUEST['flag'] == 'editar')
+                {
+                    $this->edita();
+                }
+                else if($_REQUEST['flag'] == 'naoeditar')
+                {
+                    $this->nedita();
+                }
+            }
+            else 
+            {
+                goBack();
+            }
+        }
         
         /**
-         * This method will update the dataform a selected form
+         * Method that will only update existing values in the database
          */
-        public function updateForm(){}
+        private function edita()
+        {}
+        /**
+         * Mehtod that will insert new values in the database.
+         */
+        private function nedita()
+        {}
 }
 ?>
