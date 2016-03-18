@@ -265,11 +265,11 @@ class InsertValues{
                         $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"])[0];
                     }
                     else {
-                        $idEntidades[0] = $_SESSION[$tipo."_id"];
+                        $idEntidades[$_SESSION[$tipo."_id"]] = $_SESSION[$tipo."_id"];
                     }
-                    foreach ($idEntidades as $idEnt) {
+                    foreach ($idEntidades as $id => $idEnt) {
                         //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                        $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'");
+                        $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref'");
                         $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$idEnt." = id")->fetch_assoc()["name"];
                         while($FK = $selecionaFK->fetch_assoc())
                         {
