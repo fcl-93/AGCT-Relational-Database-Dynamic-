@@ -261,21 +261,34 @@ class InsertValues{
  ?>
                     <select name="<?php echo $arrayProp['form_field_name'];?>">
 <?php
-                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_SESSION[$tipo."_id"]." = ent_type_id AND value_type = 'ent_ref'");
-
-                    while($FK = $selecionaFK->fetch_assoc())
-                    {
-                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-
-                        //array associativo que guarda o resultado que vem da query 
-                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                    if ($tipo === "form") {
+                        $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"])[0];
+                    }
+                    else {
+                        $idEntidades[$_SESSION[$tipo."_id"]] = $_SESSION[$tipo."_id"];
+                    }
+                    foreach ($idEntidades as $id => $idEnt) {
+                        //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                        $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref'");
+                        while($FK = $selecionaFK->fetch_assoc())
                         {
-                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+                            
+                            $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                            // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                            $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                            if ($this->verificaEntRef($FK['fk_ent_type_id'], $idEntidades)) {
 ?>
-                        <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+                                <option value="instPorCriar"><?php echo $nomeEntRef;?> que está a criar</option>
 <?php
+                            }
+                            //array associativo que guarda o resultado que vem da query 
+                            while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                            {
+                                //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+?>
+                                <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                            }
                         }
                     }
 ?>
@@ -308,10 +321,24 @@ class InsertValues{
     }
     
     /**
+     * This method checks if the referenced entity is on the form presented
+     */
+    private function verificaEntRef ($idEntRef, $arrayEnt) {
+        $pertence = false;
+        foreach ($arrayEnt as $key => $value) {
+            if ($idEntRef == $key && $pertence == false) {
+                $pertence = true;
+            }
+        }
+        return $pertence;
+    }
+
+    
+
+    /**
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        print_r($_REQUEST);
         $tipo = $_SESSION["tipo"];
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"] ?> - inserção </h3>
@@ -324,15 +351,38 @@ class InsertValues{
             $arrayEntRel = $this->idEntRel($_SESSION[$tipo."_id"]);
             $arrayEnt = $arrayEntRel[0];
             $arrayRel = $arrayEntRel[1];
+            $i = 0;
             foreach ($arrayEnt as $id=>$ent) {
-                $this->insertEntityValues($id);
+                $controlo[$i] = $this->insertEntityValues($id);
+            }
+            $sucesso = true;
+            foreach ($controlo as $value) {
+                if ($sucesso === true && $value === false)
+                {
+                    $sucesso = false;
+                }
             }
             /*foreach ($arrayRel as $rel) {
                 $this->insertRelValues($rel);
             }*/
         }
         else {
-            $this->insertEntityValues($_SESSION[$tipo."_id"]);
+            $sucesso = $this->insertEntityValues($_SESSION[$tipo."_id"]);
+        }
+        if($sucesso == true)
+        {
+?>
+            <p>Inseriu o(s) valor(es) com sucesso.</p></br>
+            <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
+<?php
+        }
+
+        else
+        {
+?>
+            <p>Lamentamos, mas ocorreu um erro.</p>
+<?php
+            goBack();
         }
     }
     
@@ -403,7 +453,6 @@ class InsertValues{
         else {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."')";
         }
-        echo $queryInsertInst;
         
         $resInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$resInsertInst) {
@@ -444,23 +493,9 @@ class InsertValues{
                         }	
                     }
                 }
-                if($sucesso == true)
-                {
-?>
-                    <p>Inseriu o(s) valor(es) com sucesso.</p></br>
-                    <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
-<?php
-                }
-
-                else
-                {
-?>
-                    <p>Lamentamos, mas ocorreu um erro.</p>
-<?php
-                    goBack();
-                }
             }
         }
+        return $sucesso;
     }
     
     /**
@@ -483,7 +518,7 @@ class InsertValues{
        while ($arrayProp = $execQueryProp->fetch_assoc()) {
            if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
-                <p>O campo <?php echo $arrayProp["name"];?></p> é de preenchimento obrigatório!;
+                <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
 <?php
                 goBack();
                 $goBack = true;
