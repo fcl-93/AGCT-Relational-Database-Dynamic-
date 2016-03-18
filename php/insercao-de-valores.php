@@ -276,7 +276,7 @@ class InsertValues{
                             $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                             // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
                             $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-                            if ($FK['fk_ent_type_id'] == $id) {
+                            if ($this->verificaEntRef($FK['fk_ent_type_id'], $idEntidades)) {
 ?>
                                 <option value="instPorCriar"><?php echo $nomeEntRef;?> que está a criar</option>
 <?php
@@ -320,6 +320,20 @@ class InsertValues{
 <?php  
     }
     
+    /**
+     * This method checks if the referenced entity is on the form presented
+     */
+    private function verificaEntRef ($idEntRef, $arrayEnt) {
+        $pertence = false;
+        foreach ($arrayEnt as $key => $value) {
+            if ($idEntRef == $key && $pertence == false) {
+                $pertence = true;
+            }
+        }
+    }
+
+    
+
     /**
      * This method is responsible to control the flow execution when state is "inserir"
      */
