@@ -671,7 +671,7 @@ class InsertValues{
         $guardaRel = array();
         $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id "
-                . "ORDER BY prop.fk_ent_type_id DESC";
+                . "ORDER BY prop.fk_ent_type_id ASC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
             if (empty($prop["rel_type_id"])){
