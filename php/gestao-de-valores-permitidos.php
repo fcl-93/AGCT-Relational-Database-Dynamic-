@@ -231,14 +231,15 @@ class ValoresPermitidos
             <h3>Gestão de valores permitidos - Relações</h3>
 <?php
             $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL");
-            if($res_NProp->num_rows > 0)
+            $numberRltn = $res_NProp->num_rows;
+            if($numberRltn > 0)
             {
 ?>
             <html>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Entidade</th>
+                            <th>Relação</th>
                             <th>Id</th>
                             <th>Propriedade</th>
                             <th>Id</th>
@@ -249,7 +250,7 @@ class ValoresPermitidos
                     </thead>
                     <tbody>
 <?php
-                    $printedNames = array();
+                    $printedId = array();
                     while($read_PropWEnum = $res_NProp->fetch_assoc())
                     {
 ?>
@@ -259,20 +260,25 @@ class ValoresPermitidos
                             $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
                                                                     
                             //Get the entity name and id that is related to the property we are printing
-                            $res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
+                            $res_Ent = $this->bd->runQuery("SELECT id FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
                             $read_EntName = $res_Ent->fetch_assoc();
+                            
+                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id="$read_EntName['ent_type1_id']);
+                            $read_name1 = $res_name1->fetch_assoc();
+                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id="$read_EntName['ent_type2_id']);
+                            $read_name2 = $res_name2->fetch_assoc();
                                                                     
                             //Get the number of properties with that belonh to the etity I'm printing and have enum tipe
                             $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
                                                                     
                             //Get all the enum values that we wil print this is only the number.
-                            $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+                            $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
                                                                     
-                            //verifies if the name i'm printing has ever been written
+                            //verifies if the id i'm printing has ever been printed before
                             $conta = 0;
-                            for($i = 0; $i < count($printedNames); $i++)
+                            for($i = 0; $i < count($printedId); $i++)
                             {
-				if($printedNames[$i] == $read_EntName['name'])
+				if($printedId[$i] == $read_PropWEnum['rel_type_id'])
 				{
                                     $conta++;
 				}
@@ -282,15 +288,10 @@ class ValoresPermitidos
                             if($conta == 0)
                             {
 ?>
-                            <td rowspan='<?php echo $acerta->num_rows; ?>'><?php echo $read_EntName['name'];?></td>
-<?php 	
-								$printedNames[] = $read_EntName['name'];
-							}
-							else
-							{
-								//echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
-                                                                    
-							}
+                                <td rowspan='<?php echo $acerta->num_rows; ?>'><?php echo $res_name1['name'] ?> - <?php echo $read_name2['name'] ;?></td>
+<?php                           
+                                $printedId[] = $read_PropWEnum['rel_type_id'];
+                            }
 ?>
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
                             <!-- Nome da propriedade -->
@@ -298,8 +299,8 @@ class ValoresPermitidos
                                 
 <?php 							
 							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
-							if($res_Enum->num_rows == 0)
-							{
+                            if($res_Enum->num_rows == 0)
+                            {
 ?>
                             <td colspan=4> Não há valores permitidos definidos </td>
 <?php 
