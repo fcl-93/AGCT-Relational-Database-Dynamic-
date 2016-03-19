@@ -140,17 +140,20 @@ class ImportValues{
 <?php
 		if(isset($_REQUEST['form']))
 		{
-                    $selPropQuery = "SELECT p.id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
+                    $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
                                     WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id";
 		}
 		else
 		{
-                    $selPropQuery = "SELECT p.id FROM property AS p, ent_type AS e 
+                    $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, ent_type AS e 
                                     WHERE e.id=".$_REQUEST['ent']." AND p.ent_type_id = e.id";
 		}
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
 		{
+                    $getEntidade = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
+                    $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $arrayEntidades[$entidade["id"]]=$entidade["name"];
                     $selFormFieldNamesQuery = "SELECT value_type, form_field_name FROM property WHERE id = ".$prop['id'];
                     $selFormFieldNames = $this->db->runQuery($selFormFieldNamesQuery);
                     while($formfieldnames = $selFormFieldNames->fetch_assoc())
@@ -174,6 +177,13 @@ class ImportValues{
                         }
                     }
 		}
+                $contaEntidades = 0;
+                foreach ($arrayEntidades as $nome) {
+                    $contaEntidades++;
+?>
+                    <td>Nome para instância da entidade <?php echo $nome; ?></td>
+<?php
+                }
 ?>
             </tr>
             <tr>
@@ -204,6 +214,11 @@ class ImportValues{
                         }
                     }
 		}
+                for (;$contaEntidades > 0; $contaEntidades--) {
+?>
+                    <td></td>
+<?php                    
+                }
 ?>
             </tr>
 	</table>

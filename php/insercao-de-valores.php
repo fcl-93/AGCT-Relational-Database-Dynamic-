@@ -376,8 +376,10 @@ class InsertValues{
             <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente ou em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta(s) entidade(s)</a> se quiser continuar a inserir valores.</p>
 <?php
             if ($tipo === "ent") {
+                $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." ORDER BY id DESC LIMIT 1";
+                $ult = $this->db->runQuery($querySelUlt)->fetch_assoc();
 ?>
-            <p>Clique em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade , com uma outra já previamente criada.</p>
+            <p>Clique em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $ult["id"];?>">Associar entidades</a>, caso deseje associar a entidade <?php echo $ult["entity_name"];?>, com uma outra já previamente criada.</p>
 <?php
             } else {
                 foreach ($arrayEnt as $id=>$ent) {
