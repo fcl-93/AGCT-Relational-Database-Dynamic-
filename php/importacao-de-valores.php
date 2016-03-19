@@ -189,7 +189,7 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc($selfAllowed))
+                            while($linha = $selfAllowed->fetch_assoc())
                             {
 ?>
                                 <td><?php echo $linha['value'];?></td>	
