@@ -220,7 +220,7 @@ class InsereRelacoes
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-               /* $control = true;
+                /*$control = true;
                  for($i = 0; $i <  $_SESSION['valueNumber']; $i++)
                 {
                     if(isset($_REQUEST['valSel'.$i]))
@@ -235,8 +235,8 @@ class InsereRelacoes
                             break;
                         }
                     }
-                }*/
-            /*$controlaCheck = 0;
+                }
+            $controlaCheck = 0;
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                     {
                             if(empty($_REQUEST["idProp".$i]))
@@ -246,7 +246,7 @@ class InsereRelacoes
                     }
                     
             if($controlaCheck == $_SESSION['propSelected'])
-            {//erro}
+            {}
                 
             
              for($i = 1; $i <= $_SESSION['propSelected']; $i++)
