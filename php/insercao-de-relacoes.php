@@ -46,6 +46,7 @@ class InsereRelacoes
 				}
                                 else if($_REQUEST['estado'] == 'introducao')
                                 {
+                                    $this->secondEntSel();
                                 }
 				else if($_REQUEST['estado'] == 'inserir')
 				{
@@ -73,6 +74,7 @@ class InsereRelacoes
 ?>
 			<html>
 				<p>O utilizador não tem sessão iniciada.</p>
+                                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
 			</html>
 <?php			
 		}
@@ -263,15 +265,13 @@ class InsereRelacoes
 	public function associar(){
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=". $_REQUEST['ent']." OR ent_type2_id=". $_REQUEST['ent']);
  ?>          
-            <h3>Inserção de Relações - Tipos de relação</h3>
+            <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
                 <table>
                     <thead>
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>Id</th>
+                            <th>Tipo de Relacao</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -281,11 +281,14 @@ class InsereRelacoes
                             $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type1_id']);
                             $read_name1 = $res_name1->fetch_assoc(); 
                             $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type2_id']);
-                            $read_name1 = $res_name2->fetch_assoc(); 
+                            $read_name2 = $res_name2->fetch_assoc(); 
 ?>
-                            <tr>
-                                
-                            </tr>
+                        <tr>
+                            <td><?php echo $read_RelTypes['id']?></td>
+                            <td>
+                                <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $res_name1['name'];?> - <?php echo $read_name2['name'];?>]</a>
+                            </td>
+                        </tr>
 <?php
                         }
 ?>
@@ -295,7 +298,43 @@ class InsereRelacoes
  <?php         
         }
         
-                                                
+        /**
+         * This method will be able to prvide the user a list of entities that are compatible with the 
+         * relation_type choosen in the associar state
+         */
+        public function secondEntSel(){
+            $prev_SelEnt = $_REQUEST['ent'];
+            $sltd_RelType = $_REQUEST['rel_type'];
+            
+            $res_CompRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$sltd_RelType);
+            $read_CompRel =$res_CompRel->fetch_assoc();
+            if($read_CompRel['ent_type1_id'] == $prev_SelEnt)
+            {
+               $res_SencondEnt =  $this->bd->runQuery("SELECT * FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
+               $read_SecondEnt = $res_SencondEnt->fetch_assoc();
+               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+               /*if()
+               {
+                   
+               }*/
+               
+               
+            }
+            else if($read_CompRel['ent_type2_id'] == $prev_SelEnt)
+            {
+                $res_SencondEnt =  $this->bd->runQuery("SELECT * FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id");
+                $read_SecondEnt = $res_SencondEnt->fetch_assoc();
+            }
+            else
+            {
+?>
+                <html>
+                    <p>Erro, o tipo de relação selecionado anteriormente não é compatível com a entidade criada.</p>
+                </html>
+<?php
+            }
+            
+        }
 	
 	/**
 	 * This method will activate the custom form the user selected.
@@ -334,7 +373,26 @@ class InsereRelacoes
         /**
          * Mehtod that will insert new values in the database.
          */
-        private function nedita()
-        {}
+        private function nedita(){
+            //a preencher
+            $ent1;
+            $ent2;
+            $relType;
+            $rel_name;
+            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')"));
+            {
+?>
+                <html>
+                    <p>Associou com sucesso a entidade xxx, a entidade yyy.
+                        Clique em inserir propriedades para preencher informações relativas a relação que acabou de criar"</p>
+                </html>
+<?php
+            }
+            else
+            {
+                
+            }
+            
+        }
 }
 ?>
