@@ -222,4 +222,4 @@ class ImportValues{
 
 }
 // instantiation of an object from the class ImportValues. This instantiation is responsable to get the script work as expected.
-new InsertValues();
+new ImportValues();
