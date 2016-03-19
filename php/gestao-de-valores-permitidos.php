@@ -30,6 +30,7 @@ class ValoresPermitidos
 				if(empty($_REQUEST))
 				{
 					$this->tablePrintEntities();
+                                        $this->tablePrintRelation();
 				}
 				else if($_REQUEST['estado'] == 'introducao') 
 				{
