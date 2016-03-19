@@ -29,7 +29,7 @@ class ValoresPermitidos
 			{
 				if(empty($_REQUEST))
 				{
-					$this->tablePrint();
+					$this->tablePrintEntities();
 				}
 				else if($_REQUEST['estado'] == 'introducao') 
 				{
@@ -78,10 +78,10 @@ class ValoresPermitidos
 	 * This method will be responsable for the table print that will show properties with enum value 
 	 * and the diferent values assigned to that field
 	 */
-	public function tablePrint()
+	public function tablePrintEntities()
 	{
 		// gets all properties with enum in value_type.
-		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NOT NULL"); 
+		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id IS NULL"); 
 		$num_Prop = $res_NProp->num_rows;
 		if($num_Prop > 0)
 		{
