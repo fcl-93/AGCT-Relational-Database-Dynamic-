@@ -273,7 +273,7 @@ class ValoresPermitidos
                                                                     
                             //Get all the enum values that we wil print this is only the number.
                             $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
-                                                                    
+                            echo  "SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id";                                      
                             //verifies if the id i'm printing has ever been printed before
                             $conta = 0;
                             for($i = 0; $i < count($printedId); $i++)
@@ -303,57 +303,58 @@ class ValoresPermitidos
                             {
 ?>
                             <td colspan=4> Não há valores permitidos definidos </td>
-<?php 
-							}
-							else
-							{
-								while($read_EnumValues = $res_Enum->fetch_assoc())
-								{			
-?>									
+<?php
+
+                            }
+                            else
+                            {
+                            while($read_EnumValues = $res_Enum->fetch_assoc()){			
+?>			
                             <td><?php  echo $read_EnumValues['id'];?></td>
                             <td><?php echo $read_EnumValues['value'];?></td>
                             <td>
 <?php 			
-										if($read_EnumValues['state'] == 'active')
-										{
+                            if($read_EnumValues['state'] == 'active')
+                            {
 ?>
                                 Ativo
 <?php 
-										}
-										else 
-										{
+                            }
+                            else 
+                            {
 ?>	
                                 Inativo
 <?php 											
-										}
+                            }
                                                                                     
 ?>										
                             </td>
                             <td>
                                 <a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
 <?php 
-										if($read_EnumValues['state'] === 'active')
-										{
+                                if($read_EnumValues['state'] === 'active')
+                                {
 ?>
-                                <a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+                                    <a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
 <?php 
-										}
-										else 
-										{
+				}
+				else 
+				{
 ?>
-                                <a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+                                    <a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
 <?php 
-										}
+				}
 ?>										
                             </td>
                         </tr>		
-<?php 								
-								}
-							}
+<?php           
+
+                                }
+                                     
+                            }
 ?>
                         </tr>
-<?php 
-						}
+<?php               }
 ?>
                     </tbody>
                 </table>
