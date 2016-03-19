@@ -105,7 +105,7 @@ class ImportValues{
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
                     //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="?estado=introducao&ent='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
+                    echo'<li><a href="importacao-de-valores?estado=introducao&ent='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
             }
 ?>
             
@@ -124,7 +124,7 @@ class ImportValues{
             while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
                     //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="?estado=introducao&form='.$arrayCustForm['id'].'">['.$arrayCustForm['name'].']</a>';
+                    echo'<li><a href="importcao-de-valores?estado=introducao&form='.$arrayCustForm['id'].'">['.$arrayCustForm['name'].']</a>';
             }
 ?>   
             </ul>
@@ -140,7 +140,7 @@ class ImportValues{
 <?php
 		if(isset($_REQUEST['form']))
 		{
-                    $selPropQuery = "SELECT p.id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
+                    $selPropQuery = "SELECT p.id FROM property AS p, custom_form AS cf, custom_form_has_property AS cfhp 
                                     WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id";
 		}
 		else
@@ -189,7 +189,7 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc())
+                            while($linha = $selfAllowed->fetch_assoc($selfAllowed))
                             {
 ?>
                                 <td><?php echo $linha['value'];?></td>	
@@ -222,4 +222,4 @@ class ImportValues{
 
 }
 // instantiation of an object from the class ImportValues. This instantiation is responsable to get the script work as expected.
-new ImportValues();
+new InsertValues();

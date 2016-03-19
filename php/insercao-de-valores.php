@@ -353,7 +353,7 @@ class InsertValues{
             $arrayRel = $arrayEntRel[1];
             $i = 0;
             foreach ($arrayEnt as $id=>$ent) {
-                $controlo[$i] = $this->insertEntityValues($id);
+                    $controlo[$i] = $this->insertEntityValues($id);
             }
             $sucesso = true;
             foreach ($controlo as $value) {
@@ -373,8 +373,21 @@ class InsertValues{
         {
 ?>
             <p>Inseriu o(s) valor(es) com sucesso.</p></br>
-            <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
+            <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente ou em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta(s) entidade(s)</a> se quiser continuar a inserir valores.</p>
 <?php
+            if ($tipo === "ent") {
+?>
+            <p>Clique em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade , com uma outra já previamente criada.</p>
+<?php
+            } else {
+                foreach ($arrayEnt as $id=>$ent) {
+                    $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$id." ORDER BY id DESC LIMIT 1";
+                    $ult = $this->db->runQuery($querySelUlt)->fetch_assoc();
+?>
+                    <p>Clique em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $ult["id"];?>">Associar entidades</a>, caso deseje associar a entidade <?php echo $ult["entity_name"];?>, com uma outra já previamente criada.</p>
+<?php
+                }
+            }
         }
 
         else
@@ -476,7 +489,18 @@ class InsertValues{
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
                     if (!empty($_REQUEST[$propriedades['form_field_name']])) {
-                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
+                        if ($_REQUEST[$propriedades['form_field_name']] === "instPorCriar") {
+                            $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'";
+                            echo $querySelFK;
+                            $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
+                            $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
+                            echo $querySelUltRef;
+                            $selUltRef = $this->db->runQuery($querySelUltRef);
+                            $ultRef = $selUltRef->fetch_assoc();
+                            $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
+                        }
+                        $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) "
+                            . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
                         if(!$insertVal)
                         {								
@@ -659,7 +683,8 @@ class InsertValues{
         $guardaEnt = array();
         $guardaRel = array();
         $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
-                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id";
+                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id "
+                . "ORDER BY prop.fk_ent_type_id ASC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
             if (empty($prop["rel_type_id"])){
@@ -681,5 +706,5 @@ class InsertValues{
     }
     
 }
-// instantiation of an object from the class PropertyManage. This instantiation is responsable to get the script work as expected.
+// instantiation of an object from the class InsertValues. This instantiation is responsable to get the script work as expected.
 new InsertValues();
