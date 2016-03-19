@@ -85,7 +85,7 @@ class ValoresPermitidos
 ?>
                         <h3>Gestão de valores permitidos - Entidades</h3>
 <?php
-		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id IS NULL"); 
+		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id IS NULL ORDER BY `property`.`ent_type_id` ASC"); 
 		$num_Prop = $res_NProp->num_rows;
 		if($num_Prop > 0)
 		{
@@ -231,7 +231,7 @@ class ValoresPermitidos
 ?>
             <h3>Gestão de valores permitidos - Relações</h3>
 <?php
-            $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL");
+            $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL ORDER BY `property`.`rel_type_id` ASC");
             $numberRltn = $res_NProp->num_rows;
             if($numberRltn > 0)
             {
