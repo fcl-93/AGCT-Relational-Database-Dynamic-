@@ -220,7 +220,7 @@ class InsereRelacoes
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-                $control = true;
+               /* $control = true;
                  for($i = 0; $i <  $_SESSION['valueNumber']; $i++)
                 {
                     if(isset($_REQUEST['valSel'.$i]))
@@ -235,7 +235,7 @@ class InsereRelacoes
                             break;
                         }
                     }
-                }
+                }*/
                 return $control;
             /*$controlaCheck = 0;
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
@@ -342,6 +342,9 @@ class InsereRelacoes
                     }
                     $_SESSION['numEnt2Max'] = $control; 
 ?>
+                    <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
+                    <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
+                    
                     <input type="hidden" name="flag" value="naoeditar">
                     <input type="hidden" name="estado" value="inserir">
                     <input type="submit" value="Associar Segunda Entidade">
@@ -373,6 +376,9 @@ class InsereRelacoes
                     }
                     $_SESSION['numEnt2Max'] = $control; 
 ?>
+                     <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
+                    <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
+                    
                     <input type="hidden" name="flag" value="naoeditar">
                     <input type="hidden" name="estado" value="inserir">
                     <input type="submit" value="Associar Segunda Entidade">
@@ -474,7 +480,7 @@ class InsereRelacoes
             $rel_name="";
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
                 if(isset($_REQUEST['secondEnt'.$i])){
-                    if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['ent'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."',active)"))
+                    if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."',active)"))
                     {
                         
 ?>
