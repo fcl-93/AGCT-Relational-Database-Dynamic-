@@ -288,7 +288,7 @@ class ValoresPermitidos
                             if($conta == 0)
                             {
 ?>
-                                <td rowspan='<?php echo $acerta->num_rows; ?>'><?php echo $res_name1['name'] ?> - <?php echo $read_name2['name'] ;?></td>
+                                <td rowspan='<?php echo $acerta->num_rows; ?>'><?php echo $read_name1['name'] ?> - <?php echo $read_name2['name'] ;?></td>
 <?php                           
                                 $printedId[] = $read_PropWEnum['rel_type_id'];
                             }
