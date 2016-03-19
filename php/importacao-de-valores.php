@@ -135,7 +135,8 @@ class ImportValues{
     
     private function estadoIntroducao() {
 ?>
-	<table>
+	<table class = "table">
+            <thead>
             <tr>
 <?php
 		if(isset($_REQUEST['form']))
@@ -165,14 +166,14 @@ class ImportValues{
                             while($linha = $selfAllowed->fetch_assoc())
                             {
 ?>
-                                <td><?php echo $formfieldnames['form_field_name'];?></td>
+                                <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
                             }
                         }
                         else
                         {
 ?>
-                            <td><?php echo $formfieldnames['form_field_name'];?></td>
+                            <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
                         }
                     }
@@ -181,11 +182,13 @@ class ImportValues{
                 foreach ($arrayEntidades as $nome) {
                     $contaEntidades++;
 ?>
-                    <td>Nome para instância da entidade <?php echo $nome; ?></td>
+                    <th>Nome para instância da entidade <?php echo $nome; ?></th>
 <?php
                 }
 ?>
             </tr>
+            </thead>
+            <tbody>
             <tr>
 <?php
 		$selProp = $this->db->runQuery($selPropQuery);
@@ -221,6 +224,7 @@ class ImportValues{
                 }
 ?>
             </tr>
+            </tbody>
 	</table>
 	
         Caro utilizador,<br>

@@ -488,35 +488,43 @@ class InsertValues{
             else {
 
                 $sucesso = false;
-                while($propriedades = $propriedadesEnt->fetch_assoc())
-                {
-                    if (!empty($_REQUEST[$propriedades['form_field_name']])) {
-                        if ($_REQUEST[$propriedades['form_field_name']] === "instPorCriar") {
-                            $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'";
-                            echo $querySelFK;
-                            $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
-                            $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
-                            echo $querySelUltRef;
-                            $selUltRef = $this->db->runQuery($querySelUltRef);
-                            $ultRef = $selUltRef->fetch_assoc();
-                            $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
-                        }
-                        $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) "
-                            . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
+                if ($propriedadesEnt->num_rows == 0) {
+                    $this->db->getMysqli()->commit();
+                    $sucesso = true;
+                }
+                else {
+                    while($propriedades = $propriedadesEnt->fetch_assoc())
+                    {
+                        if (!empty($_REQUEST[$propriedades['form_field_name']])) {
+                            if ($_REQUEST[$propriedades['form_field_name']] === "instPorCriar") {
+                                $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'";
+                                echo $querySelFK;
+                                $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
+                                $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
+                                echo $querySelUltRef;
+                                $selUltRef = $this->db->runQuery($querySelUltRef);
+                                $ultRef = $selUltRef->fetch_assoc();
+                                $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
+                            }
+                            $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) "
+                                . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
 
-                        if(!$insertVal)
-                        {								
-                            $this->db->getMysqli()->rollback();
+                            if(!$insertVal)
+                            {								
+                                $this->db->getMysqli()->rollback();
 ?>
-                            <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
+                                <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
 <?php
-                            $sucesso = false;
+                                $sucesso = false;
+                                break;
+                            }
+                            else
+                            {
+                                $this->db->getMysqli()->commit();
+                                $sucesso = true;
+                            }	
                         }
-                        else
-                        {
-                            $this->db->getMysqli()->commit();
-                            $sucesso = true;
-                        }	
+
                     }
                 }
             }
