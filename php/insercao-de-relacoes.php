@@ -273,7 +273,7 @@ class InsereRelacoes
  ?>          
             <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
-                <table>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -316,15 +316,30 @@ class InsereRelacoes
             $read_CompRel =$res_CompRel->fetch_assoc();
             if($read_CompRel['ent_type1_id'] == $prev_SelEnt)
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT * FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
-               $read_SecondEnt = $res_SencondEnt->fetch_assoc();
-               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-               /*if()
-               {
-                   
-               }*/
-               
-               
+               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
+?>
+                <html>
+                    <form>
+<?php
+                    $control = 0;
+                    while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
+                    {
+                        if(isset($read_SecondEnt['entity_name']))
+                        {
+?>
+                            <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
+<?php
+                        }
+                        else
+                        {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+                            
+                        }
+                    }
+?>
+                    <input type="submit" value="Associar Segunda Entidade">
+                    </form>
+                </html>
+<?php               
             }
             else if($read_CompRel['ent_type2_id'] == $prev_SelEnt)
             {
