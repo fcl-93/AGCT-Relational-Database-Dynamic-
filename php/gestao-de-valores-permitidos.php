@@ -265,7 +265,7 @@ class ValoresPermitidos
                             
                             $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type1_id']);
                             $read_name1 = $res_name1->fetch_assoc();
-                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type2_id'])
+                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type2_id']);
                             $read_name2 = $res_name2->fetch_assoc();
                                                                     
                             //Get the number of properties with that belonh to the etity I'm printing and have enum tipe
