@@ -423,12 +423,11 @@ class InsereRelacoes
             $ent2;
             $relType;
             $rel_name;
-            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')"));
+            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')")));
             {
 ?>
                 <html>
-                    <p>Associou com sucesso a entidade xxx, a entidade yyy.
-                        Clique em inserir propriedades para preencher informações relativas a relação que acabou de criar"</p>
+                    <p>Associou com sucesso a entidade xxx, a entidade yyy. Clique em inserir propriedades para preencher informações relativas a relação que acabou de criar"</p>
                 </html>
 <?php
             }
