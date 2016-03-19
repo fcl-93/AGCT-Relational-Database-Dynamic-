@@ -218,7 +218,7 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<p>Não há propriedades especificadas cujo tipo de valor seja enum. <br>
+				<p>Não existem propriedades especificadas para entidades, cujo tipo de valor seja enum. <br>
 				Especificar primeiro nova(s) propriedade(s) e depois voltar a esta opção</p>
 			</html>
 <?php 						
@@ -230,9 +230,8 @@ class ValoresPermitidos
 ?>
             <h3>Gestão de valores permitidos - Relações</h3>
 <?php
-            $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL"); 
-            $num_Prop = $res_NProp->num_rows;
-            if($num_Prop->num_rows > 0)
+            $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL");
+            if($res_NProp->num_rows > 0)
             {
 ?>
             <html>
