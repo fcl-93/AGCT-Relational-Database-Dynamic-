@@ -136,6 +136,7 @@ class ImportValues{
     private function estadoIntroducao() {
 ?>
 	<table class = "table">
+            <thead>
             <tr>
 <?php
 		if(isset($_REQUEST['form']))
@@ -186,6 +187,7 @@ class ImportValues{
                 }
 ?>
             </tr>
+            </thead>
             <tr>
 <?php
 		$selProp = $this->db->runQuery($selPropQuery);
