@@ -81,7 +81,7 @@ class ValoresPermitidos
 	public function tablePrint()
 	{
 		// gets all properties with enum in value_type.
-		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id NOT LIKE NULL"); 
+		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NOT NULL"); 
 		$num_Prop = $res_NProp->num_rows;
 		if($num_Prop > 0)
 		{
