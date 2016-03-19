@@ -177,7 +177,9 @@ class ImportValues{
                         }
                     }
 		}
+                $contaEntidades = 0;
                 foreach ($arrayEntidades as $nome) {
+                    $contaEntidades++;
 ?>
                     <td>Nome para instância da entidade <?php echo $nome; ?></td>
 <?php
@@ -212,6 +214,11 @@ class ImportValues{
                         }
                     }
 		}
+                for (;$contaEntidades > 0; $contaEntidades--) {
+?>
+                    <td></td>
+<?php                    
+                }
 ?>
             </tr>
 	</table>
