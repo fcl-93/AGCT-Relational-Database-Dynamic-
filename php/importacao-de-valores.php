@@ -137,7 +137,7 @@ class ImportValues{
 ?>
 	<table class = "table">
             <thead>
-            <tr>
+            <th>
 <?php
 		if(isset($_REQUEST['form']))
 		{
@@ -186,8 +186,9 @@ class ImportValues{
 <?php
                 }
 ?>
-            </tr>
+            </th>
             </thead>
+            <tbody>
             <tr>
 <?php
 		$selProp = $this->db->runQuery($selPropQuery);
@@ -223,6 +224,7 @@ class ImportValues{
                 }
 ?>
             </tr>
+            </tbody>
 	</table>
 	
         Caro utilizador,<br>
