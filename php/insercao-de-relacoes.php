@@ -266,7 +266,7 @@ class InsereRelacoes
 	public function associar(){
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=". $_REQUEST['ent']);
             $read_EntType = $res_EntType->fetch_assoc();
-            print_R($res_EntType);
+            //print_R($res_EntType);
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id']);
             //echo "SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id'];
 
@@ -292,7 +292,7 @@ class InsereRelacoes
                         <tr>
                             <td><?php echo $read_RelTypes['id']?></td>
                             <td>
-                                <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $res_name1['name'];?> - <?php echo $read_name2['name'];?>]</a>
+                                <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $read_name1['name'];?> - <?php echo $read_name2['name'];?>]</a>
                             </td>
                         </tr>
 <?php
