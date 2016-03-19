@@ -267,6 +267,8 @@ class InsereRelacoes
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=". $_REQUEST['ent']);
             $read_EntType = $res_EntType->fetch_assoc();
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id']);
+            echo "SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id'];
+
  ?>          
             <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
