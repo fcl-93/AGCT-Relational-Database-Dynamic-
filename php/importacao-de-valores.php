@@ -135,7 +135,7 @@ class ImportValues{
     
     private function estadoIntroducao() {
 ?>
-	<table>
+	<table class = "table">
             <tr>
 <?php
 		if(isset($_REQUEST['form']))
