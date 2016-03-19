@@ -54,6 +54,7 @@ class InsereRelacoes
 				}
 				else if($_REQUEST['estado'] == 'desativar')
 				{
+                                    $this->desactivate();
 				}
                                 else if($_REQUEST['estado'] == 'ativar')
                                 {
@@ -155,7 +156,7 @@ class InsereRelacoes
         }
 	
         /**
-	 * This will make you edit and add new values for the selected relation
+	 * This will make you edit values for the selected relation
 	 */
         public function editRlationProps(){
            $res_InsProps = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
@@ -263,7 +264,9 @@ class InsereRelacoes
          * existing value.
          */
 	public function associar(){
-            $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=". $_REQUEST['ent']." OR ent_type2_id=". $_REQUEST['ent']);
+            $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=". $_REQUEST['ent']);
+            $read_EntType = $res_EntType->fetch_assoc();
+            $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=". $read_EntType['ent_type_id']." OR ent_type2_id=". $read_EntType['ent_type_id']);
  ?>          
             <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
@@ -337,10 +340,51 @@ class InsereRelacoes
         }
 	
 	/**
-	 * This method will activate the custom form the user selected.
+	 * This method will activate the relation the user selected.
 	 */
 	public function activate(){
-            
+            if($this->bd->runQuery("UPDATE relation SET state='active' WHERE id=".$_REQUEST['rel']))
+            {
+?>
+                <html>
+                    <p>A relação foi ativada.</p>
+                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                </html>
+<?php
+            }
+            else
+            {
+                ?>
+                <html>
+                    <p>A ativação da relação falhou.</p>
+                </html>
+                <?php
+                goBack();
+            }
+        }
+        
+        /**
+	 * This method will desactivate the relation the user selected.
+	 */
+	public function desactivate(){
+            if($this->bd->runQuery("UPDATE relation SET state='inactive' WHERE id=".$_REQUEST['rel']))
+            {
+?>
+                <html>
+                    <p>A relação foi desativada.</p>
+                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                </html>
+<?php
+            }
+            else
+            {
+                ?>
+                <html>
+                    <p>A desativação da relação falhou.</p>
+                </html>
+                <?php
+                goBack();
+            }
         }
 	
 	/**
