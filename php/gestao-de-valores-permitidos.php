@@ -273,7 +273,8 @@ class ValoresPermitidos
                                                                     
                             //Get all the enum values that we wil print this is only the number.
                             $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
-                            echo  "SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id";                                      
+                            echo  "SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id"; 
+                            echo' <br>';
                             //verifies if the id i'm printing has ever been printed before
                             $conta = 0;
                             for($i = 0; $i < count($printedId); $i++)
