@@ -144,7 +144,7 @@ class InsereRelacoes
                                                     <td>Inativo</td>
                                                     <td>
                                                         <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Editar Propriedades da Relação]</a>  
-                                                        <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
+                                                        <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
                                                    </td>
 <?php   
                                                 }
