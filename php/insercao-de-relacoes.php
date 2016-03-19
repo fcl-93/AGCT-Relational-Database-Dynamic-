@@ -318,9 +318,9 @@ class InsereRelacoes
             $res_InsType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$prev_SelEnt);
             $read_InsType = $res_InsType->fetch_assoc();
             
-            if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
+            if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'] || $read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
+               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id OR rel_type.ent_type1_id = entity.ent_type_id");
 ?>
                 <html>
                     <form>
@@ -338,17 +338,16 @@ class InsereRelacoes
                         {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
                             
                         }
+                        $control++;
                     }
+                    $_SESSION['numEnt2Max'] = $control; 
 ?>
+                    <input type="hidden" name="flag" value="naoeditar">
+                    <input type="hidden" name="estado" value="inserir">
                     <input type="submit" value="Associar Segunda Entidade">
                     </form>
                 </html>
 <?php               
-            }
-            else if($read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
-            {
-                $res_SencondEnt =  $this->bd->runQuery("SELECT * FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id");
-                $read_SecondEnt = $res_SencondEnt->fetch_assoc();
             }
             else
             {
@@ -441,23 +440,27 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            $ent1;
-            $ent2;
-            $relType;
-            $rel_name;
-            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')"))
-            {
+            $rel_name="";
+            for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
+                if(isset($_REQUEST['secondEnt'.$i])){
+                    if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['ent'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."',active)"))
+                    {
+                        
 ?>
-                <html>
-                    <p>Associou com sucesso a entidade xxx, a entidade yyy. Clique em inserir propriedades para preencher informações relativas a relação que acabou de criar"</p>
-                </html>
-<?php
-            }
-            else
-            {
+                        <html>
+                            <p>Associou com sucesso a entidade xxx, a entidade yyy.</p>
+                            <p>Clique em <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $this->bd->getMysqli()->insert_id; ?>"/>Inserir Propriedades</a> para preencher informações relativas a relação que acabou de criar.</p>
+                        </html>
+ <?php
+                    }
+                    else
+                    {
+                    
+                    }
+                }
+        
                 
             }
-            
         }
 }
 ?>
