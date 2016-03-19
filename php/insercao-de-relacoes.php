@@ -236,7 +236,6 @@ class InsereRelacoes
                         }
                     }
                 }*/
-                return $control;
             /*$controlaCheck = 0;
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                     {
