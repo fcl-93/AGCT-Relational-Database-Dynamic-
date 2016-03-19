@@ -260,7 +260,7 @@ class ValoresPermitidos
                             $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
                                                                     
                             //Get the entity name and id that is related to the property we are printing
-                            $res_Ent = $this->bd->runQuery("SELECT id FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
+                            $res_Ent = $this->bd->runQuery("SELECT * FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
                             $read_EntName = $res_Ent->fetch_assoc();
                             
                             $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type1_id']);
