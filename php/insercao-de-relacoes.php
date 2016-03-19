@@ -423,7 +423,7 @@ class InsereRelacoes
             $ent2;
             $relType;
             $rel_name;
-            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')")));
+            if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$relType.",".$ent1.",".$ent2.",".$this->bd->userInputVal($rel_name).",'active')"))
             {
 ?>
                 <html>
