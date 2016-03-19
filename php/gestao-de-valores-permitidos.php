@@ -81,7 +81,7 @@ class ValoresPermitidos
 	public function tablePrint()
 	{
 		// gets all properties with enum in value_type.
-		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum'"); 
+		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id NOT LIKE NULL"); 
 		$num_Prop = $res_NProp->num_rows;
 		if($num_Prop > 0)
 		{
@@ -108,7 +108,7 @@ class ValoresPermitidos
 							<tr>
 <?php 				
 								//Get all enum values for the property that in will start printing now
-								$res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$read_PropWEnum['id']);
+								$res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
 								
 								//Get the entity name and id that is related to the property we are printing
 								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
