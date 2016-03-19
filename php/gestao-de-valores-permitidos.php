@@ -123,7 +123,7 @@ class ValoresPermitidos
 								
 								//Get all the enum values that we wil print this is only the number.
 								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
-                                                                $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND rel_type_id =".$read_EntName['id']);
+                                                                $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND ent_type_id =".$read_EntName['id']);
                                                         //verifies if the name i'm printing has ever been written
 							$conta = 0;
 							for($i = 0; $i < count($printedNames); $i++)
