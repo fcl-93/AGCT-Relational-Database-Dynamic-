@@ -140,7 +140,7 @@ class ImportValues{
 <?php
 		if(isset($_REQUEST['form']))
 		{
-                    $selPropQuery = "SELECT p.id FROM property AS p, custom_form AS cf, custom_form_has_property AS cfhp 
+                    $selPropQuery = "SELECT p.id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
                                     WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id";
 		}
 		else
