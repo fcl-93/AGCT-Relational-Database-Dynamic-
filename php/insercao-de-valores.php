@@ -487,7 +487,7 @@ class InsertValues{
             }
             else {
 
-                $sucesso = false;
+                $sucesso = true;
                 while($propriedades = $propriedadesEnt->fetch_assoc())
                 {
                     if (!empty($_REQUEST[$propriedades['form_field_name']])) {
@@ -511,6 +511,7 @@ class InsertValues{
                             <p>Erro na atribuição do valor à propriedade <?php echo $propriedades["name"];?>.</p>
 <?php
                             $sucesso = false;
+                            break;
                         }
                         else
                         {
