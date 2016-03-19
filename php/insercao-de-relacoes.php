@@ -116,10 +116,15 @@ class InsereRelacoes
                                     while($readRelations = $res_Rel->fetch_assoc()){
                                          $res_EntPart = $this->bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$readRelations['rel_type_id']);
                                          $read_EntPart = $res_EntPart->fetch_assoc();
-?>                      
-                                         <tr>
+                                        
+                                         $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
+                                         $read_name1 = $res_name1->fetch_assoc(); 
+                                         $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
+                                         $read_name2 = $res_name2->fetch_assoc();
+?>                                         
+                                        <tr>
                                              <td><?php echo $readRelations['id'];?></td>
-                                             <td><?php echo $readRelations['ent_type1_id'];?> - <?php echo $readRelations['ent_type2_id'] ?></td>
+                                             <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
                                              <td><?php echo $readRelations['entity1_id'];?></td>
                                              <td><?php echo $readRelations['entity2_id'];?></td>
 <?php
