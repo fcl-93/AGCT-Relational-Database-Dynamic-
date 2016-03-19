@@ -151,6 +151,9 @@ class ImportValues{
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
 		{
+                    $getEntidade = "SELECT * FROM ent_type WHERE id = ".$arrayProp["ent_type_id"];
+                    $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $arrayEntidades[$entidade["id"]]=$entidade["name"];
                     $selFormFieldNamesQuery = "SELECT value_type, form_field_name FROM property WHERE id = ".$prop['id'];
                     $selFormFieldNames = $this->db->runQuery($selFormFieldNamesQuery);
                     while($formfieldnames = $selFormFieldNames->fetch_assoc())
@@ -174,6 +177,11 @@ class ImportValues{
                         }
                     }
 		}
+                foreach ($arrayEntidades as $nome) {
+?>
+                    <td>Nome para instância da entidade <?php echo $nome; ?></td>
+<?php
+                }
 ?>
             </tr>
             <tr>
