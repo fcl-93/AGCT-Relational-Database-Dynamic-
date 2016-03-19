@@ -318,9 +318,9 @@ class InsereRelacoes
             $res_InsType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$prev_SelEnt);
             $read_InsType = $res_InsType->fetch_assoc();
             
-            if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'] || $read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
+            if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id OR rel_type.ent_type1_id = entity.ent_type_id");
+               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
 ?>
                 <html>
                     <form>
@@ -348,6 +348,37 @@ class InsereRelacoes
                     </form>
                 </html>
 <?php               
+            }
+            else if( $read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
+            {
+                $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id");
+?>
+                <html>
+                    <form>
+<?php
+                    $control = 0;
+                    while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
+                    {
+                        if(isset($read_SecondEnt['entity_name']))
+                        {
+?>
+                            <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
+<?php
+                        }
+                        else
+                        {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+                            
+                        }
+                        $control++;
+                    }
+                    $_SESSION['numEnt2Max'] = $control; 
+?>
+                    <input type="hidden" name="flag" value="naoeditar">
+                    <input type="hidden" name="estado" value="inserir">
+                    <input type="submit" value="Associar Segunda Entidade">
+                    </form>
+                </html>
+<?php                              
             }
             else
             {
