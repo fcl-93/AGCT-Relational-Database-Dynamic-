@@ -260,19 +260,19 @@ class ValoresPermitidos
                             $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
                                                                     
                             //Get the entity name and id that is related to the property we are printing
-                            $res_Ent = $this->bd->runQuery("SELECT * FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
-                            $read_EntName = $res_Ent->fetch_assoc();
+                            $res_Rel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
+                            $read_RelName = $res_Rel->fetch_assoc();
                             
-                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type1_id']);
+                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelName['ent_type1_id']);
                             $read_name1 = $res_name1->fetch_assoc();
-                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntName['ent_type2_id']);
+                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelName['ent_type2_id']);
                             $read_name2 = $res_name2->fetch_assoc();
                                                                     
-                            //Get the number of properties with that belonh to the etity I'm printing and have enum tipe
-                            $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
+                            //Get the number of properties with that belong to the entity I'm printing and have enum type
+                            $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$read_PropWEnum['rel_type_id']." AND value_type = 'enum'");
                                                                     
                             //Get all the enum values that we wil print this is only the number.
-                            $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+                            $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, rel_type as rl_tp WHERE rl_tp.id = ".$read_RelName['id']." AND  prop.rel_type_id = ".$read_RelName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
                                                                     
                             //verifies if the id i'm printing has ever been printed before
                             $conta = 0;
@@ -298,7 +298,7 @@ class ValoresPermitidos
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
                                 
 <?php 							
-							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
+							
                             if($res_Enum->num_rows == 0)
                             {
 ?>
