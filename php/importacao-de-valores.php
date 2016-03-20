@@ -333,7 +333,6 @@ class ImportValues{
                                     $j++;
                             }
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i + $numEnt]."'";
-                            echo $querySelectProp."<br>";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
@@ -347,7 +346,6 @@ class ImportValues{
                                     $value_type = $atrProp['value_type'];
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                             }
-                            echo $idProp." ".$value_type." ".$ent_fk_id;
                             if(empty($valoresPermitidosEnum[$i]))
                             {
                                     $valores = $this->db->getMysqli()->real_escape_string($valores);
@@ -465,6 +463,7 @@ class ImportValues{
                                     }
                             }
                             $i++;
+                            echo $i;
                     }
                     if($sucesso)
                     {
