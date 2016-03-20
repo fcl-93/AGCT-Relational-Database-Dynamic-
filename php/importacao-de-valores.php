@@ -310,6 +310,7 @@ class ImportValues{
                     print_r($sheetData[strval($contaLinhas)]);
                     foreach($sheetData[strval($contaLinhas)] as $valores)
                     {
+                        echo "val: ".$valores."<br>";
                             if(isset($_REQUEST["form"]))
                             {
                                 $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
