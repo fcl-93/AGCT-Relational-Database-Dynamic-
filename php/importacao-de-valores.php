@@ -301,7 +301,7 @@ class ImportValues{
                             else {
                                 $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
                             }
-                            for ($k = $i; $k < $numEnt; $k++)
+                            for (; $i < $numEnt; $i++)
                             {
                                 $valores = $this->db->getMysqli()->real_escape_string($valores);
                                 $entID = $_REQUEST["ent"];
