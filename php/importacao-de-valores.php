@@ -1,6 +1,6 @@
 <?php
 require_once("custom/php/common.php");
-
+include 'PHPExcel/Classes/PHPExcel/IOFactory.php';
 /**
  * Class that handle all the methods that are necessary to execute this component
  */
