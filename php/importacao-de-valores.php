@@ -134,7 +134,15 @@ class ImportValues{
 	<table class = "table">
             <thead>
             <tr>
+                
 <?php
+                $contaEntidades = 0;
+                foreach ($arrayEntidades as $nome) {
+                    $contaEntidades++;
+?>
+                    <th>Nome para instância da entidade <?php echo $nome; ?></th>
+<?php
+                }
 		if(isset($_REQUEST['form']))
 		{
                     $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
@@ -174,19 +182,17 @@ class ImportValues{
                         }
                     }
 		}
-                $contaEntidades = 0;
-                foreach ($arrayEntidades as $nome) {
-                    $contaEntidades++;
-?>
-                    <th>Nome para instância da entidade <?php echo $nome; ?></th>
-<?php
-                }
 ?>
             </tr>
             </thead>
             <tbody>
             <tr>
 <?php
+                for (;$contaEntidades > 0; $contaEntidades--) {
+?>
+                    <td></td>
+<?php                    
+                }
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
 		{
@@ -213,11 +219,6 @@ class ImportValues{
                         }
                     }
 		}
-                for (;$contaEntidades > 0; $contaEntidades--) {
-?>
-                    <td></td>
-<?php                    
-                }
 ?>
             </tr>
             </tbody>
@@ -297,6 +298,7 @@ class ImportValues{
                                     $sucesso = false;
                                     break;
                             }
+                            $numEnt = 1;
                     }
                     $valoresIntroduzidos = array();
                     $entID = 0;
@@ -305,7 +307,8 @@ class ImportValues{
                     {
                             if(isset($_REQUEST["form"]))
                             {
-                                    $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j]."'";
+                                $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
+                                $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j + $numEnt]."'";
                                     $selecionaEntidade = $this->db->runQuery($selecionaEntidade);
                                     $guardaID = $selecionaEntidade->fetch_assoc()['id'];
                                     if($guardaID != $entID)
@@ -323,7 +326,7 @@ class ImportValues{
                                     }
                                     $j++;
                             }
-                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
+                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i + $numEnt]."'";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
@@ -466,7 +469,35 @@ class ImportValues{
 	
         
     }
-
+    /**
+     * Identifies all the entities/relations that are involved in a given form
+     * @return an array of arrays with all the enities and all the relations
+     */
+    private function idEntRel($formId) {
+        $guardaEnt = array();
+        $guardaRel = array();
+        $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
+                   . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id "
+                . "ORDER BY prop.fk_ent_type_id ASC";
+        $resQuerySelProp = $this->db->runQuery($querySelProp);
+        while ($prop = $resQuerySelProp->fetch_assoc()) {
+            if (empty($prop["rel_type_id"])){
+                $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
+                $resQuerySelEnt = $this->db->runQuery($querySelEnt);
+                while ($ent = $resQuerySelEnt->fetch_assoc()) {
+                    $guardaEnt[$ent["id"]] = $ent["name"];
+                }    
+            }
+            else {
+                $querySelRel = "SELECT * FROM rel_type WHERE id = ".$prop["rel_type_id"];
+                $resQuerySelRel = $this->db->runQuery($querySelRel);
+                while ($rel = $resQuerySelRel->fetch_assoc()) {
+                   $guardaRel[$rel["id"]] = $rel["id"];
+                }
+            }
+        }
+        return [$guardaEnt,$guardaRel];
+    }
 }
 // instantiation of an object from the class ImportValues. This instantiation is responsable to get the script work as expected.
 new ImportValues();
