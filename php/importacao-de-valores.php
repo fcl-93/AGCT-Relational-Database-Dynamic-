@@ -436,6 +436,7 @@ class ImportValues{
                                         $querySelectEnt = "SELECT * FROM ent_type WHERE id = ".$ent_type_id;
                                         $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
                                         $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
+                                        echo $querySelUlt;
                                         $idEnt = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
                                     }
                                     $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
