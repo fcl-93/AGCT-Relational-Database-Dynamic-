@@ -310,7 +310,7 @@ class ImportValues{
                                     $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$entID.")";
                                 }
                                 else {
-                                    $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",".$valores.")";
+                                    $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",'".$valores."')";
                                 }
                                 $queryInsertInst = $this->db->runQuery($queryInsertInst);
                                 $idCompInst = $this->db->getMysqli()->insert_id;
