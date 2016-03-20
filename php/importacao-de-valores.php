@@ -410,6 +410,8 @@ class ImportValues{
                                                 $tipoCorreto = false;
                                             }
                                         }
+                                        else if ($valores == "instPorCriar") 
+                                        {}
                                         else
                                         {
 ?>
@@ -429,6 +431,14 @@ class ImportValues{
                                         $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
                                         $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
                                         $idEnt = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
+                                        if ($valores == "instPorCriar") {
+                                            $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
+                                            $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
+                                            $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
+                                            $selUltRef = $this->db->runQuery($querySelUltRef);
+                                            $ultRef = $selUltRef->fetch_assoc();
+                                            $valores = $ultRef["id"];
+                                        }
                                     }
                                     $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
 
