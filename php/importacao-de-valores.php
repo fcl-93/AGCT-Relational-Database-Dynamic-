@@ -306,6 +306,9 @@ class ImportValues{
                                 $valores = $this->db->getMysqli()->real_escape_string($valores);
                                 $entID = $_REQUEST["ent"];
                                 $this->db->getMysqli()->begin_transaction();
+                                if (empty($valores)) {
+                                    $valores = NULL;
+                                }
                                 $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",$valores)";
                                 $queryInsertInst = $this->db->runQuery($queryInsertInst);
                                 $idCompInst = $this->db->getMysqli()->insert_id;
