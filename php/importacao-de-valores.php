@@ -469,6 +469,17 @@ class ImportValues{
                                     $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
                                     $idEnt = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
                                 }
+                                $checkValue = "SELECT * FROM value WHERE entity_id = ".$idEnt." AND property_id = ".$idProp;
+                                $checkValue = $this->db->runQuery($checkValue);
+                                $checkValue = $checkValue->num_rows;
+                                if ($checkValue > 0) {
+?>
+                                    <p>Só pode atribuir um valor na propriedade enum <?php echo $propriedadesExcel[$i];?> </p>
+<?php                                           
+                                    $this->db->getMysqli()->rollback();
+                                    $sucesso = false;
+                                    break;
+                                }
                                 $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
                                 $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                 if(!$queryInsertValue)
