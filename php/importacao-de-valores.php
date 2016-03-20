@@ -290,31 +290,34 @@ class ImportValues{
             while($contaLinhas <= count($sheetData))
             {
                     $i = 0;
-                    if(isset($_REQUEST["ent"]))
-                    {
-                            $entID = $_REQUEST["ent"];
-                            $this->db->getMysqli()->begin_transaction();
-                            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
-                            $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                            $idCompInst = $this->db->getMysqli()->insert_id;
-                            if(!$queryInsertInst )
-                            {
-                                    $this->db->getMysqli()->rollback();
-                                    $sucesso = false;
-                                    break;
-                            }
-                            $numEnt = 1;
-                    }
-                    $valoresIntroduzidos = array();
-                    $entID = 0;
-                    $j = 0;
                     print_r($sheetData[strval($contaLinhas)]);
                     foreach($sheetData[strval($contaLinhas)] as $valores)
                     {
                             echo "iteracao: ".$i." val: ".$valores."<br>";
+                            if(isset($_REQUEST["ent"]))
+                            {
+                                $numEnt = 1;
+                            }
+                            else {
+                                $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
+                            }
+                            for ($k = $i; $k < $numEnt; $k++)
+                            {
+                                $valores = $this->db->getMysqli()->real_escape_string($valores);
+                                $entID = $_REQUEST["ent"];
+                                $this->db->getMysqli()->begin_transaction();
+                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",$valores)";
+                                $queryInsertInst = $this->db->runQuery($queryInsertInst);
+                                $idCompInst = $this->db->getMysqli()->insert_id;
+                                if(!$queryInsertInst )
+                                {
+                                        $this->db->getMysqli()->rollback();
+                                        $sucesso = false;
+                                        break;
+                                }  
+                            }
                             if(isset($_REQUEST["form"]))
                             {
-                                $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
                                 $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j + $numEnt]."'";
                                     $selecionaEntidade = $this->db->runQuery($selecionaEntidade);
                                     $guardaID = $selecionaEntidade->fetch_assoc()['id'];
@@ -333,7 +336,8 @@ class ImportValues{
                                     }
                                     $j++;
                             }
-                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i + $numEnt]."'";
+                            
+                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
