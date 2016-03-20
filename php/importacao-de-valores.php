@@ -285,7 +285,7 @@ class ImportValues{
             }
             $contaLinhas = 3;
             $this->db->getMysqli()->autocommit(false);
-
+            $this->db->getMysqli()->begin_transaction();
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
                 print_r($sheetData[strval($contaLinhas)]);
@@ -309,7 +309,6 @@ class ImportValues{
                     if ($i < $numEnt)
                     {
                         $valores = $this->db->getMysqli()->real_escape_string($valores);
-                        $this->db->getMysqli()->begin_transaction();
                         if (empty($valores)) {
                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt[$i].")";
                         }
@@ -318,9 +317,7 @@ class ImportValues{
                         }
                         $queryInsertInst = $this->db->runQuery($queryInsertInst);
                         $idEnt = $this->db->getMysqli()->insert_id;
-                        if(!$queryInsertInst )
-                        {
-                            $this->db->getMysqli()->rollback();
+                        if(!$queryInsertInst ) {
                             $sucesso = false;
                             break;
                         }
@@ -329,9 +326,7 @@ class ImportValues{
                     else {
                         $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                         $querySelectProp = $this->db->runQuery($querySelectProp);
-                        if(!$querySelectProp )
-                        {
-                                $this->db->getMysqli()->rollback();
+                        if(!$querySelectProp ) {
                                 $sucesso = false;
                                 break;
                         }
@@ -388,7 +383,7 @@ class ImportValues{
 ?>
                                             <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
 <?php
-                                        $tipoCorreto = false;
+                                            $tipoCorreto = false;
                                         }
                                     case 'ent_ref':
                                         if(is_numeric($valores))
@@ -418,9 +413,9 @@ class ImportValues{
                                         else
                                         {
 ?>
-                                                <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
+                                            <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
 <?php                                            
-                                        $tipoCorreto = false;
+                                            $tipoCorreto = false;
                                         }
                                         break;
                                     default: 
@@ -440,7 +435,6 @@ class ImportValues{
                                     $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                     if(!$queryInsertValue)
                                     {
-                                        $this->db->getMysqli()->rollback();
                                         $sucesso = false;
                                         break;
                                     }
@@ -473,7 +467,6 @@ class ImportValues{
 ?>
                                     <p>Só pode atribuir um valor na propriedade enum <?php echo $propriedadesExcel[$i];?> </p>
 <?php                                           
-                                    $this->db->getMysqli()->rollback();
                                     $sucesso = false;
                                     break;
                                 }
@@ -481,7 +474,6 @@ class ImportValues{
                                 $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                 if(!$queryInsertValue)
                                 {
-                                    $this->db->getMysqli()->rollback();
                                     $sucesso = false;
                                     break;
                                 }
@@ -502,6 +494,9 @@ class ImportValues{
 ?>
                 <p>Os dados foram inseridos com sucesso!</p>
 <?php
+            }
+            else {
+                $this->db->getMysqli()->rollback();
             }
 	}
     }
