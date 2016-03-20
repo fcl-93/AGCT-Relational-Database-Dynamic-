@@ -300,8 +300,13 @@ class ImportValues{
                         $idEnt[0] = $_REQUEST["ent"];
                     }
                     else {
-                        $idEnt = $this->idEntRel($_REQUEST["form"])[0];
+                        $entId = $this->idEntRel($_REQUEST["form"])[0];
                         $numEnt = count($idEnt);
+                        $k = 0;
+                        foreach ($idEnt as $key => $value) {
+                            $entId[$k] = $key;
+                            $k++;
+                        }
                     }
                     if ($i < $numEnt)
                     {
