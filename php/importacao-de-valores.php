@@ -419,7 +419,9 @@ class ImportValues{
                                                             $tipoCorreto = false;
                                                     }
                                                     break;
-                                            default: break;
+                                            default: 
+                                                $tipoCorreto = true;
+                                                break;
 
                                     }
                                     if($tipoCorreto)
