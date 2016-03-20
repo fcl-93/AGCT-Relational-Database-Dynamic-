@@ -301,7 +301,7 @@ class ImportValues{
                             else {
                                 $numEnt = count($this->idEntRel($_REQUEST["form"])[0]);
                             }
-                            for (; $i < $numEnt; $i++)
+                            if ($i < $numEnt)
                             {
                                 $valores = $this->db->getMysqli()->real_escape_string($valores);
                                 $entID = $_REQUEST["ent"];
@@ -319,160 +319,163 @@ class ImportValues{
                                         $this->db->getMysqli()->rollback();
                                         $sucesso = false;
                                         break;
-                                }  
+                                }
+                                $i++;
                             }
-                            if(isset($_REQUEST["form"]))
-                            {
-                                $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j + $numEnt]."'";
-                                    $selecionaEntidade = $this->db->runQuery($selecionaEntidade);
-                                    $guardaID = $selecionaEntidade->fetch_assoc()['id'];
-                                    if($guardaID != $entID)
-                                    {
-                                            $entID = $guardaID;
-                                            $this->db->getMysqli()->begin_transaction();
-                                            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
-                                            $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                                            $idCompInst = $this->db->getMysqli()->insert_id;
-                                            if(!$queryInsertInst )
-                                            {
-                                                    $this->db->getMysqli()->rollback();
-                                                    $sucesso = false;
-                                            }
-                                    }
-                                    $j++;
-                            }
-                            
-                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
-                            $querySelectProp = $this->db->runQuery($querySelectProp);
-                            if(!$querySelectProp )
-                            {
-                                    $this->db->getMysqli()->rollback();
-                                    $sucesso = false;
-                                    break;
-                            }
-                            while($atrProp = $querySelectProp->fetch_assoc())
-                            {
-                                    $idProp = $atrProp['id'];
-                                    $value_type = $atrProp['value_type'];
-                                    $ent_fk_id = $atrProp['fk_ent_type_id'];
-                            }
-                            if(empty($valoresPermitidosEnum[$i]))
-                            {
-                                    $valores = $this->db->getMysqli()->real_escape_string($valores);
-                                    $tipoCorreto = false;
-                                    switch($value_type)
-                                    {
-                                            case 'int':
-                                                    if(ctype_digit($valores))
-                                                    {
-                                                            $valores = (int)$valores;
-                                                            $tipoCorreto = true;
-                                                    }
-                                                    else
-                                                    {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
-                                                            $tipoCorreto = false;
-                                                    }
-                                                    break;
-                                            case 'double':
-                                                    if(is_numeric($valores))
-                                                    {
+                            else {
+                                if(isset($_REQUEST["form"]))
+                                {
+                                    $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j + $numEnt]."'";
+                                        $selecionaEntidade = $this->db->runQuery($selecionaEntidade);
+                                        $guardaID = $selecionaEntidade->fetch_assoc()['id'];
+                                        if($guardaID != $entID)
+                                        {
+                                                $entID = $guardaID;
+                                                $this->db->getMysqli()->begin_transaction();
+                                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
+                                                $queryInsertInst = $this->db->runQuery($queryInsertInst);
+                                                $idCompInst = $this->db->getMysqli()->insert_id;
+                                                if(!$queryInsertInst )
+                                                {
+                                                        $this->db->getMysqli()->rollback();
+                                                        $sucesso = false;
+                                                }
+                                        }
+                                        $j++;
+                                }
 
-                                                            $valores = floatval($valores);
-                                                            $tipoCorreto = true;
-                                                    }
-                                                    else
-                                                    {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
-                                                            $tipoCorreto = false;
-                                                    }
-                                                    break;
-                                            case 'bool':
-                                                    if($valores == 'true' || $valores == 'false')
-                                                    {
-                                                            $valores = boolval($valores);
-                                                            $tipoCorreto = true;
-                                                    }
-                                                    else
-                                                    {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor true ou false'.
-                                                            $tipoCorreto = false;
-                                                    }
-                                            case 'ent_ref':
-                                                    if(is_numeric($valores))
-                                                    {
-                                                            // vai buscar o id da instancia da entidade que tem uma referencia de outra entidade
-                                                            $selecionainstancia = $this->db->runQuery("SELECT `id` FROM `entity` WHERE ent_type_id = ".$ent_fk_id."");
+                                $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
+                                $querySelectProp = $this->db->runQuery($querySelectProp);
+                                if(!$querySelectProp )
+                                {
+                                        $this->db->getMysqli()->rollback();
+                                        $sucesso = false;
+                                        break;
+                                }
+                                while($atrProp = $querySelectProp->fetch_assoc())
+                                {
+                                        $idProp = $atrProp['id'];
+                                        $value_type = $atrProp['value_type'];
+                                        $ent_fk_id = $atrProp['fk_ent_type_id'];
+                                }
+                                if(empty($valoresPermitidosEnum[$i]))
+                                {
+                                        $valores = $this->db->getMysqli()->real_escape_string($valores);
+                                        $tipoCorreto = false;
+                                        switch($value_type)
+                                        {
+                                                case 'int':
+                                                        if(ctype_digit($valores))
+                                                        {
+                                                                $valores = (int)$valores;
+                                                                $tipoCorreto = true;
+                                                        }
+                                                        else
+                                                        {
+                                                                echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                                $tipoCorreto = false;
+                                                        }
+                                                        break;
+                                                case 'double':
+                                                        if(is_numeric($valores))
+                                                        {
 
-                                                            $verificaInst = false;
-                                                            while($instancia = $selecionainstancia->fetch_assoc())
-                                                            {
-                                                                    if($instancia['id'] == $valores)
-                                                                    {
-                                                                            $valores = (int)$valores;
-                                                                            $tipoCorreto = true;
-                                                                            $verificaInst = true;
-                                                                            break;
-                                                                    }									
-                                                            }
-                                                            if($verificaInst == false)
-                                                            {
-                                                                    echo ' Não existe nenhuma instância com o id que introduziu no campo '.$propriedadesExcel[$i];
-                                                                    $tipoCorreto = false;
-                                                            }
-                                                    }
-                                                    else
-                                                    {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
-                                                            $tipoCorreto = false;
-                                                    }
+                                                                $valores = floatval($valores);
+                                                                $tipoCorreto = true;
+                                                        }
+                                                        else
+                                                        {
+                                                                echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                                $tipoCorreto = false;
+                                                        }
+                                                        break;
+                                                case 'bool':
+                                                        if($valores == 'true' || $valores == 'false')
+                                                        {
+                                                                $valores = boolval($valores);
+                                                                $tipoCorreto = true;
+                                                        }
+                                                        else
+                                                        {
+                                                                echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor true ou false'.
+                                                                $tipoCorreto = false;
+                                                        }
+                                                case 'ent_ref':
+                                                        if(is_numeric($valores))
+                                                        {
+                                                                // vai buscar o id da instancia da entidade que tem uma referencia de outra entidade
+                                                                $selecionainstancia = $this->db->runQuery("SELECT `id` FROM `entity` WHERE ent_type_id = ".$ent_fk_id."");
+
+                                                                $verificaInst = false;
+                                                                while($instancia = $selecionainstancia->fetch_assoc())
+                                                                {
+                                                                        if($instancia['id'] == $valores)
+                                                                        {
+                                                                                $valores = (int)$valores;
+                                                                                $tipoCorreto = true;
+                                                                                $verificaInst = true;
+                                                                                break;
+                                                                        }									
+                                                                }
+                                                                if($verificaInst == false)
+                                                                {
+                                                                        echo ' Não existe nenhuma instância com o id que introduziu no campo '.$propriedadesExcel[$i];
+                                                                        $tipoCorreto = false;
+                                                                }
+                                                        }
+                                                        else
+                                                        {
+                                                                echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                                $tipoCorreto = false;
+                                                        }
+                                                        break;
+                                                default: 
+                                                    $tipoCorreto = true;
                                                     break;
-                                            default: 
-                                                $tipoCorreto = true;
+
+                                        }
+                                        if($tipoCorreto)
+                                        {
+                                                $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                                $queryInsertValue = $this->db->runQuery($queryInsertValue);
+                                                if(!$queryInsertValue)
+                                                {
+                                                        $this->db->getMysqli()->rollback();
+                                                        $sucesso = false;
+                                                        break;
+                                                }
+                                                else
+                                                {
+                                                        $sucesso = true;
+                                                }
+                                        }
+                                        else
+                                        {
+                                                $sucesso = false;
                                                 break;
+                                        }
 
-                                    }
-                                    if($tipoCorreto)
-                                    {
-                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
-                                            $queryInsertValue = $this->db->runQuery($queryInsertValue);
-                                            if(!$queryInsertValue)
-                                            {
-                                                    $this->db->getMysqli()->rollback();
-                                                    $sucesso = false;
-                                                    break;
-                                            }
-                                            else
-                                            {
-                                                    $sucesso = true;
-                                            }
-                                    }
-                                    else
-                                    {
-                                            $sucesso = false;
-                                            break;
-                                    }
-
+                                }
+                                else
+                                {
+                                        if($valores == 1)
+                                        {
+                                                $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                                $queryInsertValue = $this->db->runQuery($queryInsertValue);
+                                                if(!$queryInsertValue)
+                                                {
+                                                        $this->db->getMysqli()->rollback();
+                                                        $sucesso = false;
+                                                        break;
+                                                }
+                                                else
+                                                {
+                                                        $sucesso = true;
+                                                }
+                                        }
+                                }
+                                $i++;
                             }
-                            else
-                            {
-                                    if($valores == 1)
-                                    {
-                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
-                                            $queryInsertValue = $this->db->runQuery($queryInsertValue);
-                                            if(!$queryInsertValue)
-                                            {
-                                                    $this->db->getMysqli()->rollback();
-                                                    $sucesso = false;
-                                                    break;
-                                            }
-                                            else
-                                            {
-                                                    $sucesso = true;
-                                            }
-                                    }
-                            }
-                            $i++;
                     }
                     if($sucesso)
                     {
