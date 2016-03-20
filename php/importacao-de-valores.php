@@ -290,7 +290,7 @@ class ImportValues{
                             $this->db->getMysqli()->begin_transaction();
                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                            $idCompInst = $this->db->getMysqli()->insert_id();
+                            $idCompInst = $this->db->getMysqli()->insert_id;
                             if(!$queryInsertInst )
                             {
                                     $this->db->getMysqli()->rollback();
@@ -314,7 +314,7 @@ class ImportValues{
                                             $this->db->getMysqli()->begin_transaction();
                                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
                                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                                            $idCompInst = $this->db->getMysqli()->insert_id();
+                                            $idCompInst = $this->db->getMysqli()->insert_id;
                                             if(!$queryInsertInst )
                                             {
                                                     $this->db->getMysqli()->rollback();
