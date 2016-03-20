@@ -301,7 +301,7 @@ class ImportValues{
                     }
                     else {
                         $entId = $this->idEntRel($_REQUEST["form"])[0];
-                        $numEnt = count($idEnt);
+                        $numEnt = count($entId);
                         $k = 0;
                         foreach ($entId as $key => $value) {
                             $idEnt[$k] = $key;
