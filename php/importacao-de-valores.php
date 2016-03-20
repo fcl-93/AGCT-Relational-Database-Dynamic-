@@ -437,7 +437,7 @@ class ImportValues{
                             {
                                     if($valores == 1)
                                     {
-                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
                                             $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                             if(!$queryInsertValue)
                                             {
