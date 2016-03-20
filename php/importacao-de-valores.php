@@ -297,6 +297,7 @@ class ImportValues{
                     if(isset($_REQUEST["ent"]))
                     {
                         $numEnt = 1;
+                        $idEnt[0] = $_REQUEST["ent"];
                     }
                     else {
                         $idEnt = $this->idEntRel($_REQUEST["form"])[0];
@@ -305,10 +306,9 @@ class ImportValues{
                     if ($i < $numEnt)
                     {
                         $valores = $this->db->getMysqli()->real_escape_string($valores);
-                        $entID = $_REQUEST["ent"];
                         $this->db->getMysqli()->begin_transaction();
                         if (empty($valores)) {
-                            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$entID.")";
+                            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt[$i].")";
                         }
                         else {
                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt[$i].",'".$valores."')";
