@@ -268,8 +268,7 @@ class ImportValues{
 <?php
         // if everything is ok, try to upload file
 	} 
-	else 
-	{
+	else {
             $inputFileName = $_FILES["file"]["tmp_name"];
             $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 
@@ -287,12 +286,10 @@ class ImportValues{
             $contaLinhas = 3;
             $this->db->getMysqli()->autocommit(false);
 
-            while($contaLinhas <= count($sheetData))
-            {
+            while($contaLinhas <= count($sheetData)) {
                 $i = 0;
                 print_r($sheetData[strval($contaLinhas)]);
-                foreach($sheetData[strval($contaLinhas)] as $valores)
-                {
+                foreach($sheetData[strval($contaLinhas)] as $valores) {
                     echo "iteracao: ".$i." val: ".$valores."<br>";
                     if(isset($_REQUEST["ent"]))
                     {
@@ -497,14 +494,14 @@ class ImportValues{
                         $i++;
                     }
                 }
-                if($sucesso)
-                {
-                    $this->db->getMysqli()->commit();
-?>
-                    <p>Os dados foram inseridos com sucesso!</p>
-<?php
-                }
                 $contaLinhas++;
+            }
+            if($sucesso)
+            {
+                $this->db->getMysqli()->commit();
+?>
+                <p>Os dados foram inseridos com sucesso!</p>
+<?php
             }
 	}
     }
