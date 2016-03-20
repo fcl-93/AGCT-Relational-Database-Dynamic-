@@ -64,13 +64,9 @@ class ImportValues{
             $this->estadoIntroducao();
             
         }
-        elseif($_REQUEST['estado'] =='validar')
+        elseif($_REQUEST['estado'] =='insercao')
         {
-            $this->estadoValidar();
-        }
-        elseif($_REQUEST['estado'] =='inserir')
-        {
-            $this->estadoInserir();
+            $this->estadoInsercao();
         }
     }
     
@@ -239,7 +235,7 @@ class ImportValues{
 <?php
     }
     
-    private function estadoInserir() {
+    private function estadoInsercao() {
         $target_file = $_FILES["file"]["name"];
 	$uploadOk = 1;
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
