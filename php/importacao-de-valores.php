@@ -308,6 +308,7 @@ class ImportValues{
                     $valoresIntroduzidos = array();
                     $entID = 0;
                     $j = 0;
+                    print_r($sheetData[strval($contaLinhas)]);
                     foreach($sheetData[strval($contaLinhas)] as $valores)
                     {
                             if(isset($_REQUEST["form"]))
