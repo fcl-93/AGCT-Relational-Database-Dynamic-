@@ -410,8 +410,9 @@ class ImportValues{
                                                 $tipoCorreto = false;
                                             }
                                         }
-                                        else if ($valores == "instPorCriar") 
-                                        {}
+                                        else if ($valores == "instPorCriar") {
+                                            $tipoCorreto = true;
+                                        }
                                         else
                                         {
 ?>
