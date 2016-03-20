@@ -306,7 +306,7 @@ class ImportValues{
                             if(isset($_REQUEST["form"]))
                             {
                                     $selecionaEntidade = "SELECT c.id FROM ent_type AS c, property AS p WHERE p.ent_type_id = c.id AND p.form_field_name = '".$propriedadesExcel[$j]."'";
-                                    $selecionaEntidade = $this->db->runQuery($selecionaComponente);
+                                    $selecionaEntidade = $this->db->runQuery($selecionaEntidade);
                                     $guardaID = $selecionaEntidade->fetch_assoc()['id'];
                                     if($guardaID != $entID)
                                     {
@@ -337,6 +337,7 @@ class ImportValues{
                                     $value_type = $atrProp['value_type'];
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                             }
+                            echo $idProp." ".$value_type." ".$ent_fk_id;
                             if(empty($valoresPermitidosEnum[$i]))
                             {
                                     $valores = $this->db->getMysqli()->real_escape_string($valores);
