@@ -279,7 +279,7 @@ class ImportValues{
                 array_push($valoresPermitidosEnum, $valores);
             }
             $contaLinhas = 3;
-            $this->db->getMysqli->autocommit(false);
+            $this->db->getMysqli()->autocommit(false);
 
             while($contaLinhas <= count($sheetData))
             {
@@ -287,13 +287,13 @@ class ImportValues{
                     if(isset($_REQUEST["ent"]))
                     {
                             $entID = $_REQUEST["ent"];
-                            $this->db->getMysqli->begin_transaction();
+                            $this->db->getMysqli()->begin_transaction();
                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                            $idCompInst = $this->db->getMysqli->insert_id();
+                            $idCompInst = $this->db->getMysqli()->insert_id();
                             if(!$queryInsertInst )
                             {
-                                    $this->db->getMysqli->rollback();
+                                    $this->db->getMysqli()->rollback();
                                     $sucesso = false;
                                     break;
                             }
@@ -311,13 +311,13 @@ class ImportValues{
                                     if($guardaID != $entID)
                                     {
                                             $entID = $guardaID;
-                                            $this->db->getMysqli->begin_transaction();
+                                            $this->db->getMysqli()->begin_transaction();
                                             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$entID.",NULL)";
                                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                                            $idCompInst = $this->db->getMysqli->insert_id();
+                                            $idCompInst = $this->db->getMysqli()->insert_id();
                                             if(!$queryInsertInst )
                                             {
-                                                    $this->db->getMysqli->rollback();
+                                                    $this->db->getMysqli()->rollback();
                                                     $sucesso = false;
                                             }
                                     }
@@ -327,7 +327,7 @@ class ImportValues{
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
-                                    $this->db->getMysqli->rollback();
+                                    $this->db->getMysqli()->rollback();
                                     $sucesso = false;
                                     break;
                             }
@@ -339,7 +339,7 @@ class ImportValues{
                             }
                             if(empty($valoresPermitidosEnum[$i]))
                             {
-                                    $valores = $this->db->getMysqli->real_escape_string($valores);
+                                    $valores = $this->db->getMysqli()->real_escape_string($valores);
                                     $tipoCorreto = false;
                                     switch($value_type)
                                     {
@@ -417,7 +417,7 @@ class ImportValues{
                                             $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                             if(!$queryInsertValue)
                                             {
-                                                    $this->db->getMysqli->rollback();
+                                                    $this->db->getMysqli()->rollback();
                                                     $sucesso = false;
                                                     break;
                                             }
@@ -441,7 +441,7 @@ class ImportValues{
                                             $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                             if(!$queryInsertValue)
                                             {
-                                                    $this->db->getMysqli->rollback();
+                                                    $this->db->getMysqli()->rollback();
                                                     $sucesso = false;
                                                     break;
                                             }
@@ -455,7 +455,7 @@ class ImportValues{
                     }
                     if($sucesso)
                     {
-                            $this->db->getMysqli->commit();
+                            $this->db->getMysqli()->commit();
                             echo 'Os dados foram inseridos com sucesso!';
                     }
                     $contaLinhas++;
