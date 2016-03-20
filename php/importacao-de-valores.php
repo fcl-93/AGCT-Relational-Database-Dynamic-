@@ -332,6 +332,7 @@ class ImportValues{
                                     $j++;
                             }
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i + $numEnt]."'";
+                            echo $querySelectProp."<br>";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
