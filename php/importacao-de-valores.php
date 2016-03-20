@@ -289,7 +289,6 @@ class ImportValues{
 
             while($contaLinhas <= count($sheetData))
             {
-                    $i = 0;
                     if(isset($_REQUEST["ent"]))
                     {
                             $entID = $_REQUEST["ent"];
@@ -332,7 +331,7 @@ class ImportValues{
                                     }
                                     $j++;
                             }
-                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i + $numEnt]."'";
+                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$numEnt]."'";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp )
                             {
@@ -346,7 +345,7 @@ class ImportValues{
                                     $value_type = $atrProp['value_type'];
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                             }
-                            if(empty($valoresPermitidosEnum[$i]))
+                            if(empty($valoresPermitidosEnum[$numEnt]))
                             {
                                     $valores = $this->db->getMysqli()->real_escape_string($valores);
                                     $tipoCorreto = false;
@@ -360,7 +359,7 @@ class ImportValues{
                                                     }
                                                     else
                                                     {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$numEnt].' não está correto. Certifique-se que introduziu um valor numérico'.
                                                             $tipoCorreto = false;
                                                     }
                                                     break;
@@ -373,7 +372,7 @@ class ImportValues{
                                                     }
                                                     else
                                                     {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$numEnt].' não está correto. Certifique-se que introduziu um valor numérico'.
                                                             $tipoCorreto = false;
                                                     }
                                                     break;
@@ -385,7 +384,7 @@ class ImportValues{
                                                     }
                                                     else
                                                     {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor true ou false'.
+                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$numEnt].' não está correto. Certifique-se que introduziu um valor true ou false'.
                                                             $tipoCorreto = false;
                                                     }
                                             case 'ent_ref':
@@ -407,13 +406,13 @@ class ImportValues{
                                                             }
                                                             if($verificaInst == false)
                                                             {
-                                                                    echo ' Não existe nenhuma instância com o id que introduziu no campo '.$propriedadesExcel[$i];
+                                                                    echo ' Não existe nenhuma instância com o id que introduziu no campo '.$propriedadesExcel[$numEnt];
                                                                     $tipoCorreto = false;
                                                             }
                                                     }
                                                     else
                                                     {
-                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$i].' não está correto. Certifique-se que introduziu um valor numérico'.
+                                                            echo 'O valor introduzido para o campo '.$propriedadesExcel[$numEnt].' não está correto. Certifique-se que introduziu um valor numérico'.
                                                             $tipoCorreto = false;
                                                     }
                                                     break;
@@ -448,7 +447,7 @@ class ImportValues{
                             {
                                     if($valores == 1)
                                     {
-                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idCompInst.", ".$idProp.",'".$valoresPermitidosEnum[$numEnt]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
                                             $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                             if(!$queryInsertValue)
                                             {
@@ -462,8 +461,8 @@ class ImportValues{
                                             }
                                     }
                             }
-                            $i++;
-                            echo $i;
+                            $numEnt++;
+                            echo $numEnt;
                     }
                     if($sucesso)
                     {
