@@ -368,7 +368,7 @@ class InsereRelacoes
             }
             else if( $read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
             {
-                $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id");
+                $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id  AND rel_type.ent_type1_id=".$read_CompRel['ent_type1_id']));
 ?>
                 <html>
                     <form>
