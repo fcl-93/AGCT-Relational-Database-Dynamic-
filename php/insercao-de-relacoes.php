@@ -165,14 +165,23 @@ class InsereRelacoes
 	 */
         public function editRlationProps(){
            $res_InsProps = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
-           $res_Tipos = $this->bd->runQuery("SELECT ent_type1_id,ent_type2_id FROM rel_type WHERE id=".$_REQUEST['rel']);
-           $read_Types = $res_Tipos->fetch_assoc();
-                  
+           if($res_InsProps->num_rows == 0)
+           {
+?>                     
+               <html>
+                   <p>Não existem propriedades para a relação selecionada.</p>
+                   <p>Clique em <?php goBack(); ?> para voltar atrás</p>
+               </html>
+<?php       
+
+           }
+           else
+           {
 ?>
                         <html>
                             <form>
-                            <h3>Inserção de Relações - Edição de Propriedades da Relação entre <?php echo$read_Types['ent_type1_id'] ;?> - <?php  echo$read_Types['ent_type2_id'] ;?></h3>
-                                <table>
+                            <h3>Inserção de Relações - Edição de Propriedades da Relação selecionada.?></h3>
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -181,6 +190,7 @@ class InsereRelacoes
                                             <th>Nome</th>
                                             <th>Valor</th>
                                             <th>Escolha</th>
+                                            <th>Editar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -324,7 +334,7 @@ class InsereRelacoes
             
             if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id");
+               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type1_id']);
 ?>
                 <html>
                     <form>
@@ -474,8 +484,9 @@ class InsereRelacoes
         /**
          * Method that will only update existing values in the database
          */
-        private function edita()
-        {}
+        private function edita(){
+            
+        }
         /**
          * Mehtod that will insert new values in the database.
          */
