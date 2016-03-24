@@ -227,7 +227,7 @@ class InsereRelacoes
                                 
                                 while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
                                 {
-                                    $res_CanBeAdded = $this->bd->runQuery("SELECT p.id,p.name,p.value_type FROM property as p,value as v WHERE v.relation_id=".$idFromRelation." AND v.property_id !=.$read_GetPropFromRelType['id']");
+                                    $res_CanBeAdded = $this->bd->runQuery("SELECT p.id,p.name,p.value_type FROM property as p,value as v WHERE v.relation_id=".$idFromRelation." AND v.property_id !=".$read_GetPropFromRelType['id']);
                                     $read_CanBeAdded = $res_CanBeAdded->fetch_assoc();
 ?>                                  
                                     <tr>
