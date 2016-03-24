@@ -777,6 +777,9 @@ class InsereRelacoes
                         $tipoCorreto = false;
                     }
                     break;
+                default:
+                    $tipoCorreto = true;
+                    break;
             }
         }
         
@@ -815,7 +818,9 @@ class InsereRelacoes
                             if(isset($_REQUEST['textbox'.$i]))
                             {
                                 $res_propId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
-                                $res_GetValType = $this->bd->runQuery("SELECT value_type FROM property WHERE id = "$res_propId->fetch_assoc()['property_id']);
+                                $read_propId = $res_propId->fetch_assoc();
+                                
+                                $res_GetValType = $this->bd->runQuery("SELECT value_type FROM property WHERE id = ".$read_propId['property_id']);
                                 $read_GetValType = $res_GetValType->fetch_assoc();
                                 
                                 if($this->typeValidation($read_GetValType['value_type'],$_REQUEST['textbox'.$i]) == 'false')
