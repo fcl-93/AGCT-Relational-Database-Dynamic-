@@ -442,6 +442,9 @@ class ImportValues{
                                 $entity = $this->db->runQuery($selEntType)->fetch_assoc();
                                 $ent_type = $entity["ent_type_id"];
                             }
+                            else {
+                                $ent_type = 0;
+                            }
                             $selRel = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
                             $relation = $this->db->runQuery($selRel)->fetch_assoc();
                             $ent_type1 = $relation["ent_type1_id"];
