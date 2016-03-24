@@ -418,8 +418,7 @@ class ImportValues{
                                 $ent_fk_id = $atrProp['fk_ent_type_id'];
                                 $ent_type_id = $atrProp["ent_type_id"];
                             }
-                            print_r($valoresPermitidosEnum);
-                            if(empty($valoresPermitidosEnum[$i]))
+                            if($value_type != "enum")
                             {
                                 echo "passei 1";
                                 $valores = $this->db->getMysqli()->real_escape_string($valores);
