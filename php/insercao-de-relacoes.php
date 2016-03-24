@@ -789,15 +789,27 @@ class InsereRelacoes
 	public function ssvalidation(){
             if($_REQUEST['flag'] == 'UpdateAttr')
             {
+                //validation you should select at least one checkbox
+               //validation check if for every check box there is at least one value 
                 $count = 0;
                 for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
-                {
-                    if(isset($_REQUEST['check'.$i]))
                     {
-                        $count++;
-                        //echo $count;
+                        if(isset($_REQUEST['check'.$i]))
+                        {
+                            //there is no 
+                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['text'.$i]))
+                            {
+?>
+                        <html>
+                            <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                        </html>
+<?php
+                                return false;
+                            }
+                            $count++;
+                        }
                     }
-                }
+                    
                 if($count == 0)
                 {
 ?>
@@ -807,56 +819,13 @@ class InsereRelacoes
 <?php
                     return false;
                 }
-                else
-                {
-                    $count = 0;
-                    for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
-                    {
-                        if(isset($_REQUEST['check'.$i]))
-                        {
-                            //check the data type in the checkbox
-                            if(empty($_REQUEST['textbox'.$i]))
-                            {
-?>
-                                <html>
-                                    <p>Deve preencher campos do tipo int, double e text com caratéres.</p>
-                                </html>
-<?php
-                                return false;
-                            }
-                            else 
-                            {
-                                $res_propId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
-                                $read_propId = $res_propId->fetch_assoc();
-                                
-                                $res_GetValType = $this->bd->runQuery("SELECT value_type FROM property WHERE id = ".$read_propId['property_id']);
-                                $read_GetValType = $res_GetValType->fetch_assoc();
-                                
-                                if($this->typeValidation($read_GetValType['value_type'],$_REQUEST['textbox'.$i]) == false)
-                                {
-                                    return false;
-                                }
-                            }
-                            $count++;
-                        }
-                    }
-                    if($count == 0)
-                    {
-?>
-                        <html>
-                            <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
-                        </html>
-<?php
-                        return false;
-                    }
-                    
+                
                     return true;
                     
                     
                 }
 
             }
-            //return true;
         }
 }
 ?>
