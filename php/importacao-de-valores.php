@@ -548,7 +548,6 @@ class ImportValues{
                                         case 'bool':
                                             if($valores == 'true' || $valores == 'false')
                                             {
-                                                $valores = boolval($valores);
                                                 $tipoCorreto = true;
                                             }
                                             else
