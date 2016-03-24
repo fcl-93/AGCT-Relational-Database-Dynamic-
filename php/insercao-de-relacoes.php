@@ -268,9 +268,9 @@ class InsereRelacoes
 <?php
                                 }
 ?>                             
-                                    <input type="submit" value="Adicionar Novas Propriedades">
                                 </tbody>
                             </table>
+                                    <input type="submit" value="Adicionar Novas Propriedades">
                             </form>
                         </html>
 <?php
