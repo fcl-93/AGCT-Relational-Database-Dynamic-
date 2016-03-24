@@ -231,14 +231,14 @@ class InsereRelacoes
                                     $read_CanBeAdded = $res_CanBeAdded->fetch_assoc();
 ?>                                  
                                     <tr>
-                                        <td><?php echo $read_CanBeAdded['id']; ?></td>
-                                        <td><?php echo $read_CanBeAdded['name']; ?></td>
-                                        <td><?php  echo $read_CanBeAdded['value_type'];?></td>
+                                        <td><?php echo $read_CanBeAdded['p.id']; ?></td>
+                                        <td><?php echo $read_CanBeAdded['p.name']; ?></td>
+                                        <td><?php  echo $read_CanBeAdded['p.value_type'];?></td>
                                         <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
                                         <td>
 <?php
                                             //verifies the value type
-                                            if($read_CanBeAdded['value_type'] == 'bool')
+                                            if($read_CanBeAdded['p.value_type'] == 'bool')
                                             {
 ?>
                                                 <input type="radio" name="<?php echo $conta ?>" value="true">True
