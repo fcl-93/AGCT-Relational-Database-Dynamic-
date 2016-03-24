@@ -263,7 +263,7 @@ class InsereRelacoes
                                             }
                                             $conta++;
 ?>
-                                        <td>
+                                        </td>
                                     </tr>
 <?php
                                 }
