@@ -822,7 +822,7 @@ class InsereRelacoes
                                     $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
                                     $getValue_Type = $res_getValue_Type->fetch_assoc();
                                    
-                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['text'.$i]))== false)
+                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
                                     {
                                         return false;
                                     }
