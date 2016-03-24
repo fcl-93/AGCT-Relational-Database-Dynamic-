@@ -403,7 +403,7 @@ class InsereRelacoes
                 $count = 0;
                 for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
                 {
-                    if(empty($_REQUEST['check'.$i])
+                    if(empty($_REQUEST['check'.$i]))
                     {
                         $count++;
                     }
