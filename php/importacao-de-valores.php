@@ -197,7 +197,7 @@ class ImportValues{
             </thead>
             <tbody>
             <tr>
-                <td>Tipo de valor/Valores permitidos</td>
+                <td id="primCol">Tipo de valor/Valores permitidos</td>
 <?php
                 $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
@@ -234,7 +234,7 @@ class ImportValues{
 ?>
             </tr>
             <tr>
-                <td>Valores a intoduzir</td>
+                <td id="primCol">Valores a intoduzir</td>
 <?php
                 for (;$numCol > 0; $numCol--) {
 ?>

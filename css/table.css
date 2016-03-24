@@ -22,7 +22,7 @@
   background-position: 100% 100%;
 }
 
-.table thead tr th.headerSortUp, #table thead tr th.headerSortDown {
+.table thead tr th.headerSortUp, #table thead tr th.headerSortDown, #primCol {
   background: #acc8dd;
 }
 
@@ -53,6 +53,7 @@
 }
 
 #acertaCabecalho {
-    border: none;
+    border-top-color: white;
+    border-left-color: white;
     background: white;
 }
