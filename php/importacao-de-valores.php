@@ -408,6 +408,7 @@ class ImportValues{
                         }
                         else {
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
+                            echo $querySelectProp;
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp ) {
                                 $sucesso = false;
