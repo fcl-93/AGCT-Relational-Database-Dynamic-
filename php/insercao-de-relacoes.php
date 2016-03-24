@@ -806,6 +806,26 @@ class InsereRelacoes
 <?php
                                 return false;
                             }
+                            else
+                            {
+                                if(isset($_REQUEST['select'.$i]))
+                                {}
+                                else if(isset($_REQUEST['radio'.$i]))
+                                {}
+                                else if(isset($_REQUEST['text'.$i]))
+                                {
+                                    $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
+                                    $getPropId = $res_getPropId->fetch_assoc();
+                                    
+                                    $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
+                                    $getValue_Type = $res_getValue_Type->fetch_assoc();
+                                   
+                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['text'.$i]))== false)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
                             $count++;
                         }
                     }
@@ -819,6 +839,12 @@ class InsereRelacoes
 <?php
                     return false;
                 }
+                
+                
+                
+                
+                
+                
                 
                     return true;
                     
