@@ -812,10 +812,19 @@ class InsereRelacoes
                     $count = 0;
                     for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
                     {
-                        if(isset($_REQUEST['check'.$i]) && ( isset($_REQUEST['select'.$i]) ||isset($_REQUEST['textbox'.$i]) || isset($_REQUEST['radio'.$i])))
+                        if(isset($_REQUEST['check'.$i]))
                         {
                             //check the data type in the checkbox
-                            if(isset($_REQUEST['textbox'.$i]))
+                            if(empty($_REQUEST['textbox'.$i]))
+                            {
+?>
+                                <html>
+                                    <p>Deve preencher campos do tipo int, double e text com caratéres.</p>
+                                </html>
+<?php
+                                return false;
+                            }
+                            else 
                             {
                                 $res_propId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
                                 $read_propId = $res_propId->fetch_assoc();
