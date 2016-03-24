@@ -372,20 +372,17 @@ class ImportValues{
                 print_r($sheetData[strval($contaLinhas)]);
                 print_r($propriedadesExcel);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
+                    echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
-                        if ($i === 1) {
-                            $i = 0;
-                        }
-                        echo "iteracao: ".$i." val: ".$valores."<br>";
                         if(isset($_REQUEST["ent"]))
                         {
                             $numEnt = 1;
-                            $idEnt[0] = $_REQUEST["ent"];
+                            $idEnt[1] = $_REQUEST["ent"];
                         }
                         else {
                             $entId = $this->idEntRel($_REQUEST["form"])[0];
                             $numEnt = count($entId);
-                            $k = 0;
+                            $k = 1;
                             $idEnt = array();
                             foreach ($entId as $key => $value) {
                                 $idEnt[$k] = $key;
