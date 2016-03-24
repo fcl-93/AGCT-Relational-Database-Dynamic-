@@ -145,8 +145,10 @@ class ImportValues{
                     $arrayEntidades = $this->idEntRel($_REQUEST["form"])[0];
                 }
                 $contaEntidades = 0;
+                $numCol = 0;
                 foreach ($arrayEntidades as $nome) {
                     $contaEntidades++;
+                    $numCol++;
 ?>
                     <th>Nome para instância da entidade <?php echo $nome; ?></th>
 <?php
@@ -162,7 +164,6 @@ class ImportValues{
                                     WHERE e.id=".$_REQUEST['ent']." AND p.ent_type_id = e.id";
 		}
 		$selProp = $this->db->runQuery($selPropQuery);
-                $numProp = $selProp->num_rows;
 		while($prop = $selProp->fetch_assoc())
 		{
                     $selFormFieldNamesQuery = "SELECT value_type, form_field_name FROM property WHERE id = ".$prop['id'];
@@ -178,6 +179,7 @@ class ImportValues{
 ?>
                                 <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
+                               $numCol++;
                             }
                         }
                         else
@@ -185,6 +187,7 @@ class ImportValues{
 ?>
                             <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
+                            $numCol++;
                         }
                     }
 		}
@@ -232,12 +235,7 @@ class ImportValues{
             <tr>
                 <td>Valores a intoduzir</td>
 <?php
-                for (;$contaEntidadesBack > 0; $contaEntidadesBack--) {
-?>
-                    <td></td>
-<?php                    
-                }
-                for (;$numProp > 0; $numProp--) {
+                for (;$numCol > 0; $numCol--) {
 ?>
                     <td></td>
 <?php                    
