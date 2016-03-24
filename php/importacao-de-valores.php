@@ -448,7 +448,7 @@ class ImportValues{
                                 $idEntidadeRel[0] = $_REQUEST["rel"];
                             }
                         }
-                        if (isset($_REQUEST["ent"]))
+                        else if (isset($_REQUEST["ent"]))
                         {
                             $numEntRel = 1;
                             $idEntidadeRel[0] = $_REQUEST["ent"];
