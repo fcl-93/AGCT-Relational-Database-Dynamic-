@@ -437,11 +437,61 @@ class ImportValues{
                     echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
                         if (isset($_REQUEST["rel"])) {
+                            $selEntType = "SELECT ent_type_id FROM entity WHERE id = ".$valores;
+                            $selRel = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
+                            $entity = $this->db->runQuery($selEntType)->fetch_assoc();
+                            $relation = $this->db->runQuery($selRel)->fetch_assoc();
+                            $ent_type = $entity["ent_type_id"];
+                            $ent_type1 = $relation["ent_type1_id"];
+                            $selNomeEnt1 = "SELECT * FROM ent_type WHERE id = ".$ent_type1;
+                            $ent1 = $this->db->runQuery($selNomeEnt1)->fetch_assoc();
+                            $nome1 = $ent1["name"];
+                            $ent_type2 = $relation["ent_type2_id"];
+                            $selNomeEn1t = "SELECT * FROM ent_type WHERE id = ".$ent_type2;
+                            $nome2 = $ent2["name"];
+                            $ent1 = $this->db->runQuery($selNomeEnt2)->fetch_assoc();
                             if ($i == 1) {
-                                $entRel1 = $valores;
+                                if (empty($valores))
+                                {
+?>
+                                    <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome1;?> </p>
+<?php
+                                    break;
+                                }
+                                else {
+                                    
+                                    if ($ent_type != $ent_type1)
+                                    {
+?>
+                                        <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome1;?> </p>
+<?php                                        
+                                        break;
+                                    }
+                                    else {
+                                        $entRel1 = $valores;
+                                    }
+                                }
                             }
                             else if ($i == 2) {
-                                $entRel2 = $valores;
+                                if (empty($valores))
+                                {
+?>
+                                    <p>O valor introduzido para o campo Entidade 2 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
+<?php                                    
+                                    break;
+                                }
+                                else {
+                                    if ($ent_type != $ent_type2)
+                                    {
+?>
+                                        <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
+<?php                                        
+                                        break;
+                                    }
+                                    else {
+                                        $entRel2 = $valores;
+                                    }
+                                }
                             }
                             else {
                                 $numEntRel = 1;
@@ -524,9 +574,9 @@ class ImportValues{
                                             }
                                             else
                                             {
-    ?>
+?>
                                                 <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
-    <?php
+<?php
                                                 $tipoCorreto = false;
                                             }
                                             break;
@@ -539,9 +589,9 @@ class ImportValues{
                                             }
                                             else
                                             {
-    ?>
+?>
                                                 <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i]; ?> não está correto. Certifique-se que introduziu um valor numérico</p>
-    <?php
+<?php
                                                 $tipoCorreto = false;
                                             }
                                             break;
@@ -552,9 +602,9 @@ class ImportValues{
                                             }
                                             else
                                             {
-    ?>
+?>
                                                 <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
-    <?php
+<?php
                                                 $tipoCorreto = false;
                                             }
                                             break;
@@ -577,9 +627,9 @@ class ImportValues{
                                                 }
                                                 if($verificaInst == false)
                                                 {
-    ?>
+?>
                                                     <p>Não existe nenhuma instância com o id que introduziu no campo <?php echo $propriedadesExcel[$i];?></p>
-    <?php
+<?php
                                                     $tipoCorreto = false;
                                                 }
                                             }
@@ -588,9 +638,9 @@ class ImportValues{
                                             }
                                             else
                                             {
-    ?>
+?>
                                                 <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
-    <?php                                            
+<?php                                            
                                                 $tipoCorreto = false;
                                             }
                                             break;
