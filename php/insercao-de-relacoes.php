@@ -176,7 +176,7 @@ class InsereRelacoes
             
             
             //Show a table with properties who can be added.
-            if($res_PropCanBeAded->num_rows != $read_GetPropFromRelType)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
+            if($res_PropCanBeAded->num_rows != $read_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
             {
 ?>
