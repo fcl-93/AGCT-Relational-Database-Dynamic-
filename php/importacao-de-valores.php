@@ -1,6 +1,8 @@
 <?php
 require_once("custom/php/common.php");
-include 'PHPExcel/Classes/PHPExcel/IOFactory.php';
+require_once 'PHPExcel/Classes/PHPExcel.php';
+require_once 'PHPExcel/Classes/PHPExcel/Writer/Excel2007.php';
+require_once 'PHPExcel/Classes/PHPExcel/IOFactory.php';
 /**
  * Class that handle all the methods that are necessary to execute this component
  */
@@ -130,6 +132,26 @@ class ImportValues{
     }
     
     private function estadoIntroducao() {
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("")
+                ->setLastModifiedBy("")
+                ->setTitle("")
+                ->setSubject("")
+                ->setDescription("")
+                ->setKeywords("")
+                ->setCategory("");
+        
+        //Frase gerada de forma automática
+	$linha = 1;
+	$coluna = 'A';
+        $valor = "Deverá utilizar a tabela a abaixo para introduzir os valores. Estes devem se sempre introduzidos a partir da 3ª linha da tabela.";
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+        $linha = 2;
+        $valor = "Cada linha corresponderá a uma inserção na base de dados.";
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+        $linha = 3;
+        $valor = "Nos casos em que a propriedade é enum, deverá colocar um 1 na propriedade pretendida e 0 nas restantes.";
+	$objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
 ?>
 	<table class = "table">
             <thead>
@@ -137,6 +159,10 @@ class ImportValues{
                 <td id="acertaCabecalho"></td>
                 
 <?php
+                $linha = 4;  
+                $valor = "";
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                $coluna++;
                 if (isset($_REQUEST["ent"])) {
                     $getEntidade = "SELECT * FROM ent_type WHERE id = ".$_REQUEST["ent"];
                     $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
@@ -150,6 +176,12 @@ class ImportValues{
                 foreach ($arrayEntidades as $nome) {
                     $contaEntidades++;
                     $numCol++;
+                    $valor = "Nome para instância da entidade ".$nome;
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                    $coluna++;
+                    
+                    
 ?>
                     <th>Nome para instância da entidade <?php echo $nome; ?></th>
 <?php
@@ -175,8 +207,12 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc())
+                            for($num = $selfAllowed->num_rows; $num > 0; $num--)
                             {
+                                $valor = $formfieldnames['form_field_name'];
+                                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                                $coluna++;
 ?>
                                 <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
@@ -185,6 +221,11 @@ class ImportValues{
                         }
                         else
                         {
+                            $valor = $formfieldnames['form_field_name'];
+                            echo $coluna. " ".$linha." ".$coluna.$linha;
+                            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                            $coluna++;
 ?>
                             <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
@@ -199,8 +240,17 @@ class ImportValues{
             <tr>
                 <td id="primCol">Tipo de valor/Valores permitidos</td>
 <?php
+                $linha++;
+                $coluna = 'A';
+                $valor = "Tipo de valor/Valores permitidos";
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                $coluna++;
                 $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
+                    $valor = "";
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                    $coluna++;
 ?>
                     <td></td>
 <?php                    
@@ -216,15 +266,23 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc())
+                            while($valPerm = $selfAllowed->fetch_assoc())
                             {
+                                $valor = $valPerm['value'];
+                                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                                $coluna++;
 ?>
-                                <td><?php echo $linha['value'];?></td>	
+                                <td><?php echo $valPerm['value'];?></td>	
 <?php
                             }
                         }
                         else
                         {
+                            $valor = $formfieldnames['value_type'];
+                            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                            $coluna++;
 ?>
                             <td><?php echo $formfieldnames['value_type'];?></td>
 <?php
@@ -236,6 +294,11 @@ class ImportValues{
             <tr>
                 <td id="primCol">Valores a intoduzir</td>
 <?php
+                $linha++;
+                $coluna = 'A';
+                $valor = "Valores a intoduzir";
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                $coluna++;
                 for (;$numCol > 0; $numCol--) {
 ?>
                     <td></td>
@@ -245,17 +308,24 @@ class ImportValues{
             </tr>
             </tbody>
 	</table>
-	
-        Caro utilizador,<br>
-	Deverá copiar estas linhas para um ficheiro excel e introduzir os valores a importar,sendo que no caso das propriedades enum, 
-	deverá constar um 0 quando esse valor permitido não se aplique à instância em causa e um 1 quando esse valor se aplica.<br>
+<?php
+	$objPHPExcel->getActiveSheet()->setTitle('ImportValues');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save(get_bloginfo('wpurl')."/ImportValues.xlsx");
+?>
+        <p>Caro utilizador,<br>
+	Para introduzir os valores, por favor <a href="/test01.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel e siga as intruções que são indicadas.<br>
+        De seguida, deve guardar esse ficheiro e submetê-lo a partir do campo abixo.</p>
 
 	<form name="import" method="POST" enctype="multipart/form-data">
 	    	<input type="file" name="file">
 	    	<input type="hidden" name="estado" value="insercao">
 	        <input type="submit" name="submit" value="Submeter" />
 	</form>
-<?php
+<?php    
     }
     
     private function estadoInsercao() {
