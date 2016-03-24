@@ -812,7 +812,7 @@ class InsereRelacoes
                     $count = 0;
                     for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
                     {
-                        if(isset($_REQUEST['check'.$i]) && ( isset($_REQUEST['select'.$i]) ||isset($_REQUEST['textbox'.$i]) || isset($_REQUEST['radio'.$i])))
+                        if(isset($_REQUEST['check'.$i]))
                         {
                             //check the data type in the checkbox
                             if(isset($_REQUEST['textbox'.$i]))
@@ -827,6 +827,15 @@ class InsereRelacoes
                                 {
                                     return false;
                                 }
+                            }
+                            else
+                            {
+?>
+                                <html>
+                                    <p>Deve preencher campos do tipo int, double e text com texto.</p>
+                                </html>
+<?php
+                                return false;
                             }
                             $count++;
                         }
