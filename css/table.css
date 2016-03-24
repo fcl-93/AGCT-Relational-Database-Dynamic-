@@ -23,6 +23,7 @@
 }
 
 .table thead tr th.headerSortUp, #table thead tr th.headerSortDown, #primCol {
+  font-weight: bold;
   background: #acc8dd;
 }
 
