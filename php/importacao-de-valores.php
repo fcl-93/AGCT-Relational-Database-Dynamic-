@@ -314,10 +314,11 @@ class ImportValues{
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        echo get_bloginfo('wpurl')."/ImportValues.xlsx";
         $objWriter->save(get_bloginfo('wpurl')."/ImportValues.xlsx");
 ?>
         <p>Caro utilizador,<br>
-	Para introduzir os valores, por favor <a href="/test01.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel e siga as intruções que são indicadas.<br>
+	Para introduzir os valores, por favor <a href="/ImportValues.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel e siga as intruções que são indicadas.<br>
         De seguida, deve guardar esse ficheiro e submetê-lo a partir do campo abixo.</p>
 
 	<form name="import" method="POST" enctype="multipart/form-data">
