@@ -569,7 +569,7 @@ class InsereRelacoes
                     
                     
                     
-                   if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`, `relation_id`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",".$newValue.",'".date('Y-m-d')."','".date('H:i:s')."','".wp_get_current_user()->user_login."',".$_REQUEST['iddarel'].")"))
+                   if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`, `relation_id`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",'".$newValue."','".date('Y-m-d')."','".date('H:i:s')."','".wp_get_current_user()->user_login."',".$_REQUEST['iddarel'].")"))
                    {
 ?>
                     <html>
