@@ -165,7 +165,7 @@ class InsereRelacoes
 	 */
         public function editRlationProps(){
             //get relation tipo from the relation selected
-            $res_relTypeId = $this->bd->runQuery("SELECT rel_type_id FROM relation WHERE id="$_REQUEST['rel']);
+            $res_relTypeId = $this->bd->runQuery("SELECT rel_type_id FROM relation WHERE id=".$_REQUEST['rel']);
             $read_relTypeId = $res_relTypeId->fetch_assoc();
             
             //get the properties that are associated to the rel_type where the previousçy selected relation belongs. 
