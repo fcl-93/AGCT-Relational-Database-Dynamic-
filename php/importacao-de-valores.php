@@ -104,8 +104,8 @@ class ImportValues{
 ?>
             <!--create a list with all the entities-->
             <ul>
-            <li>Entidade:</li>
-            </ul>
+                <li>Entidade:</li>
+                    <ul>
 <?php            
             
             // get all the entities to list                    
@@ -116,15 +116,15 @@ class ImportValues{
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
+                        <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
 <?php
             }
 ?>
             
-            </ul>
+                    </ul>
              <!--create a list with all the relations-->
-             <li>Relação:</li>
-            </ul>
+                <li>Relação:</li>
+                    <ul>
 <?php            
             
             // get all the relations to list                    
@@ -135,14 +135,13 @@ class ImportValues{
             while($arraRelm= $executaRelation->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&rel='<?php echo $arraRelm['id'];?>'">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>']</a>
+                        <li><a href="?estado=introducao&rel=<?php echo $arraRelm['id'];?>">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>]</a>
 <?php
             }
 ?>   
-            </ul>
-            <ul>
-            <li>Formulários customizados:</li>
-            </ul>
+                    </ul>
+                <li>Formulários customizados:</li>
+                    <ul>
 <?php
             // get all the entities to list                    
             $queryCustForm = "SELECT * FROM `custom_form`";
@@ -152,10 +151,11 @@ class ImportValues{
             while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
+                        <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
 <?php
             }
 ?>   
+                    </ul>
             </ul>
             
 <?php
@@ -191,7 +191,7 @@ class ImportValues{
                 }
                 else if (isset($_REQUEST["rel"])) {
                     $getRelacao = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
-                    $relacao = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $relacao = $this->db->runQuery($getRelacao)->fetch_assoc();
                     $arrayEntidadesRel[$relacao["id"]] = $this->getRelName($relacao["ent_type1_id"],$relacao["ent_type2_id"]);
                 }
                 else {
@@ -230,7 +230,7 @@ class ImportValues{
 		}
                 else {
                     $selPropQuery = "SELECT p.id, p.rel_type_id FROM property AS p, rel_type AS r 
-                                    WHERE r.id=".$_REQUEST['rel']." AND p.ent_type_id = r.id";
+                                    WHERE r.id=".$_REQUEST['rel']." AND p.rel_type_id = r.id";
                 }
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
