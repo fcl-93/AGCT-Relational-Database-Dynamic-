@@ -253,7 +253,7 @@ class InsereRelacoes
                                                 while($read_EnumValue = $res_EnumValue->fetch_assoc())
                                                 {
 ?>
-                                                    <option name="<?php echo 'select'.$conta ?>" value="<?php echo $read_EnumValue['id']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+                                                    <option name="<?php echo 'select'.$conta ?>" value="<?php echo $read_EnumValue['value']; ?>"><?php echo $read_EnumValue['value']; ?></option>
 <?php
                                                 }
 ?>
@@ -553,10 +553,7 @@ class InsereRelacoes
                 {
                     if(isset($_REQUEST['radio'.$i]))
                     {
-                        echo $_REQUEST['radio'.$i];
                         $newValue = $_REQUEST['radio'.$i];
-                    
-                        echo $newValue;
                     }
                     else if(isset($_REQUEST['select'.$i]))
                     {
