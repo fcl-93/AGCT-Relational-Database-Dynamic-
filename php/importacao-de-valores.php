@@ -389,7 +389,7 @@ class ImportValues{
                                 $k++;
                             }
                         }
-                        if ($i < $numEnt)
+                        if ($i < $numEnt + 1)
                         {
                             $valores = $this->db->getMysqli()->real_escape_string($valores);
                             if (empty($valores)) {
