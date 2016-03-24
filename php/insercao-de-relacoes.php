@@ -798,8 +798,8 @@ class InsereRelacoes
                         {
                             echo $i;
                             //there is no 
-                            echo $_REQUEST['text'.$i];
-                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['text'.$i]))
+                            echo $_REQUEST['textbox'.$i];
+                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
                             {
 ?>
                         <html>
@@ -814,7 +814,7 @@ class InsereRelacoes
                                 {}
                                 else if(isset($_REQUEST['radio'.$i]))
                                 {}
-                                else if(isset($_REQUEST['text'.$i]))
+                                else if(isset($_REQUEST['textbox'.$i]))
                                 {
                                     $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
                                     $getPropId = $res_getPropId->fetch_assoc();
