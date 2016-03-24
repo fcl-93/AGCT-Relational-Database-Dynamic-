@@ -174,7 +174,6 @@ class InsereRelacoes
             
             $res_PropAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
             
-            
             //Show a table with properties who can be added.
             if($res_PropAded->num_rows != $res_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
@@ -182,7 +181,7 @@ class InsereRelacoes
 ?>
                 <h3>Inserção de Relações - Propriedades das Relações</h3>
 <?php
-                $this->possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType);
+                $this->possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$_REQUEST['rel']);
             }
             else
             {
@@ -201,7 +200,12 @@ class InsereRelacoes
             
         } 
        
-        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType)
+        /**
+         * This method prints a table with all the property values that are no assigned to the selectd relation
+         * @param type $res_PropAded
+         * @param type $res_GetPropFromRelType
+         */
+        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$idFromRelation)
         {
             
 ?>
@@ -220,25 +224,28 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
+                                
                                 while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
                                 {
+                                    $res_CanBeAdded = $this->bd->runQuery("SELECT p.id,p.name,p.value_type FROM property as p,value as v WHERE v.relation_id=".$idFromRelation." AND v.property_id !=.$read_GetPropFromRelType['id']");
+                                    $read_CanBeAdded = $res_CanBeAdded->fetch_assoc();
 ?>                                  
                                     <tr>
-                                        <td><?php echo $read_GetPropFromRelType['id']; ?></td>
-                                        <td><?php echo $read_GetPropFromRelType['name']; ?></td>
-                                        <td><?php  echo $read_GetPropFromRelType['value_type'];?></td>
-                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropFromRelType['id']?>"></td>
+                                        <td><?php echo $read_CanBeAdded['id']; ?></td>
+                                        <td><?php echo $read_CanBeAdded['name']; ?></td>
+                                        <td><?php  echo $read_CanBeAdded['value_type'];?></td>
+                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
                                         <td>
 <?php
                                             //verifies the value type
-                                            if($read_GetPropFromRelType['value_type'] == 'bool')
+                                            if($read_CanBeAdded['value_type'] == 'bool')
                                             {
 ?>
                                                 <input type="radio" name="<?php echo $conta ?>" value="true">True
                                                 <input type="radio" name="<?php echo $conta ?>" value="false">False
 <?php
                                             }
-                                            else if($read_GetPropFromRelType['value_type'] == 'enum')
+                                            else if($read_CanBeAdded['value_type'] == 'enum')
                                             {   
                                                 $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropFromRelType['id']);
 ?>
