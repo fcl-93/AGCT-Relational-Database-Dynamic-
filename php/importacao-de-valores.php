@@ -356,6 +356,7 @@ class ImportValues{
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
             $propriedadesExcel = array();
             $valoresPermitidosEnum = array();
+            $idEnt = array();
             foreach($sheetData["1"] as $valores )
             {
                 array_push($propriedadesExcel, $valores);
@@ -383,7 +384,6 @@ class ImportValues{
                             $entId = $this->idEntRel($_REQUEST["form"])[0];
                             $numEnt = count($entId);
                             $k = 0;
-                            $idEnt = array();
                             foreach ($entId as $key => $value) {
                                 $idEnt[$k] = $key;
                                 $k++;
