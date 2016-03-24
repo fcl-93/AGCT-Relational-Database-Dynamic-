@@ -162,6 +162,7 @@ class ImportValues{
                                     WHERE e.id=".$_REQUEST['ent']." AND p.ent_type_id = e.id";
 		}
 		$selProp = $this->db->runQuery($selPropQuery);
+                $numProp = $selProp->num_rows;
 		while($prop = $selProp->fetch_assoc())
 		{
                     $selFormFieldNamesQuery = "SELECT value_type, form_field_name FROM property WHERE id = ".$prop['id'];
@@ -192,7 +193,9 @@ class ImportValues{
             </thead>
             <tbody>
             <tr>
+                <td>Tipo de valor/Valores permitidos</td>
 <?php
+                $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
 ?>
                     <td></td>
@@ -219,11 +222,26 @@ class ImportValues{
                         else
                         {
 ?>
-                            <td></td>
+                            <td><?php echo $formfieldnames['value_type'];?></td>
 <?php
                         }
                     }
 		}
+?>
+            </tr>
+            <tr>
+                <td>Valores a intoduzir</td>
+<?php
+                for (;$contaEntidadesBack > 0; $contaEntidadesBack--) {
+?>
+                    <td></td>
+<?php                    
+                }
+                for (;$numProp > 0; $numProp--) {
+?>
+                    <td></td>
+<?php                    
+                }
 ?>
             </tr>
             </tbody>
