@@ -832,7 +832,7 @@ class InsereRelacoes
                                 $res_GetValType = $this->bd->runQuery("SELECT value_type FROM property WHERE id = ".$read_propId['property_id']);
                                 $read_GetValType = $res_GetValType->fetch_assoc();
                                 
-                                if($this->typeValidation($read_GetValType['value_type'],$_REQUEST['textbox'.$i]) == 'false')
+                                if($this->typeValidation($read_GetValType['value_type'],$_REQUEST['textbox'.$i]) == false)
                                 {
                                     return false;
                                 }
@@ -847,12 +847,10 @@ class InsereRelacoes
                             <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                         </html>
 <?php
-                    return false;
+                        return false;
                     }
-                    else
-                    {
-                        return true;
-                    }
+                    
+                    return true;
                     
                     
                 }
