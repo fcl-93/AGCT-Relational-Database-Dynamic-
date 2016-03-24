@@ -148,7 +148,8 @@ class ImportValues{
                 <td id="acertaCabecalho"></td>
                 
 <?php
-                $linha = 1;  
+                $linha = 1;
+                $coluna = 'A';
                 $valor = "";
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                 $coluna++;
