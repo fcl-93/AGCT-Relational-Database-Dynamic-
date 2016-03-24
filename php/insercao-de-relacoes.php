@@ -847,12 +847,10 @@ class InsereRelacoes
                             <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                         </html>
 <?php
-                    return false;
+                        return false;
                     }
-                    else
-                    {
-                        return true;
-                    }
+                    
+                    return true;
                     
                     
                 }
