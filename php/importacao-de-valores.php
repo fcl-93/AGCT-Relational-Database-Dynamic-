@@ -104,8 +104,8 @@ class ImportValues{
 ?>
             <!--create a list with all the entities-->
             <ul>
-            <li>Entidade:</li>
-            </ul>
+                <li>Entidade:</li>
+                    <ul>
 <?php            
             
             // get all the entities to list                    
@@ -116,15 +116,15 @@ class ImportValues{
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
+                        <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
 <?php
             }
 ?>
             
-            </ul>
+                    </ul>
              <!--create a list with all the relations-->
-             <li>Relação:</li>
-            </ul>
+                <li>Relação:</li>
+                    <ul>
 <?php            
             
             // get all the relations to list                    
@@ -135,14 +135,13 @@ class ImportValues{
             while($arraRelm= $executaRelation->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&rel='<?php echo $arraRelm['id'];?>'">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>']</a>
+                        <li><a href="?estado=introducao&rel=<?php echo $arraRelm['id'];?>">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>]</a>
 <?php
             }
 ?>   
-            </ul>
-            <ul>
-            <li>Formulários customizados:</li>
-            </ul>
+                    </ul>
+                <li>Formulários customizados:</li>
+                    <ul>
 <?php
             // get all the entities to list                    
             $queryCustForm = "SELECT * FROM `custom_form`";
@@ -152,10 +151,11 @@ class ImportValues{
             while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
 ?>
-                <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
+                        <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
 <?php
             }
 ?>   
+                    </ul>
             </ul>
             
 <?php
