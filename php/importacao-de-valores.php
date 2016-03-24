@@ -140,18 +140,7 @@ class ImportValues{
                 ->setDescription("")
                 ->setKeywords("")
                 ->setCategory("");
-        
-        //Frase gerada de forma automática
-	$linha = 1;
-	$coluna = 'A';
-        $valor = "Deverá utilizar a tabela a abaixo para introduzir os valores. Estes devem se sempre introduzidos a partir da 3ª linha da tabela.";
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-        $linha = 2;
-        $valor = "Cada linha corresponderá a uma inserção na base de dados.";
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-        $linha = 3;
-        $valor = "Nos casos em que a propriedade é enum, deverá colocar um 1 na propriedade pretendida e 0 nas restantes.";
-	$objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+    
 ?>
 	<table class = "table">
             <thead>
@@ -159,7 +148,7 @@ class ImportValues{
                 <td id="acertaCabecalho"></td>
                 
 <?php
-                $linha = 4;  
+                $linha = 1;  
                 $valor = "";
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                 $coluna++;
@@ -315,11 +304,13 @@ class ImportValues{
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        echo getcwd()."/ImportValues.xlsx";
         $objWriter->save(getcwd()."/ImportValues.xlsx");
 ?>
         <p>Caro utilizador,<br>
-	Para introduzir os valores, por favor <a href="/ImportValues.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel e siga as intruções que são indicadas.<br>
+	Para introduzir os valores, por favor <a href="/ImportValues.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel.<br>
+        Os valores devem ser sempre introduzidos a partir da 3ª linha da tabela.<br>
+        Cada linha corresponderá a uma inserção na base de dados.<br>
+        Nos casos em que a propriedade é enum, deverá colocar um 1 na propriedade pretendida e 0 nas restantes.<br>
         De seguida, deve guardar esse ficheiro e submetê-lo a partir do campo abixo.</p>
 
 	<form name="import" method="POST" enctype="multipart/form-data">
@@ -376,7 +367,7 @@ class ImportValues{
             $this->db->getMysqli()->autocommit(false);
             $this->db->getMysqli()->begin_transaction();
             while($contaLinhas <= count($sheetData)) {
-                $i = 0;
+                $i = 1;
                 print_r($sheetData[strval($contaLinhas)]);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     echo "iteracao: ".$i." val: ".$valores."<br>";
