@@ -191,7 +191,7 @@ class ImportValues{
                 }
                 else if (isset($_REQUEST["rel"])) {
                     $getRelacao = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
-                    $relacao = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $relacao = $this->db->runQuery($getRelacao)->fetch_assoc();
                     $arrayEntidadesRel[$relacao["id"]] = $this->getRelName($relacao["ent_type1_id"],$relacao["ent_type2_id"]);
                 }
                 else {
