@@ -172,7 +172,7 @@ class InsereRelacoes
             $res_GetPropFromRelType = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_relTypeId['rel_type_id']);
             
             
-            $res_PropCanBeAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id="$_REQUEST['rel']);
+            $res_PropCanBeAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
             
             
             //Show a table with properties who can be added.
