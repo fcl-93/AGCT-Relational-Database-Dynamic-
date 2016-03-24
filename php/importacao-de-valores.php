@@ -370,6 +370,7 @@ class ImportValues{
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
                 print_r($sheetData[strval($contaLinhas)]);
+                print_r($propriedadesExcel);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     if ($i > 0) {
                         echo "iteracao: ".$i." val: ".$valores."<br>";
