@@ -712,7 +712,14 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel']);
+            if(isset($_REQUEST['nomeDaRel']))
+            {
+                 $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel']);
+            }
+            else
+            {
+                $rel_name="";
+            }
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
