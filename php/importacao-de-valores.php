@@ -210,7 +210,7 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc())
+                            for($num = $selfAllowed->num_rows; $num > 0; $num--)
                             {
                                 $valor = $formfieldnames['form_field_name'];
                                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
@@ -270,14 +270,14 @@ class ImportValues{
                         {
                             $querySelfAllowed = "SELECT * FROM prop_allowed_value WHERE property_id = ".$prop['id'];
                             $selfAllowed = $this->db->runQuery($querySelfAllowed);
-                            while($linha = $selfAllowed->fetch_assoc())
+                            while($valPerm = $selfAllowed->fetch_assoc())
                             {
-                                $valor = $linha['value'];
+                                $valor = $valPerm['value'];
                                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                                 $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                                 $coluna++;
 ?>
-                                <td><?php echo $linha['value'];?></td>	
+                                <td><?php echo $valPerm['value'];?></td>	
 <?php
                             }
                         }
