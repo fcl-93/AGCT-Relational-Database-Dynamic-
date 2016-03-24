@@ -356,6 +356,7 @@ class ImportValues{
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
             $propriedadesExcel = array();
             $valoresPermitidosEnum = array();
+            $idEntidade = array();
             foreach($sheetData["1"] as $valores )
             {
                 array_push($propriedadesExcel, $valores);
@@ -372,31 +373,30 @@ class ImportValues{
                 print_r($sheetData[strval($contaLinhas)]);
                 print_r($propriedadesExcel);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
+                    echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
-                        echo "iteracao: ".$i." val: ".$valores."<br>";
                         if(isset($_REQUEST["ent"]))
                         {
                             $numEnt = 1;
-                            $idEnt[0] = $_REQUEST["ent"];
+                            $idEntidade[0] = $_REQUEST["ent"];
                         }
                         else {
                             $entId = $this->idEntRel($_REQUEST["form"])[0];
                             $numEnt = count($entId);
                             $k = 0;
-                            $idEnt = array();
                             foreach ($entId as $key => $value) {
-                                $idEnt[$k] = $key;
+                                $idEntidade[$k] = $key;
                                 $k++;
                             }
                         }
-                        if ($i < $numEnt + 1)
+                        if ($i - 1 < $numEnt)
                         {
                             $valores = $this->db->getMysqli()->real_escape_string($valores);
                             if (empty($valores)) {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt[$i].")";
+                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidade[$i - 1].")";
                             }
                             else {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt[$i].",'".$valores."')";
+                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidade[$i - 1].",'".$valores."')";
                             }
                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
                             $idEnt = $this->db->getMysqli()->insert_id;
@@ -404,7 +404,7 @@ class ImportValues{
                                 $sucesso = false;
                                 break;
                             }
-                            $i++;
+                            //$i++;
                         }
                         else {
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
