@@ -188,6 +188,8 @@ class ImportValues{
                     $getEntidade = "SELECT * FROM ent_type WHERE id = ".$_REQUEST["ent"];
                     $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
                     $arrayEntidadesRel[$entidade["id"]] = $entidade["name"];
+                    $contaEntRel = 0;
+                    $numCol = 0;
                 }
                 else if (isset($_REQUEST["rel"])) {
                     $getRelacao = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
@@ -207,14 +209,17 @@ class ImportValues{
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                     $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                     $coluna++;
+                    $contaEntRel = 2;
+                    $numCol = 2;
                 }
                 else {
                     $arrayEntidadesRel = $this->idEntRel($_REQUEST["form"])[0];
+                    $contaEntRel = 0;
+                    $numCol = 0;
                 }
-                $contaEntidades = 0;
-                $numCol = 0;
+                
                 foreach ($arrayEntidadesRel as $nome) {
-                    $contaEntidades++;
+                    $contaEntRel++;
                     $numCol++;
                     if (empty($_REQUEST["rel"])) {
                         $valor = "Nome para instância da entidade ".$nome;
@@ -295,8 +300,7 @@ class ImportValues{
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                 $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                 $coluna++;
-                $contaEntidadesBack = $contaEntidades;
-                for (;$contaEntidades > 0; $contaEntidades--) {
+                for (;$contaEntRel > 0; $contaEntRel--) {
                     $valor = "";
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                     $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
