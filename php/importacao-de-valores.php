@@ -437,11 +437,13 @@ class ImportValues{
                     echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
                         if (isset($_REQUEST["rel"])) {
-                            $selEntType = "SELECT ent_type_id FROM entity WHERE id = ".$valores;
+                            if (is_numeric ($valores)) {
+                                $selEntType = "SELECT ent_type_id FROM entity WHERE id = ".$valores;
+                                $entity = $this->db->runQuery($selEntType)->fetch_assoc();
+                                $ent_type = $entity["ent_type_id"];
+                            }
                             $selRel = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
-                            $entity = $this->db->runQuery($selEntType)->fetch_assoc();
                             $relation = $this->db->runQuery($selRel)->fetch_assoc();
-                            $ent_type = $entity["ent_type_id"];
                             $ent_type1 = $relation["ent_type1_id"];
                             $selNomeEnt1 = "SELECT * FROM ent_type WHERE id = ".$ent_type1;
                             $ent1 = $this->db->runQuery($selNomeEnt1)->fetch_assoc();
