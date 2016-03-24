@@ -781,6 +781,7 @@ class InsereRelacoes
                     $tipoCorreto = true;
                     break;
             }
+            return $tipoCorreto;
         }
         
         	/**
