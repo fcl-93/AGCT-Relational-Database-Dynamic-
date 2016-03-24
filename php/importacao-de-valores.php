@@ -179,7 +179,7 @@ class ImportValues{
                 foreach ($arrayEntidades as $nome) {
                     $contaEntidades++;
                     $numCol++;
-                    $valor = "Nome para instância da entidade".$nome;
+                    $valor = "Nome para instância da entidade ".$nome;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                     $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                     $coluna++;
@@ -225,6 +225,7 @@ class ImportValues{
                         else
                         {
                             $valor = $formfieldnames['form_field_name'];
+                            echo $coluna. " ".$linha." ".$coluna.$linha;
                             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                             $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                             $coluna++;
