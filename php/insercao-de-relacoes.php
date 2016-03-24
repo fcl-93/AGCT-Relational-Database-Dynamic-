@@ -891,6 +891,7 @@ class InsereRelacoes
                             }
                             $count++;
                         }
+                    }
                     
                         if($count == 0)
                         {
@@ -903,9 +904,8 @@ class InsereRelacoes
                         }
                         return true;
                     }
-                }
-                else if($_REQUEST['flag'] == 'nedita')
-                {}
+                    else if($_REQUEST['flag'] == 'nedita')
+                    {}
         }
 }
 ?>
