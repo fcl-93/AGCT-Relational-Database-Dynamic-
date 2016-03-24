@@ -134,6 +134,7 @@ class ImportValues{
 	<table class = "table">
             <thead>
             <tr>
+                <td id="acertaCabecalho"></td>
                 
 <?php
                 if (isset($_REQUEST["ent"])) {
@@ -145,8 +146,10 @@ class ImportValues{
                     $arrayEntidades = $this->idEntRel($_REQUEST["form"])[0];
                 }
                 $contaEntidades = 0;
+                $numCol = 0;
                 foreach ($arrayEntidades as $nome) {
                     $contaEntidades++;
+                    $numCol++;
 ?>
                     <th>Nome para instância da entidade <?php echo $nome; ?></th>
 <?php
@@ -177,6 +180,7 @@ class ImportValues{
 ?>
                                 <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
+                               $numCol++;
                             }
                         }
                         else
@@ -184,6 +188,7 @@ class ImportValues{
 ?>
                             <th><?php echo $formfieldnames['form_field_name'];?></th>
 <?php
+                            $numCol++;
                         }
                     }
 		}
@@ -192,7 +197,9 @@ class ImportValues{
             </thead>
             <tbody>
             <tr>
+                <td id="primCol">Tipo de valor/Valores permitidos</td>
 <?php
+                $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
 ?>
                     <td></td>
@@ -219,11 +226,21 @@ class ImportValues{
                         else
                         {
 ?>
-                            <td></td>
+                            <td><?php echo $formfieldnames['value_type'];?></td>
 <?php
                         }
                     }
 		}
+?>
+            </tr>
+            <tr>
+                <td id="primCol">Valores a intoduzir</td>
+<?php
+                for (;$numCol > 0; $numCol--) {
+?>
+                    <td></td>
+<?php                    
+                }
 ?>
             </tr>
             </tbody>

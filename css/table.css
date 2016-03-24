@@ -6,8 +6,12 @@
   margin-bottom: 15px;
 }
 
-.table thead {
-  cursor: pointer;
+#sortedTable thead {
+cursor: pointer;
+}
+
+.table thead , #primCol {
+  font-weight: bold;
   background: #c9dff0;
 }
 .table thead tr th {
@@ -50,4 +54,10 @@
     border: 1px solid !important;
     padding: 1px !important;
     font-size: 11px  !important;
+}
+
+#acertaCabecalho {
+    border-top-color: white;
+    border-left-color: white;
+    background: white;
 }
