@@ -826,6 +826,5 @@ class InsereRelacoes
                 }
 
             }
-        }
 }
 ?>
