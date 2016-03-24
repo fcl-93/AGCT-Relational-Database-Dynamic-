@@ -395,38 +395,6 @@ class InsereRelacoes
         }
         
 	/**
-	 * Server side validation when JQuery is disabled
-	 */
-	public function ssvalidation(){
-            if($_REQUEST['flag'] == 'UpdateAttr')
-            {
-                $count = 0;
-                for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
-                {
-                    if(isset($_REQUEST['check'.$i]))
-                    {
-                        $count++;
-                        //echo $count;
-                    }
-                }
-                if($count == 0)
-                {
-?>
-                    <html>
-                        <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
-                    </html>
-<?php
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-
-            }
-            //return true;
-        }
-	/**
          * Associates the newy creaed value and associates it with another 
          * existing value.
          */
@@ -762,6 +730,121 @@ class InsereRelacoes
         
                 
             }
+        }
+        
+        private function typeValidation($value_type,$valores){
+            switch($value_type) {
+                case 'int':
+                    if(ctype_digit($valores))
+                    {
+                        $valores = (int)$valores;
+                        $tipoCorreto = true;
+                    }
+                    else
+                    {
+    ?>
+                        <p>O valor introduzido não está correto. Certifique-se que introduziu um valor numérico</p>
+    <?php
+                        $tipoCorreto = false;
+
+                    }
+                break;
+                case 'double':
+                    if(is_numeric($valores))
+                    {
+                        $valores = floatval($valores);
+                        $tipoCorreto = true;
+                    }
+                    else
+                    {
+?>
+                        <p>O valor introduzido não está correto. Certifique-se que introduziu um valor numérico</p>
+<?php
+                        $tipoCorreto = false;
+                    }
+                break;
+                case 'bool':
+                    if($valores == 'true' || $valores == 'false')
+                    {
+                        $valores = boolval($valores);
+                        $tipoCorreto = true;
+                    }
+                    else
+                    {
+?>
+                        <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
+<?php
+                        $tipoCorreto = false;
+                    }
+                    break;
+            }
+        }
+        
+        	/**
+	 * Server side validation when JQuery is disabled
+	 */
+	public function ssvalidation(){
+            if($_REQUEST['flag'] == 'UpdateAttr')
+            {
+                $count = 0;
+                for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
+                {
+                    if(isset($_REQUEST['check'.$i]))
+                    {
+                        $count++;
+                        //echo $count;
+                    }
+                }
+                if($count == 0)
+                {
+?>
+                    <html>
+                        <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
+                    </html>
+<?php
+                    return false;
+                }
+                else
+                {
+                    $count = 0;
+                    for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
+                    {
+                        if(isset($_REQUEST['check'.$i]) && ( isset($_REQUEST['select'.$i]) ||isset($_REQUEST['textbox'.$i]) || isset($_REQUEST['radio'.$i])))
+                        {
+                            //check the data type in the checkbox
+                            if(isset($_REQUEST['textbox'.$i]))
+                            {
+                                $res_propId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
+                                $res_GetValType = $this->bd->runQuery("SELECT value_type FROM property WHERE id = "$res_propId->fetch_assoc()['property_id']);
+                                $read_GetValType = $res_GetValType->fetch_assoc();
+                                
+                                if($this->typeValidation($read_GetValType['value_type'],$_REQUEST['textbox'.$i]) == 'false')
+                                {
+                                    return false;
+                                }
+                            }
+                            $count++;
+                        }
+                    }
+                    if($count == 0)
+                    {
+?>
+                        <html>
+                            <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                        </html>
+<?php
+                    return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                    
+                    
+                }
+
+            }
+            //return true;
         }
 }
 ?>
