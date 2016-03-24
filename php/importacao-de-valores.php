@@ -485,7 +485,7 @@ class ImportValues{
                                     if ($ent_type != $ent_type2)
                                     {
 ?>
-                                        <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
+                                        <p>O valor introduzido para o campo Entidade 2 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
 <?php                                        
                                         break;
                                     }
