@@ -370,8 +370,6 @@ class ImportValues{
             $this->db->getMysqli()->begin_transaction();
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
-                print_r($sheetData[strval($contaLinhas)]);
-                print_r($propriedadesExcel);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
@@ -408,7 +406,6 @@ class ImportValues{
                         }
                         else {
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
-                            echo $querySelectProp;
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp ) {
                                 $sucesso = false;
@@ -526,7 +523,7 @@ class ImportValues{
                                             }
                                         }
                                         $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
-
+                                        echo $queryInsertValue;
                                         $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                         if(!$queryInsertValue)
                                         {
