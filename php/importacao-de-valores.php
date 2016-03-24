@@ -116,7 +116,7 @@ class ImportValues{
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
 ?>
-                        <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
+                        <li><a href="?estado=introducao&ent=<?php echo $arrayEntity['id'];?>">[<?php echo $arrayEntity['name'];?>]</a>
 <?php
             }
 ?>
@@ -151,7 +151,7 @@ class ImportValues{
             while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
 ?>
-                        <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
+                        <li><a href="?estado=introducao&form=<?php echo $arrayCustForm['id'];?>">[<?php echo $arrayCustForm['name'];?>]</a>
 <?php
             }
 ?>   
