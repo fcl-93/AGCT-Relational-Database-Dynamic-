@@ -886,9 +886,10 @@ class InsereRelacoes
 <?php
                                         return false;
                                     }
+                               }
                             }
+                            $count++;
                         }
-                    }
                     
                         if($count == 0)
                         {
