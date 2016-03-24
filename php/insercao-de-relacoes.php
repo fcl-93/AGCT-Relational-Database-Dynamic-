@@ -406,6 +406,7 @@ class InsereRelacoes
                     if(empty($_REQUEST['check'.$i]))
                     {
                         $count++;
+                        echo $count;
                     }
                 }
                 if($count == $_SESSION['attrDaRelImp'])
