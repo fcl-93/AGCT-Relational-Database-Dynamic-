@@ -201,13 +201,13 @@ class InsereRelacoes
             
         } 
        
-        private function possibleValuesToAdd($res_PropAded,$read_GetPropFromRelType)
+        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType)
         {
             
 ?>
                         <html>
                             <form>
-                            <table>
+                            <table id="table">
                                 <thead>
                                     <tr>
                                         <td>Id</td>
@@ -220,7 +220,7 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
-                                while($read_GetPropFromRelType = $read_GetPropFromRelType->fetch_assoc())
+                                while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
                                 {
 ?>                                  
                                     <tr>
