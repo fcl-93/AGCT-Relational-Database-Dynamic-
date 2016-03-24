@@ -553,7 +553,10 @@ class InsereRelacoes
                 {
                     if(isset($_REQUEST['radio'.$i]))
                     {
+                        echo $_REQUEST['radio'.$i];
                         $newValue = $_REQUEST['radio'.$i];
+                    
+                        echo $newValue;
                     }
                     else if(isset($_REQUEST['select'.$i]))
                     {
