@@ -292,8 +292,8 @@ class InsereRelacoes
                                         </td>
                                     </tr>
 <?php
-                                $_SESSION['propImpressas'] = $conta;
                                 }
+                                $_SESSION['propImpressas'] = $conta;
 ?>                             
                                 </tbody>
                             </table>
