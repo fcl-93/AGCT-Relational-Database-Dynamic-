@@ -133,7 +133,7 @@ class InsereRelacoes
 ?>       
                                                         <td>Ativo </td>
                                                         <td>
-                                                            <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Editar Propriedades da Relação]</a>  
+                                                            <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                             <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
 							</td>
 <?php
@@ -143,7 +143,7 @@ class InsereRelacoes
 ?>
                                                     <td>Inativo</td>
                                                     <td>
-                                                        <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Editar Propriedades da Relação]</a>  
+                                                        <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                         <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
                                                    </td>
 <?php   
@@ -161,7 +161,10 @@ class InsereRelacoes
         }
 	
         /**
-	 * This will make you edit values for the selected relation
+	 * This will make you edit values for the selected relation or add the value 
+         * prints two tables 
+         * one with all the possible properties you can add to your relation depending on the rel_type
+         * and the other with the existing properties and their values in your ralation
 	 */
         public function editRlationProps(){
             //get relation tipo from the relation selected
@@ -395,43 +398,33 @@ class InsereRelacoes
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
-                /*$control = true;
-                 for($i = 0; $i <  $_SESSION['valueNumber']; $i++)
+            if($_REQUEST['flag'] == 'UpdateAttr')
+            {
+                $count = 0;
+                for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
                 {
-                    if(isset($_REQUEST['valSel'.$i]))
+                    if(isset($_REQUEST['check'.$i]))
                     {
-                        if(isset($REQUEST['valor'.$i]))//check if for tge selected box there is always a value associated if not abort the submission operation
-                        {
-                            
-                        }
-                        else
-                        {
-                            $control = false;
-                            break;
-                        }
+                        $count++;
+                        //echo $count;
                     }
                 }
-            $controlaCheck = 0;
-                    for($i = 1; $i <= $_SESSION['propSelected']; $i++)
-                    {
-                            if(empty($_REQUEST["idProp".$i]))
-                            {
-                                    $controlaCheck++;
-                            }
-                    }
-                    
-            if($controlaCheck == $_SESSION['propSelected'])
-            {}
-                
-            
-             for($i = 1; $i <= $_SESSION['propSelected']; $i++)
-                    {
-                            if((!is_numeric($_REQUEST["ordem".$i]) || $_REQUEST["ordem".$i] < 1) && isset($_REQUEST["idProp".$i]))
-                            {
-                            
-                            }
-                    }*/
-            return true;
+                if($count == 0)
+                {
+?>
+                    <html>
+                        <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
+                    </html>
+<?php
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+            //return true;
         }
 	/**
          * Associates the newy creaed value and associates it with another 
@@ -626,11 +619,7 @@ class InsereRelacoes
         {
             if($this->ssvalidation())
             {
-                if($_REQUEST['flag'] == 'editar')
-                {
-                    $this->edita();
-                }
-                else if($_REQUEST['flag'] == 'naoeditar')
+                if($_REQUEST['flag'] == 'naoeditar')
                 {
                     $this->nedita();
                 }
@@ -747,12 +736,6 @@ class InsereRelacoes
         }
         
         
-        /**
-         * Method that will only update existing values in the database
-         */
-        private function edita(){
-            
-        }
         /**
          * Mehtod that will insert new values in the database.
          */
