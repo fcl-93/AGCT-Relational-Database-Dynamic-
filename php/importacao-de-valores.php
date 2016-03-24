@@ -1,5 +1,4 @@
 <?php
-ini_set("display_errors", "on");
 require_once("custom/php/common.php");
 require_once 'PHPExcel/Classes/PHPExcel.php';
 require_once 'PHPExcel/Classes/PHPExcel/Writer/Excel2007.php';
@@ -329,7 +328,13 @@ class ImportValues{
 
 
     // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-
+    echo get_current_user();
+    $filename = '/var/www/html';
+    if (is_writable($filename)) {
+        echo 'The file is writable';
+    } else {
+        echo 'The file is not writable';
+    }
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     $objWriter->save("/var/www/html/test01.xlsx");
     //Link para download do xlsx gerado
