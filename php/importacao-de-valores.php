@@ -447,9 +447,10 @@ class ImportValues{
                             $ent1 = $this->db->runQuery($selNomeEnt1)->fetch_assoc();
                             $nome1 = $ent1["name"];
                             $ent_type2 = $relation["ent_type2_id"];
-                            $selNomeEn1t = "SELECT * FROM ent_type WHERE id = ".$ent_type2;
+                            $selNomeEnt2 = "SELECT * FROM ent_type WHERE id = ".$ent_type2;
+                            $ent2 = $this->db->runQuery($selNomeEnt2)->fetch_assoc();
                             $nome2 = $ent2["name"];
-                            $ent1 = $this->db->runQuery($selNomeEnt2)->fetch_assoc();
+                            
                             if ($i == 1) {
                                 if (empty($valores))
                                 {
