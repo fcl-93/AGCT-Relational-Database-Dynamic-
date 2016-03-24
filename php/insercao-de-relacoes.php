@@ -172,17 +172,17 @@ class InsereRelacoes
             $res_GetPropFromRelType = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_relTypeId['rel_type_id']);
             
             
-            $res_PropCanBeAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
+            $res_PropAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
             
             
             //Show a table with properties who can be added.
-            if($res_PropCanBeAded->num_rows != $read_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
+            if($res_PropAded->num_rows != $read_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
             {
 ?>
-                        <h3>Inserção de Relações - Propriedades das Relações</h3>
+                <h3>Inserção de Relações - Propriedades das Relações</h3>
 <?php
-                $this->possibleValuesToAdd($res_PropCanBeAded);
+                $this->possibleValuesToAdd($res_PropAded,$read_GetPropFromRelType);
             }
             else
             {
@@ -201,7 +201,7 @@ class InsereRelacoes
             
         } 
        
-        private function possibleValuesToAdd($res_PropCanBeAded)
+        private function possibleValuesToAdd($res_PropAded,$read_GetPropFromRelType)
         {
             
 ?>
@@ -220,7 +220,7 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
-                                while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
+                                while($read_GetPropFromRelType = $read_GetPropFromRelType->fetch_assoc())
                                 {
 ?>                                  
                                     <tr>
