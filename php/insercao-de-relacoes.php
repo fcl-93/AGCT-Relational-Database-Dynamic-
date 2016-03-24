@@ -824,6 +824,12 @@ class InsereRelacoes
                                    
                                     if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
                                     {
+                                        ?>
+                        <html>
+                            <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                        </html>
+                        
+                                            <?php
                                         return false;
                                     }
                                 }
@@ -841,13 +847,6 @@ class InsereRelacoes
 <?php
                     return false;
                 }
-                
-                
-                
-                
-                
-                
-                
                     return true;
                     
                     
