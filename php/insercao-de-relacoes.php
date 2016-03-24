@@ -164,72 +164,117 @@ class InsereRelacoes
 	 * This will make you edit values for the selected relation
 	 */
         public function editRlationProps(){
-           $res_InsProps = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
-           if($res_InsProps->num_rows == 0)
-           {
-?>                     
-               <html>
-                   <p>Não existem propriedades para a relação selecionada.</p>
-                   <p>Clique em <?php goBack(); ?> para voltar atrás</p>
-               </html>
-<?php       
-
-           }
-           else
-           {
+            //get relation tipo from the relation selected
+            $res_relTypeId = $this->bd->runQuery("SELECT rel_type_id FROM relation WHERE id=".$_REQUEST['rel']);
+            $read_relTypeId = $res_relTypeId->fetch_assoc();
+            
+            //get the properties that are associated to the rel_type where the previousçy selected relation belongs. 
+            $res_GetPropFromRelType = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_relTypeId['rel_type_id']);
+            
+            
+            $res_PropCanBeAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
+            
+            
+            //Show a table with properties who can be added.
+            if($res_PropCanBeAded->num_rows != $read_GetPropFromRelType)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
+                //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
+            {
+?>
+                        <h3>Inserção de Relações - Propriedades das Relações</h3>
+<?php
+                $this->possibleValuesToAdd($res_PropCanBeAded);
+            }
+            else
+            {
+?>
+                        <html>
+                            <p>Não existem propriedades que possam ser adicionadas.</p>
+                        </html>
+<?php
+            }
+           
+            //Mostrar uma tabela com as propriedades já adicionadas e os respetivos valores.
+            
+           
+            
+            
+            
+        } 
+       
+        private function possibleValuesToAdd($res_PropCanBeAded)
+        {
+            
 ?>
                         <html>
                             <form>
-                            <h3>Inserção de Relações - Edição de Propriedades da Relação selecionada.?></h3>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Data</th>
-                                            <th>Hora</th>
-                                            <th>Nome</th>
-                                            <th>Valor</th>
-                                            <th>Escolha</th>
-                                            <th>Editar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-    <?php   
-                                        $checkBoxNumber = 0;
-                                        while($read_InsProps = $res_InsProps->fetch_assoc())
-                                        {
-                                            $res_PropName = $this->bd->runQuery("SELECT name FROM property WHERE id=".$read_InsProps['property_id']);
-                                            $read_PropName = $res_PropName->fetch_assoc();
-    ?>
-                                        <tr>
-                                            <td><?php echo $read_InsProps['id']; ?></td>
-                                            <td><?php echo $read_InsProps['date'];?></td> 
-                                            <td><?php echo $read_InsProps['time'];?></td>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>Id</td>
+                                        <td>Nome propriedade</td>
+                                        <td>Tipo</td>
+                                        <td>Seleção<td>
+                                        <td>Novo valor</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+<?php
+                                $conta = 0;
+                                while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
+                                {
+?>                                  
+                                    <tr>
+                                        <td><?php echo $read_GetPropFromRelType['id']; ?></td>
+                                        <td><?php echo $read_GetPropFromRelType['name']; ?></td>
+                                        <td><?php  echo $read_GetPropFromRelType['value_type'];?></td>
+                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropFromRelType['id']?>"></td>
+                                        <td>
+<?php
+                                            //verifies the value type
+                                            if($read_GetPropFromRelType['value_type'] == 'bool')
+                                            {
+?>
+                                                <input type="radio" name="<?php echo $conta ?>" value="true">True
+                                                <input type="radio" name="<?php echo $conta ?>" value="false">False
+<?php
+                                            }
+                                            else if($read_GetPropFromRelType['value_type'] == 'enum')
+                                            {   
+                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$read_GetPropFromRelType['id']);
+?>
+                                                <select>
+<?php
+                                                while($read_EnumValue = $res_EnumValue->fetch_assoc())
+                                                {
+?>
+                                                    <option name="<?php echo $conta ?>" value="<?php echo $read_EnumValue['id']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+<?php
+                                                }
+?>
+                                                </select>
+<?php
+                                            }
+                                            else
+                                            {
+?>
+                                                <input type="text" name="<?php echo $conta ?>">
                                             
-                                            <td><?php echo $read_PropName['name'];?></td>
-                                            <td><input type="text" name="valor<?php echo $checkBoxNumber; ?>" value="<?php echo $read_PropName['value']; ?>"></td>
-                                            <td><input type="checkbox" name="valSel<?php echo $checkBoxNumber;?>" value="<?php echo $read_InsProps['id'];?>"></td>			
-                                            
-                                        </tr>
-    <?php
-                                        }
-                                        $_SESSION['valueNumber'] = $checkBoxNumber;
-                                        
-    ?>  
-                                        
-                                       <input type="hidden" name="flag" value="editar"/>
-                                       <input type="hidden" name="estado" value="inserir"/>
-                                       <input type="submit" value="Atualizar Valores"/>
-                                    </tbody>
-                                </table>
-                            <form>
+<?php
+                                            }
+                                            $conta++;
+?>
+                                        <td>
+                                    </tr>
+<?php
+                                }
+?>                             
+                                    <input type="button" value="Adicionar Novas Propriedades">
+                                </tbody>
+                            </table>
+                            </form>
                         </html>
 <?php
-
-            
         }
-   } 
-       
         
 	/**
 	 * Server side validation when JQuery is disabled
