@@ -356,7 +356,6 @@ class ImportValues{
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
             $propriedadesExcel = array();
             $valoresPermitidosEnum = array();
-            $idEnt = array();
             foreach($sheetData["1"] as $valores )
             {
                 array_push($propriedadesExcel, $valores);
@@ -378,12 +377,13 @@ class ImportValues{
                         if(isset($_REQUEST["ent"]))
                         {
                             $numEnt = 1;
-                            $idEnt[1] = $_REQUEST["ent"];
+                            $idEnt[0] = $_REQUEST["ent"];
                         }
                         else {
                             $entId = $this->idEntRel($_REQUEST["form"])[0];
                             $numEnt = count($entId);
-                            $k = 1;
+                            $k = 0;
+                            $idEnt = array();
                             foreach ($entId as $key => $value) {
                                 $idEnt[$k] = $key;
                                 $k++;
@@ -393,10 +393,10 @@ class ImportValues{
                         {
                             $valores = $this->db->getMysqli()->real_escape_string($valores);
                             if (empty($valores)) {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt[$i].")";
+                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEnt[$i - 1].")";
                             }
                             else {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt[$i].",'".$valores."')";
+                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt[$i - 1].",'".$valores."')";
                             }
                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
                             $idEnt = $this->db->getMysqli()->insert_id;
