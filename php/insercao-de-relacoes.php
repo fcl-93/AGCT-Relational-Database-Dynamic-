@@ -478,7 +478,7 @@ class InsereRelacoes
                     $_SESSION['numEnt2Max'] = $control; 
                     
 ?>
-                    <label>Nome para a relação </label>
+                            <label>Nome para a relação </label>
                     <input type="text" name ="nomeDaRel">
                     <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
                     <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
@@ -514,6 +514,9 @@ class InsereRelacoes
                     }
                     $_SESSION['numEnt2Max'] = $control; 
 ?>
+                            
+                    <label>Nome para a relação </label>
+                    <input type="text" name ="nomeDaRel">
                      <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
                     <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
                     
