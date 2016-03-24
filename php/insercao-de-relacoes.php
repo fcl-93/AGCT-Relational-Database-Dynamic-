@@ -207,13 +207,13 @@ class InsereRelacoes
 ?>
                         <html>
                             <form>
-                            <table id="table">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <td>Id</td>
                                         <td>Nome propriedade</td>
                                         <td>Tipo</td>
-                                        <td>Seleção<td>
+                                        <td>Seleção</td>
                                         <td>Novo valor</td>
                                     </tr>
                                 </thead>
