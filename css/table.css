@@ -52,7 +52,7 @@
     font-size: 11px  !important;
 }
 
-.table td #acertaCabecalho {
+#acertaCabecalho {
     border: none;
     color : white;
 }
