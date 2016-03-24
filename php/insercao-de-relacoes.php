@@ -176,13 +176,13 @@ class InsereRelacoes
             
             
             //Show a table with properties who can be added.
-            if($res_PropAded->num_rows != $read_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
+            if($res_PropAded->num_rows != $res_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
             {
 ?>
                 <h3>Inserção de Relações - Propriedades das Relações</h3>
 <?php
-                $this->possibleValuesToAdd($res_PropAded,$read_GetPropFromRelType);
+                $this->possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType);
             }
             else
             {
