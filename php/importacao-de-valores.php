@@ -195,14 +195,14 @@ class ImportValues{
                     $arrayEntidadesRel[$relacao["id"]] = $this->getRelName($relacao["ent_type1_id"],$relacao["ent_type2_id"]);
                     $valor = "Entidade 1";
 ?>
-                    <th>Nome para instância da entidade <?php echo $nome; ?></th>
+                    <th><?php echo $valor; ?></th>
 <?php
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                     $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                     $coluna++;
                     $valor = "Entidade 2";
 ?>
-                    <th>Nome para instância da entidade <?php echo $nome; ?></th>
+                    <th><?php echo $valor; ?></th>
 <?php
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                     $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
