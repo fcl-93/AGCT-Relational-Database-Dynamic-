@@ -174,6 +174,7 @@ class InsereRelacoes
             
             $res_PropAded = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$_REQUEST['rel']);
             
+            
             //Show a table with properties who can be added.
             if($res_PropAded->num_rows != $res_GetPropFromRelType->num_rows)//se o numero de instancias de propriedades de uma relação é menor que o numero de propriedades 
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
@@ -205,7 +206,7 @@ class InsereRelacoes
          * @param type $res_PropAded
          * @param type $res_GetPropFromRelType
          */
-        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$idFromRelation)
+        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$idDaRel)
         {
             
 ?>
@@ -224,28 +225,26 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
-                                
                                 while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
                                 {
-                                    $res_CanBeAdded = $this->bd->runQuery("SELECT p.id,p.name,p.value_type FROM property as p,value as v WHERE v.relation_id=".$idFromRelation." AND v.property_id !=".$read_GetPropFromRelType['id']);
-                                    $read_CanBeAdded = $res_CanBeAdded->fetch_assoc();
+                                    //$res_CanBeAdded = $this->bd->runQuery("SELECT * FROM value as v WHERE v.relation_id=".$idFromRel." AND v.property_id !=".$res_GetPropFromRelType['id']);
 ?>                                  
                                     <tr>
-                                        <td><?php echo $read_CanBeAdded['p.id']; ?></td>
-                                        <td><?php echo $read_CanBeAdded['p.name']; ?></td>
-                                        <td><?php  echo $read_CanBeAdded['p.value_type'];?></td>
-                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
+                                        <td><?php echo $read_GetPropFromRelType['id']; ?></td>
+                                        <td><?php echo $read_GetPropFromRelType['name']; ?></td>
+                                        <td><?php  echo $read_GetPropFromRelType['value_type'];?></td>
+                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropFromRelType['id']?>"></td>
                                         <td>
 <?php
                                             //verifies the value type
-                                            if($read_CanBeAdded['p.value_type'] == 'bool')
+                                            if($read_GetPropFromRelType['value_type'] == 'bool')
                                             {
 ?>
-                                                <input type="radio" name="<?php echo $conta ?>" value="true">True
-                                                <input type="radio" name="<?php echo $conta ?>" value="false">False
+                                                <input type="radio" name="<?php echo 'radio'.$conta ?>" value="true">True
+                                                <input type="radio" name="<?php echo 'radio'.$conta ?>" value="false">False
 <?php
                                             }
-                                            else if($read_CanBeAdded['value_type'] == 'enum')
+                                            else if($read_GetPropFromRelType['value_type'] == 'enum')
                                             {   
                                                 $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropFromRelType['id']);
 ?>
@@ -254,7 +253,7 @@ class InsereRelacoes
                                                 while($read_EnumValue = $res_EnumValue->fetch_assoc())
                                                 {
 ?>
-                                                    <option name="<?php echo $conta ?>" value="<?php echo $read_EnumValue['id']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+                                                    <option name="<?php echo 'select'.$conta ?>" value="<?php echo $read_EnumValue['id']; ?>"><?php echo $read_EnumValue['value']; ?></option>
 <?php
                                                 }
 ?>
@@ -264,19 +263,24 @@ class InsereRelacoes
                                             else
                                             {
 ?>
-                                                <input type="text" name="<?php echo $conta ?>">
+                                                <input type="text" name="<?php echo 'textbox'.$conta ?>">
                                             
 <?php
                                             }
                                             $conta++;
-?>
+                                            
+?>          
                                         </td>
                                     </tr>
 <?php
+                                $_SESSION['propImpressas'] = $conta;
                                 }
 ?>                             
                                 </tbody>
                             </table>
+                                    <input type="hidden" name="iddarel" value="<?php echo $idDaRel ?>" >
+                                    <input type="hidden" name="flag" value="atributosNovos">
+                                    <input type="hidden" name="estado" value="inserir">
                                     <input type="submit" value="Adicionar Novas Propriedades">
                             </form>
                         </html>
@@ -526,10 +530,60 @@ class InsereRelacoes
                 {
                     $this->nedita();
                 }
+                else if ($_REQUEST['flag'] =='atributosNovos')
+                {
+                    $this->addNewAttr();
+                }
             }
             else 
             {
                 goBack();
+            }
+        }
+        
+        /**
+         *This method will insert new atributtes 
+         */
+        private function addNewAttr()
+        {
+            for($i= 0; $i <= $_SESSION['propImpressas']; $i++ )
+            {
+                
+                if(isset($_REQUEST['check'.$i]))
+                {
+                    if(isset($_REQUEST['radio'.$i]))
+                    {
+                        $newValue = $_REQUEST['radio'.$i];
+                    }
+                    else if(isset($_REQUEST['select'.$i]))
+                    {
+                        $newValue = $_REQUEST['select'.$i];
+                    }
+                    else if(isset($_REQUEST['textbox'.$i]))
+                    {
+                        $newValue =$_REQUEST['textbox'.$i];
+                    }
+                    
+                    
+                    
+                   if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`, `relation_id`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",".$newValue.",'".date('Y-m-d')."','".date('H:i:s')."','".wp_get_current_user()->user_login."',".$_REQUEST['iddarel'].")"))
+                   {
+?>
+                    <html>
+                        <p>As propriedades foram adicionadas à relação.</p>
+                    </html>
+<?php
+                   }
+                   else
+                   {
+?>
+                    <html>
+                        <p>Erro ao Adicionar as propriedades.</p>
+                    </html>
+<?php
+                   }
+                    
+                }
             }
         }
         
