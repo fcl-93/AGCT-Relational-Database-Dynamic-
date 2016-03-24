@@ -180,7 +180,7 @@ class InsereRelacoes
                 //não é igual ao numero de propriedades da tabela propertyy significa que ainda posso adicionar mais propriedades
             {
 ?>
-                <h3>Inserção de Relações - Propriedades das Relações</h3>
+                <h3>Inserção de Relações - Inserção de propriedades das relações</h3>
 <?php
                 $this->possibleValuesToAdd($read_relTypeId['rel_type_id'],$_REQUEST['rel']);
             }
@@ -188,14 +188,30 @@ class InsereRelacoes
             {
 ?>
                         <html>
+                             <h3>Inserção de Relações - Inserção de propriedades das relações</h3>
                             <p>Não existem propriedades que possam ser adicionadas.</p>
                         </html>
 <?php
             }
            
-            //Mostrar uma tabela com as propriedades já adicionadas e os respetivos valores.
-            
-           
+            //Show a table with all the property values associated to the selected relation
+?>
+            <h3>Inserção de Relações - Alteração de propriedades das relações</h3>
+    <?php   
+           $res_GetPropRel = $this->bd->runQuery("SELECT * FROM value WHERE relation_id = ".$_REQUEST['rel']);
+           if($res_GetPropRel->num_rows == 0)
+           {
+?>               
+               <html>
+                <p>Não existem propriedades associadas a esta relação.</p>
+                <p>Pelo que não pode efetuar nenhuma alteração.</p>
+               </html>
+ <?php
+           }
+           else
+           {
+               $this->changePropValue($read_relTypeId['rel_type_id'],$_REQUEST['rel'],$res_GetPropRel);
+           }
             
             
             
@@ -285,6 +301,94 @@ class InsereRelacoes
                             </form>
                         </html>
 <?php
+        }
+        
+        /**
+         * This method prints a table with all the properties that are associted to the select relation
+         * @param type $tipyRelSel
+         * @param type $idDaRel
+         * @param type $res_GetPropRel -> mysqli object
+         */
+        private function changePropValue($tipyRelSel,$idDaRel,$res_GetPropRel)
+        {
+?>
+            <html>
+                <form>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Id</td>
+                                <td>Nome propriedade</td>
+                                <td>Tipo</td>
+                                <td>Valor Atual </td>
+                                <td>Seleção</td>
+                                <td>Novo valor</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+<?php
+                            $conta = 0;
+                            while($read_GetPropRel = $res_GetPropRel->fetch_assoc())
+                            {
+                                $res_Prop= $this->bd->runQuery("SELECT p.id, p.name, p.value_type FROM property as p WHERE id =".$read_GetPropRel['property_id']);
+                                $read_PropValues = $res_Prop->fetch_assoc();
+?>
+                            <tr>
+                                <td><?php echo $read_PropValues['id'];?></td>
+                                <td><?php echo $read_PropValues['name']?></td>
+                                <td><?php echo $read_PropValues['value_type']?></td>
+                                <td><?php echo $read_GetPropRel['value'] ?></td>
+                                <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropRel['id']?>"></td>
+                                <td>
+<?php
+                                    if($read_PropValues['value_type'] == 'bool')
+                                    {
+                                        
+?>
+                                        <input type="radio" name="<?php echo 'radio'.$conta ?>" value="true">True
+                                        <input type="radio" name="<?php echo 'radio'.$conta ?>" value="false">False
+<?php
+                                    }
+                                    else if($read_PropValues['value_type'] == 'enum')
+                                    {   
+                                        $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropRel['property_id']);
+?>
+                                        <select name="<?php echo 'select'.$conta ?>">
+<?php
+                                        while($read_EnumValue = $res_EnumValue->fetch_assoc())
+                                        {
+?>
+                                            <option  value="<?php echo $read_EnumValue['value']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+<?php
+                                        }
+?>
+                                        </select>
+<?php                                    
+                                    }
+                                    else
+                                    {
+?>
+                                        <input type="text" name="<?php echo 'textbox'.$conta ?>">
+<?php  
+                                    }
+?>                                    
+                                </td>
+                            </tr>
+<?php   
+                                $conta++;
+                            }
+                            $_SESSION['attrDaRelImp'] = $conta;
+?>
+                        </tbody>
+                    </table>
+                
+                    <input type="hidden" name="iddarel" value="<?php echo $idDaRel ?>" >
+                    <input type="hidden" name="flag" value="UpdateAttr">
+                    <input type="hidden" name="estado" value="inserir">
+                    <input type="submit" value="Atualizar Propriedades">
+                </form>
+           </html>
+<?php                    
         }
         
 	/**
@@ -534,10 +638,62 @@ class InsereRelacoes
                 {
                     $this->addNewAttr();
                 }
+                else if($_REQUEST['flag'] =='UpdateAttr')
+                {
+                    $this->updateAttr();
+                }
             }
             else 
             {
                 goBack();
+            }
+        }
+        
+        /**
+         * Updates the current value from the properties to new ones.
+         */
+        private function updateAttr()
+        {
+            for($i= 0; $i <= $_SESSION['attrDaRelImp']; $i++ )
+            {
+                
+                if(isset($_REQUEST['check'.$i]))
+                {
+                    if(isset($_REQUEST['radio'.$i]))
+                    {
+                        $newValue = $_REQUEST['radio'.$i];
+                    }
+                    else if(isset($_REQUEST['select'.$i]))
+                    {
+                        $newValue = $_REQUEST['select'.$i];
+                        //echo $_REQUEST['select'.$i];
+                    }
+                    else if(isset($_REQUEST['textbox'.$i]))
+                    {
+                        $newValue =$_REQUEST['textbox'.$i];
+                    }
+                    
+                    if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."',`date`='".date('Y-m-d')."',`time`='".date('H:i:s')."' WHERE id=".$_REQUEST['check'.$i]))
+                    {
+?>
+                        <html>
+                            <p>A propriedades  foi atualizada</p>
+                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                    }
+                    else
+                    {
+?>
+                        <html>
+                            <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
+                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                    }
+                    
+                    
+                }
             }
         }
         
@@ -572,6 +728,7 @@ class InsereRelacoes
 ?>
                     <html>
                         <p>As propriedades foram adicionadas à relação.</p>
+                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                     </html>
 <?php
                    }
@@ -580,6 +737,7 @@ class InsereRelacoes
 ?>
                     <html>
                         <p>Erro ao Adicionar as propriedades.</p>
+                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                     </html>
 <?php
                    }
@@ -587,6 +745,7 @@ class InsereRelacoes
                 }
             }
         }
+        
         
         /**
          * Method that will only update existing values in the database
