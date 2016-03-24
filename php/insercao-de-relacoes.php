@@ -182,7 +182,7 @@ class InsereRelacoes
 ?>
                 <h3>Inserção de Relações - Propriedades das Relações</h3>
 <?php
-                $this->possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$_REQUEST['rel']);
+                $this->possibleValuesToAdd($read_relTypeId['rel_type_id'],$_REQUEST['rel']);
             }
             else
             {
@@ -206,7 +206,7 @@ class InsereRelacoes
          * @param type $res_PropAded
          * @param type $res_GetPropFromRelType
          */
-        private function possibleValuesToAdd($res_PropAded,$res_GetPropFromRelType,$idDaRel)
+        private function possibleValuesToAdd($tipyRelSel,$idDaRel)
         {
             
 ?>
@@ -225,9 +225,9 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
+                                $res_CanBeAdded = $this->bd->runQuery("SELECT * FROM value as v, property as p WHERE p.rel_type_id=".$tipyRelSel." AND p.id NOT IN (v.property_id) AND v.relation_id =".$idDaRel);
                                 while($read_GetPropFromRelType = $res_GetPropFromRelType->fetch_assoc())
                                 {
-                                    //$res_CanBeAdded = $this->bd->runQuery("SELECT * FROM value as v WHERE v.relation_id=".$idFromRel." AND v.property_id !=".$res_GetPropFromRelType['id']);
 ?>                                  
                                     <tr>
                                         <td><?php echo $read_GetPropFromRelType['id']; ?></td>
@@ -558,7 +558,7 @@ class InsereRelacoes
                     else if(isset($_REQUEST['select'.$i]))
                     {
                         $newValue = $_REQUEST['select'.$i];
-                        echo $_REQUEST['select'.$i];
+                        //echo $_REQUEST['select'.$i];
                     }
                     else if(isset($_REQUEST['textbox'.$i]))
                     {
