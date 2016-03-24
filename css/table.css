@@ -6,8 +6,12 @@
   margin-bottom: 15px;
 }
 
-.table thead {
-  cursor: pointer;
+#sortedTable thead {
+cursor: pointer;
+}
+
+.table thead , #primCol {
+  font-weight: bold;
   background: #c9dff0;
 }
 .table thead tr th {
@@ -22,8 +26,7 @@
   background-position: 100% 100%;
 }
 
-.table thead tr th.headerSortUp, #table thead tr th.headerSortDown, #primCol {
-  font-weight: bold;
+.table thead tr th.headerSortUp, #table thead tr th.headerSortDown {
   background: #acc8dd;
 }
 
