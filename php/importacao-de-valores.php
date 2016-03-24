@@ -51,6 +51,19 @@ class ImportValues{
         <?php
         }
     }
+    
+    /**
+     * Method that creates the name of the type of relation
+     */
+    private function getRelName($idEnt1, $idEnt2) {
+        $queryEntity1 = "SELECT * FROM `ent_type` WHERE id = ".$idEnt1;
+        $queryEntity2 = "SELECT * FROM `ent_type` WHERE id = ".$idEnt2;
+        $executaEntity1 = $this->db->runQuery($queryEntity1);
+        $executaEntity2 = $this->db->runQuery($queryEntity2);
+        $nome1 = $executaEntity1->fetch_assoc()["name"];
+        $nome2 = $executaEntity2->fetch_assoc()["name"];
+        return $nome1."-".$nome2;
+    }
 
     /**
      * Method that controls the execution flow of this component
@@ -77,7 +90,7 @@ class ImportValues{
      */
     private function estadoEmpty() {
 ?>
-        <h3>Importação de valores - escolher entidade/formulário customizado</h3>
+        <h3>Importação de valores - escolher entidade/relação/formulário customizado</h3>
 <?php
         $entidades = $this->db->runQuery("SELECT * FROM ent_type ORDER BY name ASC");
         $row_cnt = $entidades->num_rows;
@@ -102,18 +115,35 @@ class ImportValues{
             // guarda um array associativo que recebe a informação da query, 
             while($arrayEntity = $executaEntity->fetch_assoc())
             {
-                    //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="?estado=introducao&ent='.$arrayEntity['id'].'">['.$arrayEntity['name'].']</a>';
+?>
+                <li><a href="?estado=introducao&ent='<?php echo $arrayEntity['id'];?>'">[<?php echo $arrayEntity['name'];?>]</a>
+<?php
             }
 ?>
             
             </ul>
-             <!--create a list with all the entities-->
-            <ul>
-            <li>Formulários customizados:</li>
+             <!--create a list with all the relations-->
+             <li>Relação:</li>
             </ul>
 <?php            
             
+            // get all the relations to list                    
+            $queryRelation = "SELECT * FROM `rel_type`";
+
+            $executaRelation = $this->db->runQuery($queryRelation);
+            // guarda um array associativo que recebe a informação da query, 
+            while($arraRelm= $executaRelation->fetch_assoc())
+            {
+?>
+                <li><a href="?estado=introducao&rel='<?php echo $arraRelm['id'];?>'">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>']</a>
+<?php
+            }
+?>   
+            </ul>
+            <ul>
+            <li>Formulários customizados:</li>
+            </ul>
+<?php
             // get all the entities to list                    
             $queryCustForm = "SELECT * FROM `custom_form`";
 
@@ -121,8 +151,9 @@ class ImportValues{
             // guarda um array associativo que recebe a informação da query, 
             while($arrayCustForm= $executaCustForm->fetch_assoc())
             {
-                    //ligação de cada item ao endereço Inserção de Valores
-                    echo'<li><a href="?estado=introducao&form='.$arrayCustForm['id'].'">['.$arrayCustForm['name'].']</a>';
+?>
+                <li><a href="?estado=introducao&form='<?php echo $arrayCustForm['id'];?>'">[<?php echo $arrayCustForm['name'];?>]</a>
+<?php
             }
 ?>   
             </ul>
@@ -156,36 +187,51 @@ class ImportValues{
                 if (isset($_REQUEST["ent"])) {
                     $getEntidade = "SELECT * FROM ent_type WHERE id = ".$_REQUEST["ent"];
                     $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
-                    $arrayEntidades[$entidade["id"]]=$entidade["name"];
+                    $arrayEntidadesRel[$entidade["id"]] = $entidade["name"];
+                }
+                else if (isset($_REQUEST["rel"])) {
+                    $getRelacao = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
+                    $relacao = $this->db->runQuery($getEntidade)->fetch_assoc();
+                    $arrayEntidadesRel[$relacao["id"]] = $this->getRelName($relacao["ent_type1_id"],$relacao["ent_type2_id"]);
                 }
                 else {
-                    $arrayEntidades = $this->idEntRel($_REQUEST["form"])[0];
+                    $arrayEntidadesRel = $this->idEntRel($_REQUEST["form"])[0];
                 }
                 $contaEntidades = 0;
                 $numCol = 0;
-                foreach ($arrayEntidades as $nome) {
+                foreach ($arrayEntidadesRel as $nome) {
                     $contaEntidades++;
                     $numCol++;
-                    $valor = "Nome para instância da entidade ".$nome;
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
-                    $coluna++;
-                    
-                    
+                    if (empty($_REQUEST["rel"])) {
+                        $valor = "Nome para instância da entidade ".$nome;
 ?>
                     <th>Nome para instância da entidade <?php echo $nome; ?></th>
 <?php
+                    }
+                    else {
+                        $valor = "Nome para instância da relação ".$nome;
+?>
+                    <th>Nome para instância da relação <?php echo $nome; ?></th>
+<?php
+                    }
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                    $coluna++;
                 }
-		if(isset($_REQUEST['form']))
+		if (isset($_REQUEST['form']))
 		{
                     $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
                                     WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id";
 		}
-		else
+		else if (isset($_REQUEST['ent']))
 		{
                     $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, ent_type AS e 
                                     WHERE e.id=".$_REQUEST['ent']." AND p.ent_type_id = e.id";
 		}
+                else {
+                    $selPropQuery = "SELECT p.id, p.rel_type_id FROM property AS p, rel_type AS r 
+                                    WHERE r.id=".$_REQUEST['rel']." AND p.ent_type_id = r.id";
+                }
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
 		{
