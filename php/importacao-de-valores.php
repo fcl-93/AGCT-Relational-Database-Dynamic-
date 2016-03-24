@@ -452,7 +452,7 @@ class ImportValues{
                             $nome2 = $ent2["name"];
                             
                             if ($i == 1) {
-                                if (empty($valores))
+                                if (empty($valores) || $ent_type != $ent_type1 || !is_numeric($valores))
                                 {
 ?>
                                     <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome1;?> </p>
@@ -460,21 +460,12 @@ class ImportValues{
                                     break;
                                 }
                                 else {
-                                    
-                                    if ($ent_type != $ent_type1)
-                                    {
-?>
-                                        <p>O valor introduzido para o campo Entidade 1 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome1;?> </p>
-<?php                                        
-                                        break;
-                                    }
-                                    else {
-                                        $entRel1 = $valores;
-                                    }
+                                    $entRel1 = $valores;
                                 }
+                                
                             }
                             else if ($i == 2) {
-                                if (empty($valores))
+                                if (empty($valores) || $ent_type != $ent_type2 || !is_numeric($valores))
                                 {
 ?>
                                     <p>O valor introduzido para o campo Entidade 2 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
@@ -482,16 +473,7 @@ class ImportValues{
                                     break;
                                 }
                                 else {
-                                    if ($ent_type != $ent_type2)
-                                    {
-?>
-                                        <p>O valor introduzido para o campo Entidade 2 não está correto. Certifique-se que introduziu um id correspondente a uma entidade do tipo <?php echo $nome2;?> </p>
-<?php                                        
-                                        break;
-                                    }
-                                    else {
-                                        $entRel2 = $valores;
-                                    }
+                                    $entRel2 = $valores;
                                 }
                             }
                             else {
