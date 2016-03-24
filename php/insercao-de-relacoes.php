@@ -240,7 +240,7 @@ class InsereRelacoes
                                             }
                                             else if($read_GetPropFromRelType['value_type'] == 'enum')
                                             {   
-                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$read_GetPropFromRelType['id']);
+                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropFromRelType['id']);
 ?>
                                                 <select>
 <?php
@@ -268,7 +268,7 @@ class InsereRelacoes
 <?php
                                 }
 ?>                             
-                                    <input type="button" value="Adicionar Novas Propriedades">
+                                    <input type="submit" value="Adicionar Novas Propriedades">
                                 </tbody>
                             </table>
                             </form>
