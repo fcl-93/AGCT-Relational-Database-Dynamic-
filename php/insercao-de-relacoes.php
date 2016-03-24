@@ -225,7 +225,7 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
-                                $res_CanBeAdded = $this->bd->runQuery("SELECT DISTINCT * FROM value as v, property as p WHERE p.rel_type_id=".$tipyRelSel." AND p.id NOT IN (v.property_id) AND v.relation_id =".$idDaRel);
+                                $res_CanBeAdded = $this->bd->runQuery("SELECT * FROM value as v, property as p WHERE p.rel_type_id=".$tipyRelSel." AND v.relation_id =".$idDaRel."AND p.id != v.property_id");
                                 while($read_GetPropFromRelType = $res_CanBeAdded->fetch_assoc())
                                 {
 ?>                                  
