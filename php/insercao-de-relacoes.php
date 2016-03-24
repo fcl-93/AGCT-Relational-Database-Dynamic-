@@ -798,6 +798,7 @@ class InsereRelacoes
                         {
                             echo $i;
                             //there is no 
+                            echo $_REQUEST['text'.$i];
                             if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['text'.$i]))
                             {
 ?>
