@@ -734,7 +734,12 @@ class InsereRelacoes
                     }
                     else
                     {
-                    
+?>
+                        <html>
+                            <p>A inserção de esta nova relação falhou.</p>
+                            <p>Clique em <a href="insercao-de-relacoes"/>Continuar</a> para continuar</p>
+                        </html>
+ <?php
                     }
                 }
         
@@ -868,7 +873,7 @@ class InsereRelacoes
                     
                     
                 }
-                else if($_REQUEST['flag'] == 'atributosNovos')
+            else if($_REQUEST['flag'] == 'atributosNovos')
                 {
                     $count = 0;
                     for($i=0; $i <=  $_SESSION['propImpressas']; $i++)
@@ -920,10 +925,10 @@ class InsereRelacoes
                         }
                         return true;
                     }
-                    else if($_REQUEST['flag'] == 'nedita')
-                    {
+            else if($_REQUEST['flag'] == 'naoeditar')
+            {
                         return true;
-                    }
+            }
         }
 }
 ?>
