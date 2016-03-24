@@ -852,7 +852,58 @@ class InsereRelacoes
                     
                     
                 }
-
-            }
+                else if($_REQUEST['flag'] == 'atributosNovos')
+                {
+                    $count = 0;
+                    for($i=0; $i <=  $_SESSION['propImpressas']; $i++)
+                    {
+                        if(isset($_REQUEST['check'.$i]))
+                        {
+                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
+                            {
+?>
+                        <html>
+                            <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                        </html>
+<?php
+                                return false;
+                            }
+                            else
+                            {
+                                if(isset($_REQUEST['select'.$i])){}
+                                else if(isset($_REQUEST['radio'.$i])){}
+                                else if(isset($_REQUEST['textbox'.$i]))
+                                {                                    
+                                    $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
+                                    $getValue_Type = $res_getValue_Type->fetch_assoc();
+                                   
+                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
+                                    {
+?>
+                                        <html>
+                                            <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                                        </html>                        
+<?php
+                                        return false;
+                                    }
+                            }
+                        }
+                    }
+                    
+                        if($count == 0)
+                        {
+?>
+                            <html>
+                                 <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
+                            </html>
+<?php
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+                else if($_REQUEST['flag'] == 'nedita')
+                {}
+        }
 }
 ?>
