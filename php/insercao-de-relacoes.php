@@ -363,6 +363,7 @@ class InsereRelacoes
                                         }
 ?>
                                         </select>
+<?php                                    
                                     }
                                     else
                                     {
