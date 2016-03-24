@@ -476,7 +476,10 @@ class InsereRelacoes
                         $control++;
                     }
                     $_SESSION['numEnt2Max'] = $control; 
+                    
 ?>
+                    <label>Nome para a relação </label>
+                    <input type="text" name ="nomaDaRel">
                     <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
                     <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
                     
@@ -709,7 +712,7 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            $rel_name="";
+            $rel_name= $this->bd->userInputVal($_REQUEST['nomaDaRel']);
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
@@ -717,7 +720,7 @@ class InsereRelacoes
                         
 ?>
                         <html>
-                            <p>Associou com sucesso a entidade xxx, a entidade yyy.</p>
+                            <p>Associou com sucesso a entidade <?php echo $_REQUEST['firstEnt']; ?>, a entidade <?php echo $_REQUEST['secondEnt'.$i]; ?>.</p>
                             <p>Clique em <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $this->bd->getMysqli()->insert_id; ?>"/>Inserir Propriedades</a> para preencher informações relativas a relação que acabou de criar.</p>
                         </html>
  <?php
@@ -732,6 +735,12 @@ class InsereRelacoes
             }
         }
         
+        /**
+         * Check if a value is an integer or a bool or a double.
+         * @param type $value_type ->type of that value
+         * @param type $valores -> value to checl
+         * @return boolean
+         */
         private function typeValidation($value_type,$valores){
             switch($value_type) {
                 case 'int':
@@ -859,7 +868,7 @@ class InsereRelacoes
                     {
                         if(isset($_REQUEST['check'.$i]))
                         {
-                            echo $i;
+                           // echo $i;
                             if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
                             {
 ?>
@@ -905,7 +914,9 @@ class InsereRelacoes
                         return true;
                     }
                     else if($_REQUEST['flag'] == 'nedita')
-                    {}
+                    {
+                        return true;
+                    }
         }
 }
 ?>
