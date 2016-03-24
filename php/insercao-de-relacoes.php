@@ -781,6 +781,7 @@ class InsereRelacoes
                     $tipoCorreto = true;
                     break;
             }
+            return $tipoCorreto;
         }
         
         	/**
@@ -796,9 +797,10 @@ class InsereRelacoes
                     {
                         if(isset($_REQUEST['check'.$i]))
                         {
-                            echo $i;
+                            //echo $i;
                             //there is no 
-                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['text'.$i]))
+                            //echo $_REQUEST['textbox'.$i];
+                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
                             {
 ?>
                         <html>
@@ -813,7 +815,7 @@ class InsereRelacoes
                                 {}
                                 else if(isset($_REQUEST['radio'.$i]))
                                 {}
-                                else if(isset($_REQUEST['text'.$i]))
+                                else if(isset($_REQUEST['textbox'.$i]))
                                 {
                                     $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
                                     $getPropId = $res_getPropId->fetch_assoc();
@@ -821,8 +823,14 @@ class InsereRelacoes
                                     $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
                                     $getValue_Type = $res_getValue_Type->fetch_assoc();
                                    
-                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['text'.$i]))== false)
+                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
                                     {
+                                        ?>
+                        <html>
+                            <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                        </html>
+                        
+                                            <?php
                                         return false;
                                     }
                                 }
@@ -840,13 +848,6 @@ class InsereRelacoes
 <?php
                     return false;
                 }
-                
-                
-                
-                
-                
-                
-                
                     return true;
                     
                     
