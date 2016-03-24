@@ -333,7 +333,7 @@ class ImportValues{
 
     //Link para download do xlsx gerado
     echo '<a href="/test01.xlsx" target="_blank">Clique aqui para descarregar</a>';
-    $objWriter->save(get_bloginfo('wpurl')."/test01.xlsx");
+    $objWriter->save("var/www/html/test01.xlsx");
     }
     
     private function estadoInsercao() {
