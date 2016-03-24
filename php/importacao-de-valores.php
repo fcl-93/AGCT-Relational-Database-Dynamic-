@@ -418,6 +418,7 @@ class ImportValues{
                                 $ent_fk_id = $atrProp['fk_ent_type_id'];
                                 $ent_type_id = $atrProp["ent_type_id"];
                             }
+                            print_r($valoresPermitidosEnum);
                             if(empty($valoresPermitidosEnum[$i]))
                             {
                                 echo "passei 1";
