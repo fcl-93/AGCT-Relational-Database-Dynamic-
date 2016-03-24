@@ -244,6 +244,7 @@ class ImportValues{
                 $coluna = 'A';
                 $valor = "Tipo de valor/Valores permitidos";
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                 $coluna++;
                 $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
