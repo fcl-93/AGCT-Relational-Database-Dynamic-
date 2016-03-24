@@ -373,6 +373,9 @@ class ImportValues{
                 print_r($propriedadesExcel);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     if ($i > 0) {
+                        if ($i === 1) {
+                            $i = 0;
+                        }
                         echo "iteracao: ".$i." val: ".$valores."<br>";
                         if(isset($_REQUEST["ent"]))
                         {
@@ -389,7 +392,7 @@ class ImportValues{
                                 $k++;
                             }
                         }
-                        if ($i < $numEnt + 1)
+                        if ($i < $numEnt)
                         {
                             $valores = $this->db->getMysqli()->real_escape_string($valores);
                             if (empty($valores)) {
