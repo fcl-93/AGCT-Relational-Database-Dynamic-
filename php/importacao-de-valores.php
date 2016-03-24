@@ -146,15 +146,12 @@ class ImportValues{
 	$coluna = 'A';
         $valor = "Deverá utilizar a tabela a abaixo para introduzir os valores. Estes devem se sempre introduzidos a partir da 3ª linha da tabela.";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
         $linha = 2;
         $valor = "Cada linha corresponderá a uma inserção na base de dados.";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
         $linha = 3;
         $valor = "Nos casos em que a propriedade é enum, deverá colocar um 1 na propriedade pretendida e 0 nas restantes.";
 	$objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
 ?>
 	<table class = "table">
             <thead>
@@ -247,7 +244,6 @@ class ImportValues{
                 $coluna = 'A';
                 $valor = "Tipo de valor/Valores permitidos";
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                 $coluna++;
                 $contaEntidadesBack = $contaEntidades;
                 for (;$contaEntidades > 0; $contaEntidades--) {
@@ -302,7 +298,6 @@ class ImportValues{
                 $coluna = 'A';
                 $valor = "Valores a intoduzir";
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
-                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                 $coluna++;
                 for (;$numCol > 0; $numCol--) {
 ?>
@@ -313,33 +308,24 @@ class ImportValues{
             </tr>
             </tbody>
 	</table>
-	
-        Caro utilizador,<br>
-	Deverá copiar estas linhas para um ficheiro excel e introduzir os valores a importar,sendo que no caso das propriedades enum, 
-	deverá constar um 0 quando esse valor permitido não se aplique à instância em causa e um 1 quando esse valor se aplica.<br>
+<?php
+	$objPHPExcel->getActiveSheet()->setTitle('ImportValues');
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save(get_bloginfo('wpurl')."/ImportValues.xlsx");
+?>
+        <p>Caro utilizador,<br>
+	Para introduzir os valores, por favor <a href="/test01.xlsx" target="_blank">Clique aqui</a> para descarregar o ficheiro Excel e siga as intruções que são indicadas.<br>
+        De seguida, deve guardar esse ficheiro e submetê-lo a partir do campo abixo.</p>
 
 	<form name="import" method="POST" enctype="multipart/form-data">
 	    	<input type="file" name="file">
 	    	<input type="hidden" name="estado" value="insercao">
 	        <input type="submit" name="submit" value="Submeter" />
 	</form>
-<?php
-    $objPHPExcel->getActiveSheet()->setTitle('ImportValues');
-
-
-    // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-    echo get_current_user();
-    $filename = '/var/www/html';
-    if (is_writable($filename)) {
-        echo 'The file is writable';
-    } else {
-        echo 'The file is not writable';
-    }
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    $objWriter->save("/var/www/html/test01.xlsx");
-    //Link para download do xlsx gerado
-    echo '<a href="/test01.xlsx" target="_blank">Clique aqui para descarregar</a>';
-    
+<?php    
     }
     
     private function estadoInsercao() {
