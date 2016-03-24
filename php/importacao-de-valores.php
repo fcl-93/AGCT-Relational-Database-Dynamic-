@@ -134,6 +134,7 @@ class ImportValues{
 	<table class = "table">
             <thead>
             <tr>
+                <td></td>
                 
 <?php
                 if (isset($_REQUEST["ent"])) {
