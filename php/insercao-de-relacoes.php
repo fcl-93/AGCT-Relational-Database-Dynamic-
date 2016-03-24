@@ -558,6 +558,7 @@ class InsereRelacoes
                     else if(isset($_REQUEST['select'.$i]))
                     {
                         $newValue = $_REQUEST['select'.$i];
+                        echo $_REQUEST['select'.$i];
                     }
                     else if(isset($_REQUEST['textbox'.$i]))
                     {
