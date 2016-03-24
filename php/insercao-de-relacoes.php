@@ -403,18 +403,17 @@ class InsereRelacoes
                 $count = 0;
                 for($i=0; $i <= $_SESSION['attrDaRelImp']; $i++)
                 {
-                    if(empty($_REQUEST['check'.$i]))
+                    if(isset($_REQUEST['check'.$i]))
                     {
                         $count++;
-                        echo $count;
+                        //echo $count;
                     }
                 }
-                if($count == $_SESSION['attrDaRelImp'])
+                if($count == 0)
                 {
 ?>
                     <html>
                         <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
-                        <p> Clique em <?php goBack(); ?></p>
                     </html>
 <?php
                     return false;
