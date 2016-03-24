@@ -409,103 +409,103 @@ class ImportValues{
                             $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp ) {
-                                    $sucesso = false;
-                                    break;
+                                $sucesso = false;
+                                break;
                             }
                             while($atrProp = $querySelectProp->fetch_assoc())
                             {
-                                    $idProp = $atrProp['id'];
-                                    $value_type = $atrProp['value_type'];
-                                    $ent_fk_id = $atrProp['fk_ent_type_id'];
-                                    $ent_type_id = $atrProp["ent_type_id"];
+                                $idProp = $atrProp['id'];
+                                $value_type = $atrProp['value_type'];
+                                $ent_fk_id = $atrProp['fk_ent_type_id'];
+                                $ent_type_id = $atrProp["ent_type_id"];
                             }
                             if(empty($valoresPermitidosEnum[$i]))
                             {
-                                    $valores = $this->db->getMysqli()->real_escape_string($valores);
-                                    $tipoCorreto = false;
-                                    switch($value_type)
-                                    {
-                                        case 'int':
-                                            if(ctype_digit($valores))
-                                            {
-                                                $valores = (int)$valores;
-                                                $tipoCorreto = true;
-                                            }
-                                            else
-                                            {
-?>
-                                                <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
-<?php
-                                                $tipoCorreto = false;
-                                            }
-                                            break;
-                                        case 'double':
-                                            if(is_numeric($valores))
-                                            {
-
-                                                $valores = floatval($valores);
-                                                $tipoCorreto = true;
-                                            }
-                                            else
-                                            {
-?>
-                                                <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i]; ?> não está correto. Certifique-se que introduziu um valor numérico</p>
-<?php
-                                                $tipoCorreto = false;
-                                            }
-                                            break;
-                                        case 'bool':
-                                            if($valores == 'true' || $valores == 'false')
-                                            {
-                                                $valores = boolval($valores);
-                                                $tipoCorreto = true;
-                                            }
-                                            else
-                                            {
-?>
-                                                <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
-<?php
-                                                $tipoCorreto = false;
-                                            }
-                                        case 'ent_ref':
-                                            if(is_numeric($valores))
-                                            {
-                                            // vai buscar o id da instancia da entidade que tem uma referencia de outra entidade
-                                                $selecionainstancia = $this->db->runQuery("SELECT `id` FROM `entity` WHERE ent_type_id = ".$ent_fk_id."");
-
-                                                $verificaInst = false;
-                                                while($instancia = $selecionainstancia->fetch_assoc())
-                                                {
-                                                    if($instancia['id'] == $valores)
-                                                    {
-                                                        $valores = (int)$valores;
-                                                        $tipoCorreto = true;
-                                                        $verificaInst = true;
-                                                        break;
-                                                    }									
-                                                }
-                                                if($verificaInst == false)
-                                                {
-?>
-                                                    <p>Não existe nenhuma instância com o id que introduziu no campo <?php echo $propriedadesExcel[$i];?></p>
-<?php
-                                                    $tipoCorreto = false;
-                                                }
-                                            }
-                                            else if ($valores == "instPorCriar") {
-                                                $tipoCorreto = true;
-                                            }
-                                            else
-                                            {
-?>
-                                                <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
-<?php                                            
-                                                $tipoCorreto = false;
-                                            }
-                                            break;
-                                        default: 
+                                $valores = $this->db->getMysqli()->real_escape_string($valores);
+                                $tipoCorreto = false;
+                                switch($value_type)
+                                {
+                                    case 'int':
+                                        if(ctype_digit($valores))
+                                        {
+                                            $valores = (int)$valores;
                                             $tipoCorreto = true;
-                                            break;
+                                        }
+                                        else
+                                        {
+?>
+                                            <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
+<?php
+                                            $tipoCorreto = false;
+                                        }
+                                        break;
+                                    case 'double':
+                                        if(is_numeric($valores))
+                                        {
+
+                                            $valores = floatval($valores);
+                                            $tipoCorreto = true;
+                                        }
+                                        else
+                                        {
+?>
+                                            <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i]; ?> não está correto. Certifique-se que introduziu um valor numérico</p>
+<?php
+                                            $tipoCorreto = false;
+                                        }
+                                        break;
+                                    case 'bool':
+                                        if($valores == 'true' || $valores == 'false')
+                                        {
+                                            $valores = boolval($valores);
+                                            $tipoCorreto = true;
+                                        }
+                                        else
+                                        {
+?>
+                                            <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
+<?php
+                                            $tipoCorreto = false;
+                                        }
+                                    case 'ent_ref':
+                                        if(is_numeric($valores))
+                                        {
+                                        // vai buscar o id da instancia da entidade que tem uma referencia de outra entidade
+                                            $selecionainstancia = $this->db->runQuery("SELECT `id` FROM `entity` WHERE ent_type_id = ".$ent_fk_id."");
+
+                                            $verificaInst = false;
+                                            while($instancia = $selecionainstancia->fetch_assoc())
+                                            {
+                                                if($instancia['id'] == $valores)
+                                                {
+                                                    $valores = (int)$valores;
+                                                    $tipoCorreto = true;
+                                                    $verificaInst = true;
+                                                    break;
+                                                }									
+                                            }
+                                            if($verificaInst == false)
+                                            {
+?>
+                                                <p>Não existe nenhuma instância com o id que introduziu no campo <?php echo $propriedadesExcel[$i];?></p>
+<?php
+                                                $tipoCorreto = false;
+                                            }
+                                        }
+                                        else if ($valores == "instPorCriar") {
+                                            $tipoCorreto = true;
+                                        }
+                                        else
+                                        {
+?>
+                                            <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor numérico</p>
+<?php                                            
+                                            $tipoCorreto = false;
+                                        }
+                                        break;
+                                    default: 
+                                        $tipoCorreto = true;
+                                        break;
                                     }
                                     if($tipoCorreto)
                                     {
@@ -576,11 +576,12 @@ class ImportValues{
                                     }
                                 }
                             }
-                            $i++;
+                            
                         }
                     }
-                    $contaLinhas++;
+                    $i++;
                 }
+                $contaLinhas++;
             }
             if($sucesso)
             {
