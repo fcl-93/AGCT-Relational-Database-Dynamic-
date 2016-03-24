@@ -248,12 +248,12 @@ class InsereRelacoes
                                             {   
                                                 $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropFromRelType['id']);
 ?>
-                                                <select>
+                                                <select name="<?php echo 'select'.$conta ?>">
 <?php
                                                 while($read_EnumValue = $res_EnumValue->fetch_assoc())
                                                 {
 ?>
-                                                    <option name="<?php echo 'select'.$conta ?>" value="<?php echo $read_EnumValue['id']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+                                                    <option  value="<?php echo $read_EnumValue['value']; ?>"><?php echo $read_EnumValue['value']; ?></option>
 <?php
                                                 }
 ?>
@@ -553,14 +553,12 @@ class InsereRelacoes
                 {
                     if(isset($_REQUEST['radio'.$i]))
                     {
-                        echo $_REQUEST['radio'.$i];
                         $newValue = $_REQUEST['radio'.$i];
-                    
-                        echo $newValue;
                     }
                     else if(isset($_REQUEST['select'.$i]))
                     {
                         $newValue = $_REQUEST['select'.$i];
+                        echo $_REQUEST['select'.$i];
                     }
                     else if(isset($_REQUEST['textbox'.$i]))
                     {
