@@ -330,7 +330,7 @@ class InsereRelacoes
                             $conta = 0;
                             while($read_GetPropRel = $res_GetPropRel->fetch_assoc())
                             {
-                                $res_Prop= $this->bd->runQuery("SELECT p.id, p.name, p.value_type FROM property WHERE id =".$read_GetPropRel['property_id']);
+                                $res_Prop= $this->bd->runQuery("SELECT p.id, p.name, p.value_type FROM property as p WHERE id =".$read_GetPropRel['property_id']);
                                 $read_PropValues = $res_Prop->fetch_assoc();
 ?>
                             <tr>
