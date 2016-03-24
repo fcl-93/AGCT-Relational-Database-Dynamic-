@@ -230,7 +230,7 @@ class ImportValues{
 		}
                 else {
                     $selPropQuery = "SELECT p.id, p.rel_type_id FROM property AS p, rel_type AS r 
-                                    WHERE r.id=".$_REQUEST['rel']." AND p.ent_type_id = r.id";
+                                    WHERE r.id=".$_REQUEST['rel']." AND p.rel_type_id = r.id";
                 }
 		$selProp = $this->db->runQuery($selPropQuery);
 		while($prop = $selProp->fetch_assoc())
