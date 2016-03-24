@@ -225,28 +225,28 @@ class InsereRelacoes
                                 <tbody>
 <?php
                                 $conta = 0;
-                                $res_CanBeAdded = $this->bd->runQuery("SELECT DISTINCT * FROM value as v, property as p WHERE p.rel_type_id=".$tipyRelSel." AND p.id NOT IN (SELECT value.property_id FROM value WHERE value.relation_id = ".$idDaRel.") ");
-                               while($read_GetPropFromRelType = $res_CanBeAdded->fetch_assoc())
+                                $res_CanBeAdded = $this->bd->runQuery("SELECT DISTINCT p.id, p.name, p.value_type FROM value as v, property as p WHERE p.rel_type_id=".$tipyRelSel." AND p.id NOT IN (SELECT value.property_id FROM value WHERE value.relation_id = ".$idDaRel.") ");
+                               while($read_CanBeAdded = $res_CanBeAdded->fetch_assoc())
                                 {
 ?>                                  
                                     <tr>
-                                        <td><?php echo $read_GetPropFromRelType['id']; ?></td>
-                                        <td><?php echo $read_GetPropFromRelType['name']; ?></td>
-                                        <td><?php  echo $read_GetPropFromRelType['value_type'];?></td>
-                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropFromRelType['id']?>"></td>
+                                        <td><?php echo $read_CanBeAdded['id']; ?></td>
+                                        <td><?php echo $read_CanBeAdded['name']; ?></td>
+                                        <td><?php  echo $read_CanBeAdded['value_type'];?></td>
+                                        <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
                                         <td>
 <?php
                                             //verifies the value type
-                                            if($read_GetPropFromRelType['value_type'] == 'bool')
+                                            if($read_CanBeAdded['value_type'] == 'bool')
                                             {
 ?>
                                                 <input type="radio" name="<?php echo 'radio'.$conta ?>" value="true">True
                                                 <input type="radio" name="<?php echo 'radio'.$conta ?>" value="false">False
 <?php
                                             }
-                                            else if($read_GetPropFromRelType['value_type'] == 'enum')
+                                            else if($read_CanBeAdded['value_type'] == 'enum')
                                             {   
-                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_GetPropFromRelType['id']);
+                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_CanBeAdded['id']);
 ?>
                                                 <select name="<?php echo 'select'.$conta ?>">
 <?php
