@@ -600,10 +600,8 @@ class ImportValues{
                                     }
                                     if($tipoCorreto)
                                     {
-                                        if (isset($_REQUEST["form"])) {                                            
-                                            $querySelectEnt = "SELECT * FROM ent_type WHERE id = ".$ent_type_id;
-                                            $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
-                                            $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
+                                        if (isset($_REQUEST["form"])) {                                    
+                                            $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$ent_type_id." ORDER BY id DESC LIMIT 1";
                                             $idEntRel = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
                                             if ($valores == "instPorCriar") {
                                                 $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
