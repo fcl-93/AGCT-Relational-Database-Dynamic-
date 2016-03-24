@@ -859,12 +859,13 @@ class InsereRelacoes
                     {
                         if(isset($_REQUEST['check'.$i]))
                         {
+                            echo $i;
                             if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
                             {
 ?>
-                        <html>
-                            <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
-                        </html>
+                                <html>
+                                    <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                                </html>
 <?php
                                 return false;
                             }
