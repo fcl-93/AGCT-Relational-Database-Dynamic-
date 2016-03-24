@@ -258,7 +258,6 @@ class ImportValues{
                         else
                         {
                             $valor = $formfieldnames['form_field_name'];
-                            echo $coluna. " ".$linha." ".$coluna.$linha;
                             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $valor);
                             $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                             $coluna++;
@@ -419,31 +418,45 @@ class ImportValues{
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     echo "iteracao: ".$i." val: ".$valores."<br>";
                     if ($i > 0) {
-                        if(isset($_REQUEST["ent"]))
+                        if (isset($_REQUEST["ent"]))
                         {
-                            $numEnt = 1;
-                            $idEntidade[0] = $_REQUEST["ent"];
+                            $numEntRel = 1;
+                            $idEntidadeRel[0] = $_REQUEST["ent"];
+                        }
+                        else if (isset($_REQUEST["rel"])) {
+                            $numEntRel = 1;
+                            $idEntidadeRel[0] = $_REQUEST["rel"];
                         }
                         else {
-                            $entId = $this->idEntRel($_REQUEST["form"])[0];
-                            $numEnt = count($entId);
+                            $entRelId = $this->idEntRel($_REQUEST["form"])[0];
+                            $numEnRelt = count($entId);
                             $k = 0;
-                            foreach ($entId as $key => $value) {
-                                $idEntidade[$k] = $key;
+                            foreach ($entRelId as $key => $value) {
+                                $idEntidadeRel[$k] = $key;
                                 $k++;
                             }
                         }
-                        if ($i - 1 < $numEnt)
+                        if ($i - 1 < $numEntRel)
                         {
                             $valores = $this->db->getMysqli()->real_escape_string($valores);
                             if (empty($valores)) {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidade[$i - 1].")";
+                                if (empty ($_REQUEST["rel"])) {
+                                    $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidadeRel[$i - 1].")";
+                                }
+                                else {
+                                    $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`) VALUES (NULL,".$idEntidadeRel[$i - 1].")";
+                                }
                             }
                             else {
-                                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidade[$i - 1].",'".$valores."')";
+                                if (empty ($_REQUEST["rel"])) {
+                                    $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidadeRel[$i - 1].",'".$valores."')";
+                                }
+                                else {
+                                    $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`, `entity_name`) VALUES (NULL,".$idEntidadeRel[$i - 1].",'".$valores."')";
+                                }
                             }
                             $queryInsertInst = $this->db->runQuery($queryInsertInst);
-                            $idEnt = $this->db->getMysqli()->insert_id;
+                            $idEntRel = $this->db->getMysqli()->insert_id;
                             if(!$queryInsertInst ) {
                                 $sucesso = false;
                                 break;
@@ -451,7 +464,7 @@ class ImportValues{
                             //$i++;
                         }
                         else {
-                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
+                            $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id, rel_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                             $querySelectProp = $this->db->runQuery($querySelectProp);
                             if(!$querySelectProp ) {
                                 $sucesso = false;
@@ -463,6 +476,7 @@ class ImportValues{
                                 $value_type = $atrProp['value_type'];
                                 $ent_fk_id = $atrProp['fk_ent_type_id'];
                                 $ent_type_id = $atrProp["ent_type_id"];
+                                $rel_type_id = $atrProp["rel_type_id"];
                             }
                             if($value_type != "enum")
                             {
@@ -555,11 +569,11 @@ class ImportValues{
                                 }
                                 if($tipoCorreto)
                                 {
-                                    if (empty($_REQUEST["ent"])) {                                            
+                                    if (isset($_REQUEST["form"])) {                                            
                                         $querySelectEnt = "SELECT * FROM ent_type WHERE id = ".$ent_type_id;
                                         $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
                                         $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
-                                        $idEnt = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
+                                        $idEntRel = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
                                         if ($valores == "instPorCriar") {
                                             $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
                                             $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
@@ -569,7 +583,12 @@ class ImportValues{
                                             $valores = $ultRef["id"];
                                         }
                                     }
-                                    $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    if (empty($_REQUEST["rel"])) {
+                                        $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    }
+                                    else {
+                                        $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    }
                                     echo $queryInsertValue;
                                     $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                     if(!$queryInsertValue)
@@ -592,13 +611,18 @@ class ImportValues{
                             {
                                 if($valores == 1)
                                 {
-                                    if (empty($_REQUEST["ent"])) {                                            
+                                    if (isset($_REQUEST["form"])) {                                            
                                         $querySelectEnt = "SELECT * FROM ent_type WHERE id = ".$ent_type_id;
                                         $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
                                         $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
-                                        $idEnt = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
+                                        $idEntRel = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
                                     }
-                                    $checkValue = "SELECT * FROM value WHERE entity_id = ".$idEnt." AND property_id = ".$idProp;
+                                    if (empty ($_REQUEST["rel"])) {
+                                        $checkValue = "SELECT * FROM value WHERE entity_id = ".$idEntRel." AND property_id = ".$idProp;
+                                    }
+                                    else {
+                                        $checkValue = "SELECT * FROM value WHERE relation_id = ".$idEntRel." AND property_id = ".$idProp;
+                                    }
                                     $checkValue = $this->db->runQuery($checkValue);
                                     $checkValue = $checkValue->num_rows;
                                     if ($checkValue > 0) {
@@ -608,7 +632,12 @@ class ImportValues{
                                         $sucesso = false;
                                         break;
                                     }
-                                    $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEnt.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    if (empty ($_REQUEST["rel"])) {
+                                        $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    }
+                                    else {
+                                        $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+                                    }
                                     $queryInsertValue = $this->db->runQuery($queryInsertValue);
                                     if(!$queryInsertValue)
                                     {
