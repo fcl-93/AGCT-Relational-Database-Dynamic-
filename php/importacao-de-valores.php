@@ -537,7 +537,7 @@ class ImportValues{
                                 {
                                     if($valores == 1)
                                     {
-                                        $sucesso = $this->insertEnum($ent_type_id, $idProp, $propriedadesExcel, $valoresPermitidosEnum, $idEntRel);
+                                        $sucesso = $this->insertEnum($i,$ent_type_id, $idProp, $propriedadesExcel, $valoresPermitidosEnum, $idEntRel);
                                         if (!$sucesso) {
                                             break;
                                         }
