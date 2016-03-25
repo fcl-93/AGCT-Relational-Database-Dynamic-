@@ -183,11 +183,11 @@ class ImportValues{
 ?>
 	<table class = "table">
 <?php
-            $this->criaCabecalho ();
+            $this->criaCabecalho ($objPHPExcel);
 ?>
             <tbody>
 <?php
-            $this->criaLinha2 ();
+            $this->criaLinha2 ($objPHPExcel);
 ?>            
             <tr>
                 <td id="primCol">Valores a intoduzir</td>
@@ -232,8 +232,9 @@ class ImportValues{
     
     /**
      * This method creates the second line of the table to import values
+     * @param PHPExcel $objPHPExcel (the object that will creat the Excel Spreadsheet
      */
-    private function criaLinha2 () {
+    private function criaLinha2 ($objPHPExcel) {
 ?>
         <tr>
                 <td id="primCol">Tipo de valor/Valores permitidos</td>
@@ -292,11 +293,11 @@ class ImportValues{
 <?php
     }
     
-    
     /**
      * This method create the head of the table
+     * @param PHPExcel $objPHPExcel (the object that will creat the Excel Spreadsheet
      */
-    private function criaCabecalho () {
+    private function criaCabecalho ($objPHPExcel) {
 ?>
         <thead>
             <tr>
