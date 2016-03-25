@@ -306,7 +306,8 @@ class ImportValues{
     /**
      * This method create the head of the table
      * @param PHPExcel $objPHPExcel (the object that will create the Excel Spreadsheet
-     * @return array (an array with the actual row and column of the spreadheet, the number of columns and the query that gets the properties)
+     * @return array (an array with the actual row and column of the spreadheet, 
+     * the number of entities/relation involved, the query that gets the properties and the number of collumns of the table)
      */
     private function criaCabecalho ($objPHPExcel) {
 ?>
@@ -427,7 +428,7 @@ class ImportValues{
             </tr>
             </thead>
 <?php
-        return [$linha,$coluna, $contaEntRel, $selPropQuery];
+        return [$linha,$coluna, $contaEntRel, $selPropQuery, $numCol];
     }
     
     /**
