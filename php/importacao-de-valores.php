@@ -352,7 +352,6 @@ class ImportValues{
                 }
                 else {
                     $arrayEntidadesRel = $this->idEntRel($_REQUEST["form"])[0];
-                    print_r($arrayEntidadesRel);
                     $contaEntRel = 0;
                     $numCol = 0;
                 }
@@ -787,7 +786,7 @@ class ImportValues{
             if (!$idEntRel) {
                 echo "erro 1";
             }
-            if ($valores == "instPorCriar") {
+            if ($valores === "instPorCriar") {
                 $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
                 $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
                 $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
@@ -976,8 +975,6 @@ class ImportValues{
                 . "ORDER BY prop.fk_ent_type_id ASC, cfhp.field_order ASC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
-            print_r($prop);
-            echo "<br>";
             if (empty($prop["rel_type_id"])){
                 $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
                 $resQuerySelEnt = $this->db->runQuery($querySelEnt);

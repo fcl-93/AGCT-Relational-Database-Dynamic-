@@ -460,6 +460,12 @@ class InsertValues{
     
     }
     */
+    
+    /**
+     * Method that inserts the new instance of the entity
+     * @param type $idEnt (the id of the entity that we will create a new instance)
+     * @return boolean
+     */
     private function insertEntityValues($idEnt) {
         $tipo = $_SESSION["tipo"];
         if ($tipo === "ent") {
@@ -671,6 +677,11 @@ class InsertValues{
         }  
     }
     
+    /**
+     * Method that gets the unit name of a given unit id
+     * @param type $idUnit
+     * @return string
+     */
     private function obtemUnidades ($idUnit) {
         if(!is_null($idUnit))
         {
@@ -694,7 +705,7 @@ class InsertValues{
         $guardaRel = array();
         $querySelProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$formId." AND prop.state = 'active' AND cfhp.property_id = prop.id "
-                . "ORDER BY prop.fk_ent_type_id ASC";
+                . "ORDER BY prop.fk_ent_type_id ASC, cfhp.field_order ASC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
             if (empty($prop["rel_type_id"])){
