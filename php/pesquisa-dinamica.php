@@ -97,7 +97,7 @@ class Search{
                 $count++;
 ?>              
                 <h5>Tipo de Entidade: <?php echo $read_EntRef['name']; ?></h5>
-                <table>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Id</th>
