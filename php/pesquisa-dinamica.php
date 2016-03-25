@@ -77,19 +77,19 @@ class Search{
                     //need to filter the entities previously selected.
                     $res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
 ?>
-                    <li>
 <?php
                             while($read_Filter = $res_FilterEntities->fetch_assoc())
                             {
 ?>                           
+                                <li>
                                 <ul>
                                     <li><a href="pesquisa-dinamica?estado=escolha&ent=<?php echo $read_Filter['id']; ?>">[<?php echo $read_Filter['name']; ?>]</a></li>
-                                </ul>
+                                </ul></li>
 <?php
                             }
 ?>
                         
-                    </li>
+                    
 <?php
                 }
 ?>
