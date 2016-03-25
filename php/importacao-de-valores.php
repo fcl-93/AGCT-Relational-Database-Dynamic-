@@ -493,7 +493,7 @@ class ImportValues{
                             }
                             if ($controlaNotProp < $numEntRel) {
                                 if (empty($_REQUEST["rel"])) {
-                                    $idEntRel = $this->insertEntity($idEntidadeRel,$controlaNotProp, $valores);
+                                    $idEntRel = $this->insertEntity($i,$idEntidadeRel,$controlaNotProp, $valores);
                                 }
                                 else {
                                     $idEntRel = $this->insertRelation($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores);
@@ -729,7 +729,7 @@ class ImportValues{
      * @param int $idEntRel (the id of the entity or relation that we want to insert the value)
      * @return boolean (true if the insertion was successfull)
      */
-    private function insertEnum($ent_type_id, $idProp, $propriedadesExcel, $valoresPermitidosEnum, $idEntRel) {
+    private function insertEnum($i, $ent_type_id, $idProp, $propriedadesExcel, $valoresPermitidosEnum, $idEntRel) {
         if (isset($_REQUEST["form"])) {                                            
             $querySelectEnt = "SELECT * FROM ent_type WHERE id = ".$ent_type_id;
             $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
