@@ -793,7 +793,8 @@ class ImportValues{
                 $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
                 $selUltRef = $this->db->runQuery($querySelUltRef);
                 if (!$selUltRef) {
-                    echo "erro 2";
+                    echo $valores
+;                    echo "erro 2";
                 }
                 $ultRef = $selUltRef->fetch_assoc();
                 $valores = $ultRef["id"];
