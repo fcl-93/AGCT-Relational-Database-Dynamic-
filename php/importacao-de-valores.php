@@ -183,11 +183,15 @@ class ImportValues{
 ?>
 	<table class = "table">
 <?php
-            $this->criaCabecalho ($objPHPExcel);
+            $lc = $this->criaCabecalho ($objPHPExcel);
+            $linha = $lc[0];
+            $coluna = $lc[1];
 ?>
             <tbody>
 <?php
-            $this->criaLinha2 ($objPHPExcel);
+            $lc = $this->criaLinha2 ($objPHPExcel, $linha, $coluna);
+            $linha = $lc[0];
+            $coluna = $lc[1];
 ?>            
             <tr>
                 <td id="primCol">Valores a intoduzir</td>
@@ -232,9 +236,12 @@ class ImportValues{
     
     /**
      * This method creates the second line of the table to import values
-     * @param PHPExcel $objPHPExcel (the object that will creat the Excel Spreadsheet
+     * @param PHPExcel $objPHPExcel (the object that will creat the Excel Spreadsheet)
+     * @param int $linha (the actual row of the spreadsheet)
+     * @param string $coluna (the actual column of the spreadsheet)
+     * @return array (an array with the actual row and column of the spreadheet)
      */
-    private function criaLinha2 ($objPHPExcel) {
+    private function criaLinha2 ($objPHPExcel, $linha, $coluna) {
 ?>
         <tr>
                 <td id="primCol">Tipo de valor/Valores permitidos</td>
@@ -291,11 +298,13 @@ class ImportValues{
 ?>
             </tr>
 <?php
+        return [$linha,$coluna];
     }
     
     /**
      * This method create the head of the table
-     * @param PHPExcel $objPHPExcel (the object that will creat the Excel Spreadsheet
+     * @param PHPExcel $objPHPExcel (the object that will create the Excel Spreadsheet
+     * @return array (an array with the actual row and column of the spreadheet)
      */
     private function criaCabecalho ($objPHPExcel) {
 ?>
@@ -416,6 +425,7 @@ class ImportValues{
             </tr>
             </thead>
 <?php
+        return [$linha,$coluna];
     }
     
     /**
