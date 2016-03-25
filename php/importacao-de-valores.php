@@ -703,7 +703,7 @@ class ImportValues{
      * @param type $valores (values that comes from he spreadsheet in this case would be the names for the entity or relation)
      * @return boolean (true if the insertion was sucessfull)
      */
-    private function insertEntityn ($idEntidadeRel,$controlaNotProp, $valores) {
+    private function insertEntity ($idEntidadeRel,$controlaNotProp, $valores) {
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         if (empty($valores)) {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].")";
