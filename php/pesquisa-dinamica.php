@@ -117,13 +117,15 @@ class Search{
                 <h3>Lista de propriedades do tipo de entidade selecionada</h3>
                 <table>
                     <thead class="table">
-                        <tr>
-                            <th>Id</th>
-                            <th>Nome da propriedade</th>
-                            <th>Seleção</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome da propriedade</th>
+                                <th>Seleção</th>
+                                <th>Valor</th>
+                            </tr>
+                  
+                        </thead>
                     <tbody>
 <?php
                         $count =0;
