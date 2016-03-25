@@ -821,16 +821,16 @@ class ImportValues{
         $tipoCorreto = false;
         switch($value_type) {
             case 'int':
-                $tipoCorreto = validaInt ($i,$propriedadesExcel,$valores);
+                $tipoCorreto = $this->validaInt($i,$propriedadesExcel,$valores);
                 break;
             case 'double':
-                $tipoCorreto = validaDouble ($i,$propriedadesExcel,$valores);
+                $tipoCorreto = $this->validaDouble($i,$propriedadesExcel,$valores);
                 break;
             case 'bool':
-                $tipoCorreto = validaBool ($i,$propriedadesExcel,$valores);
+                $tipoCorreto = $this->validaBool($i,$propriedadesExcel,$valores);
                 break;
             case 'ent_ref':
-                $tipoCorreto = validaEntRef ($i,$propriedadesExcel,$valores, $ent_fk_id);
+                $tipoCorreto = $this->validaEntRef($i,$propriedadesExcel,$valores, $ent_fk_id);
                 break;
             default: 
                 $tipoCorreto = true;
@@ -846,7 +846,7 @@ class ImportValues{
      * @param type $valores (the values from the spreadsheet)
      * @return boolean (true if the input is in the expected format)
      */
-    private function validaInt ($i,$propriedadesExcel,$valores) {
+    private function validaInt($i,$propriedadesExcel,$valores) {
         if(ctype_digit($valores))
         {
             $valores = (int)$valores;
