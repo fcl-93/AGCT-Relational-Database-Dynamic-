@@ -115,8 +115,8 @@ class Search{
         {
 ?>
                 <h3>Lista de propriedades do tipo de entidade selecionada</h3>
-                <table>
-                    <thead class="table">
+                <table class="table">
+                    <thead >
                         <thead>
                             <tr>
                                 <th>Id</th>
