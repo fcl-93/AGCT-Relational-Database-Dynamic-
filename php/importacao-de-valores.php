@@ -352,6 +352,7 @@ class ImportValues{
                 }
                 else {
                     $arrayEntidadesRel = $this->idEntRel($_REQUEST["form"])[0];
+                    print_r($arrayEntidadesRel);
                     $contaEntRel = 0;
                     $numCol = 0;
                 }
