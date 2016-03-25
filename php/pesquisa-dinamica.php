@@ -75,7 +75,7 @@ class Search{
      * references the select entity 
      */
     private function showPropValueType(){
-        $res_EntRef = $this->bd->runQuery("SELECT ent_type.id, ent_type.name FROM ent_type, property WHERE ent_type.id = property.ent_type_id AND property.value_type != 'ent_ref' AND property.fk_ent_type_id = ".$this->bd->userInputVal($_REQUEST['ent'])."");
+        $res_EntRef = $this->bd->runQuery("SELECT ent_type.id, ent_type.name FROM ent_type, property WHERE ent_type.id = property.ent_type_id AND property.value_type = 'ent_ref' AND property.fk_ent_type_id = ".$this->bd->userInputVal($_REQUEST['ent'])."");
     
         if($res_EntRef->num_rows == 0)
 	{
@@ -110,6 +110,8 @@ class Search{
 <?php
                         $res_PropRelEnt = $this->bd->runQuery("SELECT * FROM property as p WHERE p.ent_type_id=".$read_EntRef['id']);
                         while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
+                            if($read_PropRelEnt['value_type'] != 'ent_ref')
+                            {
 ?>
                         <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
@@ -181,7 +183,8 @@ class Search{
 ?>
                                     </td>
                         </tr>
-<?php
+<?php                       
+                            }
                     }
 ?>
                     </tbody>
