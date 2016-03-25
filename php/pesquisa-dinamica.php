@@ -111,6 +111,7 @@ class Search{
                         $res_PropRelEnt = $this->bd->runQuery("SELECT * FROM property as p WHERE p.ent_type_id=".$read_EntRef['id']);
                         while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
 ?>
+                        <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
                             <td><?php echo $read_PropRelEnt['name']?></td>
                             <td><input type="checkbox" name="check<?php echo $count?>" value="<?php echo $read_PropRelEnt['id'] ?>"></td>
@@ -179,6 +180,7 @@ class Search{
                                     }
 ?>
                                     </td>
+                        </tr>
 <?php
                     }
 ?>
