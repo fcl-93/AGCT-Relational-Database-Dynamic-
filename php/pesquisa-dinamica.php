@@ -82,9 +82,8 @@ class Search{
                             {
 ?>                           
                                 <li>
-                                <ul>
                                     <li><a href="pesquisa-dinamica?estado=escolha&ent=<?php echo $read_Filter['id']; ?>">[<?php echo $read_Filter['name']; ?>]</a></li>
-                                </ul></li>
+                                </li>
 <?php
                             }
 ?>
