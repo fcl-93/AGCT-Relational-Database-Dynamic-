@@ -9,6 +9,7 @@ class Search{
     public function __construct()
     {
         $this->bd = new Db_Op();
+        $this->checkUser();
     }
     
     public function checkUser(){
