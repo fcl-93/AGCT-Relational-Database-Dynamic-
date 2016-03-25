@@ -81,6 +81,7 @@ class Search{
 	{
 ?>
             <html>
+                <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
                 <p>Não existem propriedades de entidades que referenciem o tipo de entidade selecionada.</p>
             </html>
 <?php                                       
@@ -89,6 +90,103 @@ class Search{
         {
 ?>
             <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
+<?php
+            $count = 0;
+            while($read_EntRef = $res_EntRef->fetch_assoc())
+            {
+                $count++;
+?>              
+                <h5>Tipo de Entidade: <?php echo $read_EntRef['name']; ?></h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome da propriedade</th>
+                            <th>Seleção</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php
+                        $res_PropRelEnt = $this->bd->runQuery("SELECT * FROM property as p WHERE p.ent_type_id=".$read_EntRef['id']);
+                        while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
+?>
+                            <td><?php echo  $res_PropRelEnt['id'] ?></td>
+                            <td><?php echo $res_PropRelEnt['name']?></td>
+                            <td><input type="checkbox" name="check<?php echo $count?>" value="<?php echo $res_PropRelEnt['id'] ?>"></td>
+                            <td>
+<?php
+                                switch ($read_GetProp['value_type']) {
+                                    case 'enum':
+                                        //get enum values if the component valu_type is enum
+                                        $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetProp['id']." AND prop_allowed_value.state = 'active");
+ ?>
+                                        <select name="select<?php echo $count ?>">
+<?php
+                                            while($read_AlldVal = $res_AlldVal->fetch_assoc()){
+?>                                            
+                                                <option><?php echo $read_AlldVal['value']; ?></option>
+<?php
+                                            }
+?>                                      </select>
+<?php
+                                        break;
+                                    case 'bool':
+?>
+                                        <input type="radio" name="radio<?php echo $count?>" value="true">True
+                                        <input type="radio" name="radio<?php echo $count?>" value="false">False
+<?php
+                                            break;
+					case 'double':
+?>
+                                                <select name="operators<?php echo $count?>">
+                                                    <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php
+                                                    foreach($this->operators as$key=>$value)
+                                                    {
+?>
+                                                        <option><?php echo $value;?></option>
+<?php                                               }
+?>
+                                                    </select>
+						<input type="text" name="double<?php echo $count;?>">
+<?php                                                
+						break;
+					case 'text':
+?>
+                                            <input type="text" name="textbox<?php echo $count; ?>">
+<?php
+                                            break;
+					case 'int':
+?>
+                                            <select name="operators<?php echo $count?>">
+						<option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php						 foreach($this->operators as$key=>$value)
+                                                    {
+?>
+                                                        <option><?php echo $value;?></option>
+<?php                                               }
+?>
+                                            </select>
+                                                    <input type="text" name="int<?php echo $count ?>">
+<?php
+                                                    break;
+					case 'ent_ref':
+?>
+                                                    <input type="hidden" name="comp_ref" value="<?php echo $read_GetProp['id'] ?>">
+<?php
+                                            break;
+                                    }
+?>
+                                    </td>
+<?php
+                    }
+?>
+                    </tbody>
+                </table>
+<?php
+            }
+?>
 <?php
         }
     }
