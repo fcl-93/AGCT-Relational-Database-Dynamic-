@@ -188,6 +188,7 @@ class ImportValues{
             $coluna = $lc[1];
             $contaEntRel = $lc[2];
             $selPropQuery = $lc[3];
+            $numCol = $lc[4];
 ?>
             <tbody>
 <?php
