@@ -736,6 +736,9 @@ class ImportValues{
             $idEntType = $this->db->runQuery($querySelectEnt)->fetch_assoc()["id"];
             $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$idEntType." ORDER BY id DESC LIMIT 1";
             $idEntRel = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
+            if (!$idEntRel) {
+                echo "erro 3";
+            }
         }
         if (empty ($_REQUEST["rel"])) {
             $checkValue = "SELECT * FROM value WHERE entity_id = ".$idEntRel." AND property_id = ".$idProp;
@@ -781,11 +784,18 @@ class ImportValues{
         if (isset($_REQUEST["form"])) {                                    
             $querySelUlt = "SELECT * FROM entity WHERE ent_type_id = ".$ent_type_id." ORDER BY id DESC LIMIT 1";
             $idEntRel = $this->db->runQuery($querySelUlt)->fetch_assoc()["id"];
+            if (!$idEntRel) {
+                echo "erro 1";
+            }
             if ($valores == "instPorCriar") {
                 $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
                 $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
                 $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
                 $selUltRef = $this->db->runQuery($querySelUltRef);
+                if (!$selUltRef) {
+                    echo "valor:".$valores;
+                    echo "erro 2";
+                }
                 $ultRef = $selUltRef->fetch_assoc();
                 $valores = $ultRef["id"];
             }
