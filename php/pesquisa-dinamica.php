@@ -101,7 +101,7 @@ class Search{
      * the properties will be presented in a table
      */
     private function showPropEnt(){
-        $res_GetProp = $this->bd->runQuery("SELECT * FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
+        $res_GetProp = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$this->bd->userInputVal($_REQUEST['ent']));
         if($res_GetProp->num_rows == 0)
         {
 ?>
