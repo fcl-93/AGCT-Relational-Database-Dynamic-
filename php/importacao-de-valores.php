@@ -966,6 +966,7 @@ class ImportValues{
                 . "ORDER BY prop.fk_ent_type_id ASC";
         $resQuerySelProp = $this->db->runQuery($querySelProp);
         while ($prop = $resQuerySelProp->fetch_assoc()) {
+            print_r($prop);
             if (empty($prop["rel_type_id"])){
                 $querySelEnt = "SELECT * FROM ent_type WHERE id = ".$prop["ent_type_id"];
                 $resQuerySelEnt = $this->db->runQuery($querySelEnt);
