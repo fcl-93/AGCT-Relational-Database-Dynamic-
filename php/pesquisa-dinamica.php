@@ -65,7 +65,7 @@ class Search{
         else
         {
 ?>
-            <h3>Pesquisa Dinâmica - escolher componente</h3>"SELECT id, name FROM  comp_type
+            <h3>Pesquisa Dinâmica - escolher componente</h3>
 <?php
             $res_getEnt = $this->bd->runQuery("SELECT id, name FROM  ent_type"); //get all entities from ent type 
 ?>
@@ -78,6 +78,7 @@ class Search{
                     $res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
 ?>
                     <ul>
+                        <ul>
 <?php
                         while($read_Filter = $res_FilterEntities->fetch_assoc())
                         {
@@ -86,6 +87,7 @@ class Search{
 <?php
                         }
 ?>
+                             </ul>
                     </ul>
 <?php
                 }
