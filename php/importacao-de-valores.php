@@ -379,7 +379,7 @@ class ImportValues{
 		if (isset($_REQUEST['form']))
 		{
                     $selPropQuery = "SELECT p.id, p.ent_type_id FROM property AS p, custom_form AS cf, custom_form_has_prop AS cfhp 
-                                    WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id";
+                                    WHERE cf.id=".$_REQUEST['form']." AND cf.id = cfhp.custom_form_id AND cfhp.property_id = p.id ORDER BY cfhp.field_order ASC";
 		}
 		else if (isset($_REQUEST['ent']))
 		{
