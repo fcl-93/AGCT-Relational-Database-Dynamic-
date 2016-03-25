@@ -105,7 +105,7 @@ class Search{
         if($res_GetProp->num_rows == 0)
         {
 ?>
-            <<html>
+            <html>
                 <p>O tipo de entidade selecionada não tem propriedades.</p>
             </html>
 
@@ -116,7 +116,7 @@ class Search{
 ?>
                 <h3>Lista de propriedades do tipo de entidade selecionada</h3>
                 <table>
-                    <thead>
+                    <thead class="table">
                         <tr>
                             <th>Id</th>
                             <th>Nome da propriedade</th>
