@@ -492,7 +492,12 @@ class ImportValues{
                                 $controlaNotProp = $i - 3;
                             }
                             if ($controlaNotProp < $numEntRel) {
-                                $idEntRel = $this->insertEntityRelation($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores);
+                                if (empty($_REQUEST["rel"])) {
+                                    $idEntRel = $this->insertEntity($idEntidadeRel,$controlaNotProp, $valores);
+                                }
+                                else {
+                                    $idEntRel = $this->insertRelation($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores);
+                                }
                                 if(!$idEntRel) {
                                     break;
                                 }
@@ -672,23 +677,39 @@ class ImportValues{
      * @param type $valores (values that comes from he spreadsheet in this case would be the names for the entity or relation)
      * @return boolean (true if the insertion was sucessfull)
      */
-    private function insertEntityRelation ($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores) {
+    private function insertRelation ($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores) {
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         if (empty($valores)) {
-            if (empty ($_REQUEST["rel"])) {
-                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].")";
-            }
-            else {
-                $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`,`entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].", ".$entRel1.", ".$entRel2.")";
-            }
+            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`,`entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].", ".$entRel1.", ".$entRel2.")";
         }
         else {
-            if (empty ($_REQUEST["rel"])) {
-                $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."')";
-            }
-            else {
-                $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`, `relation_name`, `entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."', ".$entRel1.", ".$entRel2.")";
-            }
+            
+            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`, `relation_name`, `entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."', ".$entRel1.", ".$entRel2.")";
+            
+        }
+        $queryInsertInst = $this->db->runQuery($queryInsertInst);
+        if(!$queryInsertInst ) {
+            return false;
+        }
+        else {
+            return $this->db->getMysqli()->insert_id;
+        }
+    }
+    
+    /**
+     * This method creates a new instance of the entity type that is envolve in the import
+     * @param array $idEntidadeRel (the id of the entity_type or rel_type that we will create the instance)
+     * @param int $controlaNotProp (used as index of the array $idEntidadeRel because in this imports we may need to creat more than one instance)
+     * @param type $valores (values that comes from he spreadsheet in this case would be the names for the entity or relation)
+     * @return boolean (true if the insertion was sucessfull)
+     */
+    private function insertEntityn ($idEntidadeRel,$controlaNotProp, $valores) {
+        $valores = $this->db->getMysqli()->real_escape_string($valores);
+        if (empty($valores)) {
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].")";
+        }
+        else {
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."')";
         }
         $queryInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$queryInsertInst ) {
