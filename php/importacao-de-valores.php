@@ -787,7 +787,7 @@ class ImportValues{
             if (!$idEntRel) {
                 echo "erro 1";
             }
-            if ($valores == "instPorCriar") {
+            if ($valores === "instPorCriar") {
                 $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$ent_type_id." = ent_type_id AND value_type = 'ent_ref'";
                 $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
                 $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
