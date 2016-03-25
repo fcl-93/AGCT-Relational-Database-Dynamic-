@@ -493,7 +493,7 @@ class ImportValues{
                             }
                             if ($controlaNotProp < $numEntRel) {
                                 if (empty($_REQUEST["rel"])) {
-                                    $idEntRel = $this->insertEntity($i,$idEntidadeRel,$controlaNotProp, $valores);
+                                    $idEntRel = $this->insertEntity($idEntidadeRel,$controlaNotProp, $valores);
                                 }
                                 else {
                                     $idEntRel = $this->insertRelation($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores);
