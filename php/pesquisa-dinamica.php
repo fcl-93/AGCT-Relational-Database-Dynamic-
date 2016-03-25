@@ -116,7 +116,7 @@ class Search{
                             <td><input type="checkbox" name="check<?php echo $count?>" value="<?php echo $read_PropRelEnt['id'] ?>"></td>
                             <td>
 <?php
-                                switch ($read_GetProp['value_type']) {
+                                switch ($read_PropRelEnt['value_type']) {
                                     case 'enum':
                                         //get enum values if the component valu_type is enum
                                         $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_EntRef['id']." AND prop_allowed_value.state = 'active");
