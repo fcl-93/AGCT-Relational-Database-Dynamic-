@@ -331,6 +331,12 @@ class Search{
             <h3>Pesquisa Dinâmica - escolher componente</h3>
 <?php
             $res_getEnt = $this->bd->runQuery("SELECT id, name FROM  ent_type"); //get all entities from ent type 
+            if($res_getEnt->num_rows == 0)
+            {
+                
+            }
+            else 
+            {
 ?>
             <ul>
                 <li>Entidade:
@@ -353,6 +359,7 @@ class Search{
 ?>              </li>
             </ul>
 <?php
+            }
         }
     }
     
