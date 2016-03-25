@@ -61,7 +61,7 @@ class Db_Op
     	$result = $this->mysqli->query($query);
 	    if(!$result)
 	    {
-	    	echo "".$this->mysqli->error;
+	    	echo $query."<br>".$this->mysqli->error;
 	    }
 	    else
 	    {
