@@ -333,7 +333,12 @@ class Search{
             $res_getEnt = $this->bd->runQuery("SELECT id, name FROM  ent_type"); //get all entities from ent type 
             if($res_getEnt->num_rows == 0)
             {
-                
+?>
+            <html>
+                <p>Não existem tipos de entidades.</p>
+            </html>
+
+<?php
             }
             else 
             {
