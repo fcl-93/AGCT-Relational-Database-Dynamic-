@@ -175,13 +175,15 @@ class Search{
                             }
 ?>
                         </td>
+                        
+                </tr>
 
 <?php
                         $count++;
                     }
                     $_SESSION['relPropCount'] = $count;
 ?>
-                </tr>
+                <!--</tr>-->
 <?php                 
             }
 ?>
