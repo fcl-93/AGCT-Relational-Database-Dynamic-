@@ -53,22 +53,44 @@ class Search{
      * 
      * 
      */
-    private function tableChsStt()
-    {
+    private function tableChsStt(){
 ?>
             <html>
                 <form>
 <?php
                     $this->showPropEnt();
                     $this->showPropValueType();
+                    $this->showRelation();
 ?>
                 </form>
             </html>
 <?php
     }
     
-    
-    
+    /**
+     * This method will print table showing alll the relation types and their atributes where there is 
+     * one entity equal the one we have choosed
+     */
+    private function showRelation(){
+        $res_GetRelType = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id =".$this->bd->userInputVal($_REQUEST['ent'])." OR ent_type2_id=".$this->bd->userInputVal($_REQUEST['ent'])."");
+        if($res_GetRelType->num_rows == 0)
+        {
+?>
+            <html>
+                <h3></h3>
+                <p></p>
+            </html>
+<?php
+            
+        }
+        else
+        {
+            while($read_GetRelType = $res_GetRelType->fetch_assoc())
+            {
+                
+            }
+        }
+    }
     
     /**
      * Show a table of entities, where at least the value_type of one o the properties of the selected entity is ent_ref, and fk_ent_type_id 		
