@@ -68,7 +68,7 @@ class Search{
     }
     
     /**
-     * This method will print table showing alll the relation types and their atributes where there is 
+     * This method will print table showing all the relation types and their atributes/properties where there is 
      * one entity equal the one we have choosed
      */
     private function showRelation(){
@@ -77,18 +77,119 @@ class Search{
         {
 ?>
             <html>
-                <h3></h3>
-                <p></p>
+                <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
+                <p>Não existem relações cuja entidade selecionada se encontra presente.</p>
             </html>
 <?php
             
         }
         else
         {
+?>
+            <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
+            <html>
+                <table>
+                    <thead>
+                        <th>Tipo Relação</th>
+                        <th>Propriedade da Relação</th>
+                        <th>Seleção</th>
+                        <th>Valor</th>
+                    </thead>
+                    <tbody>
+<?php
+            $count = 0;
             while($read_GetRelType = $res_GetRelType->fetch_assoc())
             {
-                
+                $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_GetRelType['id']);
+?>
+                <tr>
+                    <td rowspan="<?php echo $res_GetRelProps->num_rows?>"><?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type1_id'])->fetch_assoc()['name'];?> - <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type1_id'])->fetch_assoc()['name']?></td>
+<?php
+                   
+                    while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
+?>
+                        <td><?php $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
+                        <td><input type="checkbox" name="checkRL<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
+                        <td>
+<?php                       
+                            switch ($read_GetRelProps['value_type']) {
+                                case 'enum':
+                                    //get enum values if the component valu_type is enum
+                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetRelProps['id']." AND prop_allowed_value.state = 'active'");
+ ?>
+                                    <select name="selectRL<?php echo $count ?>">
+<?php
+                                        while($read_AlldVal = $res_AlldVal->fetch_assoc()){
+?>                                            
+                                            <option><?php echo $read_AlldVal['value']; ?></option>
+<?php
+                                        }
+?>                                  </select>
+<?php
+                                    break;
+                                case 'bool':
+?>
+                                    <input type="radio" name="radioRL<?php echo $count?>" value="true">True
+                                    <input type="radio" name="radioRL<?php echo $count?>" value="false">False
+<?php
+                                            break;
+				case 'double':
+?>
+                                    <select name="operators<?php echo $count?>">
+                                        <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php
+                                        foreach($this->operators as$key=>$value)
+                                        {
+?>
+                                            <option><?php echo $value;?></option>
+<?php                                   }
+?>
+                                    </select>
+                                    <input type="text" name="doubleRL<?php echo $count;?>">
+<?php                                                
+                                    break;
+				case 'text':
+?>
+                                    <input type="text" name="textboxRL<?php echo $count; ?>">
+<?php
+                                    break;
+				case 'int':
+?>
+                                    <select name="operators<?php echo $count?>">
+					<option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php					foreach($this->operators as$key=>$value)
+                                        {
+?>
+                                            <option><?php echo $value;?></option>
+<?php                                   }
+?>
+                                    </select>
+                                    <input type="text" name="intRL<?php echo $count ?>">
+<?php
+                                    break;
+				case 'ent_ref':
+?>  
+                                    <input type="hidden" name="ent_refRL" value="<?php echo $read_GetRelProps['id'] ?>">
+<?php
+                                    break;
+                            }
+?>
+                        </td>
+
+<?php
+                        $count++;
+                    }
+                    $_SESSION['relPropCount'] = $coutn;
+?>
+                </tr>
+<?php                 
             }
+?>
+                          
+                    </tbody>
+                </table>
+            </html>
+<?php
         }
     }
     
@@ -138,7 +239,7 @@ class Search{
                         <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
                             <td><?php echo $read_PropRelEnt['name']?></td>
-                            <td><input type="checkbox" name="check<?php echo $count?>" value="<?php echo $read_PropRelEnt['id'] ?>"></td>
+                            <td><input type="checkbox" name="checkVT<?php echo $count?>" value="<?php echo $read_PropRelEnt['id'] ?>"></td>
                             <td>
 <?php
                                 switch ($read_PropRelEnt['value_type']) {
@@ -146,7 +247,7 @@ class Search{
                                         //get enum values if the component valu_type is enum
                                         $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
  ?>
-                                        <select name="select<?php echo $count ?>">
+                                        <select name="selectVT<?php echo $count ?>">
 <?php
                                             while($read_AlldVal = $res_AlldVal->fetch_assoc()){
 ?>                                            
@@ -158,8 +259,8 @@ class Search{
                                         break;
                                     case 'bool':
 ?>
-                                        <input type="radio" name="radio<?php echo $count?>" value="true">True
-                                        <input type="radio" name="radio<?php echo $count?>" value="false">False
+                                        <input type="radio" name="radioVT<?php echo $count?>" value="true">True
+                                        <input type="radio" name="radioVT<?php echo $count?>" value="false">False
 <?php
                                             break;
 					case 'double':
@@ -174,12 +275,12 @@ class Search{
 <?php                                               }
 ?>
                                                     </select>
-						<input type="text" name="double<?php echo $count;?>">
+						<input type="text" name="doubleVT<?php echo $count;?>">
 <?php                                                
 						break;
 					case 'text':
 ?>
-                                            <input type="text" name="textbox<?php echo $count; ?>">
+                                            <input type="text" name="textboxVT<?php echo $count; ?>">
 <?php
                                             break;
 					case 'int':
@@ -193,12 +294,12 @@ class Search{
 <?php                                               }
 ?>
                                             </select>
-                                                    <input type="text" name="int<?php echo $count ?>">
+                                                    <input type="text" name="intVT<?php echo $count ?>">
 <?php
                                                     break;
 					case 'ent_ref':
 ?>
-                                                    <input type="hidden" name="comp_ref" value="<?php echo $read_PropRelEnt['id'] ?>">
+                                                    <input type="hidden" name="ent_refVT" value="<?php echo $read_PropRelEnt['id'] ?>">
 <?php
                                             break;
                                     }
@@ -259,7 +360,7 @@ class Search{
                             <tr>
                                 <td><?php echo $read_GetProp['id'] ?></td>
                                 <td><?php echo $read_GetProp['name']?></td>
-                                <td><input type="checkbox" name="check<?php echo $count;?>" value="<?php echo $read_GetProp['id']; ?>"></td>
+                                <td><input type="checkbox" name="checkET<?php echo $count;?>" value="<?php echo $read_GetProp['id']; ?>"></td>
                                 <td>
 <?php
                                     switch ($read_GetProp['value_type']) {
@@ -267,7 +368,7 @@ class Search{
                                             //get enum values if the component valu_type is enum
                                             $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetProp['id']." AND prop_allowed_value.state = 'active");
  ?>
-                                            <select name="select<?php echo $count ?>">
+                                            <select name="selectET<?php echo $count ?>">
 <?php
                                                 while($read_AlldVal = $res_AlldVal->fetch_assoc()){
 ?>                                            
@@ -279,8 +380,8 @@ class Search{
                                             break;
 					case 'bool':
 ?>
-                                             <input type="radio" name="radio<?php echo $count?>" value="true">True
-                                             <input type="radio" name="radio<?php echo $count?>" value="false">False
+                                             <input type="radio" name="radioET<?php echo $count?>" value="true">True
+                                             <input type="radio" name="radioET<?php echo $count?>" value="false">False
 <?php
                                             break;
 					case 'double':
@@ -295,12 +396,12 @@ class Search{
 <?php                                               }
 ?>
                                                     </select>
-						<input type="text" name="double<?php echo $count;?>">
+						<input type="text" name="doubleET<?php echo $count;?>">
 <?php                                                
 						break;
 					case 'text':
 ?>
-                                            <input type="text" name="textbox<?php echo $count; ?>">
+                                            <input type="text" name="textboxET<?php echo $count; ?>">
 <?php
                                             break;
 					case 'int':
@@ -314,12 +415,12 @@ class Search{
 <?php                                               }
 ?>
                                             </select>
-                                                    <input type="text" name="int<?php echo $count ?>">
+                                                    <input type="text" name="intET<?php echo $count ?>">
 <?php
                                                     break;
 					case 'ent_ref':
 ?>
-                                                    <input type="hidden" name="comp_ref" value="<?php echo $read_GetProp['id'] ?>">
+                                                    <input type="hidden" name="ent_refET" value="<?php echo $read_GetProp['id'] ?>">
 <?php
                                             break;
                                     }
