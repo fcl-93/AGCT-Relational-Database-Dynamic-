@@ -88,7 +88,7 @@ class Search{
 ?>
             <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
             <html>
-                <table id="table">
+                <table class="table">
                     <thead>
                         <th>Tipo Relação</th>
                         <th>Propriedade da Relação</th>
@@ -103,12 +103,12 @@ class Search{
                 $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_GetRelType['id']);
 ?>
                 <tr>
-                    <td rowspan="<?php echo $res_GetRelProps->num_rows?>"><?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type1_id'])->fetch_assoc()['name'];?> - <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type1_id'])->fetch_assoc()['name']?></td>
+                    <td rowspan="<?php echo $res_GetRelProps->num_rows?>"><?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type1_id'])->fetch_assoc()['name'];?> - <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id =".$read_GetRelType['ent_type2_id'])->fetch_assoc()['name']?></td>
 <?php
                    
                     while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
 ?>
-                        <td><?php $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
+                        <td><?php echo $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
                         <td><input type="checkbox" name="checkRL<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
                         <td>
 <?php                       
@@ -175,13 +175,15 @@ class Search{
                             }
 ?>
                         </td>
+                        
+                </tr>
 
 <?php
                         $count++;
                     }
                     $_SESSION['relPropCount'] = $count;
 ?>
-                </tr>
+                <!--</tr>-->
 <?php                 
             }
 ?>
