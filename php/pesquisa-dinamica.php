@@ -88,7 +88,7 @@ class Search{
 ?>
             <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
             <html>
-                <table>
+                <table id="table">
                     <thead>
                         <th>Tipo Relação</th>
                         <th>Propriedade da Relação</th>
@@ -179,7 +179,7 @@ class Search{
 <?php
                         $count++;
                     }
-                    $_SESSION['relPropCount'] = $coutn;
+                    $_SESSION['relPropCount'] = $count;
 ?>
                 </tr>
 <?php                 
