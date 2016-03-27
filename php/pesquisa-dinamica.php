@@ -88,7 +88,7 @@ class Search{
 ?>
             <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
             <html>
-                <table id="table">
+                <table class="table">
                     <thead>
                         <th>Tipo Relação</th>
                         <th>Propriedade da Relação</th>
@@ -108,7 +108,7 @@ class Search{
                    
                     while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
 ?>
-                        <td><?php $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
+                        <td><?php echo $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
                         <td><input type="checkbox" name="checkRL<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
                         <td>
 <?php                       
