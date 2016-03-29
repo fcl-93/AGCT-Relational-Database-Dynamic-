@@ -1,5 +1,5 @@
 $().ready(function(){
-   $("[data-href]").click(function(){
+   $("[data-href]").mouseover(function(){
     	alert("Emcima");
     });
 });
