@@ -125,8 +125,8 @@ class InsereRelacoes
                                         <tr>
                                              <td><?php echo $readRelations['id'];?></td>
                                              <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
-                                             <td><?php echo $readRelations['entity1_id'];?></td>
-                                             <td><?php echo $readRelations['entity2_id'];?></td>
+                                             <td data-href="fetchdata?ent=<?php echo $readRelations['entity1_id'];?>"><?php echo $readRelations['entity1_id'];?></td>
+                                             <td data-href="fetchdata?ent=<?php echo $readRelations['entity2_id'];?>"><?php echo $readRelations['entity2_id'];?></td>
 <?php
                                                 if($readRelations['state'] == 'active')
                                                 {
