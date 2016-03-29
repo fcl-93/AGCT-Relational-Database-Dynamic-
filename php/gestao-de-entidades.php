@@ -1,16 +1,9 @@
 <?php
-
-	require_once("custom/php/common.php");	
+require_once("custom/php/common.php");	
 	
-	$entity = new Entidade();
-        
-	
-	
- ?>
-
-<?php
+$entity = new Entidade();
+    
 /**
- * Very importante $Dp_OpObject is an object from the class in common Dp_Op.
  * This method present in this class will handle all the operations that we can do in 
  * Entity page.
  * @author fabio
@@ -27,7 +20,9 @@ class Entidade
         $this->bd = new Db_Op();
         $this->checkUser();
     }
-    
+    /**
+     * Checks if the user has permission to use the page.
+     */
     public function checkUser(){
         if ( is_user_logged_in() )
 	{
@@ -159,8 +154,6 @@ class Entidade
     
 	/**
 	 * This method will be responsable for the print of the form
-	 * this method will receive a  Dp_OpObject (instance from the class 
-	 * Dp_Op in common that allow database operation)
 	*/
 	public function form()
 	{
@@ -248,8 +241,6 @@ class Entidade
 	}
 	/**
 	 * This method will be responsable for populated the form for the user to be able to  edit a selected entity
-	 * this method will receive a Dp_OpObject (instance from the class Dp_Op in common that allow database operation)
-	 * and it will receive the id from the selected entity
 	*/
 	public function editEntity($ent_id)
 	{
