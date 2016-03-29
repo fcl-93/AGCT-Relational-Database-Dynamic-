@@ -205,7 +205,7 @@ class InsertValues{
                         $colunas = substr($arrayProp["form_field_size"], 0, 2);
                         $linhas = substr($arrayProp["form_field_size"], 3, 2);;
 ?>
-                        <textarea  name="<?php echo $arrayProp["form_field_name"];?>" rows="" cols=""> <?php echo $un["name"];?><br><br>
+                        <textarea  name="<?php echo $arrayProp["form_field_name"];?>" rows="" cols=""></textarea><?php echo $un["name"];?><br><br>
 <?php
                     }                    
                     break;
