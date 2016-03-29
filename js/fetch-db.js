@@ -1,7 +1,15 @@
 $().ready(function(){
    $("[data-href]").mouseover(function(e){
-	   	e.preventDefault();	//não deixa ir para um novo url
+	   	e.preventDefault();	//WON'T CHAGE THE NEW PAGE
 	   	var link = $(this).attr('data-href'); //Gets the url 
-	   	console.log(link);
+	   	//console.log(link);
+	   	$.ajax({ //Make the ajax request
+	        url: link,
+	        cache: false
+	      }).done(function(rcvdData)
+	      {
+	    	  
+	    		  });
+	   	
     });
 });
