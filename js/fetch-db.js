@@ -1,5 +1,5 @@
 $().ready(function(){
-    $(['data-href']).mouseover(function(){
+    $(['data-href']).click(function(){
     	alert("Emcima");
        console.log("EM CIMA");
     });
