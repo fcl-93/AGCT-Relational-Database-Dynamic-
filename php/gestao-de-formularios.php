@@ -1,7 +1,7 @@
 <?php
 require_once("custom/php/common.php");
 
-$gerencia = new gereForms();
+$gerencia = new GereForms();
 
 /**
  This method present in this class will handle all the operations that we can do in 
@@ -9,7 +9,7 @@ $gerencia = new gereForms();
  *  @author fabio
  * 
  */
-class gereForms
+class GereForms
 {
 	private $bd;
 	private $numProp; //printed properties in the table
@@ -72,6 +72,7 @@ class gereForms
 ?>
 			<html>
 				<p>O utilizador não tem sessão iniciada.</p>
+                                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
 			</html>
 <?php			
 		}

@@ -1,106 +1,58 @@
 <?php
-
-	require_once("custom/php/common.php");	
-	$bd = new Db_op();
-	$entity = new Entidade();
-	if ( is_user_logged_in() )
+require_once("custom/php/common.php");	
+	
+$entity = new Entidade();
+    
+/**
+ * This method present in this class will handle all the operations that we can do in 
+ * Entity page.
+ * @author fabio
+ *
+ */
+class Entidade
+{
+    private $bd;
+    
+    /**
+     * Constructor
+     */
+    public function __construct(){
+        $this->bd = new Db_Op();
+        $this->checkUser();
+    }
+    /**
+     * Checks if the user has permission to use the page.
+     */
+    public function checkUser(){
+        if ( is_user_logged_in() )
 	{
-        if(current_user_can('manage_entities'))
+            if(current_user_can('manage_entities'))
 		{
 			if(empty($_REQUEST['estado']))
 			{
-				//Apresentar tabela
-				$res_EntType = $bd->runQuery("SELECT * FROM ent_type");
-				//verifica se há ou não entidades
-				if($res_EntType->num_rows > 0)
-				{
-					
-?>
-				<html>
-                                    <table id="sortedTable" class="table">
-						<thead>
-							<tr>
-								<th> <span>ID</span></th>
-								<th> <span>Nome</span></th>
-								<th> <span>Estado</span></th>
-								<th> <span>Ação</span></th>
-							</tr>
-						</thead>
-						<tbody>
-<?php				
-				
-					while($read_EntType = $res_EntType->fetch_assoc())
-					{	//print_r($read_EntType);
-						//printa a restante tabela
-?>						
-						<tr>
-							<td><?php echo $read_EntType['id']; ?></td>
-							<td><?php echo $read_EntType['name']?></td>
-							
-							
-<?php 						if($read_EntType['state'] === 'active')
-							{
-								
-?>								
-								<td> Ativo </td>
-								<td>
-									<a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
-									<a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
-								</td>
-<?php			 				
-							}
-							else
-							{
-?>
-								<td> Inativo </td>
-								<td>
-									<a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
-									<a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
-								</td>	
-<?php 						}
-?>
-							</td>
-						</tr>
-<?php 
-					}	
-?>
-							</tbody>
-						</table>
-					</html>
-							
-<?php 			
-				}
-				else
-				{
-?>
-					<html>
-						<p> Não há componentes.</p>
-					</html>
-<?php 			}
-				
-			
-				$entity->form($bd); // object lead the method to print the form 
+                                $this->tableToprint();
+				$this->form(); // object lead the method to print the form 
  			}
  			else if($_REQUEST['estado'] =='editar')
  			{
- 				$entity->editEntity($_REQUEST['ent_id'],$bd);
+ 				$this->editEntity($_REQUEST['ent_id']);
  			}
  			else if($_REQUEST['estado'] == 'ativar')
  			{
-				$entity->enableEnt($bd);
+				$this->enableEnt();
  			}
  			else if($_REQUEST['estado'] == 'desativar')
  			{
- 				$entity->disableEnt($bd);
+ 				$this->disableEnt();
  			}
  			else if($_REQUEST['estado']=='alteracao')
  			{
- 				$entity->changeEnt($bd);
+ 				$this->changeEnt();
  				
  			}
 			else if($_REQUEST['estado'] == 'inserir')
 			{
-				$entity->insertEnt($bd);
+				$this->insertEnt();
 				
 			}
 			
@@ -119,28 +71,91 @@
 	?>
 		<html>
 			<p> O utilizador não se encontra logado.</p>
+                         <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
 		</html>
 	<?php
 	}
-	
- ?>
+    }
+    
+    /**
+     * This method will print the table that will show all the ent_types
+     */
+    public function tableToprint(){
+        //Apresentar tabela
+	$res_EntType = $this->bd->runQuery("SELECT * FROM ent_type");
+	//verifica se há ou não entidades
+	if($res_EntType->num_rows > 0)
+	{
+					
+?>
+            <html>
+                <table id="sortedTable" class="table">
+                    <thead>
+                        <tr>
+                            <th> <span>ID</span></th>
+                            <th> <span>Nome</span></th>
+                            <th> <span>Estado</span></th>
+                            <th> <span>Ação</span></th>
+                        </tr>
+                    </thead>
+		<tbody>
+<?php				
+		while($read_EntType = $res_EntType->fetch_assoc())
+		{	//print_r($read_EntType);
+                        //printa a restante tabela
+?>						
+                    <tr>
+                        <td><?php echo $read_EntType['id']; ?></td>
+			<td><?php echo $read_EntType['name']?></td>
+							
+							
+<?php 			if($read_EntType['state'] === 'active')
+			{
+								
+?>								
+                            <td> Ativo </td>
+                                <td>
+                                    <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
+				</td>
+<?php			}
+			else
+			{
+?>
+                            <td> Inativo </td>
+				<td>
+                                    <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
+				</td>	
+<?php                   }
+?>
+			</td>
+                    </tr>
+<?php 
+                }	
+?>
+                    </tbody>
+		</table>
+            </html>
+							
+<?php 			
+	}
+        else
+	{
+?>
+            <html>
+                <p> Não há componentes.</p>
+            </html>
+<?php 			
 
-<?php
-/**
- * Very importante $Dp_OpObject is an object from the class in common Dp_Op.
- * This method present in this class will handle all the operations that we can do in 
- * Entity page.
- * @author fabio
- *
- */
-class Entidade
-{
+        }
+    }
+        
+    
 	/**
 	 * This method will be responsable for the print of the form
-	 * this method will receive a  Dp_OpObject (instance from the class 
-	 * Dp_Op in common that allow database operation)
 	*/
-	public function form($Dp_OpObject)
+	public function form()
 	{
 ?>
 		<html>
@@ -154,7 +169,7 @@ class Entidade
 				<br>
 				<label>Estado:</label><br>
 <?php 
-			$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state'); //this function is in common.php
+			$stateEnumValues = $this->bd->getEnumValues('ent_type','state'); //this function is in common.php
 			//print_r($stateEnumValues);
 			
 			foreach($stateEnumValues as $value)
@@ -190,7 +205,7 @@ class Entidade
 	/**
 	 * This method will do the server side validation
 	 */
-	public function ssvalidation($Dp_OpObject)
+	public function ssvalidation()
 	{
 		echo '<h3>Gestão de componentes - inserção</h3>';
 		if(empty($_REQUEST['nome']))
@@ -209,8 +224,8 @@ class Entidade
 		}
 		else
 		{
-			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
-			$res_checkRep = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
+			$sanitizeName = $this->bd->userInputVal($_REQUEST['nome']);
+			$res_checkRep = $this->bd->runQuery("SELECT * FROM ent_type WHERE name like '".$sanitizeName."'");
 			if($res_checkRep->num_rows)
 			{
 ?>
@@ -226,12 +241,10 @@ class Entidade
 	}
 	/**
 	 * This method will be responsable for populated the form for the user to be able to  edit a selected entity
-	 * this method will receive a Dp_OpObject (instance from the class Dp_Op in common that allow database operation)
-	 * and it will receive the id from the selected entity
 	*/
-	public function editEntity($ent_id,$Dp_OpObject)
+	public function editEntity($ent_id)
 	{
-		$res_EntEdit = $Dp_OpObject->runQuery("SELECT * FROM ent_type WHERE id='".$ent_id."'");
+		$res_EntEdit = $this->bd->runQuery("SELECT * FROM ent_type WHERE id='".$ent_id."'");
 		$read_EntToEdit = $res_EntEdit->fetch_assoc();
 		
 ?>		
@@ -245,7 +258,7 @@ class Entidade
 					<label class="error" for="nome"></label>
 					<br>
 <?php 
-		$stateEnumValues = $Dp_OpObject->getEnumValues('ent_type','state');
+		$stateEnumValues = $this->bd->getEnumValues('ent_type','state');
 		foreach($stateEnumValues as $value)
 		{
 			if($value == 'active')
@@ -298,15 +311,15 @@ class Entidade
 	 *  This method will check if is everything ok with the submited data and if really is
 	 *  it will update the existing entity
 	 */
-	public function changeEnt($Dp_OpObject) 
+	public function changeEnt() 
 	{
-		if ($this->ssvalidation ($Dp_OpObject)) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
+		if ($this->ssvalidation ()) // / verifies if all the field are filled and if the name i'm trying to submit exists in ent_type
 		{
-			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$sanitizeName = $this->bd->userInputVal($_REQUEST['nome']);
 
 		//	print_r($_REQUEST);
 		//	echo "UPDATE `ent_type` SET `name`=".$sanitizeName.",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."";
-			$res_EntTypeAS =  $Dp_OpObject->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$_REQUEST['ent_id']."");
+			$res_EntTypeAS =  $this->bd->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$_REQUEST['ent_id']."");
 ?>
 			<p>Alterou os dados da entidade com sucesso.</p>
 			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
@@ -320,13 +333,12 @@ class Entidade
 
 	/**
 	 * This method will disable an enttity when we click in desactivar button 
-	 * @param unknown $Dp_OpObject
 	 */
-	public function disableEnt($Dp_OpObject)
+	public function disableEnt()
 	{
-		$res_EntTypeD = $Dp_OpObject->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+		$res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
 		$read_EntTypeD = $res_EntTypeD->fetch_assoc();
-		$Dp_OpObject->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
+		$this->bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
 ?>
 			<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
 			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
@@ -335,13 +347,12 @@ class Entidade
 	
 	/**
 	 * This method will enable the entity when we click in then activate button 
-	 * @param unknown $Dp_OpObject
 	 */
-	public function enableEnt($Dp_OpObject)
+	public function enableEnt()
 	{
-		$res_EntTypeA = $Dp_OpObject->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+		$res_EntTypeA = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
 		$read_EntTypeA = $res_EntTypeA->fetch_assoc();
-		$Dp_OpObject->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
+		$this->bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
 ?>
 		<html>
 		 	<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>
@@ -352,16 +363,15 @@ class Entidade
 	
 	/**
 	 * This method will insert a new entity in the database
-	 * @param unknown $Dp_OpPbject
 	 */
-	public function insertEnt($Dp_OpObject)
+	public function insertEnt()
 	{
-		if($this->ssvalidation($Dp_OpObject)) 
+		if($this->ssvalidation()) 
 		{
 			//print_R($_REQUEST);
-			$sanitizeName = $Dp_OpObject->userInputVal($_REQUEST['nome']);
+			$sanitizeName = $this->bd->userInputVal($_REQUEST['nome']);
 			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
-			$res_querState = $Dp_OpObject->runQuery($queryInsert);
+			$res_querState = $this->bd->runQuery($queryInsert);
 ?>
 				<p>Inseriu os dados de uma nova entidade com sucesso</p>
 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>

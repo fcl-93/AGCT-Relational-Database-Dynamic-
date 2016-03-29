@@ -41,6 +41,14 @@ class Unidade
 				{
 					$this->insertState();
 				}
+                                else if($_REQUEST['estado'] == 'desativar')
+                                {
+                                    $this->desactivate();
+                                }
+                                else if($_REQUEST['estado'] == 'activar')
+                                {
+                                    $this->activate();
+                                }
 			}
 			else
 			{
@@ -56,6 +64,7 @@ class Unidade
 ?>
 			<html>
 				<p>Não tem sessão iniciada.</p>
+                                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
 			</html>
 <?php 
 		}
@@ -87,6 +96,8 @@ class Unidade
 						<tr>
 							<th>Id</th>
 							<th>Unidade</th>
+                                                        <th>Estado</th>
+                                                        <th>Ação</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -97,6 +108,25 @@ class Unidade
 						<tr>
 							<td><?php echo $read_Units['id']; ?></td>
 							<td><?php echo $read_Units['name']; ?></td>
+<?php
+                                                            if($read_Units['state']  == 'active')
+                                                            {
+?>
+                                                                <td>Ativo</td>
+                                                                <td><a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a></td>
+<?php
+                                                            }
+                                                            else if($read_Units['state'] =='inactive')
+                                                            {
+?>
+                                                                <td>Inativo</td>
+                                                                <td><a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a></td>
+
+                                                                
+<?php
+                                                            }
+?>
+
 						</tr>
 <?php 						
 					}
@@ -108,6 +138,37 @@ class Unidade
 		$this->insertFormPrint(); //call insertFormPrint method prints the form
 		}
 	}
+        
+        /**
+         * This method will disable unit-types that enabled.
+         */
+        private function desactivate(){
+            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive' WHERE id=".$_REQUEST['unit_id']))
+            {
+?>
+                        <html>
+                            <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi desativada</p>
+                            <p>Clique em <a href="/gestao-de-unidades"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+            }
+        }
+        /**
+         * This method will activate unit-types that are disabled
+         */
+        private function activate(){
+            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'active' WHERE id=".$_REQUEST['unit_id']))
+            {
+?>
+                        <html>
+                            <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi ativada.</p>
+                            <p>Clique em <a href="/gestao-de-unidades"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+            }
+        }
+        
+        
 	/**
 	 * This method will print the form that will be used to insert a new unit type.
 	 */
@@ -150,14 +211,14 @@ class Unidade
 	public function insertState(){
 		if(!$this->ssvalidation())
 		{
-			print_r($_REQUEST);
+			//print_r($_REQUEST);
 ?>
 			<p>Clique em para <?php goBack(); ?></p>
 <?php 
 		}
 		else
 		{
-			print_r($_REQUEST);
+			//print_r($_REQUEST);
 			$sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
 			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".$sanitizedName."')");
 ?>

@@ -182,9 +182,6 @@ class Search{
                         $count++;
                     }
                     $_SESSION['relPropCount'] = $count;
-?>
-                <!--</tr>-->
-<?php                 
             }
 ?>
                           
