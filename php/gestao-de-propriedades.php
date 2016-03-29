@@ -36,7 +36,7 @@ class PropertyManage
             {
         ?>
             <html>
-                <p>N√£o tem autoriza√ß√£o para aceder a esta p√°gina</p>
+                <p>N„o tem autorizaÁ„o para aceder a esta p·gina</p>
             </html>
         <?php
             }
@@ -45,8 +45,8 @@ class PropertyManage
         {
         ?>
             <html>
-                <p>N√£o tem sess√£o iniciada.</p>
-                <p>Clique <a href="/login">aqui</a> para iniciar sess√£o.</p>
+                <p>N„o tem sess„o iniciada.</p>
+                <p>Clique <a href="/login">aqui</a> para iniciar sess„o.</p>
             </html>
         <?php
         }
@@ -64,7 +64,7 @@ class PropertyManage
             <p>Por favor escolha que tipo de propriedades quer gerir.</p>
             <ul>
                 <li><a href="/gestao-de-propriedades?estado=entity">Entidade</a></li>
-                <li><a href="/gestao-de-propriedades?estado=relation">Rela√ß√£o</a></li>
+                <li><a href="/gestao-de-propriedades?estado=relation">RelaÁ„o</a></li>
             </ul>
         </html>
     <?php
@@ -124,7 +124,7 @@ class PropertyManage
         {
     ?>
         <html>
-            <p>N√£o existem propiedades especificadas para o tipo selecionado</p>
+            <p>N„o existem propiedades especificadas para o tipo selecionado</p>
         </html>
     <?php
             return false;
@@ -170,21 +170,21 @@ class PropertyManage
                     else
                     {
                 ?>
-                    <th>Rela√ß√£o</th>
+                    <th>RelaÁ„o</th>
                 <?php
                     }
                 ?>
                     <th>ID</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
-                    <th>Nome do campo no formul√°rio</th>
-                    <th>Tipo do campo no formul√°rio</th>
+                    <th>Nome do campo no formul·rio</th>
+                    <th>Tipo do campo no formul·rio</th>
                     <th>Tipo de unidade</th>
-                    <th>Ordem do campo no formul√°rio</th>
-                    <th>Tamanho do campo no formul√°rio</th>
-                    <th>Obrigat√≥rio</th>
+                    <th>Ordem do campo no formul·rio</th>
+                    <th>Tamanho do campo no formul·rio</th>
+                    <th>ObrigatÛrio</th>
                     <th>Estado</th>
-                    <th>A√ß√£o</th>
+                    <th>AÁ„o</th>
                 </tr>
             </thead>
             <tbody>
@@ -251,7 +251,7 @@ class PropertyManage
                             }
                             else
                             {
-                                echo " n√£o";
+                                echo " n„o";
                             }
                  ?>
                             </td>
@@ -304,7 +304,7 @@ class PropertyManage
             if($numEnt === 0)
             {
             ?>
-                <p>N√£o poder√° inserir propriedades uma vez que ainda n√£o foram criadas quaisquer entidades</p>
+                <p>N„o poder· inserir propriedades uma vez que ainda n„o foram criadas quaisquer entidades</p>
             <?php
                 $existeEntRel = false;
             }
@@ -317,7 +317,7 @@ class PropertyManage
             if($numEnt === 0)
             {
             ?>
-                <p>N√£o poder√° inserir propriedades uma vez que ainda n√£o foram criadas quaisquer rela√ß√µes</p>
+                <p>N„o poder· inserir propriedades uma vez que ainda n„o foram criadas quaisquer relaÁıes</p>
             <?php
                 $existeEntRel = false;
             }
@@ -327,7 +327,7 @@ class PropertyManage
         {
         ?>
         <html>
-            <h3> Gest√£o de propriedades - introdu√ß√£o </h3>
+            <h3> Gest„o de propriedades - introduÁ„o </h3>
 
             <form id="insertProp" method="POST">
                 <label>Nome da Propriedade:</label><br>
@@ -350,14 +350,14 @@ class PropertyManage
                             if ($tipo === "entity")
                             {
                                 echo'
-                                <label>Entidade a que ir√° pertencer esta propriedade</label><br>
+                                <label>Entidade a que ir· pertencer esta propriedade</label><br>
                                 <select id="entidadePertence" name="entidadePertence">';
                                 $selecionaEntRel = "SELECT name, id FROM ent_type";
                             }
                             else
                             {
                                 echo'
-                                <label>Rela√ß√£o a que ir√° pertencer esta propriedade</label><br>
+                                <label>RelaÁ„o a que ir· pertencer esta propriedade</label><br>
                                 <select id="relacaoPertence" name="relacaoPertence">';
                                 $selecionaEntRel = "SELECT id FROM rel_type";
                             }
@@ -375,7 +375,7 @@ class PropertyManage
                             echo '</select><br><br>';
                         ?>
                 <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
-                <label>Tipo do campo do formul√°rio</label><br>
+                <label>Tipo do campo do formul·rio</label><br>
                         <?php
                             $field = 'form_field_type';
                             $table = 'property';
@@ -400,15 +400,15 @@ class PropertyManage
                         ?>
                 </select><br><br>
                 <label class="error" for="tipoUnidade"></label>
-                <label>Ordem do campo no formul√°rio</label><br>
+                <label>Ordem do campo no formul·rio</label><br>
                 <input id="ordem" type="text" name="ordem" min="1"><br>
                 <label class="error" for="ordem"></label><br>
-                <label>Tamanho do campo no formul√°rio</label><br>
+                <label>Tamanho do campo no formul·rio</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>
-                <label>Obrigat√≥rio</label><br>
+                <label>ObrigatÛrio</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                 <br>
-                <input id="obrigatorio" type="radio" name="obrigatorio" value="2">N√£o
+                <input id="obrigatorio" type="radio" name="obrigatorio" value="2">N„o
                 <br>
                 <label class="error" for="obrigatorio"></label><br>
                         <?php
@@ -453,14 +453,14 @@ class PropertyManage
      */
     private function estadoInserir()
     {
-        echo '<h3>Gest√£o de propriedades - inser√ß√£o</h3>';
+        echo '<h3>Gest„o de propriedades - inserÁ„o</h3>';
         if(!empty($_REQUEST["entidadePertence"]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
             $entRelResult = $this->db->runQuery($entRelQuery);
             $entRelArray = $entRelResult->fetch_assoc();
-            // contru√ß√£o do form_field_name
-            // obt√©m-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+            // contruÁ„o do form_field_name
+            // obtÈm-se o nome da entidade a que corresponde a propriedade que queremos introduzir
             $entRel = $entRelArray["name"];
         }
         else
@@ -473,17 +473,17 @@ class PropertyManage
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
 	$idProp = '';
-	// Garantimos que n√£o h√° SQL injection atrav√©s do campo nome
+	// Garantimos que n„o h· SQL injection atravÈs do campo nome
 	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome"]);
 	// Substituimos todos os carateres por carateres ASCII
 	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
-	// Substituimos todos pos espa√ßos por underscore
+	// Substituimos todos pos espaÁos por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-	// Inicia uma tansa√ß√£o uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, ap√≥s a inser√ß√£o
+	// Inicia uma tansaÁ„o uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, apÛs a inserÁ„o
 	$this->db->getMysqli()->autocommit(false);
 	$this->db->getMysqli()->begin_transaction();
-	// De modo a evitar problemas na execu√ß√£o da query quando o campo form_field_size √© NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
+	// De modo a evitar problemas na execuÁ„o da query quando o campo form_field_size È NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
         if(!empty($_REQUEST["entidadePertence"]))
         {
@@ -533,7 +533,7 @@ class PropertyManage
 	}
 	else
 	{
-            //obtem o √∫ltimo id que foi introduzido na BD
+            //obtem o ˙ltimo id que foi introduzido na BD
             $id = $this->db->getMysqli()->insert_id;
             // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
             $form_field_name = $entRel.$traco.$id.$traco.$nomeField;
@@ -548,7 +548,7 @@ class PropertyManage
             {
                 $this->db->getMysqli()->commit();
 		echo 'Inseriu os dados de nova propriedade com sucesso.';
-		echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avan√ßar.';
+		echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avanÁar.';
             }
 	}
 
@@ -576,45 +576,45 @@ class PropertyManage
         }
         if (empty($_REQUEST["tipoCampo"]))
         {
-            echo "Por favor selecione um tipo do campo do formul√°rio.";
+            echo "Por favor selecione um tipo do campo do formul·rio.";
             goBack();
             echo '<br>';
             return false;
         }
         if (empty($_REQUEST["obrigatorio"]))
         {
-            echo "Por favor indique se esta propriedade deve ou n√£o ser obrigat√≥ria.";
+            echo "Por favor indique se esta propriedade deve ou n„o ser obrigatÛria.";
             goBack();
             echo '<br>';
             return false;
         }
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul√°rio n√£o √© num√©rico!<br>';
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul·rio n„o È numÈrico!<br>';
             goBack();
             echo '<br>';
             return false;
 	}
 	else if($_REQUEST["ordem"] < 1)
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul√°rio deve ser superior a 0!<br>';
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul·rio deve ser superior a 0!<br>';
             goBack();
             echo '<br>';
             return false;
 	}
 	if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formul√°rio deve ser preenchido com valores num√©ricos
-                uma vez que indicou que o Tipo do campo do formul√°rio era text<br>';
+            echo 'ERRO! O campo Tamanho do campo no formul·rio deve ser preenchido com valores numÈricos
+                uma vez que indicou que o Tipo do campo do formul·rio era text<br>';
             goBack();
             echo '<br>';
             return false;
 	}
-        // preg_match serve para verificar se o valor introduzido est√° no formato aaxbb onde aa e bb s√£o n√∫meros de 0 a 9
+        // preg_match serve para verificar se o valor introduzido est· no formato aaxbb onde aa e bb s„o n˙meros de 0 a 9
 	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formul√°rio deve ser preenchido com o seguinte formato
-                aaxbb em que aa √© o n√∫mero de colunas e bb o n√∫mero de linhas da caixa de texto<br>';
+            echo 'ERRO! O campo Tamanho do campo no formul·rio deve ser preenchido com o seguinte formato
+                aaxbb em que aa È o n˙mero de colunas e bb o n˙mero de linhas da caixa de texto<br>';
             goBack();
             echo '<br>';
             return false;
@@ -647,7 +647,7 @@ class PropertyManage
         <html>
             <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
             <br>
-            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avan√ßar</p>
+            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avanÁar</p>
         </html>
 <?php 
     }
@@ -700,7 +700,7 @@ class PropertyManage
         $mandatory = $prop["mandatory"];
 ?>
         <html>
-        <h3> Gest√£o de propriedades - Edi√ß√£o </h3>
+        <h3> Gest„o de propriedades - EdiÁ„o </h3>
 
         <form id="editProp" method="POST">
             <label>Nome da Propriedade:</label><br>
@@ -731,14 +731,14 @@ class PropertyManage
                         if ($tipo === "entity")
                         {
                             echo'
-                            <label>Entidade a que ir√° pertencer esta propriedade</label><br>
+                            <label>Entidade a que ir· pertencer esta propriedade</label><br>
                             <select id="entidadePertence" name="entidadePertence">';
                             $selecionaEntRel = "SELECT name, id FROM ent_type";
                         }
                         else
                         {
                             echo'
-                            <label>Rela√ß√£o a que ir√° pertencer esta propriedade</label><br>
+                            <label>RelaÁ„o a que ir· pertencer esta propriedade</label><br>
                             <select id="relacaoPertence" name="relacaoPertence">';
                             $selecionaEntRel = "SELECT id FROM rel_type";
                         }
@@ -763,7 +763,7 @@ class PropertyManage
                         echo '</select><br><br>';
                     ?>
             <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
-            <label>Tipo do campo do formul√°rio</label><br>
+            <label>Tipo do campo do formul·rio</label><br>
                     <?php
                         $field = 'form_field_type';
                         $table = 'property';
@@ -804,19 +804,19 @@ class PropertyManage
             </select>
             <br>
             <label class="error" for="tipoUnidade"></label><br>
-            <label>Ordem do campo no formul√°rio</label><br>
+            <label>Ordem do campo no formul·rio</label><br>
             <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>"><br>
-            <!--<label>Tamanho do campo no formul√°rio</label><br>
-            <input type="text" name="tamanho"><br><br>-->
+            <label>Tamanho do campo no formul·rio</label><br>
+            <input type="text" name="tamanho"><br><br>
             <label class="error" for="ordem"></label><br>
-            <label>Obrigat√≥rio</label><br>
+            <label>ObrigatÛrio</label><br>
         <?php
                 if ($mandatory)
                 {
         ?>       
                     <input id="mandatory" type="radio" name="obrigatorio" value="1" checked>Sim
                     <br>
-                    <input id="mandatory" type="radio" name="obrigatorio" value="2">N√£o
+                    <input id="mandatory" type="radio" name="obrigatorio" value="2">N„o
                     <br>
                     <label class="error" for="obrigatorio"></label><br>
         <?php
@@ -826,7 +826,7 @@ class PropertyManage
         ?>       
                     <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                     <br>
-                    <input id="obrigatorio" type="radio" name="obrigatorio" value="2" checked>N√£o
+                    <input id="obrigatorio" type="radio" name="obrigatorio" value="2" checked>N„o
                     <br>
                     <label class="error" for="obrigatorio"></label><br>
         <?php   
@@ -867,14 +867,14 @@ class PropertyManage
      * This method executes the necessary update's query to update the values inserted in the database
      */
     private function estadoUpdate() {
-        echo '<h3>Gest√£o de propriedades - Atualiza√ß√£o</h3>';
+        echo '<h3>Gest„o de propriedades - AtualizaÁ„o</h3>';
                 if(!empty($_REQUEST["entidadePertence"]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
             $entRelResult = $this->db->runQuery($entRelQuery);
             $entRelArray = $entRelResult->fetch_assoc();
-            // contru√ß√£o do form_field_name
-            // obt√©m-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+            // contruÁ„o do form_field_name
+            // obtÈm-se o nome da entidade a que corresponde a propriedade que queremos introduzir
             $entRel = $entRelArray["name"];
         }
         else
@@ -887,18 +887,18 @@ class PropertyManage
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
 	$idProp = $_REQUEST["idProp"];
-	// Garantimos que n√£o h√° SQL injection atrav√©s do campo nome
+	// Garantimos que n„o h· SQL injection atravÈs do campo nome
 	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome"]);
 	// Substituimos todos os carateres por carateres ASCII
 	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
-	// Substituimos todos pos espa√ßos por underscore
+	// Substituimos todos pos espaÁos por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
-        /*if(!empty($_REQUEST["tamanho"]))
+        if(!empty($_REQUEST["tamanho"]))
 	{
             $queryUpdate .= ',form_filed_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
-	}*/
+	}
         $queryUpdate .= ',form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).',mandatory='.$_REQUEST["obrigatorio"].',state="active"';
         
         if (!empty($_REQUEST["entidadeReferenciada"]))
@@ -923,7 +923,7 @@ class PropertyManage
         else
         {
             echo 'Atualizou os dados de nova propriedade com sucesso.';
-            echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avan√ßar.';
+            echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avanÁar.';
         }
     }
 }
