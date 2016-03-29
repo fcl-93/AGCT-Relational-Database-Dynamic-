@@ -241,8 +241,8 @@ class PropertyManage
                             }
                 ?>
                             </td>
-                            <td><?php echo $arraySelec["form_field_order"]; ?>                                </td>
-                            <td><?//php echo $arraySelec["form_field_size"]; ?></td>
+                            <td><?php echo $arraySelec["form_field_order"];?></td>
+                            <td><?php echo $arraySelec["form_field_size"]; ?></td>
                             <td>
                 <?php
                             if ($arraySelec["mandatory"] == 1)
@@ -403,8 +403,8 @@ class PropertyManage
                 <label>Ordem do campo no formulário</label><br>
                 <input id="ordem" type="text" name="ordem" min="1"><br>
                 <label class="error" for="ordem"></label><br>
-                <!--<label>Tamanho do campo no formulário</label><br>
-                <input id="size" type="text" name="tamanho"><br><br>-->
+                <label>Tamanho do campo no formulário</label><br>
+                <input id="size" type="text" name="tamanho"><br><br>
                 <label>Obrigatório</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                 <br>
@@ -494,10 +494,10 @@ class PropertyManage
             $queryInsere .=  '`rel_type_id`,';
         }
         $queryInsere .=  ' `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`,';
-        /*if(!empty($_REQUEST["tamanho"]))
+        if(!empty($_REQUEST["tamanho"]))
 	{
             $queryInsere .= '`form_field_size`, ';
-        }*/
+        }
         $queryInsere .=  '`form_field_order`, `mandatory`, `state`';
         if (!empty($_REQUEST["entidadeReferenciada"]))
         {
@@ -513,10 +513,10 @@ class PropertyManage
             $queryInsere .=  $_REQUEST["relacaoPertence"];
         }
         $queryInsere .= ',\''.$_REQUEST["tipoValor"].'\',\''.$form_field_name.'\',\''.$_REQUEST["tipoCampo"].'\','.$_REQUEST["tipoUnidade"];
-        /*if(!empty($_REQUEST["tamanho"]))
+        if(!empty($_REQUEST["tamanho"]))
 	{
             $queryInsere .= ',"'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
-	}*/
+	}
         $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
 	if (!empty($_REQUEST["entidadeReferenciada"]))
         {
@@ -602,23 +602,23 @@ class PropertyManage
             echo '<br>';
             return false;
 	}
-	/*if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
+	if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
 	{
             echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
                 uma vez que indicou que o Tipo do campo do formulário era text<br>';
             goBack();
             echo '<br>';
             return false;
-	}*/
+	}
         // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
-	/*if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
+	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
 	{
             echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
                 aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
             goBack();
             echo '<br>';
             return false;
-        }*/
+        }
 	return true;
     }
     
@@ -895,10 +895,10 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
-        /*if(!empty($_REQUEST["tamanho"]))
+        if(!empty($_REQUEST["tamanho"]))
 	{
             $queryUpdate .= ',form_filed_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
-	}*/
+	}
         $queryUpdate .= ',form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).',mandatory='.$_REQUEST["obrigatorio"].',state="active"';
         
         if (!empty($_REQUEST["entidadeReferenciada"]))
