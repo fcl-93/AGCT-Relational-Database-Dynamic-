@@ -181,7 +181,7 @@ class PropertyManage
                     <th>Tipo do campo no formulário</th>
                     <th>Tipo de unidade</th>
                     <th>Ordem do campo no formulário</th>
-                    <!--<th>Tamanho do campo no formulário</th>-->
+                    <th>Tamanho do campo no formulário</th>
                     <th>Obrigatório</th>
                     <th>Estado</th>
                     <th>Ação</th>
@@ -242,7 +242,7 @@ class PropertyManage
                 ?>
                             </td>
                             <td><?php echo $arraySelec["form_field_order"]; ?>                                </td>
-                            <!--<td><?//php echo $arraySelec["form_field_size"]; ?></td>-->
+                            <td><?//php echo $arraySelec["form_field_size"]; ?></td>
                             <td>
                 <?php
                             if ($arraySelec["mandatory"] == 1)
