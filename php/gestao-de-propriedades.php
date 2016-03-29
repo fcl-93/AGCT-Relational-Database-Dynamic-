@@ -806,8 +806,8 @@ class PropertyManage
             <label class="error" for="tipoUnidade"></label><br>
             <label>Ordem do campo no formulário</label><br>
             <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>"><br>
-            <!--<label>Tamanho do campo no formulário</label><br>
-            <input type="text" name="tamanho"><br><br>-->
+            <label>Tamanho do campo no formulário</label><br>
+            <input type="text" name="tamanho"><br><br>
             <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
         <?php
