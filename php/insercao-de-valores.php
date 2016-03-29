@@ -202,8 +202,10 @@ class InsertValues{
                     }
                     else if ($arrayProp["form_field_type"] === "textbox")
                     {
+                        $colunas = substr($arrayProp["form_field_size"], 0, 2);
+                        $linhas = substr($arrayProp["form_field_size"], 3, 2);;
 ?>
-                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
+                        <textarea  name="<?php echo $arrayProp["form_field_name"];?>" rows="" cols=""> <?php echo $un["name"];?><br><br>
 <?php
                     }                    
                     break;
