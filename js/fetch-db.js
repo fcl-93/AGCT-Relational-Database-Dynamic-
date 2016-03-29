@@ -8,7 +8,7 @@ $().ready(function(){
 	        cache: false
 	      }).done(function(rcvdData)
 	      {
-	    	  
+	    	  alert(rcvdData);
 	    		  });
 	   	
     });
