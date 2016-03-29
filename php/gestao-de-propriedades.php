@@ -45,7 +45,7 @@ class PropertyManage
         {
         ?>
             <html>
-                <p>Não tem sessão iniciada.</p>
+                <p>Não tem sessão iniciada.a</p>
                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
             </html>
         <?php
