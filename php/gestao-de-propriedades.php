@@ -693,6 +693,7 @@ class PropertyManage
             $unit_type_id = 0;
         }
         $form_field_order = $prop["form_field_order"];
+        $form_field_size = $prop["form_field_size"];
         
         $queryUnit = "SELECT name FROM prop_unit_type WHERE id = ".$unit_type_id;
         $unit = $this->db->runQuery($queryUnit)->fetch_assoc()["name"];
@@ -805,9 +806,9 @@ class PropertyManage
             <br>
             <label class="error" for="tipoUnidade"></label><br>
             <label>Ordem do campo no formulário</label><br>
-            <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>"><br>
+            <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order;?>"><br>
             <label>Tamanho do campo no formulário</label><br>
-            <input type="text" name="tamanho"><br><br>
+            <input type="text" name="tamanho"value="<?php echo $form_field_size;?>"><br>
             <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
         <?php
