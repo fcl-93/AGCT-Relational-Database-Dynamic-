@@ -503,7 +503,7 @@ class ImportValues{
                                 }
                             }
                             else {
-                                $querySelectProp = "SELECT id, value_type, fk_ent_type_id, ent_type_id, rel_type_id FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
+                                $querySelectProp = "SELECT *FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                                 $querySelectProp = $this->db->runQuery($querySelectProp);
                                 if(!$querySelectProp ) {
                                     $sucesso = false;
@@ -516,10 +516,19 @@ class ImportValues{
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                                     $ent_type_id = $atrProp["ent_type_id"];
                                     $rel_type_id = $atrProp["rel_type_id"];
+                                    if (isset($_REQUEST["rel"])) {
+                                        $size = $atrProp["form_field_size"];
+                                        $mandatory = $atrProp["mandatory"];
+                                    }
+                                    else {
+                                        $size = $atrProp["field_size"];
+                                        $mandatory = $atrProp["mandatory"];
+                                    }
+                                    
                                 }
                                 if($value_type != "enum")
                                 {
-                                    $tipoCorreto = $this->validNotEnum($i,$propriedadesExcel, $value_type, $ent_fk_id, $valores);
+                                    $tipoCorreto = $this->validNotEnum($i,$propriedadesExcel, $value_type, $ent_fk_id, $valores, $mandatory, $size );
                                     if($tipoCorreto)
                                     {
                                         $sucesso = $this->insertNotEnum($valores,$ent_type_id, $idProp, $idEntRel);
@@ -559,6 +568,10 @@ class ImportValues{
             }
             else {
                 $this->db->getMysqli()->rollback();
+?>
+                <p>Lamentamos, mas correu um erro!</p>
+<?php
+                goBack();
             }
 	}
     }
@@ -826,9 +839,25 @@ class ImportValues{
      * @param type $valores (the values from the spreadsheet)
      * @return boolean (true if the input is in the expected format)
      */
-    private function validNotEnum($i,$propriedadesExcel, $value_type, $ent_fk_id, $valores) {
+    private function validNotEnum($i,$propriedadesExcel, $value_type, $ent_fk_id, $valores, $mandatory, $size) {
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         $tipoCorreto = false;
+
+       if ($mandatory == 1  && empty($valores)){
+?>
+            <p>O campo <?php echo $propriedadesExcel[$i];?> é de preenchimento obrigatório!</p>
+<?php
+            goBack();
+            return false;
+       }           
+
+       if (strlen($valores) > $size) {
+?>
+            <p>O valor introduzido no campo <?php echo $propriedadesExcel[$i];?> tem muitos carateres.</p>
+<?php
+            goBack();
+            return false;
+       }
         switch($value_type) {
             case 'int':
                 $tipoCorreto = $this->validaInt($i,$propriedadesExcel,$valores);
