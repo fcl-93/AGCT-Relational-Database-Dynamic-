@@ -45,8 +45,8 @@ class PropertyManage
         {
         ?>
             <html>
-                <p>Não tem sessão iniciada.</p>
-                <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
+                <p>N�o tem sessão iniciada.</p>
+                <p>Clique <a href="/login">aqui</a> para iniciar sess�o.</p>
             </html>
         <?php
         }
@@ -177,11 +177,11 @@ class PropertyManage
                     <th>ID</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
-                    <th>Nome do campo no formulário</th>
-                    <th>Tipo do campo no formulário</th>
+                    <th>Nome do campo no formul�rio</th>
+                    <th>Tipo do campo no formul�rio</th>
                     <th>Tipo de unidade</th>
-                    <th>Ordem do campo no formulário</th>
-                    <!--<th>Tamanho do campo no formulário</th>-->
+                    <th>Ordem do campo no formul�rio</th>
+                    <!--<th>Tamanho do campo no formul�rio</th>-->
                     <th>Obrigatório</th>
                     <th>Estado</th>
                     <th>Ação</th>
@@ -375,7 +375,7 @@ class PropertyManage
                             echo '</select><br><br>';
                         ?>
                 <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
-                <label>Tipo do campo do formulário</label><br>
+                <label>Tipo do campo do formul�rio</label><br>
                         <?php
                             $field = 'form_field_type';
                             $table = 'property';
@@ -400,10 +400,10 @@ class PropertyManage
                         ?>
                 </select><br><br>
                 <label class="error" for="tipoUnidade"></label>
-                <label>Ordem do campo no formulário</label><br>
+                <label>Ordem do campo no formul�rio</label><br>
                 <input id="ordem" type="text" name="ordem" min="1"><br>
                 <label class="error" for="ordem"></label><br>
-                <!--<label>Tamanho do campo no formulário</label><br>
+                <!--<label>Tamanho do campo no formul�rio</label><br>
                 <input id="size" type="text" name="tamanho"><br><br>-->
                 <label>Obrigatório</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
@@ -576,7 +576,7 @@ class PropertyManage
         }
         if (empty($_REQUEST["tipoCampo"]))
         {
-            echo "Por favor selecione um tipo do campo do formulário.";
+            echo "Por favor selecione um tipo do campo do formul�rio.";
             goBack();
             echo '<br>';
             return false;
@@ -590,22 +590,22 @@ class PropertyManage
         }
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul�rio não é numérico!<br>';
             goBack();
             echo '<br>';
             return false;
 	}
 	else if($_REQUEST["ordem"] < 1)
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!<br>';
+            echo 'ERRO! O valor introduzido no campo Ordem do campo no formul�rio deve ser superior a 0!<br>';
             goBack();
             echo '<br>';
             return false;
 	}
 	/*if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
-                uma vez que indicou que o Tipo do campo do formulário era text<br>';
+            echo 'ERRO! O campo Tamanho do campo no formul�rio deve ser preenchido com valores numéricos
+                uma vez que indicou que o Tipo do campo do formul�rio era text<br>';
             goBack();
             echo '<br>';
             return false;
@@ -613,7 +613,7 @@ class PropertyManage
         // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
 	/*if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+            echo 'ERRO! O campo Tamanho do campo no formul�rio deve ser preenchido com o seguinte formato
                 aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
             goBack();
             echo '<br>';
@@ -763,7 +763,7 @@ class PropertyManage
                         echo '</select><br><br>';
                     ?>
             <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
-            <label>Tipo do campo do formulário</label><br>
+            <label>Tipo do campo do formul�rio</label><br>
                     <?php
                         $field = 'form_field_type';
                         $table = 'property';
@@ -804,9 +804,9 @@ class PropertyManage
             </select>
             <br>
             <label class="error" for="tipoUnidade"></label><br>
-            <label>Ordem do campo no formulário</label><br>
+            <label>Ordem do campo no formul�rio</label><br>
             <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order?>"><br>
-            <!--<label>Tamanho do campo no formulário</label><br>
+            <!--<label>Tamanho do campo no formul�rio</label><br>
             <input type="text" name="tamanho"><br><br>-->
             <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
