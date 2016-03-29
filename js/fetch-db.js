@@ -1,5 +1,5 @@
-$.ready(fucntion(){
+$().ready(function(){
     $(['data-href']).mouseover(function(){
-       alert("Test"); 
+       console.log("EM CIMA");
     });
 });
