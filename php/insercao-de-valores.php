@@ -164,6 +164,7 @@ class InsertValues{
 ?>
         <h3>Inserção de valores - <?php echo $_SESSION[$tipo."_name"];?></h3>
         <form method="POST" name="<?php echo $tipo."_".$_SESSION[$tipo."_id"];?>" action="?estado=validar&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">
+            <p class="mandatory">Os campos marcados com * são de preenchimento obrigatorio</p>
 <?php
        if ($tipo === "ent"){
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
@@ -180,16 +181,37 @@ class InsertValues{
            
            if ($tipo === "ent") {
 ?>
-            <label><?php echo $arrayProp["name"];?></label><br>
+            <label><?php echo $arrayProp["name"];?>
 <?php
+                if ($arrayProp["mandatory"] == 1) {
+?>
+                     *</label><br>
+<?php 
+                }
+                else {
+?>
+                     </label><br>
+<?php 
+                }
            }
            else {
                $getEntidade = "SELECT * FROM ent_type WHERE id = ".$arrayProp["ent_type_id"];
                $entidade = $this->db->runQuery($getEntidade)->fetch_assoc();
                $arrayEntidades[$entidade["id"]]=$entidade["name"];
 ?>
-            <label><?php echo $entidade["name"]."-".$arrayProp["name"];?></label><br>
-<?php   
+            <label><?php echo $entidade["name"]."-".$arrayProp["name"];?>
+<?php
+                print_r($arrayProp);
+                if ($arrayProp["cfhp.mandatory"] == 1) {
+?>
+                     *</label><br>
+<?php 
+                }
+                else {
+?>
+                     </label><br>
+<?php 
+                }
            }
             switch ($arrayProp["value_type"])
             {
@@ -202,8 +224,10 @@ class InsertValues{
                     }
                     else if ($arrayProp["form_field_type"] === "textbox")
                     {
+                        $colunas = substr($arrayProp["form_field_size"], 0, 2);
+                        $linhas = substr($arrayProp["form_field_size"], 3, 2);;
 ?>
-                        <input type="textbox" name="<?php echo $arrayProp["form_field_name"];?>"> <?php echo $un["name"];?><br><br>
+                        <textarea  name="<?php echo $arrayProp["form_field_name"];?>" rows="<?php echo $linhas;?>" cols="<?php echo $colunas;?>"></textarea><?php echo $un["name"];?><br><br>
 <?php
                     }                    
                     break;

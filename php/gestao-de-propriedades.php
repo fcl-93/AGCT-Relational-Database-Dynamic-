@@ -857,7 +857,7 @@ class PropertyManage
             <label class="error" for="entidadeReferenciada"></label><br>
             <input type="hidden" name="estado" value="update"><br>
             <input type="hidden" name="idProp" value="<?php echo $_REQUEST['prop_id']?>">
-            <input type="submit" value="Inserir propriedade">
+            <input type="submit" value="Editar propriedade">
         </form>
         <html>
  <?php       
