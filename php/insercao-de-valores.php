@@ -558,15 +558,27 @@ class InsertValues{
        $execQueryProp = $this->db->runQuery($queryProp);
        $goBack = false;
        while ($arrayProp = $execQueryProp->fetch_assoc()) {
-           if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
+           if ($tipo == "ent") {
+               if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
-                <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
+                    <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
 <?php
-                goBack();
-                $goBack = true;
-                break;
+                    goBack();
+                    $goBack = true;
+                    break;
+               }           
            }
-           else if (strlen($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
+           else {
+               if ($arrayProp["cfhp.mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
+?>
+                    <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
+<?php
+                    goBack();
+                    $goBack = true;
+                    break;
+               }  
+           }
+           if (strlen($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
 ?>
                 <p>O valor introduzido no campo <?php echo $arrayProp['name'];?> tem muitos carateres.</p>
 <?php
