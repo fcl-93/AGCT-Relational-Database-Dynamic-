@@ -93,8 +93,8 @@ class InsertValues{
 ?>
             <!--create a list with all the entities-->
             <ul>
-            <li>Entidade:</li>
-            </ul>
+            <li>Entidade:
+            <ul>
 <?php            
             
             // get all the entities to list                    
@@ -111,9 +111,9 @@ class InsertValues{
             
             </ul>
              <!--create a list with all the entities-->
+            </li>
+            <li>Formulários customizados:
             <ul>
-            <li>Formulários customizados:</li>
-            </ul>
 <?php            
             
             // get all the entities to list                    
@@ -127,6 +127,8 @@ class InsertValues{
                     echo'<li><a href="insercao-de-valores?estado=introducao&form='.$arrayCustForm['id'].'">['.$arrayCustForm['name'].']</a>';
             }
 ?>   
+            </ul>
+            </li>
             </ul>
             
 <?php
@@ -559,6 +561,14 @@ class InsertValues{
            if ($arrayProp["mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
                 <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
+<?php
+                goBack();
+                $goBack = true;
+                break;
+           }
+           else if (size($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
+?>
+                <p>O valor introduzido no campo <?php echo $arrayProp['name'];?> tem muitos carateres.</p>
 <?php
                 goBack();
                 $goBack = true;
