@@ -174,7 +174,7 @@ class PropertyManage
                 <?php
                     }
                 ?>
-                    <th>ID</th>
+                    <th>ID1</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
                     <th>Nome do campo no formulário</th>
