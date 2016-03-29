@@ -76,6 +76,5 @@
     });
 })(jQuery);
 
-$('#table').paging({limit:5});
 
 
