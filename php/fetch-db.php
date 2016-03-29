@@ -14,7 +14,7 @@ class FetchData{
 	
 	public function getData(){
 		$sanitizeId = $this->bd->userInputVal($_REQUEST['ent']);
-		while($read_Props = $this->bd->runQuery("SELECT * FROM value WHERE relation_id=".$sanitizeId)->fetch_assoc())
+		while($read_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId)->fetch_assoc())
 		{
 			$nome = $this->bd->runQuery("SELECT * FROM property WHERE property_id=".$read_Props['id'])->fetch_assoc()['name'];
 			echo $nome . " : " .$read_Props['value']."</br>";
