@@ -516,7 +516,7 @@ class ImportValues{
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                                     $ent_type_id = $atrProp["ent_type_id"];
                                     $rel_type_id = $atrProp["rel_type_id"];
-                                    if (isset($_REQUEST["rel"])) {
+                                    if (isset($_REQUEST["ent"])) {
                                         $size = $atrProp["form_field_size"];
                                         $mandatory = $atrProp["mandatory"];
                                     }
@@ -847,7 +847,6 @@ class ImportValues{
 ?>
             <p>O campo <?php echo $propriedadesExcel[$i];?> é de preenchimento obrigatório!</p>
 <?php
-            goBack();
             return false;
        }           
 
@@ -855,7 +854,6 @@ class ImportValues{
 ?>
             <p>O valor introduzido no campo <?php echo $propriedadesExcel[$i];?> tem muitos carateres.</p>
 <?php
-            goBack();
             return false;
        }
         switch($value_type) {
