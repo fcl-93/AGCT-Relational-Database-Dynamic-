@@ -566,7 +566,7 @@ class InsertValues{
                 $goBack = true;
                 break;
            }
-           else if (size($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
+           else if (strlen($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
 ?>
                 <p>O valor introduzido no campo <?php echo $arrayProp['name'];?> tem muitos carateres.</p>
 <?php
