@@ -201,8 +201,7 @@ class InsertValues{
 ?>
             <label><?php echo $entidade["name"]."-".$arrayProp["name"];?>
 <?php
-                print_r($arrayProp);
-                if ($arrayProp["cfhp.mandatory"] == 1) {
+                if ($arrayProp["mandatory_form"] == 1) {
 ?>
                      *</label><br>
 <?php 

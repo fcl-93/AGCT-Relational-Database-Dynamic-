@@ -522,7 +522,7 @@ class ImportValues{
                                     }
                                     else {
                                         $size = $atrProp["field_size"];
-                                        $mandatory = $atrProp["mandatory"];
+                                        $mandatory = $atrProp["mandatory_form"];
                                     }
                                     
                                 }
