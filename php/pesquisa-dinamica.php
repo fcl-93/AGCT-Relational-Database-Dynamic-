@@ -25,7 +25,8 @@ class Search{
                 else if($_REQUEST['estado'] == 'escolha'){
                    $this->tableChsStt();
                 }
-                
+                else if($_REQUEST['estado'] == 'execucao'){
+                }                
                 
                 
                 
@@ -62,6 +63,8 @@ class Search{
                     $this->showPropValueType();
                     $this->showRelation();
 ?>
+					<input type="hidden" name="estado" value="execucao">
+					<input type="submit" value="Pesquisar">
                 </form>
             </html>
 <?php
