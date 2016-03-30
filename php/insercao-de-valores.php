@@ -185,7 +185,7 @@ class InsertValues{
 <?php
                 if ($arrayProp["mandatory"] == 1) {
 ?>
-                     *</label><br>
+                    <span class="mandatory">*</span></label><br>
 <?php 
                 }
                 else {
@@ -203,7 +203,7 @@ class InsertValues{
 <?php
                 if ($arrayProp["mandatory_form"] == 1) {
 ?>
-                     *</label><br>
+                    <span class="mandatory">*</span></label><br>
 <?php 
                 }
                 else {
