@@ -128,10 +128,14 @@ class InsereRelacoes
                                              <td>
 <?php 
 												echo $readRelations['entity1_id'];
-                                             	
-                                             	while($read_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId)->fetch_assoc())
+												$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
+												$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
+                                             	while($read_Props = $res_GetVal->fetch_assoc())
                                              	{
-                                             		
+                                             		$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
+?>
+													<p><?php echo $nome." : ".$read_Props['value']; ?></p></br>												
+<?php
                                              	}
                                              	
                                              	
