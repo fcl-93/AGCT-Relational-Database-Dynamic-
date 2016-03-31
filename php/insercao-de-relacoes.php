@@ -137,10 +137,7 @@ class InsereRelacoes
 													<p><?php echo $nome." : ".$read_Props['value']; ?></p></br>												
 <?php
                                              	}
-?>                         
-                                             
-                                             
-                                             
+?>                                           
                                              
                                              </td>
                                              
@@ -157,17 +154,6 @@ class InsereRelacoes
 <?php
                                              }
 ?>                         
-                                             
-                                             
-                                             
-                                             
-                                             ?>
-                                             
-                                             
-                                             
-                                             
-                                             
-                                             
                                              </td>
 <?php
                                                 if($readRelations['state'] == 'active')
