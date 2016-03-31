@@ -26,6 +26,7 @@ class Search{
                    $this->tableChsStt();
                 }
                 else if($_REQUEST['estado'] == 'execucao'){
+                    $this->estadoExecucao();
                 }                
                 
                 
@@ -498,9 +499,193 @@ class Search{
         }
     }
     
+    private function estadoExecucao() {
+        $idEnt = $_REQUEST['ent']; // vem pelo get é o id da entidade selecionada.
+        $numeroDechecksImpressos = $_SESSION['countPrintedProps'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
+        //percorre o request 
+        $checkSelected = 0;
+        $i = 0;
+        $guardanomePropSelec = array();
+        $guardaValorDaProp = array();
+        $guardaidDosSelecionados = array();
+        while( $i <=  $numeroDechecksImpressos) {
+            if(isset($_REQUEST['checkET'.$i]) || isset($_REQUEST['checkVT'.$i]) || isset($_REQUEST['checkRL'.$i])) {
+                //significa que foi selecionada
+                $checkSelected++;
+            }
+            $i++;
+        }
+        for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
+            //CheckBoxes não foram selecionadas
+            if(empty($_REQUEST['checkET'.$i]) || empty($_REQUEST['checkVT'.$i]) || empty($_REQUEST['checkRL'.$i])) {
+                //significa que não foi selecionado
+                $contaChecksNaoSelecionadas++;
+            }
+            //checkboxes selecionadas.
+            else {
+                if (isset($_REQUEST['checkET'.$count])) {
+                    $idDaPropriedade = $_REQUEST['checkET'.$count];
+                    $tipo = "ET";
+                }
+                else if (isset($_REQUEST['checkVT'.$count])) {
+                    $idDaPropriedade = $_REQUEST['checkVT'.$count];
+                    $tipo = "VT";
+                }
+                else {
+                    $idDaPropriedade = $_REQUEST['checkRL'.$count];
+                    $tipo = "RL";
+                }
+                $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
+                $queryNomeValProp = $this->bd->runQuery($querynomeProp);
+                $queryNomeValProp =$querynomeProp->fetch_assoc();
+                $nomeProp = $queryNomeValProp["name"];
+                $tipoValor = $queryNomeValProp["value_type"];
+                
+                if ($tipoValor == "int") {
+                    if (validaInt($count, $tipo)) {
+                        
+                    }
+                    else {
+                        $erro = true;
+                        break;
+                    }
+                }
+                else if ($tipoValor == "double") {
+                    if (validaDouble($count, $tipo)) {
+                        
+                    }
+                    else {
+                        $erro = true;
+                        break;
+                    }
+                }
+                else {
+                    
+                }
+            }
+        }
+        if($checkSelected == $numeroDechecksImpressos)
+        {
+            $querydinamica = "SELECT * FROM entity WHERE ent_type = ".$idEnt;
+        }
+        if($erroParametros)
+        {
+            goBack();
+        }
+        else {
+            apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp);
+        }
+    }
+    
+    private function validaInt ($count, $tipo) {
+        if (verificaOperadores($count)) {
+            $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int_'.$count.'']);
+            if(ctype_digit($int_escaped))
+            {	
+                    //Se todo o input do user são numeros então converter para inteitro
+                    $int_escaped = (int)$int_escaped;
+                    if(is_int($int_escaped))
+                    {			
+                            return true;
+                    }
+                else
+                {
+?>
+                    <p>Verifique se introduziu um valor numérico.</p>
+<?php
+                    return false;
+                }
+            }
+            else
+            {
+?>
+                <p>Verifique se introduziu um valor numérico.</p>
+<?php
+                return false;	
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    
+    private function validaDouble ($count, $tipo) {
+        if (verificaOperadores($count)) {
+            $double_escaped = $this->bd->userInputVal($_REQUEST['double'.$tipo.$count.'']);
+            if(is_numeric($double_escaped))
+            {
+                $double_escaped = floatval($double_escaped);
+                if(is_double ($double_escaped))
+                {
+                    return true;
+                }
+                else
+                {
+?>
+                    <p>Verifique se introduziu um valor numérico.</p>
+<?php
+                    return false;
+                }
+            }
+            else
+            {
+?>
+                <p>Verifique se introduziu um valor numérico.</p>
+<?php
+                return false;	
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    
+    private function verificaOperadores ($count) {
+        if(empty($_REQUEST['operadores'.$count]))
+        {
+?>
+            <p>Verifique se introduziu os operadores.</p>
+<?php
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    
+    private function preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor) {
+        array_push($guardaidDosSelecionados,$idDaPropriedade);
+        array_push($guardanomePropSelec, $nomeProp);
+        array_push($guardaValorDaProp,$valor);
+    }
     
     
-    
-
+    private function apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp) {
+        $instEnt = $this->bd->runquery($querydinamica);		
+        //imprime a lista de instancias do componente selecionado de acordo com os filtros
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</td>
+                    <th>Instância</td>
+                </tr>
+<?php
+        $arrayInstId = array();
+        $arrayInstComp = array();
+        while($instancias =$instEnt->fetch_assoc()) {
+?>
+            <tr>
+                <td><?php echo $instancias['id'];?></td>
+                <td><?php echo $instancias['entity_name'];?></td>
+            </tr>	
+<?php
+            array_push($arrayInstId,$instancias['id']);
+            array_push($arrayInstComp,$instancias['entity_name']); 
+        }
+?>
+        </table>
+<?php
+    }
 }
 ?>
