@@ -145,7 +145,7 @@ class InsereRelacoes
                                                     ?>
                                                     <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidade"</span></p>
                                                  <?php
-                                                }                                   ?>
+                                                }                                  
 ?>                           
                                              </td>
                                            
