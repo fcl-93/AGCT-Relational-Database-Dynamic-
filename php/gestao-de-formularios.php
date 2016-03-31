@@ -282,8 +282,8 @@ class GereForms
 								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
-                                                                <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
-                                                                    <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                                <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                                    <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
                                                                 </td>
 							</tr>
 <?php 				
@@ -439,8 +439,7 @@ class GereForms
 					</td>
                                         
                                         <td><?php echo $read_Props["form_field_order"]; ?></td>
-                                        <!-- // echo $read_Props["form_field_size"]; ?-->
-					<td><?php echo '?'; ?></td>
+					<td><?php echo $read_Props["form_field_size"]; ?></td>
 					<td>
 <?php					
                                         if($read_Props["mandatory"] == 1)
@@ -466,15 +465,15 @@ class GereForms
                                                     <?php
                                                     if ($arrayChecks["mandatory_form"] == 1) {
 ?>
-                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1" checked>Sim
-                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" checked>Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
                                                     </td>
 <?php
                                                     }
                                                     else {
 ?>
-                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
-                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0" checked>Não
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false" checked>Não
                                                     </td>
 <?php
                                                     }
@@ -484,8 +483,8 @@ class GereForms
 ?>
                                                     <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>
                                                     <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
-                                                    <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
-                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                    <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
                                                     </td>
 <?php
                                                 }
