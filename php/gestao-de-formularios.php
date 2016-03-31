@@ -281,6 +281,9 @@ class GereForms
 								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
+                                                                <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                                    <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
+                                                                </td>
 							</tr>
 <?php 				
 							}
@@ -449,27 +452,38 @@ class GereForms
 
 						if($res_Checkd->num_rows == 1)
 						{
-							$arrayChecks = $res_Checkd->fetch_assoc();
-                                                                
+                                                    $arrayChecks = $res_Checkd->fetch_assoc();
+
 ?>
-                                        
-							
-                                        
-							<td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
-							<td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+                                                    <td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
+                                                    <td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+                                                    <?php
+                                                    if ($res_Checkd->fetch_assoc()[mandatory_form] == 1) {
+?>
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" selected>Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
+                                                    </td>
 <?php
+                                                    }
+                                                    else {
+?>
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false" selected>Não
+                                                    </td>
+<?php
+                                                    }
                                                 }
 						else
 						{
 ?>
-                                                        <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>
-                                                        <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
+                                                    <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>
+                                                    <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
+                                                    <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
+                                                    </td>
 <?php
                                                 }
 ?>
-                                            <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
-                                                <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
-                                            </td>
                                             <input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
                             </tr>	
 <?php
