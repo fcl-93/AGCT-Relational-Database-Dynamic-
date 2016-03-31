@@ -349,7 +349,7 @@ class GereForms
 <?php    
                                 return false;
                             }
-                            if (empty($_REQUEST["obrigatorio".$i])) {
+                            if (empty($_REQUEST["obrigatorio".$i]) && isset($_REQUEST["idProp".$i])) {
 ?> 
                                 <p>Deve escolher uma opção para o campo Obrigatório no forumlário costumizado.</p><br>
 <?php 
