@@ -56,6 +56,15 @@ class Search{
      * 
      */
     private function tableChsStt(){
+        if (isset($_REQUEST["ent"])) {
+            $_SESSION["tipo"] = "ent";
+            $_SESSION["id"] = $_SESSION["tipo"] = "ent";
+        }
+        else {
+            $_SESSION["tipo"] = "rel";
+            $_SESSION["id"] = $_SESSION["tipo"] = "rel";
+        }
+        
 ?>
             <html>
                 <form>
@@ -500,7 +509,8 @@ class Search{
     }
     
     private function estadoExecucao() {
-        $idEnt = $_REQUEST['ent']; // vem pelo get é o id da entidade selecionada.
+        $tipo = $_SESSION["tipo"];
+        $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
         $numeroDechecksImpressos = $_SESSION['countPrintedProps'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
@@ -519,7 +529,6 @@ class Search{
             //CheckBoxes não foram selecionadas
             if(empty($_REQUEST['checkET'.$i]) || empty($_REQUEST['checkVT'.$i]) || empty($_REQUEST['checkRL'.$i])) {
                 //significa que não foi selecionado
-                $contaChecksNaoSelecionadas++;
             }
             //checkboxes selecionadas.
             else {
@@ -568,7 +577,7 @@ class Search{
         {
             $querydinamica = "SELECT * FROM entity WHERE ent_type = ".$idEnt;
         }
-        if($erroParametros)
+        if($erro)
         {
             goBack();
         }
