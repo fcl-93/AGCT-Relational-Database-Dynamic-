@@ -1,5 +1,6 @@
 $().ready(function(){
    $("[data-showHidden]").mouseover(function(e){
-	   	alert("oLÉ");
+	   	$var = $(this).find("span");
+	   	alert($var);
     });
 });
