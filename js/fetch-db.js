@@ -1,7 +1,7 @@
 $().ready(function(){
-   $("[data-showHidden]").click(function(e){
-	   	var x = $(this).find("p span").text();
-        $(this).balloon({ position: "top", content: x });
+   $("[data-showHidden]").mouseover(function(e){
+	var x = $(this).find("p span").text();
+        $(this).balloon({ position: "top", content: x }, css:{zIndex: "32767"});
         //alert(x);mouseover
    });
 });
