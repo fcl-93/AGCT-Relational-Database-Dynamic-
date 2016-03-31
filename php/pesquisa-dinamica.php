@@ -674,7 +674,7 @@ class Search{
     }
     
     
-    private function apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp) {
+    private function apresentaResultado ($querydinamica) {
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
 ?>
