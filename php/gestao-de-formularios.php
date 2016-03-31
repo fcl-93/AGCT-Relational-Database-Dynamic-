@@ -383,6 +383,7 @@ class GereForms
                                 <th>Estado</th>
                                 <th>Escolher</th>
                                 <th>Ordem</th>
+                                <th>Obrigatório no forumulário customizado</th>
                             </tr>
                         </thead>
                         <tbody>    
@@ -466,7 +467,10 @@ class GereForms
 <?php
                                                 }
 ?>
-						<input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
+                                            <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
+                                                <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
+                                            </td>
+                                            <input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
                             </tr>	
 <?php
                                 }
