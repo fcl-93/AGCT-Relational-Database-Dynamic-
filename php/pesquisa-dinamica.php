@@ -583,6 +583,7 @@ class Search{
             goBack();
         }
         else {
+            echo "check selected: ".$checkSelected." checksimpressos: ".$numeroDechecksImpressos;
             $this->apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp);
         }
     }
