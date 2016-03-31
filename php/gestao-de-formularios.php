@@ -344,9 +344,15 @@ class GereForms
                             {
 ?> 
                                 <html>
-                                    <p>O campo ordem deve ser numérico e deve introduzir um valor superior a zero</p><br>
+                                    <p>O campo ordem deve ser numérico e deve introduzir um valor superior a zero.</p><br>
                                 </html>
 <?php    
+                                return false;
+                            }
+                            if (empty($_REQUEST["obrigatorio".$i])) {
+?> 
+                                <p>Deve escolher uma opção para o campo Obrigatório no forumlário costumizado.</p><br>
+<?php 
                                 return false;
                             }
                     }
@@ -548,9 +554,9 @@ class GereForms
 			$control = true;
 			for($i = 1; $i <= $_SESSION['propSelected'] ; $i++)
 			{
-				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
+				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i]))
 				{
-					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
 					{
                                             $control = false;
 ?>						
