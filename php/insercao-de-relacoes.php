@@ -131,7 +131,6 @@ class InsereRelacoes
 						$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
 						$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
 ?>
-                                                <div id="wrapper">
 <?php
                                              	while($read_Props = $res_GetVal->fetch_assoc())
                                              	{
@@ -140,12 +139,10 @@ class InsereRelacoes
                                                         <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."<br>"; ?></span></p>										
 <?php
                                              	}
-?>
-                                                </div>                                             
+?>                           
                                              </td>
                                            
                                              <td data-showHidden="true">
-                                             <div id="wrapper">
 <?php   
                                              echo $readRelations['entity2_id'];
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
@@ -158,7 +155,6 @@ class InsereRelacoes
 <?php
                                              }
 ?>                         
-                                                </div>
                                              </td>
 <?php
                                                 if($readRelations['state'] == 'active')
