@@ -541,7 +541,7 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipoValor == "int") {
-                    if validaInt() {
+                    if (validaInt($count, $tipo)) {
                         
                     }
                     else {
@@ -550,7 +550,7 @@ class Search{
                     }
                 }
                 else if ($tipoValor == "double") {
-                    if validaDouble() {
+                    if (validaDouble($count, $tipo)) {
                         
                     }
                     else {
