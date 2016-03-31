@@ -587,7 +587,7 @@ class Search{
         }
         else {
             echo "check selected: ".$checkSelected." checksimpressos: ".$numeroDechecksImpressos;
-            $this->apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp);
+            $this->apresentaResultado ($querydinamica);
         }
     }
     
@@ -684,6 +684,8 @@ class Search{
                     <th>Id</td>
                     <th>Instância</td>
                 </tr>
+            </thead>
+            <tbody>
 <?php
         $arrayInstId = array();
         $arrayInstComp = array();
@@ -698,6 +700,7 @@ class Search{
             array_push($arrayInstComp,$instancias['entity_name']); 
         }
 ?>
+            </tbody>
         </table>
 <?php
     }
