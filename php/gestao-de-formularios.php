@@ -461,7 +461,7 @@ class GereForms
                                                     <?php
                                                     if ($res_Checkd->fetch_assoc()["mandatory_form"] == 1) {
 ?>
-                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" selected>Sim
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" checked>Sim
                                                         <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
                                                     </td>
 <?php
@@ -469,7 +469,7 @@ class GereForms
                                                     else {
 ?>
                                                         <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true">Sim
-                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false" selected>Não
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false" checked>Não
                                                     </td>
 <?php
                                                     }
