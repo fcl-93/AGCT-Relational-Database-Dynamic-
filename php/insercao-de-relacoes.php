@@ -134,7 +134,7 @@ class InsereRelacoes
                                              	{
                                              		$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
 ?>
-                                                        <p hidden="hidden"><span class="hidden"><?php echo $nome." : ".$read_Props['value']; ?></span></p>										
+                                                        <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']; ?></span></p>										
 <?php
                                              	}
 ?>                                           
@@ -150,7 +150,7 @@ class InsereRelacoes
                                              {
                                              	$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
 ?>
-                                                <p hidden="hidden"><span class="hidden"><?php echo $nome." : ".$read_Props['value']; ?></span></p>												
+                                                <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']; ?></span></p>												
 <?php
                                              }
 ?>                         
