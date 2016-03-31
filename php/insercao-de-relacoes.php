@@ -127,7 +127,7 @@ class InsereRelacoes
                                              <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
                                              <td data-showHidden="true">
 <?php 
-                                                $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['$readRelations'])->fetch_assoc();
+                                                $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['entity1_id'])->fetch_assoc();
                                                 if($_readEnt1['entity_name'] != '')
                                                 {
                                                     echo $_readEnt1['entity_name'];
@@ -160,7 +160,7 @@ class InsereRelacoes
                                            
                                              <td data-showHidden="true">
 <?php   
-                                            $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['$readRelations'])->fetch_assoc();
+                                            $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['entity2_id'])->fetch_assoc();
                                             if($_readEnt2['entity_name'] == '')
                                             {
                                                 echo $_readEnt2['entity_name'];
