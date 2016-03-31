@@ -132,13 +132,20 @@ class InsereRelacoes
 						$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
 ?>
 <?php
+                                                $count = 0;
                                              	while($read_Props = $res_GetVal->fetch_assoc())
                                              	{
                                              		$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
 ?>
-                                                        <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."\n"; ?></span></p>										
+                                                        <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."\n"; $count++;?></span></p>										
 <?php
                                              	}
+                                                if($count == 0)
+                                                {
+                                                    ?>
+                                                    <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidade"</span></p>
+                                                 <?php
+                                                }                                   ?>
 ?>                           
                                              </td>
                                            
@@ -147,13 +154,18 @@ class InsereRelacoes
                                              echo $readRelations['entity2_id'];
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
                                              $res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
+                                             $count = 0;
                                              while($read_Props = $res_GetVal->fetch_assoc())
                                              {
                                              	$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
 ?>
-                                                <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."\n"; ?></span></p>												
+                                                <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."\n"; $count++ ?></span></p>												
 <?php
                                              }
+                                             if($count == 0)
+                                             {?>
+                                                 <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidades"</span></p>
+                                             }<?php
 ?>                         
                                              </td>
 <?php
