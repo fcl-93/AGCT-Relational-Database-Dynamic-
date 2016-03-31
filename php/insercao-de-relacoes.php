@@ -144,7 +144,31 @@ class InsereRelacoes
                                              
                                              </td>
                                              
-                                             <td><?php echo $readRelations['entity2_id'];?></td>
+                                             <td>
+<?php 
+                                             echo $readRelations['entity2_id'];
+                                             $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
+                                             $res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
+                                             while($read_Props = $res_GetVal->fetch_assoc())
+                                             {
+                                             	$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
+?>
+												<p><?php echo $nome." : ".$read_Props['value']; ?></p>												
+<?php
+                                             }
+?>                         
+                                             
+                                             
+                                             
+                                             
+                                             ?>
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             </td>
 <?php
                                                 if($readRelations['state'] == 'active')
                                                 {
