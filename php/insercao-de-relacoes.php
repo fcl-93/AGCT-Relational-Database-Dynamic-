@@ -127,7 +127,16 @@ class InsereRelacoes
                                              <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
                                              <td data-showHidden="true">
 <?php 
-                                                echo $readRelations['entity1_id'];
+                                                $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['$readRelations'])->fetch_assoc();
+                                                if($_readEnt1['entity_name'] != '')
+                                                {
+                                                    echo $_readEnt1['entity_name'];
+                                                }
+                                                else
+                                                {
+                                                    echo $readRelations['entity1_id'];
+                                                }
+                                                
 						$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
 						$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
 ?>
@@ -151,7 +160,16 @@ class InsereRelacoes
                                            
                                              <td data-showHidden="true">
 <?php   
-                                             echo $readRelations['entity2_id'];
+                                            $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$$readRelations['$readRelations'])->fetch_assoc();
+                                            if($_readEnt2['entity_name'] == '')
+                                            {
+                                                echo $_readEnt2['entity_name'];
+                                            }
+                                            else
+                                            {
+                                                echo $readRelations['entity2_id'];
+                                            }
+                                             
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
                                              $res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
                                              $count = 0;
