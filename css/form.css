@@ -11,3 +11,8 @@ and open the template in the editor.
 .mandatory {
     color: red;
 }
+
+//CSS style para inserção de relações 
+.hidden{
+	display: none;
+}
