@@ -3,6 +3,5 @@ $().ready(function(){
 	var x = $(this).find("span").text();
         x = x.replace(/\n/g, '<br>');
         $(this).balloon({ position: "null",  contents: x});
-        //alert(x);mouseover
    });
 });
