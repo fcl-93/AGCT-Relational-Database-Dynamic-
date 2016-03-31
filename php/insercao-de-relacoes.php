@@ -161,7 +161,7 @@ class InsereRelacoes
                                              <td data-showHidden="true">
 <?php   
                                             $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity2_id'])->fetch_assoc();
-                                            if($_readEnt2['entity_name'] == '')
+                                            if($_readEnt2['entity_name'] != '')
                                             {
                                                 echo $_readEnt2['entity_name'];
                                             }
