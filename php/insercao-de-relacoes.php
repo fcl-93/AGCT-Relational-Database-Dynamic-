@@ -143,7 +143,7 @@ class InsereRelacoes
                                                 if($count == 0)
                                                 {
                                                     ?>
-                                                    <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidade"</span></p>
+                                                    <p hidden="hidden"><span>Não existem valores de propriedades para esta entidade</span></p>
                                                  <?php
                                                 }                                  
 ?>                           
@@ -165,7 +165,7 @@ class InsereRelacoes
                                              if($count == 0)
                                              {
 ?>
-                                                 <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidades"</span></p>
+                                                 <p hidden="hidden"><span>Não existem valores de propriedades para esta entidades</span></p>
 <?php                                       }
 ?>                         
                                              </td>
