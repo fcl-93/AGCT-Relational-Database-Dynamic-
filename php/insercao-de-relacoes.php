@@ -125,7 +125,7 @@ class InsereRelacoes
                                         <tr>
                                              <td><?php echo $readRelations['id'];?></td>
                                              <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
-                                             <td>
+                                             <td data-showHidden="true">
 <?php 
 												echo $readRelations['entity1_id'];
 												$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
@@ -141,7 +141,7 @@ class InsereRelacoes
                                              
                                              </td>
                                              
-                                             <td>
+                                             <td data-showHidden="true">
 <?php 
                                              echo $readRelations['entity2_id'];
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);

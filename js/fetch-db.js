@@ -1,5 +1,5 @@
 $().ready(function(){
-   $(".hidden").mouseover(function(e){
+   $("[data-showHidden]").mouseover(function(e){
 	   	alert("oLÉ");
     });
 });
