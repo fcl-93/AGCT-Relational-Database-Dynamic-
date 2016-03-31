@@ -518,6 +518,7 @@ class Search{
         $guardanomePropSelec = array();
         $guardaValorDaProp = array();
         $guardaidDosSelecionados = array();
+        $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
             if(isset($_REQUEST['checkET'.$i]) || isset($_REQUEST['checkVT'.$i]) || isset($_REQUEST['checkRL'.$i])) {
                 //significa que foi selecionada
@@ -582,7 +583,8 @@ class Search{
             goBack();
         }
         else {
-            apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp);
+            echo "check selected: ".$checkSelected." checksimpressos: ".$numeroDechecksImpressos;
+            $this->apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp);
         }
     }
     
