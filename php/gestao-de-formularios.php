@@ -449,9 +449,6 @@ class GereForms
 					<td><?php echo $read_Props["state"]; ?></td>
 <?php
 						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_prop AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['form_id']." AND cfhp.property_id = ".$read_Props["id"]);
-                                                $res = $res_Checkd->fetch_assoc();
-                                                print_r($res);
-
 						if($res_Checkd->num_rows == 1)
 						{
                                                     $arrayChecks = $res_Checkd->fetch_assoc();
@@ -460,7 +457,7 @@ class GereForms
                                                     <td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
                                                     <td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
                                                     <?php
-                                                    if ($res["mandatory_form"] == 1) {
+                                                    if ($arrayChecks["mandatory_form"] == 1) {
 ?>
                                                         <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" checked>Sim
                                                         <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
