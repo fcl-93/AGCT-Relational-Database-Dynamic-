@@ -439,8 +439,7 @@ class GereForms
 					</td>
                                         
                                         <td><?php echo $read_Props["form_field_order"]; ?></td>
-                                        <!-- // echo $read_Props["form_field_size"]; ?-->
-					<td><?php echo '?'; ?></td>
+					<td><?php echo $read_Props["form_field_size"]; ?></td>
 					<td>
 <?php					
                                         if($read_Props["mandatory"] == 1)
