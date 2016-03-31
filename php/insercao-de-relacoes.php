@@ -163,9 +163,10 @@ class InsereRelacoes
 <?php
                                              }
                                              if($count == 0)
-                                             {?>
+                                             {
+?>
                                                  <p hidden="hidden"><span>"Não existem valores de propriedades para esta entidades"</span></p>
-                                             }<?php
+<?php                                       }
 ?>                         
                                              </td>
 <?php
@@ -201,7 +202,7 @@ class InsereRelacoes
 <?php
         }
         
-                                                }
+        
 	
         /**
 	 * This will make you edit values for the selected relation or add the value 
