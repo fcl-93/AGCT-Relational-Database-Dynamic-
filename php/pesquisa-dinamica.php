@@ -26,6 +26,7 @@ class Search{
                    $this->tableChsStt();
                 }
                 else if($_REQUEST['estado'] == 'execucao'){
+                    $this->estadoExecucao();
                 }                
                 
                 
