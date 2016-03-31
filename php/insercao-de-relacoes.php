@@ -130,6 +130,9 @@ class InsereRelacoes
                                                 echo $readRelations['entity1_id'];
 						$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
 						$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
+?>
+                                                <div id="wrapper">
+<?php
                                              	while($read_Props = $res_GetVal->fetch_assoc())
                                              	{
                                              		$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
@@ -137,12 +140,13 @@ class InsereRelacoes
                                                         <p hidden="hidden"><span><?php echo $nome." : ".$read_Props['value']."<br>"; ?></span></p>										
 <?php
                                              	}
-?>                                           
-                                             
+?>
+                                                </div>                                             
                                              </td>
-                                             
+                                           
                                              <td data-showHidden="true">
-<?php 
+                                             <div id="wrapper">
+<?php   
                                              echo $readRelations['entity2_id'];
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
                                              $res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
@@ -154,6 +158,7 @@ class InsereRelacoes
 <?php
                                              }
 ?>                         
+                                                </div>
                                              </td>
 <?php
                                                 if($readRelations['state'] == 'active')
