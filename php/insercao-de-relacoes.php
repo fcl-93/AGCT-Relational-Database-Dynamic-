@@ -125,7 +125,7 @@ class InsereRelacoes
                                         <tr>
                                              <td><?php echo $readRelations['id'];?></td>
                                              <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
-                                             <td data-showHidden="true" title="Atributos">
+                                             <td data-showHidden="true">
 <?php 
 												echo $readRelations['entity1_id'];
 												$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
@@ -134,32 +134,27 @@ class InsereRelacoes
                                              	{
                                              		$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
 ?>
-							<p hidden="hidden"><span class="hidden"><?php echo $nome." : ".$read_Props['value']; ?></span></p>										
+													<p hidden="hidden"><span class="hidden"><?php echo $nome." : ".$read_Props['value']; ?></span></p>										
 <?php
                                              	}
 ?>                                           
                                              
                                              </td>
                                              
-                                             <td data-showHidden="true" title="
-<?php
+                                             <td data-showHidden="true">
+<?php 
+                                             echo $readRelations['entity2_id'];
                                              $sanitizeId = $this->bd->userInputVal($readRelations['entity2_id']);
                                              $res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
                                              while($read_Props = $res_GetVal->fetch_assoc())
                                              {
-
-
                                              	$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
-  ?>                                              
-						<p><?php echo $nome." : ".$read_Props['value']; ?></p>	
-                                                </br>
-<?php
-                                            }
 ?>
-                                             ">
+                                                <p hidden="hidden"><span class="hidden"><?php echo $nome." : ".$read_Props['value']; ?></span></p>												
 <?php
-                                             echo $readRelations['entity2_id'];
- ?>                                            </td>
+                                             }
+?>                         
+                                             </td>
 <?php
                                                 if($readRelations['state'] == 'active')
                                                 {
