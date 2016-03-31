@@ -276,6 +276,7 @@ class RelationManage
         <form id="insertRelation" method="POST">
             <label>Entidade 1</label><br>
             <select id="ent1" name="ent1">
+                <option></option>
 <?php
                 $this->getEntities();
 ?>
@@ -283,6 +284,7 @@ class RelationManage
             <label class="error" for="ent1"></label><br>
             <label>Entidade 2</label><br>
             <select id="ent2" name="ent2">
+                <option></option>
 <?php
                 $this->getEntities();
 ?>                
@@ -305,6 +307,7 @@ class RelationManage
         <form id="insertRelation" method="POST">
             <label>Entidade 1</label><br>
             <select id="ent1" name="ent1">
+                <option></option>
 <?php
                 $this->getEntitiesEdit($relEdit["ent_type1_id"]);
 ?>
@@ -312,6 +315,7 @@ class RelationManage
             <label class="error" for="ent1"></label><br>
             <label>Entidade 2</label><br>
             <select id="ent2" name="ent2">
+                <option></option>
 <?php
                 $this->getEntitiesEdit($relEdit["ent_type2_id"]);
 ?>                
