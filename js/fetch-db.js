@@ -1,6 +1,6 @@
 $().ready(function(){
    $("[data-showHidden]").mouseover(function(e){
 	   	$var = $(this).find("p span").text();
-        $(this).balloon();
+        $(this).balloon({ contents: $var});
     });
 });
