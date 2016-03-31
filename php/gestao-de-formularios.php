@@ -459,7 +459,7 @@ class GereForms
                                                     <td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
                                                     <td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
                                                     <?php
-                                                    if ($res_Checkd->fetch_assoc()[mandatory_form] == 1) {
+                                                    if ($res_Checkd->fetch_assoc()["mandatory_form"] == 1) {
 ?>
                                                         <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="true" selected>Sim
                                                         <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="false">Não
