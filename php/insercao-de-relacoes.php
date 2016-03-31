@@ -200,6 +200,8 @@ class InsereRelacoes
                         </html>
 <?php
         }
+        
+                                                }
 	
         /**
 	 * This will make you edit values for the selected relation or add the value 
