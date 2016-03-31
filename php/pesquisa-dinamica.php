@@ -536,7 +536,7 @@ class Search{
                 }
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
                 $queryNomeValProp = $this->bd->runQuery($querynomeProp);
-                $queryNomeValProp =$querynomeProp->fetch_assoc()
+                $queryNomeValProp =$querynomeProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
                 
