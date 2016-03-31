@@ -512,6 +512,7 @@ class Search{
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
+        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount'];
         $numeroDechecksImpressos = $_SESSION['countPrintedProps'] + $_SESSION['relPropCount'] + $_SESSION['vtPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
@@ -577,7 +578,7 @@ class Search{
         }
         if($checkSelected == 0)
         {
-            $querydinamica = "SELECT * FROM entity WHERE ent_type = ".$idEnt;
+            $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         if($erro)
         {
