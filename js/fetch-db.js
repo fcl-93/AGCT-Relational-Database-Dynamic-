@@ -1,5 +1,5 @@
 $().ready(function(){
-   $("[hidden]").mouseover(function(e){
+   $("hidden").mouseover(function(e){
 	   	alert();
     });
 });
