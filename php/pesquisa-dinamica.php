@@ -531,7 +531,7 @@ class Search{
                 //significa que foi selecionada
                 $checkSelectedVT++;
             }
-            else {
+            else if(isset($_REQUEST['checkRL'.$i])){
                 //significa que foi selecionada
                 $checkSelectedRL++;
             }
