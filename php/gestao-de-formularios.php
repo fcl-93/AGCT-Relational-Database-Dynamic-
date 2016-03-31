@@ -191,19 +191,20 @@ class GereForms
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Entidade</th>
-							<th>Id</th>
-							<th>Propriedade</th>
-							<th>Tipo de valor</th>
-							<th>Nome do campo no formulário</th>
-							<th>Tipo do campo no formulário</th>
-							<th>Tipo de unidade</th>
-							<th>Ordem do campo no formulário</th>
-							<th>Tamanho do campo no formulário</th>
-							<th>Obrigatório</th>
-							<th>Estado</th>
-							<th>Escolher</th>
-							<th>Ordem</th>
+                                                    <th>Entidade</th>
+                                                    <th>Id</th>
+                                                    <th>Propriedade</th>
+                                                    <th>Tipo de valor</th>
+                                                    <th>Nome do campo no formulário</th>
+                                                    <th>Tipo do campo no formulário</th>
+                                                    <th>Tipo de unidade</th>
+                                                    <th>Ordem do campo no formulário</th>
+                                                    <th>Tamanho do campo no formulário</th>
+                                                    <th>Obrigatório</th>
+                                                    <th>Estado</th>
+                                                    <th>Escolher</th>
+                                                    <th>Ordem</th>
+                                                    <th>Obrigatório no forumulário customizado</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -281,6 +282,9 @@ class GereForms
 								<td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $readGetProps['id'];?>"></td>
 								
 								<td><input type="text" name="ordem<?php echo $this->numProp; ?>"></td>
+                                                                <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
+                                                                    <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                                </td>
 							</tr>
 <?php 				
 							}
@@ -340,9 +344,15 @@ class GereForms
                             {
 ?> 
                                 <html>
-                                    <p>O campo ordem deve ser numérico e deve introduzir um valor superior a zero</p><br>
+                                    <p>O campo ordem deve ser numérico e deve introduzir um valor superior a zero.</p><br>
                                 </html>
 <?php    
+                                return false;
+                            }
+                            if (empty($_REQUEST["obrigatorio".$i])) {
+?> 
+                                <p>Deve escolher uma opção para o campo Obrigatório no forumlário costumizado.</p><br>
+<?php 
                                 return false;
                             }
                     }
@@ -383,6 +393,7 @@ class GereForms
                                 <th>Estado</th>
                                 <th>Escolher</th>
                                 <th>Ordem</th>
+                                <th>Obrigatório no forumulário customizado</th>
                             </tr>
                         </thead>
                         <tbody>    
@@ -444,29 +455,41 @@ class GereForms
 					<td><?php echo $read_Props["state"]; ?></td>
 <?php
 						$res_Checkd = $this->bd->runQuery("SELECT * FROM custom_form_has_prop AS cfhp WHERE cfhp.custom_form_id = ".$_REQUEST['form_id']." AND cfhp.property_id = ".$read_Props["id"]);
-
-
 						if($res_Checkd->num_rows == 1)
 						{
-							$arrayChecks = $res_Checkd->fetch_assoc();
-                                                                
+                                                    $arrayChecks = $res_Checkd->fetch_assoc();
+
 ?>
-                                        
-							
-                                        
-							<td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
-							<td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+                                                    <td><input type="checkbox" name="idProp<?php echo $this->numProp; ?>" value="<?php echo $read_Props["id"]; ?>" checked></td>
+                                                    <td><input type="text" name="ordem<?php echo $this->numProp; ?>" value="<?php echo $arrayChecks["field_order"]?>"></td>
+                                                    <?php
+                                                    if ($arrayChecks["mandatory_form"] == 1) {
+?>
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1" checked>Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                    </td>
 <?php
+                                                    }
+                                                    else {
+?>
+                                                        <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0" checked>Não
+                                                    </td>
+<?php
+                                                    }
                                                 }
 						else
 						{
 ?>
-                                                        <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>
-                                                        <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
+                                                    <td><input type="checkbox" name="idProp<?php echo $this->numProp;?>" value="<?php echo $read_Props["id"];?>"></td>
+                                                    <td><input type="text" name="ordem<?php echo $this->numProp ?>"></td>
+                                                    <td><input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="1">Sim
+                                                        <input type="radio" name="obrigatorio<?php echo $this->numProp;?>" value="0">Não
+                                                    </td>
 <?php
                                                 }
 ?>
-						<input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
+                                            <input type="hidden" name="id" value="<?php echo $_REQUEST['form_id']; ?>">
                             </tr>	
 <?php
                                 }
@@ -531,9 +554,9 @@ class GereForms
 			$control = true;
 			for($i = 1; $i <= $_SESSION['propSelected'] ; $i++)
 			{
-				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]))
+				if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i]))
 				{
-					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
+					if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$getLastId.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
 					{
                                             $control = false;
 ?>						
@@ -594,11 +617,11 @@ class GereForms
                     {
                         for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                             {
-                                    if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i])) 
+                                    if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i])) 
                                     {
                                             
                                             
-                                            if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."')"))
+                                            if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
                                             {
                                                    //erro a fazer update ao form
                                                  $control = false;
