@@ -58,11 +58,11 @@ class Search{
     private function tableChsStt(){
         if (isset($_REQUEST["ent"])) {
             $_SESSION["tipo"] = "ent";
-            $_SESSION["id"] = $_SESSION["tipo"] = "ent";
+            $_SESSION["id"] = $_REQUEST["ent"];
         }
         else {
             $_SESSION["tipo"] = "rel";
-            $_SESSION["id"] = $_SESSION["tipo"] = "rel";
+            $_SESSION["id"] = $_REQUEST["rel"];
         }
         
 ?>
@@ -229,7 +229,7 @@ class Search{
             $count = 0;
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
-                $count++;
+                
 ?>              
                 <h5>Tipo de Entidade: <?php echo $read_EntRef['name']; ?></h5>
                 <table class="table">
@@ -247,6 +247,7 @@ class Search{
                         while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
                             if($read_PropRelEnt['value_type'] != 'ent_ref')
                             {
+                                $count++;
 ?>
                         <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
