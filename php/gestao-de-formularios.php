@@ -191,19 +191,20 @@ class GereForms
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Entidade</th>
-							<th>Id</th>
-							<th>Propriedade</th>
-							<th>Tipo de valor</th>
-							<th>Nome do campo no formulário</th>
-							<th>Tipo do campo no formulário</th>
-							<th>Tipo de unidade</th>
-							<th>Ordem do campo no formulário</th>
-							<th>Tamanho do campo no formulário</th>
-							<th>Obrigatório</th>
-							<th>Estado</th>
-							<th>Escolher</th>
-							<th>Ordem</th>
+                                                    <th>Entidade</th>
+                                                    <th>Id</th>
+                                                    <th>Propriedade</th>
+                                                    <th>Tipo de valor</th>
+                                                    <th>Nome do campo no formulário</th>
+                                                    <th>Tipo do campo no formulário</th>
+                                                    <th>Tipo de unidade</th>
+                                                    <th>Ordem do campo no formulário</th>
+                                                    <th>Tamanho do campo no formulário</th>
+                                                    <th>Obrigatório</th>
+                                                    <th>Estado</th>
+                                                    <th>Escolher</th>
+                                                    <th>Ordem</th>
+                                                    <th>Obrigatório no forumulário customizado</th>
 						</tr>
 					</thead>
 					<tbody>
