@@ -523,7 +523,7 @@ class Search{
         $guardaidDosSelecionados = array();
         $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
-            if(isset($_REQUEST['checkET'.$i)) {
+            if(isset($_REQUEST['checkET'.$i])) {
                 //significa que foi selecionada
                 $checkSelectedET++;
             }
