@@ -341,24 +341,30 @@ class PropertyManage
                         $array =$this->db->getEnumValues($table, $field);
                         foreach($array as $values)
                         {
-                            echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'">'.$values.'<br>';
+?>
+                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
                         }
-                        ?>
+?>
                 <label class="error" for="tipoValor"></label>
                 <br>
                         <?php
                             if ($tipo === "entity")
                             {
-                                echo'
+?>
                                 <label>Entidade a que irá pertencer esta propriedade</label><br>
-                                <select id="entidadePertence" name="entidadePertence">';
+                                <select id="entidadePertence" name="entidadePertence">
+                                    <option></option>
+<?php
                                 $selecionaEntRel = "SELECT name, id FROM ent_type";
                             }
                             else
                             {
-                                echo'
+?>
                                 <label>Relação a que irá pertencer esta propriedade</label><br>
-                                <select id="relacaoPertence" name="relacaoPertence">';
+                                <select id="relacaoPertence" name="relacaoPertence">
+                                    <option></option>
+<?php
                                 $selecionaEntRel = "SELECT id FROM rel_type";
                             }
                             $result = $this->db->runQuery($selecionaEntRel);
@@ -370,10 +376,12 @@ class PropertyManage
                                     $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
                                     $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
                                 }
-                                echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
+                                ?>
+                                <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
+<?php
                             }
-                            echo '</select><br><br>';
-                        ?>
+?>
+                            </select><br><br>
                 <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
@@ -382,9 +390,11 @@ class PropertyManage
                             $array = $this->db->getEnumValues($table, $field);
                             foreach($array as $values)
                             {
-                                echo' <input id="tipoCampo" type="radio" name="tipoCampo" value="'.$values.'">'.$values.'<br>';
+?>
+                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
                             }
-                        ?>
+?>
                 <label class="error" for="tipoCampo"></label>
                 <br>
                 <label>Tipo de unidade</label><br>
@@ -395,7 +405,9 @@ class PropertyManage
                             $result = $this->db->runQuery($selecionaTipoUnidade);
                             while($guardaTipoUnidade = $result->fetch_assoc())
                             {
-                                echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+?>
+                                <option value="<?php echo $guardaTipoUnidade["id"];?>"><?php echo $guardaTipoUnidade["name"]?></option>
+<?php
                             }
                         ?>
                 </select><br><br>
@@ -411,21 +423,27 @@ class PropertyManage
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="2">Não
                 <br>
                 <label class="error" for="obrigatorio"></label><br>
-                        <?php
+<?php
                             if ($tipo ==="entity")
                             {
-                                echo '<label>Entidade referenciada por esta propriedade</label><br>
+?>
+                                <label>Entidade referenciada por esta propriedade</label><br>
                                 <select id="entidadeReferenciada" name="entidadeReferenciada">
-                                <option value="NULL"></option>';
+                                <option value="NULL"></option>
+<?php
                                 $selecionaEntidades= "SELECT id, name FROM ent_type";
                                 $result = $this->db->runQuery($selecionaEntidades);
                                 while($guardaEntidade = $result->fetch_assoc())
                                 {
-                                    echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
+?>
+                                    <option value="<?php echo $guardaEntidade["id"];?>"><?php echo $guardaEntidade["name"];?></option>
+<?php
                                 }
-                                echo '</select><br><br>';
+?>
+                                </select><br><br>
+<?php
                             }
-                        ?>
+?>
                 <label class="error" for="entidadeReferenciada"></label>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
@@ -453,7 +471,9 @@ class PropertyManage
      */
     private function estadoInserir()
     {
-        echo '<h3>Gestão de propriedades - inserção</h3>';
+?>
+        <h3>Gestão de propriedades - inserção</h3>
+<?php
         if(!empty($_REQUEST["entidadePertence"]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
@@ -562,61 +582,69 @@ class PropertyManage
     {
         if (empty($_REQUEST["nome"]))
         {
-            echo "Por favor introduza o nome da propriedade.";
+?>
+            <p>Por favor introduza o nome da propriedade.</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
         }
         if (empty($_REQUEST["tipoValor"]))
         {
-            echo "Por favor selecione um tipo de valor para a sua entidade.";
+?>
+            <p>Por favor selecione um tipo de valor para a sua entidade.</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
         }
         if (empty($_REQUEST["tipoCampo"]))
         {
-            echo "Por favor selecione um tipo do campo do formulário.";
+?>
+            <p>Por favor selecione um tipo do campo do formulário.</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
         }
         if (empty($_REQUEST["obrigatorio"]))
         {
-            echo "Por favor indique se esta propriedade deve ou não ser obrigatória.";
-            goBack();
-            echo '<br>';
+?>
+            <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
+<?php
+            goBack();;
             return false;
         }
         if(!is_numeric($_REQUEST["ordem"]) || empty($_REQUEST["ordem"]))
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!<br>';
+?>
+            <p>ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
 	}
 	else if($_REQUEST["ordem"] < 1)
 	{
-            echo 'ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!<br>';
+?>
+            <p>ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
 	}
 	if(($_REQUEST["tipoCampo"] === "text") && (!is_numeric($_REQUEST["tamanho"]) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
-                uma vez que indicou que o Tipo do campo do formulário era text<br>';
+?>
+            <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
+                uma vez que indicou que o Tipo do campo do formulário era text</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
 	}
         // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
 	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
 	{
-            echo 'ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
-                aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto<br>';
+?>
+            <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+                aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto</p><br>
+<?php
             goBack();
-            echo '<br>';
             return false;
         }
 	return true;
@@ -717,11 +745,15 @@ class PropertyManage
                     {
                         if ($values === $value_type)
                         {
-                            echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'" checked="checked">'.$values.'<br>';
+?>
+                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
+<?php
                         }
                         else
                         {
-                            echo' <input id="tipoValor" type="radio" name="tipoValor" value="'.$values.'">'.$values.'<br>';
+?>
+                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
                         }
                         
                     }
@@ -731,16 +763,20 @@ class PropertyManage
                     <?php
                         if ($tipo === "entity")
                         {
-                            echo'
+?>
                             <label>Entidade a que irá pertencer esta propriedade</label><br>
-                            <select id="entidadePertence" name="entidadePertence">';
+                            <select id="entidadePertence" name="entidadePertence">
+                                <option></option>
+<?php
                             $selecionaEntRel = "SELECT name, id FROM ent_type";
                         }
                         else
                         {
-                            echo'
+?>
                             <label>Relação a que irá pertencer esta propriedade</label><br>
-                            <select id="relacaoPertence" name="relacaoPertence">';
+                            <select id="relacaoPertence" name="relacaoPertence">
+                                <option></option>
+<?php
                             $selecionaEntRel = "SELECT id FROM rel_type";
                         }
                         $result = $this->db->runQuery($selecionaEntRel);
@@ -754,15 +790,19 @@ class PropertyManage
                             }
                             if($guardaEntRel["name"] === $nomeRelEnt)
                             {
-                                echo '<option value="'.$guardaEntRel["id"].'" selected>'.$guardaEntRel["name"].'</option>';
+?>
+                                <option value="<?php echo $guardaEntRel["id"];?>" selected><?php echo $guardaEntRel["name"];?></option>
+<?php
                             }
                             else
                             {
-                                echo '<option value="'.$guardaEntRel["id"].'">'.$guardaEntRel["name"].'</option>';
+?>
+                                <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
+<?php
                             }
                         }
-                        echo '</select><br><br>';
-                    ?>
+?>
+                        </select><br><br>
             <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
             <label>Tipo do campo do formulário</label><br>
                     <?php
@@ -773,14 +813,18 @@ class PropertyManage
                         {
                             if ($values === $form_field_type)
                             {
-                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'" checked="checked">'.$values.'<br>';
+?>
+                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
+<?php
                             }
                             else
                             {
-                                echo' <input id="formType" type="radio" name="tipoCampo" value="'.$values.'">'.$values.'<br>';
+?>
+                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
                             }
                         }
-                    ?>
+?>
             <label class="error" for="tipoCampo"></label>
             <br>
             <label>Tipo de unidade</label><br>
@@ -793,11 +837,15 @@ class PropertyManage
                         {
                             if ($guardaTipoUnidade["id"] === $unit_type_id)
                             {
-                                echo '<option value="'.$unit_type_id["id"].'" selected>'.$unit.'</option>';
+?>
+                                <option value="<?php echo $unit_type_id["id"];?>" selected><?php echo $unit;?></option>
+<?php
                             }
                             else 
                             {
-                                echo '<option value="'.$guardaTipoUnidade["id"].'">'.$guardaTipoUnidade["name"].'</option>';
+?>
+                                <option value="<?php echo $guardaTipoUnidade["id"]?>"><?php echo $guardaTipoUnidade["name"];?></option>
+<?php
                             }
                             
                         }
@@ -834,24 +882,32 @@ class PropertyManage
                 }
             if ($tipo ==="entity")
             {
-                echo '<label>Entidade referenciada por esta propriedade</label><br>
+?>
+                <label>Entidade referenciada por esta propriedade</label><br>
                 <select id="entidadeReferenciada" name="entidadeReferenciada">
-                <option value="NULL"></option>';
+                <option value="NULL"></option>
+<?php                 
                 $selecionaEntidades= "SELECT id, name FROM ent_type";
                 $result = $this->db->runQuery($selecionaEntidades);
                 while($guardaEntidade = $result->fetch_assoc())
                 {
                     if ($guardaEntidade["id"] === $fk_ent_type_id)
                     {
-                        echo '<option value="'.$guardaEntidade["id"].'" selected>'.$guardaEntidade["name"].'</option>';
+?>
+                        <option value="<?php echo $guardaEntidade["id"];?>" selected><?php echo $guardaEntidade["name"];?></option>
+<?php
                     }
                     else
                     {
-                        echo '<option value="'.$guardaEntidade["id"].'">'.$guardaEntidade["name"].'</option>';
+?>
+                        <option value="<?php echo $guardaEntidade["id"];?>"><?php echo $guardaEntidade["name"];?></option>
+<?php
                     }
                     
                 }
-                echo '</select><br>';
+?>
+                </select><br>
+<?php
             }
         ?>
             <label class="error" for="entidadeReferenciada"></label><br>
@@ -918,13 +974,17 @@ class PropertyManage
 	$update = $this->db->runQuery($queryUpdate);
         if (!$update)
         {
-            echo 'Ocorreu um erro.';
+?>
+            <p>Ocorreu um erro.</p>
+<?php
             goBack();
         }
         else
         {
-            echo 'Atualizou os dados de nova propriedade com sucesso.';
-            echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+?>
+            <p>Atualizou os dados de nova propriedade com sucesso.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
         }
     }
 }

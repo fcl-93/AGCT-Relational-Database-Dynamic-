@@ -249,6 +249,7 @@ class InsertValues{
                     {
 ?>
                         <select name="<?php echo $arrayProp["form_field_name"];?>">
+                            <option></option>
 <?php
                     }
                     while ($allowVal = $relSelVal->fetch_assoc())
@@ -285,6 +286,7 @@ class InsertValues{
                 case "ent_ref":
  ?>
                     <select name="<?php echo $arrayProp['form_field_name'];?>">
+                        <option></option>
 <?php
                     if ($tipo === "form") {
                         $idEntidades = $this->idEntRel($_SESSION[$tipo."_id"])[0];
