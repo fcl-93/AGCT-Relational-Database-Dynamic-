@@ -58,11 +58,11 @@ class Search{
     private function tableChsStt(){
         if (isset($_REQUEST["ent"])) {
             $_SESSION["tipo"] = "ent";
-            $_SESSION["id"] = $_SESSION["tipo"] = "ent";
+            $_SESSION["id"] = $_REQUEST["ent"];
         }
         else {
             $_SESSION["tipo"] = "rel";
-            $_SESSION["id"] = $_SESSION["tipo"] = "rel";
+            $_SESSION["id"] = $_REQUEST["rel"];
         }
         
 ?>
@@ -229,7 +229,7 @@ class Search{
             $count = 0;
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
-                $count++;
+                
 ?>              
                 <h5>Tipo de Entidade: <?php echo $read_EntRef['name']; ?></h5>
                 <table class="table">
@@ -247,6 +247,7 @@ class Search{
                         while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
                             if($read_PropRelEnt['value_type'] != 'ent_ref')
                             {
+                                $count++;
 ?>
                         <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
@@ -319,7 +320,8 @@ class Search{
                                     </td>
                         </tr>
 <?php                       
-                            }
+                        }
+                        $_SESSION['vtPropCount'] = $count;
                     }
 ?>
                     </tbody>
@@ -511,7 +513,8 @@ class Search{
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
-        $numeroDechecksImpressos = $_SESSION['countPrintedProps'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
+        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount'];
+        $numeroDechecksImpressos = $_SESSION['countPrintedProps'] + $_SESSION['relPropCount'] + $_SESSION['vtPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
         $i = 0;
@@ -574,9 +577,9 @@ class Search{
                 }
             }
         }
-        if($checkSelected == $numeroDechecksImpressos)
+        if($checkSelected == 0)
         {
-            $querydinamica = "SELECT * FROM entity WHERE ent_type = ".$idEnt;
+            $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         if($erro)
         {
