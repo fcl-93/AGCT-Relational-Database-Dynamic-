@@ -12,7 +12,7 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
          <!--  <script type="text/javascript" src="<?php //echo get_bloginfo('wpurl');?>/custom/js/paging.js"></script>-->   
            
             <script src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.balloon.min.js">
-            </script> <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/fetch-db.js"></script>
+            </script> <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/showBallon.js"></script>
 <?php
         if ($VAL_CLIENT_SIDE)
         {
