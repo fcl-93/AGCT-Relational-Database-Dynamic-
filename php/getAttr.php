@@ -14,7 +14,7 @@ class FetchData{
 	
 	public function getData(){
             //Decode Json
-            echo get_site_url();
+            echo $_SERVER['PHP_SELF'];
             $json = file_get_contents(get_site_url());
             $obj = json_decode($json,TRUE);
             echo $obj['data']['id'];
