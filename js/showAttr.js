@@ -6,10 +6,11 @@ $().ready(function(){
  
         // The URL for the request
         url: url
-}).done(function( response ) {
-   var print =  $("#results").html(response);
-   alert(print);
-    });
+}).done(function( html ) {
+        $(html).ready(function(){
+            var prhases = $("#results").text();
+            alert(phrases);
+        });
 });
 
 });
