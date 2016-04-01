@@ -517,6 +517,9 @@ class Search{
         $numeroDechecksImpressos = $_SESSION['countPrintedProps'] + $_SESSION['relPropCount'] + $_SESSION['vtPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
+        $checkSelectedET = 0;
+        $checkSelectedVT = 0;
+        $checkSelectedRL = 0;
         $i = 0;
         $guardanomePropSelec = array();
         $guardaValorDaProp = array();
@@ -526,20 +529,23 @@ class Search{
             if(isset($_REQUEST['checkET'.$i])) {
                 //significa que foi selecionada
                 $checkSelectedET++;
+                $checkSelected++;
             }
             else if(isset($_REQUEST['checkVT'.$i])) {
                 //significa que foi selecionada
                 $checkSelectedVT++;
+                $checkSelected++;
             }
             else if(isset($_REQUEST['checkRL'.$i])){
                 //significa que foi selecionada
                 $checkSelectedRL++;
+                $checkSelected++;
             }
             $i++;
         }
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             //CheckBoxes não foram selecionadas
-            if(empty($_REQUEST['checkET'.$i]) || empty($_REQUEST['checkVT'.$i]) || empty($_REQUEST['checkRL'.$i])) {
+            if(empty($_REQUEST['checkET'.$i]) && empty($_REQUEST['checkVT'.$i]) && empty($_REQUEST['checkRL'.$i])) {
                 //significa que não foi selecionado
             }
             //checkboxes selecionadas.
@@ -557,31 +563,35 @@ class Search{
                     $tipo = "RL";
                 }
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
-                $queryNomeValProp = $this->bd->runQuery($querynomeProp);
-                $queryNomeValProp =$querynomeProp->fetch_assoc();
+                $queryNomeValProp = $this->bd->runQuery($queryNomeValProp);
+                $queryNomeValProp = $queryNomeValProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipoValor == "int") {
-                    if (validaInt($count, $tipo)) {
-                        
-                    }
-                    else {
+                    if (validaInt($count, $tipo) === false) {
                         $erro = true;
                         break;
+                    }
+                    else {
+                        $valor = validaInt($count, $tipo);
+                        $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                        preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                     }
                 }
                 else if ($tipoValor == "double") {
-                    if (validaDouble($count, $tipo)) {
-                        
-                    }
-                    else {
+                    if (validaDouble($count, $tipo) === false) {
                         $erro = true;
                         break;
                     }
+                    else {
+                        $valor = validaDouble($count, $tipo);
+                        $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                        preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+                    }
                 }
                 else {
-                    
+                    $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                 }
             }
         }
@@ -608,7 +618,7 @@ class Search{
                     $int_escaped = (int)$int_escaped;
                     if(is_int($int_escaped))
                     {			
-                            return true;
+                            return $int_escaped;
                     }
                 else
                 {
@@ -639,7 +649,7 @@ class Search{
                 $double_escaped = floatval($double_escaped);
                 if(is_double ($double_escaped))
                 {
-                    return true;
+                    return $double_escaped;
                 }
                 else
                 {
@@ -663,7 +673,7 @@ class Search{
     }
     
     private function verificaOperadores ($count) {
-        if(empty($_REQUEST['operadores'.$count]))
+        if(empty($_REQUEST['operators'.$count]))
         {
 ?>
             <p>Verifique se introduziu os operadores.</p>
