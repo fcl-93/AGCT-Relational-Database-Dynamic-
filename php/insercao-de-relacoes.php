@@ -218,6 +218,7 @@ class InsereRelacoes
                             </table>
                         </html>
 <?php
+        $this->createNewRel();
         }
         
         
