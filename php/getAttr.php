@@ -15,7 +15,7 @@ class FetchData{
 	public function getData(){
             //Decode Json
             //echo $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-            $json = file_get_contents("http://".$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);7
+            $json = file_get_contents("http://".$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
             print_R($json);
             $obj = json_decode($json);
             if(json_decode($json) == true )
