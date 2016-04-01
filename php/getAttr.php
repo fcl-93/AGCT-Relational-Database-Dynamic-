@@ -45,8 +45,8 @@ class FetchData{
                 
             */        //
             //header('Content-Type: application/json');
-           echo json_encode($data);        
-            echo json_last_error_msg();
+           wp_send_jason($data);        
+            //echo json_last_error_msg();
 	}
 }
 ?>
