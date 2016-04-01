@@ -8,7 +8,7 @@ $().ready(function(){
         url: url
 }).done(function( html ) {
     html.select(function(){
-        var dados = $(this).("#resultado").text();
+        var dados = $(this).("#results").text();
         alert(dados);
     });
 });
