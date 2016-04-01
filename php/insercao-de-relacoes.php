@@ -471,6 +471,11 @@ class InsereRelacoes
 <?php
                  exit;
             }
+            else {
+                $_REQUEST['ent'] = str_replace($this->bd->userInputVal($_REQUEST['ent']),"getAttr?ent="); 
+                print_r($_REQUEST);
+               
+            }
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
             $read_EntType = $res_EntType->fetch_assoc();
             //print_R($res_EntType);
@@ -1020,7 +1025,7 @@ class InsereRelacoes
 ?>
             <h3>Inserção de Relações - Nova Relação</h3>
             <form>
-                <select id="ent" >
+                <select id="ent" name="ent">
                         <option></option>
 <?php
                     $res_GetEntities = $this->bd->runQuery("SELECT * FROM entity");
@@ -1048,7 +1053,7 @@ class InsereRelacoes
                 </div>
                 
                 <noscript></noscript>
-                <input type="hidden" name="ent" value="<?php echo $read_GetEnt['id']?>"> 
+                
                 <input type="hidden" name="estado" value="associar">
                 <input type="submit" value="Inserir nova Relação">
             </form>
