@@ -491,7 +491,7 @@ class Search{
                 while($read_getEnt = $res_getEnt->fetch_assoc())
                 {
                     //need to filter the entities previously selected.
-                    $res_FilterEntities = $this->bd->runQuery("SELECT ent_type.entity_name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
+                    $res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
 ?>
 <?php               
                             while($read_Filter = $res_FilterEntities->fetch_assoc())
