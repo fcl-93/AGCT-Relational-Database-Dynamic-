@@ -7,7 +7,8 @@ $().ready(function(){
         // The URL for the request
         url: url
 }).done(function( response ) {
-    $("results").html(response);
+   var print =  $("results").html(response);
+   alert(print);
     });
 });
 
