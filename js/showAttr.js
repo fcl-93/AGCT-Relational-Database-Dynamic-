@@ -21,7 +21,7 @@ $().ready(function(){
         alert("Sucesso");
     },
     error: function() {
-        alert("Erro"):
+        alert("Erro");
     }
 
 });
