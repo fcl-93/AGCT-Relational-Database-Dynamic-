@@ -7,7 +7,10 @@ $().ready(function(){
         // The URL for the request
         url: url,
 }).done(function( html ) {
-    alert(html)
+    html.select(function(){
+        var dados = $(this).("#resultado").text();
+        alert(dados);
+    });
 });
         //alert("O id e : " + id);
     });
