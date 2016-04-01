@@ -10,6 +10,7 @@ $().ready(function(){
         $(html).ready(function(){
             var prhases = $("#results").text();
             alert(phrases);
+            });
         });
 });
 
