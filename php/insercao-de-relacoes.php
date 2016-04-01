@@ -467,7 +467,16 @@ class InsereRelacoes
             //print_R($res_EntType);
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id']);
             //echo "SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id'];
-
+            if($res_RelTypes->num_rows == 0)
+            {
+?>
+                 <h3>Inserção de Relações - Lista Tipos de relação</h3>
+                 <p>Não existem tipos de relação aos quais a entidade selecionada possa ser associada.</p>
+                 <p>Clique em <?php goBack(); ?> e selecione outra entidade.</p>
+<?php
+            }
+            else
+            {
  ?>          
             <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
@@ -500,6 +509,7 @@ class InsereRelacoes
                 </table>
             </html>
  <?php         
+            }
         }
         
         /**
