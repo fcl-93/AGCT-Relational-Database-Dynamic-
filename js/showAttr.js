@@ -9,7 +9,7 @@ $().ready(function(){
 }).done(function( html ) {
         var x = $(html).find("#results").text();
             //alert(x);
-            $("#showAttr").text(x);
+            $("#showAttr").text(x).fadeIn("slow");
             });
         });
 
