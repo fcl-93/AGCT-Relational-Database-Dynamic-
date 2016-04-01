@@ -8,7 +8,8 @@ $().ready(function(){
         url: url
 }).done(function( html ) {
         var x = $(html).find("#results").text();
-            alert(x);
+            //alert(x);
+            $("#showAttr").appendTo(x);
             });
         });
 
