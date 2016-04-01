@@ -579,6 +579,7 @@ class Search{
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
                     $query1 .= $this->filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    echo $query1."<br>";
                     if ($query1 === true) {
                         break;
                     }
