@@ -15,9 +15,9 @@ class FetchData{
 	public function getData(){
             //Decode Json
             //echo $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-            $json = file_get_contents($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+            $json = file_get_contents(echo "\"".$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]."\"");
             $obj = json_decode($json,TRUE);
-            echo $obj['data']['id'];
+            echo $obj->data->id;
             
 		/*$sanitizeId = $this->bd->userInputVal($obj->data);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
