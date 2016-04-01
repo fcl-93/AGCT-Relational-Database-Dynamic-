@@ -15,18 +15,16 @@ class FetchData{
 	public function getData(){
                 $sanitizeId = $this->bd->userInputVal($_REQUEST['ent']);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
-?>
-            <div id="results">
-<?php
+
 		while($read_Props = $res_Props->fetch_assoc())
 		{
 			$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
                         
-                        echo $nome . " : " .$read_Props['value']."\n";
-		}
-?>
-            </div>
+ ?>
+                        <p><span id="results"><?php echo $nome . " : " .$read_Props['value']."\n";?></span></p>
 <?php
+		}
+
                 
 	}
 }
