@@ -16,16 +16,16 @@ class FetchData{
             //Decode Json
             //echo $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
             $json = file_get_contents("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-            $obj = json_decode($json,true);
-            if(json_decode($json) == true )
-            {
+            //$obj = json_decode($json,true);
+            //if(json_decode($json) == true )
+            //{
                 //echo "true";
-            }
-            else
-            {
+            //}
+            //else
+            //{
                // echo "false";
-            }
-            echo json_last_error_msg();
+            //}
+            //echo json_last_error_msg();
             
             //print_r($obj);
             //echo $obj->data->id;
@@ -45,7 +45,8 @@ class FetchData{
                 
             */        //
             //header('Content-Type: application/json');
-           echo json_encode($data);         
+           echo json_encode($data);        
+            echo json_last_error_msg();
 	}
 }
 ?>
