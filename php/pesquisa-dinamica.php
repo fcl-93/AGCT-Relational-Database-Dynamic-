@@ -572,19 +572,19 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtros1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $querydinamica = $this->filtros1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-                    $query1 = $this->filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $query1 = $this->filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $querydinamica = $this->filtros3Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $querydinamica = $this->filtros3Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor);
                     if ($querydinamica === true) {
                         break;
                     }
@@ -630,7 +630,7 @@ class Search{
         }
     }
     
-    private function filtro1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp) {
+    private function filtro1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor) {
         $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
         if ($count == 0) {
             $querydinamica .= "e.id IN (";
@@ -676,7 +676,7 @@ class Search{
         return $querydinamica;
     }
    
-    private function filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp) {
+    private function filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor) {
         $query1 = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
         if ($count == 0) {
             $query1 .= "e.id IN (";
