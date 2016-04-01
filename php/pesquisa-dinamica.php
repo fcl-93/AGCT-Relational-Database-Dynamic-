@@ -523,9 +523,17 @@ class Search{
         $guardaidDosSelecionados = array();
         $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
-            if(isset($_REQUEST['checkET'.$i]) || isset($_REQUEST['checkVT'.$i]) || isset($_REQUEST['checkRL'.$i])) {
+            if(isset($_REQUEST['checkET'.$i])) {
                 //significa que foi selecionada
-                $checkSelected++;
+                $checkSelectedET++;
+            }
+            else if(isset($_REQUEST['checkVT'.$i])) {
+                //significa que foi selecionada
+                $checkSelectedVT++;
+            }
+            else if(isset($_REQUEST['checkRL'.$i])){
+                //significa que foi selecionada
+                $checkSelectedRL++;
             }
             $i++;
         }
@@ -674,7 +682,7 @@ class Search{
     }
     
     
-    private function apresentaResultado ($querydinamica, $arrayInstId, $arrayInstComp) {
+    private function apresentaResultado ($querydinamica) {
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
 ?>
