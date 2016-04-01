@@ -5,10 +5,14 @@ $().ready(function(){
         $.ajax({
  
         // The URL for the request
-        url: url,
+        url: url
 }).done(function( html ) {
-    alert(html)
-});
-        //alert("O id e : " + id);
-    });
+        var x = $(html).find("#results").text();
+            //alert(x);
+            x = x.replace(/\n/g, '<br>');
+            $("#showAttr").text(x).fadeIn("slow");
+            });
+        });
+
+
 });
