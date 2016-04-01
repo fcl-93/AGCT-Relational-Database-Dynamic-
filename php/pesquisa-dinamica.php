@@ -543,7 +543,7 @@ class Search{
             }
             $i++;
         }
-        $querydinamica = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
+        $querydinamica = $query1 = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
         $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count." controla ".$controla." <br>";
@@ -630,9 +630,8 @@ class Search{
         }
     }
     
-    private function filtro1Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+    private function filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
         echo "entrei aqui2";
-        $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
         if ($controla == 0) {
             $querydinamica .= "e.id IN (";
         }
@@ -677,9 +676,8 @@ class Search{
         return $querydinamica;
     }
    
-    private function filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+    private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
         echo "entrei aqui controla ".$controla;
-        $query1 = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
         if ($controla == 0) {
             $query1 .= "e.id IN (";
         }
