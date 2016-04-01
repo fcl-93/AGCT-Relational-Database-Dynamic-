@@ -4,7 +4,7 @@ $().ready(function(){
         $.ajax({
  
     // The URL for the request
-    url: "/getAttr",
+    url: "getAttr",
  
     // The data to send (will be converted to a query string)
     data: {
