@@ -1020,7 +1020,7 @@ class InsereRelacoes
 ?>
             <h3>Inserção de Relações - Nova Relação</h3>
             <form>
-                <select id="ent" name="ent">
+                <select id="ent" >
                         <option></option>
 <?php
                     $res_GetEntities = $this->bd->runQuery("SELECT * FROM entity");
@@ -1048,7 +1048,7 @@ class InsereRelacoes
                 </div>
                 
                 <noscript></noscript>
-                <!--<input type="hidden" name="ent" value=""> Id goes here-->
+                <input type="hidden" name="ent" value="<?php echo $read_GetEnt['id']?>"> 
                 <input type="hidden" name="estado" value="associar">
                 <input type="submit" value="Inserir nova Relação">
             </form>
