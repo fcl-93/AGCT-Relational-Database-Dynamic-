@@ -10,7 +10,7 @@ $().ready(function(){
         var x = $(html).find("#results").text();
             //alert(x);
             x = x.replace(/\n/g, '<br>');
-            $("#showAttr").text(x).fadeIn("slow");
+            $("#showAttr").html("<p>"+x+"</p>").fadeIn("slow");
             });
         });
 
