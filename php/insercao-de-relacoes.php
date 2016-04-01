@@ -472,7 +472,7 @@ class InsereRelacoes
                  exit;
             }
             else {
-                $_REQUEST['ent'] = str_replace($this->bd->userInputVal($_REQUEST['ent']),"getAttr?ent="); 
+                $_REQUEST['ent'] = substr_replace($this->bd->userInputVal($_REQUEST['ent']),"",0,12); 
                 print_r($_REQUEST);
                
             }
