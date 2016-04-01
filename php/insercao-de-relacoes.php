@@ -218,6 +218,7 @@ class InsereRelacoes
                             </table>
                         </html>
 <?php
+        $this->createNewRel();
         }
         
         
@@ -461,12 +462,21 @@ class InsereRelacoes
          * existing value.
          */
 	public function associar(){
-            $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=". $_REQUEST['ent']);
+            $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$_REQUEST['ent']);
             $read_EntType = $res_EntType->fetch_assoc();
             //print_R($res_EntType);
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id']);
             //echo "SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id'];
-
+            if($res_RelTypes->num_rows == 0)
+            {
+?>
+                 <h3>Inserção de Relações - Lista Tipos de relação</h3>
+                 <p>Não existem tipos de relação aos quais a entidade selecionada possa ser associada.</p>
+                 <p>Clique em <?php goBack(); ?> e selecione outra entidade.</p>
+<?php
+            }
+            else
+            {
  ?>          
             <h3>Inserção de Relações - Lista Tipos de relação</h3>
             <html>
@@ -499,6 +509,7 @@ class InsereRelacoes
                 </table>
             </html>
  <?php         
+            }
         }
         
         /**
@@ -869,8 +880,7 @@ class InsereRelacoes
             }
             return $tipoCorreto;
         }
-        
-        	/**
+        /**
 	 * Server side validation when JQuery is disabled
 	 */
 	public function ssvalidation(){
@@ -995,5 +1005,50 @@ class InsereRelacoes
                         return true;
             }
         }
+        
+        
+        private function createNewRel(){
+?>
+            <h3>Inserção de Relações - Nova Relação</h3>
+            <form>
+                <select name="ent">
+<?php
+                    $res_GetEntities = $this->bd->runQuery("SELECT * FROM entity");
+                    while($read_GetEnt = $res_GetEntities->fetch_assoc()){
+ 
+                        if($read_GetEnt['entity_name'] == '')
+                        {
+?>
+                            <option><?php echo $read_GetEnt['id']?></option>
+<?php
+                        }
+                        else
+                        {
+?>
+                            <option value="<?php echo $read_GetEnt['id']?>"><?php echo $read_GetEnt['entity_name']?></option>
+<?php                            
+                        }
+                       
+                    }
+?>
+                </select>
+                
+                <div type="hidden">
+                    
+                </div>
+                <noscript></noscript>
+                <!--<input type="hidden" name="ent" value=""> Id goes here-->
+                <input type="hidden" name="estado" value="associar">
+                <input type="submit" value="Inserir nova Relação">
+            </form>
+<?php
+        
+            //mandar um ent com o id da propriedade selecionada para o associar
+
+            
+        }
+        
+        
+        
 }
 ?>
