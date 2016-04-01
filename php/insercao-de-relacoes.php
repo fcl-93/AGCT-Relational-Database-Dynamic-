@@ -1029,13 +1029,13 @@ class InsereRelacoes
                         if($read_GetEnt['entity_name'] == '')
                         {
 ?>
-                            <option><?php echo $read_GetEnt['id']?></option>
+                            <option value="getAttr?ent=<?php echo $read_GetEnt['id']?>"><?php echo $read_GetEnt['id']?></option>
 <?php
                         }
                         else
                         {
 ?>
-                            <option value="<?php echo $read_GetEnt['id']?>"><?php echo $read_GetEnt['entity_name']?></option>
+                            <option value="getAttr?ent=<?php echo $read_GetEnt['id']?>"><?php echo $read_GetEnt['entity_name']?></option>
 <?php                            
                         }
                        
