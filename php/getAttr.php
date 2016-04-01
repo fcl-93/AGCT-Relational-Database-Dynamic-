@@ -16,7 +16,7 @@ class FetchData{
             //Decode Json
             $json = file_get_contents(get_site_url());
             $obj = json_decode($json,TRUE);
-            echo $obj['data'];
+            echo $obj['data']['id'];
             
 		/*$sanitizeId = $this->bd->userInputVal($obj->data);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
