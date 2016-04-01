@@ -16,8 +16,14 @@ $().ready(function(){
  
     // The type of data we expect back
     dataType : "json",
-}).done(function(json){
-    alert("Recebido");
+    
+    success: function(data) {
+        alert("Sucesso");
+    },
+    error: function(xhr, desc, err) {
+        alert(xhr + " details " + desc + " error: " + err);
+    }
+
 });
         //alert("O id e : " + id);
     });
