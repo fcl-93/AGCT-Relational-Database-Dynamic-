@@ -17,6 +17,7 @@ class FetchData{
             //echo $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
             $json = file_get_contents("http://".$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
             $obj = json_decode($json,TRUE);
+            print_r($obj);
             echo $obj->data->id;
             
 		/*$sanitizeId = $this->bd->userInputVal($obj->data);
