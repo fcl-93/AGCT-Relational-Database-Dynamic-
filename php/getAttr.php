@@ -18,7 +18,7 @@ class FetchData{
             $obj = json_decode($json,TRUE);
             echo $obj['data'];
             
-		$sanitizeId = $this->bd->userInputVal($obj->data);
+		/*$sanitizeId = $this->bd->userInputVal($obj->data);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
                 
                 $data = array();
@@ -32,6 +32,6 @@ class FetchData{
                 
                     //header('Content-Type: application/json');
                     echo json_encode($data);
-	}
+	*/}
 }
 ?>
