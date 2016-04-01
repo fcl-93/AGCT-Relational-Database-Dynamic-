@@ -7,7 +7,7 @@ $().ready(function(){
         // The URL for the request
         url: url
 }).done(function( html ) {
-        var x = $(html).find("span").text();
+        var x = $(html).find("#results").text();
             alert(x);
             });
         });
