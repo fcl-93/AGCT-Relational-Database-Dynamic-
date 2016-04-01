@@ -591,17 +591,17 @@ class Search{
                     }
                 }
                 else  if ($tipoValor == "text"){
-                    $valor = $this->bd->userInputVal($_REQUEST['text'.$count]);
+                    $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
                     $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
                 else  if ($tipoValor == "enum"){
-                    $valor = $this->bd->userInputVal($_REQUEST['enum'.$count]);
+                    $valor = $this->bd->userInputVal($_REQUEST['enum'.$tipo.$count]);
                     $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
                 else  if ($tipoValor == "bool"){
-                    $valor = $this->bd->userInputVal($_REQUEST['bool'.$count]);
+                    $valor = $this->bd->userInputVal($_REQUEST['bool'.$tipo.$count]);
                     $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
