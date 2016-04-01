@@ -579,7 +579,7 @@ class Search{
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
                     $query1 = $this->filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
-                    if ($querydinamica === true) {
+                    if ($query1 === true) {
                         break;
                     }
                 }
