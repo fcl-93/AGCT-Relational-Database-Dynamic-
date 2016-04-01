@@ -553,7 +553,6 @@ class Search{
             }
             //checkboxes selecionadas.
             else {
-                $controla++;
                 if (isset($_REQUEST['checkET'.$count])) {
                     $idDaPropriedade = $_REQUEST['checkET'.$count];
                     $tipo = "ET";
@@ -590,8 +589,7 @@ class Search{
                         break;
                     }
                 }
-                
-                
+              $controla++;  
             }
         }
         if($checkSelected == 0)
