@@ -1,5 +1,5 @@
 $().ready(function(){
-    $("#ent").change(function(){
+    $("#ent").change(function(e){
         e.preventDefault(); 
         var url = $("#ent").val();
         $.ajax({
