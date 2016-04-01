@@ -18,7 +18,7 @@ class FetchData{
                 if($res_Props->num_rows == 0)
                 {
 ?>
-                    <p><span id="results">"A entidade selecionada não tem propriedades associadas."</span></p>
+                    <p><span id="results">A entidade selecionada não tem propriedades associadas.</span></p>
 <?php
                 }
                 else 
