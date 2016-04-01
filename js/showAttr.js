@@ -20,8 +20,8 @@ $().ready(function(){
     success: function(data) {
         alert("Sucesso");
     },
-    error: function() {
-        alert("Erro");
+    error: function(xhr, desc, err) {
+        alert(xhr + " details " + desc + " error: " + err);
     }
 
 });
