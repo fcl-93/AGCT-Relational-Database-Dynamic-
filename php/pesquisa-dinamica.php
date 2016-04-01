@@ -572,19 +572,19 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = filtros1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $querydinamica = $this->filtros1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-                    $query1 = filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $query1 = $this->filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $querydinamica = filtros3Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
+                    $querydinamica = $this->filtros3Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp);
                     if ($querydinamica === true) {
                         break;
                     }
