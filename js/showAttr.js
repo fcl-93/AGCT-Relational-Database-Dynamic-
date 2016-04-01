@@ -6,10 +6,8 @@ $().ready(function(){
  
         // The URL for the request
         url: url
-}).done(function( html ) {
-    html.select(function(){
-        var dados = $(this).("#results").text();
-        alert(dados);
+}).done(function( response ) {
+    $("results").html(response);
     });
 });
 
