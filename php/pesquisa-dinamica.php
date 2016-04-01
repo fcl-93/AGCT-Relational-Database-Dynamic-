@@ -529,14 +529,17 @@ class Search{
             if(isset($_REQUEST['checkET'.$i])) {
                 //significa que foi selecionada
                 $checkSelectedET++;
+                $checkSelected++;
             }
             else if(isset($_REQUEST['checkVT'.$i])) {
                 //significa que foi selecionada
                 $checkSelectedVT++;
+                $checkSelected++;
             }
             else if(isset($_REQUEST['checkRL'.$i])){
                 //significa que foi selecionada
                 $checkSelectedRL++;
+                $checkSelected++;
             }
             $i++;
         }
