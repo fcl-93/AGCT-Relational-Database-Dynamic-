@@ -7,7 +7,7 @@ $().ready(function(){
         // The URL for the request
         url: url,
 }).done(function( html ) {
-    alert("Enviei e recebi")
+    alert(html)
 });
         //alert("O id e : " + id);
     });
