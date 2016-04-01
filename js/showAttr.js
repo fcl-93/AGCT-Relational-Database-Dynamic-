@@ -1,5 +1,6 @@
 $().ready(function(){
     $("#ent").change(function(){
-        alert("The value has changed");
+        var id = $("#ent").val();
+        alert("O id e : " + id);
     });
 });
