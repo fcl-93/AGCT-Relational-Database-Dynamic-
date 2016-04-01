@@ -19,22 +19,23 @@ class FetchData{
             $obj = json_decode($json,true);
             if(json_decode($json) == true )
             {
-                echo "true";
+                //echo "true";
             }
             else
             {
-                echo "false";
+               // echo "false";
             }
-            echo json_last_error_msg();
+            //echo json_last_error_msg();
             
-            print_r($obj);
-            echo $obj->data->id;
+            //print_r($obj);
+            //echo $obj->data->id;
             
 		/*$sanitizeId = $this->bd->userInputVal($obj->data);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
-                
+                */
                 $data = array();
-		while($read_Props = $res_Props->fetch_assoc())
+                $data[1] = 2;
+		/*while($read_Props = $res_Props->fetch_assoc())
 		{
 			$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
                         
@@ -42,8 +43,8 @@ class FetchData{
 			//echo $nome . " : " .$read_Props['value']."</br>";
 		}
                 
-                    //header('Content-Type: application/json');
-                    echo json_encode($data);
-	*/}
+            */        //header('Content-Type: application/json');
+           echo json_encode($data);         
+	}
 }
 ?>
