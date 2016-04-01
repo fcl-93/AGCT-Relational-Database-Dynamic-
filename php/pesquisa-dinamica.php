@@ -163,7 +163,7 @@ class Search{
                                     break;
 				case 'text':
 ?>
-                                    <input type="text" name="textboxRL<?php echo $count; ?>">
+                                    <input type="text" name="textRL<?php echo $count; ?>">
 <?php
                                     break;
 				case 'int':
@@ -293,7 +293,7 @@ class Search{
 						break;
 					case 'text':
 ?>
-                                            <input type="text" name="textboxVT<?php echo $count; ?>">
+                                            <input type="text" name="textVT<?php echo $count; ?>">
 <?php
                                             break;
 					case 'int':
@@ -415,7 +415,7 @@ class Search{
 						break;
 					case 'text':
 ?>
-                                            <input type="text" name="textboxET<?php echo $count; ?>">
+                                            <input type="text" name="textET<?php echo $count; ?>">
 <?php
                                             break;
 					case 'int':
@@ -590,8 +590,20 @@ class Search{
                         preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                     }
                 }
-                else {
+                else  if ($tipoValor == "text"){
+                    $valor = $this->bd->userInputVal($_REQUEST['text'.$count]);
                     $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                    preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+                }
+                else  if ($tipoValor == "enum"){
+                    $valor = $this->bd->userInputVal($_REQUEST['enum'.$count]);
+                    $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                    preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+                }
+                else  if ($tipoValor == "bool"){
+                    $valor = $this->bd->userInputVal($_REQUEST['bool'.$count]);
+                    $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                    preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
             }
         }
@@ -608,10 +620,10 @@ class Search{
             $this->apresentaResultado ($querydinamica);
         }
     }
-    
+   
     private function validaInt ($count, $tipo) {
         if (verificaOperadores($count)) {
-            $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int_'.$count.'']);
+            $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int'.$count.'']);
             if(ctype_digit($int_escaped))
             {	
                     //Se todo o input do user são numeros então converter para inteitro
