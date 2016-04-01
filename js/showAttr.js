@@ -12,6 +12,6 @@ $().ready(function(){
         alert(dados);
     });
 });
-        //alert("O id e : " + id);
+
     });
 });
