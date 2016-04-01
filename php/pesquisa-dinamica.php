@@ -85,6 +85,7 @@ class Search{
      * one entity equal the one we have choosed
      */
     private function showRelation(){
+        $count = $_SESSION['vtPropCount'];
         $res_GetRelType = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id =".$this->bd->userInputVal($_REQUEST['ent'])." OR ent_type2_id=".$this->bd->userInputVal($_REQUEST['ent'])."");
         if($res_GetRelType->num_rows == 0)
         {
@@ -110,7 +111,6 @@ class Search{
                     </thead>
                     <tbody>
 <?php
-            $count = 0;
             while($read_GetRelType = $res_GetRelType->fetch_assoc())
             {
                 $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_GetRelType['id']);
@@ -210,7 +210,8 @@ class Search{
      * references the select entity 
      */
     private function showPropValueType(){
-        $res_EntRef = $this->bd->runQuery("SELECT ent_type.id, ent_type.entity_name FROM ent_type, property WHERE ent_type.id = property.ent_type_id AND property.value_type = 'ent_ref' AND property.fk_ent_type_id = ".$this->bd->userInputVal($_REQUEST['ent'])."");
+        $count = $_SESSION['countPrintedProps'];
+        $res_EntRef = $this->bd->runQuery("SELECT ent_type.id, ent_type.name FROM ent_type, property WHERE ent_type.id = property.ent_type_id AND property.value_type = 'ent_ref' AND property.fk_ent_type_id = ".$this->bd->userInputVal($_REQUEST['ent'])."");
     
         if($res_EntRef->num_rows == 0)
 	{
@@ -226,7 +227,6 @@ class Search{
 ?>
             <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
 <?php
-            $count = 0;
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
                 
@@ -247,7 +247,6 @@ class Search{
                         while($read_PropRelEnt = $res_PropRelEnt->fetch_assoc()){
                             if($read_PropRelEnt['value_type'] != 'ent_ref')
                             {
-                                $count++;
 ?>
                         <tr>
                             <td><?php echo  $read_PropRelEnt['id'] ?></td>
@@ -316,6 +315,7 @@ class Search{
 <?php
                                             break;
                                     }
+                                    $count++;
 ?>
                                     </td>
                         </tr>
@@ -341,6 +341,7 @@ class Search{
      * the properties will be presented in a table
      */
     private function showPropEnt(){
+        $count =0;
         $res_GetProp = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$this->bd->userInputVal($_REQUEST['ent']));
         if($res_GetProp->num_rows == 0)
         {
@@ -368,7 +369,6 @@ class Search{
                         </thead>
                     <tbody>
 <?php
-                        $count =0;
                         while($read_GetProp = $res_GetProp->fetch_assoc()){
 ?>
                             <tr>
@@ -514,7 +514,7 @@ class Search{
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
         echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount'];
-        $numeroDechecksImpressos = $_SESSION['countPrintedProps'] + $_SESSION['relPropCount'] + $_SESSION['vtPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
+        $numeroDechecksImpressos = $_SESSION['relPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
         $checkSelectedET = 0;
@@ -597,12 +597,12 @@ class Search{
                     $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
                 else  if ($tipoValor == "enum"){
-                    $valor = $this->bd->userInputVal($_REQUEST['enum'.$tipo.$count]);
+                    $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
                     $querydinamica = "SELECT e.id, e.entity_name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
                 else  if ($tipoValor == "bool"){
-                    $valor = $this->bd->userInputVal($_REQUEST['bool'.$tipo.$count]);
+                    $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
                     $querydinamica = "SELECT e.id, e.entity_name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                 }
