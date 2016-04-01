@@ -4,7 +4,7 @@ $().ready(function(){
         $.ajax({
  
     // The URL for the request
-    url: "/wp-admin/test.php",
+    url: "<?php bloginfo('url'); ?>/wp-admin/test.php",
  
     // The data to send (will be converted to a query string)
     data: {
