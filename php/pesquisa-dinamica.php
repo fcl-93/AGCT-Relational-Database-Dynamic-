@@ -544,6 +544,7 @@ class Search{
             $i++;
         }
         $querydinamica = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
+        $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count."<br>";
             //CheckBoxes não foram selecionadas
@@ -552,7 +553,7 @@ class Search{
             }
             //checkboxes selecionadas.
             else {
-               
+                $controla++;
                 if (isset($_REQUEST['checkET'.$count])) {
                     $idDaPropriedade = $_REQUEST['checkET'.$count];
                     $tipo = "ET";
@@ -572,19 +573,19 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtros1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $querydinamica = $this->filtros1Tabela($controla,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-                    $query1 = $this->filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1 = $this->filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($query1 === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $querydinamica = $this->filtros3Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $querydinamica = $this->filtros3Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
@@ -598,6 +599,7 @@ class Search{
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
+            echo "entrei aqui 3";
             $conta = 0;
             $guardaEntRef = array();
             while ($entRef = $this->bd->runQuery($query1)->fetch_assoc()) {
@@ -630,9 +632,10 @@ class Search{
         }
     }
     
-    private function filtro1Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+    private function filtro1Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+        echo "entrei aqui2";
         $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
-        if ($count == 0) {
+        if ($controla == 0) {
             $querydinamica .= "e.id IN (";
         }
         else {
@@ -676,9 +679,10 @@ class Search{
         return $querydinamica;
     }
    
-    private function filtros2Tabela($count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+    private function filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+        echo "entrei aqui";
         $query1 = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
-        if ($count == 0) {
+        if ($controla == 0) {
             $query1 .= "e.id IN (";
         }
         else {
