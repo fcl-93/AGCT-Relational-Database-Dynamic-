@@ -25,7 +25,7 @@ class FetchData{
             {
                 echo "false";
             }
-            
+            echo json_last_error_msg();
             
             print_r($obj);
             echo $obj->data->id;
