@@ -610,6 +610,7 @@ class Search{
                 $entidadesComCorrespondencia = $this->bd->runQuery($query3)["id"];
                 array_push($guardaEntRef, $entidadesComCorrespondencia);
             }
+            echo "<br>".$querydinamica."<br>";
             foreach ($guardaEntRef as $entidades) {
                 if ($conta == 0) {
                     $querydinamica .= "e.id IN (";
@@ -619,7 +620,9 @@ class Search{
                 }
                 $querydinamica .= "SELECT e.id FROM entity WHERE id = ".$entidades.")";
                 $conta++;
+                echo "<br>".$querydinamica."<br>";
             }
+            echo "<br>".$querydinamica."<br>";
         }
         if($erro)
         {
