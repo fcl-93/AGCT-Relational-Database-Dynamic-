@@ -8,7 +8,7 @@ $().ready(function(){
         url: url
 }).done(function( html ) {
         $(html).ready(function(){
-            var prhases = $("#results").text();
+            var phrases = $("#results").text();
             alert(phrases);
             });
         });
