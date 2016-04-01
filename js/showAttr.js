@@ -4,7 +4,7 @@ $().ready(function(){
         $.ajax({
  
     // The URL for the request
-    url: "http://agct16.ddns.net/wp-admin/test.php",
+    url: "/getAttr",
  
     // The data to send (will be converted to a query string)
     data: {
