@@ -14,15 +14,24 @@ class FetchData{
 	
 	public function getData(){
             //Decode Json
-            echo get_site_url();
+            $json = file_get_contents(get_site_url());
+            $obj = json_decode($json);
+            echo $obj->data;
             
-		/*$sanitizeId = $this->bd->userInputVal($_REQUEST['ent']);
+		$sanitizeId = $this->bd->userInputVal($obj->data);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
+                
+                $data = array();
 		while($read_Props = $res_Props->fetch_assoc())
 		{
 			$nome = $this->bd->runQuery("SELECT * FROM property WHERE id=".$read_Props['property_id'])->fetch_assoc()['name'];
-			echo $nome . " : " .$read_Props['value']."</br>";
-		}*/
+                        
+                       $data[$nome] = $read_Props['value'].'\n';
+			//echo $nome . " : " .$read_Props['value']."</br>";
+		}
+                
+                    //header('Content-Type: application/json');
+                    echo json_encode($data);
 	}
 }
 ?>
