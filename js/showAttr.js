@@ -7,9 +7,8 @@ $().ready(function(){
         // The URL for the request
         url: url
 }).done(function( html ) {
-        $(html).ready(function(){
-            var phrases = $(this).find("span").text();
-            alert(phrases);
+        var x = $(html).find("span").text();
+            alert(x);
             });
         });
 });
