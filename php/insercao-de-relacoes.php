@@ -462,12 +462,21 @@ class InsereRelacoes
          * existing value.
          */
 	public function associar(){
-            $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$_REQUEST['ent']);
+            if(empty($this->bd->userInputVal($_REQUEST['ent'])))
+            {
+?>
+                 <h3>Inserção de Relações - Lista Tipos de relação</h3>
+                  <p>Não selecionou uma entidade.</p>
+                  <p>Clique em <?php goBack(); ?></p>
+<?php
+                 exit;
+            }
+            $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
             $read_EntType = $res_EntType->fetch_assoc();
             //print_R($res_EntType);
             $res_RelTypes = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id']);
             //echo "SELECT * FROM rel_type WHERE ent_type1_id=".$read_EntType['ent_type_id']." OR ent_type2_id=".$read_EntType['ent_type_id'];
-            if($res_RelTypes->num_rows == 0)
+            if($res_RelTypes->num_rows == 0 )
             {
 ?>
                  <h3>Inserção de Relações - Lista Tipos de relação</h3>
@@ -1012,6 +1021,7 @@ class InsereRelacoes
             <h3>Inserção de Relações - Nova Relação</h3>
             <form>
                 <select id="ent" name="ent">
+                        <option></option>
 <?php
                     $res_GetEntities = $this->bd->runQuery("SELECT * FROM entity");
                     while($read_GetEnt = $res_GetEntities->fetch_assoc()){
