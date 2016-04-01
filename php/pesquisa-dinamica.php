@@ -578,7 +578,7 @@ class Search{
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-                    $query1 = $this->filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1 .= $this->filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($query1 === true) {
                         break;
                     }
@@ -610,7 +610,7 @@ class Search{
                 array_push($guardaEntRef, $entidadesComCorrespondencia);
             }
             foreach ($guardaEntRef as $entidades) {
-                if ($count == 0) {
+                if ($conta == 0) {
                     $querydinamica .= "e.id IN (";
                 }
                 else {
@@ -678,7 +678,7 @@ class Search{
     }
    
     private function filtros2Tabela($controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
-        echo "entrei aqui";
+        echo "entrei aqui controla ".$controla;
         $query1 = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE ";
         if ($controla == 0) {
             $query1 .= "e.id IN (";
