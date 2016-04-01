@@ -563,25 +563,27 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipoValor == "int") {
-                    if (validaInt($count, $tipo)) {
-                        
-                    }
-                    else {
+                    if (validaInt($count, $tipo) === false) {
                         $erro = true;
                         break;
+                    }
+                    else {
+                        $valor = validaInt($count, $tipo);
+                        $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                     }
                 }
                 else if ($tipoValor == "double") {
-                    if (validaDouble($count, $tipo)) {
-                        
-                    }
-                    else {
+                    if (validaDouble($count, $tipo) === false) {
                         $erro = true;
                         break;
                     }
+                    else {
+                        $valor = validaDouble($count, $tipo);
+                        $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                    }
                 }
                 else {
-                    
+                    $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
                 }
             }
         }
@@ -608,7 +610,7 @@ class Search{
                     $int_escaped = (int)$int_escaped;
                     if(is_int($int_escaped))
                     {			
-                            return true;
+                            return $int_escaped;
                     }
                 else
                 {
@@ -639,7 +641,7 @@ class Search{
                 $double_escaped = floatval($double_escaped);
                 if(is_double ($double_escaped))
                 {
-                    return true;
+                    return $double_escaped;
                 }
                 else
                 {
@@ -663,7 +665,7 @@ class Search{
     }
     
     private function verificaOperadores ($count) {
-        if(empty($_REQUEST['operadores'.$count]))
+        if(empty($_REQUEST['operators'.$count]))
         {
 ?>
             <p>Verifique se introduziu os operadores.</p>
