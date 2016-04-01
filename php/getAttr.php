@@ -19,11 +19,11 @@ class FetchData{
             $obj = json_decode($json,true);
             if(json_decode($json) == true )
             {
-                echo true;
+                echo "true";
             }
             else
             {
-                echo false;
+                echo "false";
             }
             
             
