@@ -679,12 +679,14 @@ class Search{
    
     private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
         echo "entrei aqui controla ".$controla;
+        echo $query1."<br>";
         if ($controla == 0) {
             $query1 .= "e.id IN (";
         }
         else {
             $query1 .= " AND e.id IN (";
         }
+        echo $query1."<br>";
         if ($tipoValor == "int") {
             if (validaInt($count, $tipo) === false) {
                 return true;
@@ -720,6 +722,7 @@ class Search{
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        echo $query1."<br>";
         return $query1;
     }
 
