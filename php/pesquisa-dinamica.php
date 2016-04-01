@@ -517,6 +517,9 @@ class Search{
         $numeroDechecksImpressos = $_SESSION['countPrintedProps'] + $_SESSION['relPropCount'] + $_SESSION['vtPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
+        $checkSelectedET = 0;
+        $checkSelectedVT = 0;
+        $checkSelectedRL = 0;
         $i = 0;
         $guardanomePropSelec = array();
         $guardaValorDaProp = array();
@@ -557,8 +560,8 @@ class Search{
                     $tipo = "RL";
                 }
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
-                $queryNomeValProp = $this->bd->runQuery($querynomeProp);
-                $queryNomeValProp =$querynomeProp->fetch_assoc();
+                $queryNomeValProp = $this->bd->runQuery($queryNomeValProp);
+                $queryNomeValProp = $queryNomeValProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
                 
@@ -570,6 +573,7 @@ class Search{
                     else {
                         $valor = validaInt($count, $tipo);
                         $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                        preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                     }
                 }
                 else if ($tipoValor == "double") {
@@ -580,6 +584,7 @@ class Search{
                     else {
                         $valor = validaDouble($count, $tipo);
                         $querydinamica = "SELECT e.id, e.name FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+                        preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
                     }
                 }
                 else {
