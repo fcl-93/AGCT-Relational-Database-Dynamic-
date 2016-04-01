@@ -13,7 +13,7 @@ class FetchData{
 	}
 	
 	public function getData(){
-                $sanitizeId = $this->bd->userInputVal($REQUEST['ent']);
+                $sanitizeId = $this->bd->userInputVal($_REQUEST['ent']);
 		$res_Props = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
 
 		while($read_Props = $res_Props->fetch_assoc())
