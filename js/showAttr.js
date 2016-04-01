@@ -5,7 +5,7 @@ $().ready(function(){
         $.ajax({
  
         // The URL for the request
-        url: url,
+        url: url
 }).done(function( html ) {
     html.select(function(){
         var dados = $(this).("#resultado").text();
