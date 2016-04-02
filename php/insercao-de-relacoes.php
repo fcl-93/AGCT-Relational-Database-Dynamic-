@@ -219,11 +219,11 @@ class InsereRelacoes
                         </html>
                         <div id="pager" class="pager">
 	<form>
-		<img src="images/first.png" class="first"/>
-		<img src="images/prev.png" class="prev"/>
+		<img src="css/first.png" class="first"/>
+		<img src="css/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="images/next.png" class="next"/>
-		<img src="images/last.png" class="last"/>
+		<img src="css/next.png" class="next"/>
+		<img src="css/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
