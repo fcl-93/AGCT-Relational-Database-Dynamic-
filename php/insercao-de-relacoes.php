@@ -843,7 +843,6 @@ class InsereRelacoes
                 {
                     $rel_name="";
                 }
-                echo $rel_name;
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
                     {
