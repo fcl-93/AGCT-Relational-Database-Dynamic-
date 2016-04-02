@@ -574,15 +574,14 @@ class InsereRelacoes
                                 $_SESSION['numEnt2Max'] = $control; 
 
             ?>
-
+                            </tbody>
+                        </table>
                                 <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
                                 <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
 
                                 <input type="hidden" name="flag" value="naoeditar">
                                 <input type="hidden" name="estado" value="inserir">
                                 <input type="submit" value="Associar Segunda Entidade">
-                            </tbody>
-                        </table>
                     </form>
                 </html>
 <?php               
