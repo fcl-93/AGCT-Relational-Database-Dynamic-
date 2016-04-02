@@ -546,7 +546,7 @@ class InsereRelacoes
 ?>
                 <html>
                     <form>
-                        <table>
+                        <table class="table">
                             <thead>
                             <th>Entidades que podem ser associadas</th>
                             <th>Nome da relação</th>
@@ -597,7 +597,7 @@ class InsereRelacoes
 ?>
                 <html>
                     <form>
-                        <table>
+                        <table class="table">
                             <thead>
                             <th>Entidades que podem ser associadas</th>
                             <th>Nome da relação</th>
