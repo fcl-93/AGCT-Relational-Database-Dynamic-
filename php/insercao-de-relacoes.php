@@ -514,8 +514,6 @@ class InsereRelacoes
                             <td><?php echo $read_RelTypes['id']?></td>
                             <td>
                                 <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $read_name1['name'];?> - <?php echo $read_name2['name'];?>]</a>
-                                <label>Nome para a relação </label>
-                            <input type="text" name ="nomeDaRel">
                             </td>
                         </tr>
 <?php
@@ -556,8 +554,7 @@ class InsereRelacoes
                         {
 ?>
                             <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?>
-                            <label>Nome para a relação </label>
-                            <input type="text" name ="nomeDaRel">
+                            <label>Nome para a relação </label><input type="text" name ="nomeDaRel<?php echo $control; ?>">
                             <br>
 <?php
                         }
@@ -595,6 +592,7 @@ class InsereRelacoes
                         {
 ?>
                             <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
+                             <label>Nome para a relação </label><input type="text" name ="nomeDaRel<?php echo $control; ?>">
 <?php
                         }
                         else
