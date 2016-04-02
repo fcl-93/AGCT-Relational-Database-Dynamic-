@@ -556,7 +556,7 @@ class InsereRelacoes
                                 $control = 0;
                                 while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                                 {
-                                    if(isset($read_SecondEnt['entity_name']))
+                                    if($read_SecondEnt['entity_name'] != '')
                                     {
             ?>
                                     <tr>
@@ -601,7 +601,7 @@ class InsereRelacoes
                             $control = 0;
                             while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                             {
-                                if(isset($read_SecondEnt['entity_name']))
+                                if($read_SecondEnt['entity_name'] != '')
                                 {
         ?>
                                 <tr>
