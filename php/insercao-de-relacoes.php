@@ -560,25 +560,14 @@ class InsereRelacoes
                                     {
             ?>
                                     <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>">
-<?php 
-                                        if($read_SecondEnt['entity_name'] == '')
-                                        {
-                                            echo $read_SecondEnt['entity_name'];
-                                        }
-                                        else
-                                        {
-                                            echo $read_SecondEnt['id'];
-                                        }
-?>
-                                        </td>
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
                                         <td><!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                     <tr>
             <?php
                                     }
                                     else
                                     {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-
+ echo $read_SecondEnt['id'];
                                     }
                                     $control++;
                                 }
@@ -617,26 +606,14 @@ class InsereRelacoes
                                 {
         ?>
                                 <tr>
-                                    <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>">
-<?php   
-                                        if($read_SecondEnt['entity_name'] == '')
-                                        {
-                                            echo $read_SecondEnt['entity_name'];
-                                        }
-                                        else
-                                        {
-                                            echo $read_SecondEnt['id'];
-                                        }
-                                            
-?>
-                                    </td>
+                                    <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
                                     <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                 </tr>
         <?php   
                                 }
                                 else
                                 {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-
+                                        echo $read_SecondEnt['id'];
                                 }
                                 $control++;
                             }
