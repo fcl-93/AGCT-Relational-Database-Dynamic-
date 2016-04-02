@@ -604,8 +604,6 @@ class InsereRelacoes
                     $_SESSION['numEnt2Max'] = $control; 
 ?>
                             
-                    <label>Nome para a relação </label>
-                    <input type="text" name ="nomeDaRel">
                      <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
                     <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
                     
@@ -804,15 +802,18 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            if(isset($_REQUEST['nomeDaRel']))
-            {
-                 $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel']);
-            }
-            else
-            {
-                $rel_name="";
-            }
+            
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
+                
+                if(isset($_REQUEST['nomeDaRel'.$i]))
+                {
+                     $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel'.$i]);
+                }
+                else
+                {
+                    $rel_name="";
+                }
+                
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
                     {
