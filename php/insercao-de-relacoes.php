@@ -584,32 +584,42 @@ class InsereRelacoes
 ?>
                 <html>
                     <form>
+                        <html>
+                            <thead>
+                            <th>Entidades que podem ser associadas</th>
+                            <th>Nome da relação</th>
+                            </thead>
+                            <tbody>
 <?php
-                    $control = 0;
-                    while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
-                    {
-                        if(isset($read_SecondEnt['entity_name']))
-                        {
-?>
-                            <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
-                             <label>Nome para a relação </label><input type="text" name ="nomeDaRel<?php echo $control; ?>">
-<?php
-                        }
-                        else
-                        {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-                            
-                        }
-                        $control++;
-                    }
-                    $_SESSION['numEnt2Max'] = $control; 
-?>
-                            
-                     <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
-                    <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
-                    
-                    <input type="hidden" name="flag" value="naoeditar">
-                    <input type="hidden" name="estado" value="inserir">
-                    <input type="submit" value="Associar Segunda Entidade">
+                            $control = 0;
+                            while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
+                            {
+                                if(isset($read_SecondEnt['entity_name']))
+                                {
+        ?>
+                                <tr>
+                                    <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                    <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                </tr>
+        <?php   
+                                }
+                                else
+                                {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+
+                                }
+                                $control++;
+                            }
+                            $_SESSION['numEnt2Max'] = $control; 
+        ?>
+
+                             <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
+                            <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
+
+                            <input type="hidden" name="flag" value="naoeditar">
+                            <input type="hidden" name="estado" value="inserir">
+                            <input type="submit" value="Associar Segunda Entidade">
+                            </tbody>
+                        </html>
                     </form>
                 </html>
 <?php                              
