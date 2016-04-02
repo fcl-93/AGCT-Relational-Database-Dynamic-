@@ -22,7 +22,7 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
             <script type="text/javascript" >
             
             $(document).ready(function() { 
-    $(".table") 
+    $("#tabletopage") 
     .tablesorter({widthFixed: true, widgets: ['zebra']}) 
     .tablesorterPager({container: $("#pager")}); 
 }); 
