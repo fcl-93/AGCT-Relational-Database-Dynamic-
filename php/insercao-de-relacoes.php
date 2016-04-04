@@ -217,13 +217,13 @@ class InsereRelacoes
                                 </tbody>
                             </table>
                         </html>
-                        <div id="pager" class="pager">
-	<form>
-		<img src="<?php echo get_theme_roots(); ?>css/first.png" class="first"/>
-		<img src="<?php echo get_theme_roots(); ?>css/prev.png" class="prev"/>
+                        
+	
+                <img class="first"/>
+		<img class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="<?php echo get_theme_roots(); ?>css/next.png" class="next"/>
-		<img src="<?php echo get_template_directory_uri();?>css/last.png" class="last"/>
+		<img  class="next"/>
+		<img class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
@@ -231,8 +231,8 @@ class InsereRelacoes
 			<option value="10">10 per page</option>
 			
 		</select>
-	</form>
-</div>
+	
+
 <?php
         $this->createNewRel();
         }
