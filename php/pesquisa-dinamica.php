@@ -619,7 +619,7 @@ class Search{
                 else {
                     $querydinamica .= " AND e.id IN (";
                 }
-                $querydinamica .= "SELECT e.id FROM entity WHERE id = ".$entidades.")";
+                $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
                 $conta++;
                 echo "<br>".$querydinamica."<br>";
             }
