@@ -223,7 +223,7 @@ class InsereRelacoes
 		<img src="<?php echo get_theme_roots(); ?>css/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
 		<img src="<?php echo get_theme_roots(); ?>css/next.png" class="next"/>
-		<img src="<?php echo get_theme_roots();?>css/last.png" class="last"/>
+		<img src="<?php echo get_template_directory_uri();?>css/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
