@@ -37,3 +37,17 @@ table.tablesorter thead tr .headerSortDown {
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #8dbdd8;
 }
+
+.first{
+    background-image: url(../images/first.png);
+}
+.next{
+     background-image: url(../images/next.png);
+}
+
+.last{
+    background-image: url(../images/last.png);
+}
+.prev{
+     background-image: url(../images/prev.png);
+}
