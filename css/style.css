@@ -45,7 +45,9 @@ background-color: #8dbdd8;
      background-image: url(next.png);
 }
 
-
+.last{
+    background-image: url(last.png);
+}
 .prev{
      background-image: url(prev.png);
 }
