@@ -216,22 +216,22 @@ class InsereRelacoes
 ?>                               
                                 </tbody>
                             </table>
-                        </html>
-                        
-	
+                                
+                <div id="pager" class="pager">
+                    <form>
                         <img src="/custom/images/first.png" class="first"/>
                         <img src="/custom/images/prev.png" class="prev"/>
-		<input type="text" class="pagedisplay"/>
-                <img  src="/custom/images/next.png" class="next"/>
-                <img src="/custom/images/last.png" class="last"/>
-		<select class="pagesize">
-			<option value="">>LIMIT</option>
-			<option value="2">2 per page</option>
-			<option value="5">5 per page</option>
-			<option value="10">10 per page</option>
-			
-		</select>
-	
+                        <input type="text" class="pagedisplay"/>
+                        <img  src="/custom/images/next.png" class="next"/>
+                        <img src="/custom/images/last.png" class="last"/>
+                        <select class="pagesize">
+                            <option value="">>LIMIT</option>
+                            <option value="2">2 per page</option>
+                            <option value="5">5 per page</option>
+                            <option value="10">10 per page</option>
+                        </select>
+                    </form>
+            </html>
 
 <?php
         $this->createNewRel();
