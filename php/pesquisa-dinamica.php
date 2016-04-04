@@ -601,7 +601,8 @@ class Search{
             echo "entrei aqui 3";
             $conta = 0;
             $guardaEntRef = array();
-            while ($entRef = $this->bd->runQuery($query1)->fetch_assoc()) {
+            $query1 = $this->bd->runQuery($query1);
+            while ($entRef = $query1->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
                 $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
                 $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
