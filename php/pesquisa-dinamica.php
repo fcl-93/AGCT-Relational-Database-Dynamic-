@@ -572,7 +572,7 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtros1Tabela($controla,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $querydinamica = $this->filtros1Tabela($querydinamica,$controla,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
@@ -617,7 +617,7 @@ class Search{
                     $querydinamica .= "e.id IN (";
                 }
                 else {
-                    $querydinamica .= " AND e.id IN (";
+                    $querydinamica .= " OR e.id IN (";
                 }
                 $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
                 $conta++;
