@@ -219,11 +219,11 @@ class InsereRelacoes
                         </html>
                         
 	
-                        <img src="../css/first.png" class="first"/>
-                        <img src="../css/prev.png" class="prev"/>
+                        <img src="<?php echo getcwd() ?>/css/first.png" class="first"/>
+                        <img src="<?php echo getcwd() ?>/css/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-                <img  src="../css/neext.png" class="next"/>
-                <img src="../css/last.png" class="last"/>
+                <img  src="<?php echo getcwd() ?>/css/neext.png" class="next"/>
+                <img src="<?php echo getcwd() ?>/css/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
