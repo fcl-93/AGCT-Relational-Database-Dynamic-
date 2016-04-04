@@ -607,7 +607,7 @@ class Search{
                 $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
                 //obtem o id das entidades que satisfazem a pesquisa
                 $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
-                $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["id"];
+                $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
                 array_push($guardaEntRef, $entidadesComCorrespondencia);
             }
             echo "<br>".$querydinamica."<br>";
