@@ -223,7 +223,7 @@ class InsereRelacoes
                         <img src="/css/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
                 <img  src="/css/neext.png" class="next"/>
-                <img src="<?php echo $_SERVER ?>/css/last.png" class="last"/>
+                <img src="<?php echo $_SERVER['__FILE__'] ?>/css/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
