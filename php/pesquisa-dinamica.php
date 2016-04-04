@@ -572,7 +572,7 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtros1Tabela($querydinamica,$controla,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $querydinamica = $this->filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
