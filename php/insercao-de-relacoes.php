@@ -100,7 +100,7 @@ class InsereRelacoes
                                  {
 ?>                                     
                             <html>
-                                <table class="table">
+                                <table id="tabletopage" class="tablesorter">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -217,6 +217,22 @@ class InsereRelacoes
                                 </tbody>
                             </table>
                         </html>
+                        
+	
+                        <img src="/custom/images/first.png" class="first"/>
+                        <img src="/custom/images/prev.png" class="prev"/>
+		<input type="text" class="pagedisplay"/>
+                <img  src="/custom/images/next.png" class="next"/>
+                <img src="/custom/images/last.png" class="last"/>
+		<select class="pagesize">
+			<option value="">>LIMIT</option>
+			<option value="2">2 per page</option>
+			<option value="5">5 per page</option>
+			<option value="10">10 per page</option>
+			
+		</select>
+	
+
 <?php
         $this->createNewRel();
         }
@@ -473,7 +489,7 @@ class InsereRelacoes
             }
             else {
                 $_REQUEST['ent'] = substr_replace($this->bd->userInputVal($_REQUEST['ent']),"",0,12); 
-                print_r($_REQUEST);
+                //print_r($_REQUEST);
                
             }
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
@@ -546,33 +562,47 @@ class InsereRelacoes
 ?>
                 <html>
                     <form>
+                        <table class="table">
+                            <thead>
+                            <th>Entidades que podem ser associadas</th>
+                            <th>Nome da relação</th>
+                            </thead>
+                            <tbody>
 <?php
-                    $control = 0;
-                    while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
-                    {
-                        if(isset($read_SecondEnt['entity_name']))
-                        {
+                                $control = 0;
+                                while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
+                                {
+                                    if($read_SecondEnt['entity_name'] != '')
+                                    {
 ?>
-                            <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
+                                    <tr>
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                    <tr>
 <?php
-                        }
-                        else
-                        {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-                            
-                        }
-                        $control++;
-                    }
-                    $_SESSION['numEnt2Max'] = $control; 
-                    
+                                    }
+                                    else
+                                    { 
+                                        //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
 ?>
-                            <label>Nome para a relação </label>
-                    <input type="text" name ="nomeDaRel">
-                    <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
-                    <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
-                    
-                    <input type="hidden" name="flag" value="naoeditar">
-                    <input type="hidden" name="estado" value="inserir">
-                    <input type="submit" value="Associar Segunda Entidade">
+                                    <tr>
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
+                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                    <tr>
+<?php
+                                    }
+                                    $control++;
+                                }
+                                $_SESSION['numEnt2Max'] = $control; 
+?>
+                            </tbody>
+                        </table>
+                                <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
+                                <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
+
+                                <input type="hidden" name="flag" value="naoeditar">
+                                <input type="hidden" name="estado" value="inserir">
+                                <input type="submit" value="Associar Segunda Entidade">
                     </form>
                 </html>
 <?php               
@@ -583,33 +613,48 @@ class InsereRelacoes
 ?>
                 <html>
                     <form>
+                        <table class="table">
+                            <thead>
+                            <th>Entidades que podem ser associadas</th>
+                            <th>Nome da relação</th>
+                            </thead>
+                            <tbody>
 <?php
-                    $control = 0;
-                    while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
-                    {
-                        if(isset($read_SecondEnt['entity_name']))
-                        {
+                            $control = 0;
+                            while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
+                            {
+                                if($read_SecondEnt['entity_name'] != '')
+                                {
+        ?>
+                                <tr>
+                                    <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                    <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                </tr>
+        <?php   
+                                }
+                                else
+                                {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
 ?>
-                            <input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?><br>
-<?php
-                        }
-                        else
-                        {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-                            
-                        }
-                        $control++;
-                    }
-                    $_SESSION['numEnt2Max'] = $control; 
-?>
-                            
-                    <label>Nome para a relação </label>
-                    <input type="text" name ="nomeDaRel">
-                     <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
-                    <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
-                    
-                    <input type="hidden" name="flag" value="naoeditar">
-                    <input type="hidden" name="estado" value="inserir">
-                    <input type="submit" value="Associar Segunda Entidade">
+                                    <tr>
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
+                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                    <tr>
+<?php                                    
+
+                                }
+                                $control++;
+                            }
+                            $_SESSION['numEnt2Max'] = $control; 
+        ?>
+                                    </tbody>
+                        </table>
+
+                             <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
+                            <input type="hidden" name="firstEnt" value="<?php echo  $prev_SelEnt?>">
+
+                            <input type="hidden" name="flag" value="naoeditar">
+                            <input type="hidden" name="estado" value="inserir">
+                            <input type="submit" value="Associar Segunda Entidade">
                     </form>
                 </html>
 <?php                              
@@ -802,15 +847,18 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            if(isset($_REQUEST['nomeDaRel']))
-            {
-                 $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel']);
-            }
-            else
-            {
-                $rel_name="";
-            }
+            
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
+                
+                if(isset($_REQUEST['nomeDaRel'.$i]))
+                {
+                     $rel_name= $this->bd->userInputVal($_REQUEST['nomeDaRel'.$i]);
+                      
+                }
+                else
+                {
+                    $rel_name="";
+                }
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
                     {
