@@ -219,11 +219,11 @@ class InsereRelacoes
                         </html>
                         
 	
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/custom/images/first.png" class="first"/>
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/custom/images/prev.png" class="prev"/>
+                        <img src="/custom/images/first.png" class="first"/>
+                        <img src="/custom/images/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-                <img  src="<?php bloginfo('stylesheet_directory'); ?>/custom/images/next.png" class="next"/>
-                <img src="<?php bloginfo('stylesheet_directory'); ?>/custom/images/last.png" class="last"/>
+                <img  src="/custom/images/next.png" class="next"/>
+                <img src="/custom/images/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="">>LIMIT</option>
 			<option value="2">2 per page</option>
