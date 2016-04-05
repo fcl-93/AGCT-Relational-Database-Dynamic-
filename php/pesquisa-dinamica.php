@@ -729,7 +729,6 @@ class Search{
            
             echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
-            print_r($this->saveNames);
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
             {
                 $query1 .= " AND e.id IN (";
@@ -740,6 +739,7 @@ class Search{
                 $query1 .= " OR e.id IN (";        
                         
             }
+            print_r($this->saveNames);
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
