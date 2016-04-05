@@ -639,11 +639,11 @@ class Search{
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
                 $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
                 $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
-                if ($idEmtRel["ent_type1_id"] == $idEnt) {
-                    array_push($guardaEnt, $idEmtRel["ent_type1_id"]);
+                if ($idEmtRel["entity1_id"] == $idEnt) {
+                    array_push($guardaEnt, $idEmtRel["entity1_id"]);
                 }
                 else {
-                    array_push($guardaEnt, $idEmtRel["ent_type2_id"]);
+                    array_push($guardaEnt, $idEmtRel["entity2_id"]);
                 }
             }
             echo "<br>".$querydinamica."<br>";
