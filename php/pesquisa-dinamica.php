@@ -783,7 +783,7 @@ class Search{
     }
     
     private function geraQueryTabela2($query1,$idEnt,$querydinamica) {
-        echo "entrei aqui 3";
+        echo "entrei gera query 2";
         $conta = 0;
         $guardaEntRef = array();
         echo "<br><br>query1".$query1;
@@ -818,7 +818,7 @@ class Search{
     }
     
     private function geraQueryTabela3($query1REL, $idEnt, $querydinamica) {
-        echo "entrei aqui 3";
+        echo "entrei gera query 3";
         $conta = 0;
         $guardaEnt = array();
         $query1REL = $this->bd->runQuery($query1REL);
@@ -897,7 +897,7 @@ class Search{
     }
    
     private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
-        echo "entrei aqui controla ".$controla;
+        echo "entrei filtros 2 controla ".$controla;
         echo $query1."<br>";
         
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
@@ -965,7 +965,7 @@ class Search{
     }
 
 private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
-        echo "entrei aqui controla ".$controla;
+        echo "entrei filtros 3 controla ".$controla;
         echo $query1."<br>";
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
