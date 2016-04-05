@@ -765,11 +765,11 @@ class Search{
             echo "<b>devia entrar aqui<b>";
             if ($primeiraVez) {
                 echo "<b>devia entrar aqui 2<b>";
-                $querydinamica .= geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
+                $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
                 $primeiraVez = false;
             }
             else {
-                $querydinamica .= " AND e.id IN ".geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
+                $querydinamica .= " AND e.id IN ".$this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
             }
         }
         if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
