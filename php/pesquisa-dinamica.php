@@ -93,12 +93,12 @@ class Search{
                     <th>Entidade</th>
                     <th>Propriedade</th>
                     <th>Seleção</th>
-                    <th>Valores</th>
+                    <th>Valor</th>
                 </thead>
                 <tbody>
 <?php
         $count = 0;
-        while($count < $count($idDaRel))
+        while($count < count($idDaRel))
         {
 ?>
                 <tr>
