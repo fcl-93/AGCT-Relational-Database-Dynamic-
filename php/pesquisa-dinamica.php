@@ -54,7 +54,7 @@ class Search{
     }
     
     /**
-     * 
+     * This is the form that will allow the user to  make his searchs
      * 
      */
     private function tableChsStt(){
@@ -81,20 +81,168 @@ class Search{
             </html>
 <?php
     }
+    /**
+     * This method will show all the properties form the entity that is related to the one we have chosed
+     * @param type $idDaRel
+     */
+    private function showPropRelQSRel($idDaRel){
+         //print_r($idDaRel);
+        if(count($idDaRel) == 0)
+        {
+?>
+            <h3>Entidades que se relacionam com <?php  echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];;?></h3>
+            <p>Não existem entidades que se relacionem com a entidade selecionada</p>
+<?php            
+        }
+        else
+        {
+?>
+            <html>
+                <h3>Entidades que se relacionam com 
+<?php
+                echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];
+?>
+                </h3>
+                <table class="table">
+                    <thead>
+                        <th>Entidade</th>
+                        <th>Propriedade</th>
+                        <th>Seleção</th>
+                        <th>Valor</th>
+                    </thead>
+                    <tbody>
+<?php
+            $count = $_SESSION['relPropCount'];
+            $run = 0;
+            while($run < count($idDaRel)){
+?>
+                <tr>
+<?php
+                    $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$run]);
+                    $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
+
+                    if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
+                    {
+                        $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type2_id']);
+                    }
+                    else
+                    {
+                        $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type1_id']);
+                    }
+                    $numProps = $res_GetRelProps->num_rows;
+                    $x = $numProps;
+                    while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
+                        if($x == $numProps)
+                        {
+                            $_readName = $this->bd->runQuery("SELECT * FROM ent_type WHERE id = ".$read_GetRelProps['ent_type_id']);
+?>
+                            <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
+<?php
+                        }
+?>
+                            <td><?php echo $read_GetRelProps['name']?></td>
+                            <td><input type="checkbox" name="checkER<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
+                            <td>
+<?php
+                                switch ($read_GetRelProps['value_type']) {
+                                    case 'enum':
+                                    //get enum values if the component valu_type is enum
+                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
+ ?>
+                                    <select name="selectER<?php echo $count ?>">
+<?php
+                                        while($read_AlldVal = $res_AlldVal->fetch_assoc()){
+?>                                            
+                                            <option><?php echo $read_AlldVal['value']; ?></option>
+<?php
+                                        }
+?>                                  </select>
+<?php
+                                        break;
+                                    case 'bool':
+?>
+                                        <input type="radio" name="radioER<?php echo $count?>" value="true">True
+                                        <input type="radio" name="radioER<?php echo $count?>" value="false">False
+<?php
+                                        break;
+                                    case 'double':
+?>
+                                        <select name="operators<?php echo $count?>">
+                                            <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php
+                                            foreach($this->operators as$key=>$value)
+                                            {
+?>
+                                                <option><?php echo $value;?></option>
+<?php                                   
+                                            }
+?>
+                                        </select>
+                                        <input type="text" name="doubleER<?php echo $count;?>">
+<?php                                                
+                                        break;
+                                    case 'text':
+?>
+                                        <input type="text" name="textER<?php echo $count; ?>">
+<?php
+                                        break;
+                                    case 'int':
+?>
+                                        <select name="operators<?php echo $count?>">
+                                            <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php                                       foreach($this->operators as$key=>$value){
+?>
+                                                <option><?php echo $value;?></option>
+<?php                                   
+                                            }
+?>
+                                        </select>
+                                            <input type="text" name="intER<?php echo $count ?>">
+<?php
+                                            break;
+                                    case 'ent_ref':
+?>
+                                        <input type="hidden" name="ent_refER" value="<?php echo $read_PropRelEnt['id'] ?>">
+<?php
+                                        break;
+                            }
+?>
+                            </td>                              
+<?php
+                $x--; 
+?>
+                </tr>
+<?php
+                }
+            $run++;    
+            $count++;
+?>
+               
+<?php
+        }
+    }
+        $_SESSION['ER'] = $count;
+?>
+                </tbody>
+            </table>
+        </html>
+<?php
+    }
     
     /**
      * This method will print table showing all the relation types and their atributes/properties where there is 
      * one entity equal the one we have choosed
      */
     private function showRelation(){
+        $guardaRelTpId =  array();
         $count = $_SESSION['vtPropCount'];
         $res_GetRelType = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id =".$this->bd->userInputVal($_REQUEST['ent'])." OR ent_type2_id=".$this->bd->userInputVal($_REQUEST['ent'])."");
         if($res_GetRelType->num_rows == 0)
         {
 ?>
             <html>
-                <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
-                <p>Não existem relações cuja entidade selecionada se encontra presente.</p>
+                <h3>Propriedades de relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?> está presente.</h3>
+                <p>Não existem relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?> está presente.</p>
             </html>
 <?php
             
@@ -102,7 +250,7 @@ class Search{
         else
         {
 ?>
-            <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
+            <h3>Propriedades de relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];?> está presente.</h3>
             <html>
                 <table class="table">
                     <thead>
@@ -115,6 +263,7 @@ class Search{
 <?php
             while($read_GetRelType = $res_GetRelType->fetch_assoc())
             {
+                array_push($guardaRelTpId, $read_GetRelType['id']);
                 $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_GetRelType['id']);
 ?>
                 <tr>
@@ -204,6 +353,7 @@ class Search{
                 </table>
             </html>
 <?php
+        $this->showPropRelQSRel($guardaRelTpId);
         }
     }
     
@@ -219,15 +369,15 @@ class Search{
 	{
 ?>
             <html>
-                <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
-                <p>Não existem propriedades de entidades que referenciem o tipo de entidade selecionada.</p>
+                <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?></h3>
+                <p>Não existem propriedades de entidades que referenciem a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?>.</p>
             </html>
 <?php                                       
         }
         else
         {
 ?>
-            <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
+            <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?>.</h3>
 <?php
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
@@ -349,7 +499,7 @@ class Search{
         {
 ?>
             <html>
-                <p>O tipo de entidade selecionada não tem propriedades.</p>
+                <p>A entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];?> não tem propriedades.</p>
             </html>
 
 <?php            
@@ -357,7 +507,7 @@ class Search{
         else
         {
 ?>
-                <h3>Lista de propriedades do tipo de entidade selecionada</h3>
+                <h3>Lista de propriedades da entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?></h3>
                 <table class="table">
                     <thead >
                         <thead>
@@ -474,7 +624,7 @@ class Search{
 ?>
             <h3>Pesquisa Dinâmica - escolher componente</h3>
 <?php
-            $res_getEnt = $this->bd->runQuery("SELECT id, name FROM  ent_type"); //get all entities from ent type 
+            $res_getEnt = $this->bd->runQuery("SELECT  id, name FROM  ent_type"); //get all entities from ent type 
             if($res_getEnt->num_rows == 0)
             {
 ?>
