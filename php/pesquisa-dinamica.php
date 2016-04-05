@@ -742,7 +742,6 @@ class Search{
                         break;
                     }
                 }
-                $controla++;  
             }
         }
         if($checkSelected == 0)
