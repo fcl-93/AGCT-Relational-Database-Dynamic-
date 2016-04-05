@@ -90,7 +90,7 @@ class Search{
         if(count($idDaRel) == 0)
         {
 ?>
-            <h3>Entidades que se relacionam com <?php echo $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));?></h3>
+            <h3>Entidades que se relacionam com <?php  echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];;?></h3>
             <p>Não existem entidades que se relacionem com a entidade selecionada</p>
 <?php            
         }
@@ -112,8 +112,7 @@ class Search{
                     </thead>
                     <tbody>
 <?php
-            $count = 0;
-       
+            $count = $_SESSION['relPropCount'];
             while($count < count($idDaRel))
             {
 ?>
@@ -242,8 +241,8 @@ class Search{
         {
 ?>
             <html>
-                <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
-                <p>Não existem relações cuja entidade selecionada se encontra presente.</p>
+                <h3>Propriedades de relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?> está presente.</h3>
+                <p>Não existem relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?> está presente.</p>
             </html>
 <?php
             
@@ -251,7 +250,7 @@ class Search{
         else
         {
 ?>
-            <h3>Propriedades de relações em que a entidade selecionada está presente.</h3>
+            <h3>Propriedades de relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];?> está presente.</h3>
             <html>
                 <table class="table">
                     <thead>
@@ -370,15 +369,15 @@ class Search{
 	{
 ?>
             <html>
-                <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
-                <p>Não existem propriedades de entidades que referenciem o tipo de entidade selecionada.</p>
+                <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?></h3>
+                <p>Não existem propriedades de entidades que referenciem a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?>.</p>
             </html>
 <?php                                       
         }
         else
         {
 ?>
-            <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade selecionada.</h3>
+            <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?>.</h3>
 <?php
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
@@ -500,7 +499,7 @@ class Search{
         {
 ?>
             <html>
-                <p>O tipo de entidade selecionada não tem propriedades.</p>
+                <p>A entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];?> não tem propriedades.</p>
             </html>
 
 <?php            
@@ -508,7 +507,7 @@ class Search{
         else
         {
 ?>
-                <h3>Lista de propriedades do tipo de entidade selecionada</h3>
+                <h3>Lista de propriedades da entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?></h3>
                 <table class="table">
                     <thead >
                         <thead>
@@ -625,7 +624,7 @@ class Search{
 ?>
             <h3>Pesquisa Dinâmica - escolher componente</h3>
 <?php
-            $res_getEnt = $this->bd->runQuery("SELECT id, name FROM  ent_type"); //get all entities from ent type 
+            $res_getEnt = $this->bd->runQuery("SELECT DISTINCT id, name FROM  ent_type"); //get all entities from ent type 
             if($res_getEnt->num_rows == 0)
             {
 ?>
