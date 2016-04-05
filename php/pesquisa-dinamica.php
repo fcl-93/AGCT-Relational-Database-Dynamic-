@@ -732,6 +732,7 @@ class Search{
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
             {
                 $query1 .= " AND e.id IN (";
+                echo "entrei no AND";
             }
             else
             {
