@@ -698,7 +698,7 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -733,14 +733,14 @@ class Search{
 
     private function validaInt ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
-            $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$count.'']);
+            $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$tipo.$count.'']);
             if(ctype_digit($int_escaped))
             {	
                     //Se todo o input do user são numeros então converter para inteitro
                     $int_escaped = (int)$int_escaped;
                     if(is_int($int_escaped))
                     {			
-                            return $int_escaped;
+                        return $int_escaped;
                     }
                 else
                 {
