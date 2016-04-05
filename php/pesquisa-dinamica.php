@@ -546,7 +546,7 @@ class Search{
             $i++;
         }
         $querydinamica = $query1 = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
-        $query1REL = "SELECT DISTINCT r.id FROM relation WHERE ";
+        $query1REL = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count." controla ".$controla." <br>";
