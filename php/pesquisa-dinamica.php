@@ -545,8 +545,8 @@ class Search{
             }
             $i++;
         }
-        $querydinamica = $query1 = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
-        $query1REL = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
+        $querydinamica = $query1Ref = $query1Ent = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
+        $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count." controla ".$controla." <br>";
@@ -575,21 +575,21 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ent = $this->filtro1Tabela($query1Ent, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-                    $query1 = $this->filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ref = $this->filtros2Tabela($query1Ref, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     echo $query1."<br>";
                     if ($query1 === true) {
                         break;
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $query1REL = $this->filtros3Tabela($query1REL, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
-                    if ($querydinamica === true) {
+                    $query1Rel = $this->filtros3Tabela($query1Rel, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    if ($query1Rel === true) {
                         break;
                     }
                 }
@@ -600,65 +600,14 @@ class Search{
         {
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
+        if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
+            $queryTabela1 = $query1Ent;
+        }
         if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-            echo "entrei aqui 3";
-            $conta = 0;
-            $guardaEntRef = array();
-            $query1 = $this->bd->runQuery($query1);
-            while ($entRef = $query1->fetch_assoc()) {
-                //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
-                $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
-                $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
-                //obtem o id das entidades que satisfazem a pesquisa
-                $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
-                $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
-                echo "entRef ".$entRef["id"]." idPropEntRef ".$idPropEntRef." entidadesComCorrespondencia " .$entidadesComCorrespondencia."<br>";
-                array_push($guardaEntRef, $entidadesComCorrespondencia);
-            }
-            print_r($guardaEntRef);
-            echo "<br>".$querydinamica."<br>";
-            foreach ($guardaEntRef as $entidades) {
-                if ($conta == 0) {
-                    $querydinamica .= "e.id IN (";
-                }
-                else {
-                    $querydinamica .= " OR e.id IN (";
-                }
-                $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
-                $conta++;
-                echo "<br>".$querydinamica."<br>";
-            }
-            echo "<br>".$querydinamica."<br>";
+            $queryTabela2 = $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica);
         }
         if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-            echo "entrei aqui 3";
-            $conta = 0;
-            $guardaEnt = array();
-            $query1REL = $this->bd->runQuery($query1REL);
-            while ($rel = $query1REL->fetch_assoc()) {
-                //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
-                $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
-                $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
-                if ($idEmtRel["entity1_id"] == $idEnt) {
-                    array_push($guardaEnt, $idEmtRel["entity1_id"]);
-                }
-                else {
-                    array_push($guardaEnt, $idEmtRel["entity2_id"]);
-                }
-            }
-            echo "<br>".$querydinamica."<br>";
-            foreach ($guardaEnt as $entidades) {
-                if ($conta == 0) {
-                    $querydinamica .= "e.id IN (";
-                }
-                else {
-                    $querydinamica .= " OR e.id IN (";
-                }
-                $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
-                $conta++;
-                echo "<br>".$querydinamica."<br>";
-            }
-            echo "<br>".$querydinamica."<br>";
+            $queryTabela2 = $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica);
         }
         if($erro)
         {
@@ -668,6 +617,71 @@ class Search{
             echo "check selected: ".$checkSelected." checksimpressos: ".$numeroDechecksImpressos;
             $this->apresentaResultado ($querydinamica);
         }
+    }
+    
+    private function geraQueryTabela2($query1,$idEnt,$querydinamica) {
+        echo "entrei aqui 3";
+        $conta = 0;
+        $guardaEntRef = array();
+        $query1 = $this->bd->runQuery($query1);
+        while ($entRef = $query1->fetch_assoc()) {
+            //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
+            $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
+            $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
+            //obtem o id das entidades que satisfazem a pesquisa
+            $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
+            $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
+            echo "entRef ".$entRef["id"]." idPropEntRef ".$idPropEntRef." entidadesComCorrespondencia " .$entidadesComCorrespondencia."<br>";
+            array_push($guardaEntRef, $entidadesComCorrespondencia);
+        }
+        print_r($guardaEntRef);
+        echo "<br>".$querydinamica."<br>";
+        foreach ($guardaEntRef as $entidades) {
+            if ($conta == 0) {
+                $querydinamica .= "e.id IN (";
+            }
+            else {
+                $querydinamica .= " OR e.id IN (";
+            }
+            $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
+            $conta++;
+            echo "<br>".$querydinamica."<br>";
+        }
+        echo "<br>".$querydinamica."<br>";
+        return $querydinamica;
+    }
+    
+    private function geraQueryTabela3($query1REL, $idEnt, $querydinamica) {
+        echo "entrei aqui 3";
+        $conta = 0;
+        $guardaEnt = array();
+        $query1REL = $this->bd->runQuery($query1REL);
+        while ($rel = $query1REL->fetch_assoc()) {
+            //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
+            $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
+            $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
+            if ($idEmtRel["entity1_id"] == $idEnt) {
+                array_push($guardaEnt, $idEmtRel["entity1_id"]);
+            }
+            else {
+                array_push($guardaEnt, $idEmtRel["entity2_id"]);
+            }
+        }
+        echo "<br>".$querydinamica."<br>";
+        foreach ($guardaEnt as $entidades) {
+            if ($conta == 0) {
+                $querydinamica .= "e.id IN (";
+            }
+            else {
+                $querydinamica .= " OR e.id IN (";
+            }
+            $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
+            $conta++;
+            echo "<br>".$querydinamica."<br>";
+        }
+        echo "<br>".$querydinamica."<br>";
+        return $querydinamica;
+        
     }
     
     private function filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
