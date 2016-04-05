@@ -754,6 +754,7 @@ class Search{
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         $primeiraVez = true;
+        echo "Tamanhos ".strlen($query1Ent)." ".strlen($query1Ref)." ".strlen($query1Rel);
         if (strlen($query1Ent) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
                 $querydinamica .= $query1Ent.")";
@@ -761,7 +762,9 @@ class Search{
             }
         }
         if (strlen($query1Ref) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            echo "<b>devia entrar aqui<b>";
             if ($primeiraVez) {
+                echo "<b>devia entrar aqui 2<b>";
                 $querydinamica .= geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
                 $primeiraVez = false;
             }
