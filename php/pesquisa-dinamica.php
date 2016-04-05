@@ -894,7 +894,7 @@ class Search{
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
-        if ($controla == 0) {
+        if ($controla == $_SESSION['countPrintedProps']) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
@@ -960,7 +960,7 @@ private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$gua
         echo $query1."<br>";
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
-        if ($controla == 0) {
+        if ($controla == $_SESSION['vtPropCount']) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "r.id IN (";
         }
