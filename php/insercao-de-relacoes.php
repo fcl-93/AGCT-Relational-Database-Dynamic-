@@ -488,7 +488,7 @@ class InsereRelacoes
                  exit;
             }
             else {
-                if(is_numeric($_REQUEST))
+                if(is_numeric($_REQUEST['ent']))
                 {
                 }
                 else
