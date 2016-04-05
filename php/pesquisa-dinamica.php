@@ -600,6 +600,9 @@ class Search{
         {
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
+        if ($checkSelectedVT > 0 && $checkSelectedRL > 0) {
+            $querydinamica = $querydinamica." e.id IN (".$query1Ent." AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica);
+        }
         if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
             $querydinamica = $query1Ent;
         }
