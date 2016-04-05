@@ -98,7 +98,7 @@ class Search{
                 <tbody>
 <?php
         $count = 0;
-        while($i < $count($idDaRel))
+        while($count < $count($idDaRel))
         {
 ?>
                 <tr>
@@ -115,18 +115,16 @@ class Search{
                 $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type1_id']);
             }
             $numProps = $res_GetRelProps->num_rows;
-            
-                while($read_GetRelProps = $res_GetRelProps->fetch_assoc())
-                {
-                    if($count == 0)
+                $x = $numProps;
+                while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
+                    if($x == $numProps)
                     {
                         $_readName = $this->bd->runQuery("SELECT * FROM ent_type WHERE id = ".$read_GetRelProps['ent_type_id']);
 ?>
                          <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
 <?php
                     }
-                    else
-                    {
+                    else{
 ?>
                         <td><?php echo $read_GetRelProps['name']?></td>
                         <td><input type="checkbox" name="check2Ent<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
@@ -162,7 +160,8 @@ class Search{
                                         {
 ?>
                                             <option><?php echo $value;?></option>
-<?php                                   }
+<?php                                   
+                                        }
 ?>
                                     </select>
                                     <input type="text" name="doubleVT<?php echo $count;?>">
@@ -181,7 +180,8 @@ class Search{
                                         {
 ?>
                                             <option><?php echo $value;?></option>
-<?php                                   }
+<?php                                   
+                                        }
 ?>
                                     </select>
                                         <input type="text" name="intVT<?php echo $count ?>">
@@ -197,8 +197,10 @@ class Search{
                             </td>                              
 <?php
                     }
-                }            
-            $i++;
+                $x--;
+                }
+                
+            $count++;
 ?>
                 </tr>
 <?php
