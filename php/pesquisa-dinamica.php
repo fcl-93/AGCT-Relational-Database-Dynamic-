@@ -614,6 +614,7 @@ class Search{
                 $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
                 array_push($guardaEntRef, $entidadesComCorrespondencia);
             }
+            print_r($guardaEntRef);
             echo "<br>".$querydinamica."<br>";
             foreach ($guardaEntRef as $entidades) {
                 if ($conta == 0) {
