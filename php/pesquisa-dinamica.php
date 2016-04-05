@@ -587,7 +587,7 @@ class Search{
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $querydinamica = $this->filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1 = $this->filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
