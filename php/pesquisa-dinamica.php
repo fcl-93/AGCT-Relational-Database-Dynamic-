@@ -784,10 +784,10 @@ private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$gua
         echo "entrei aqui controla ".$controla;
         echo $query1."<br>";
         if ($controla == 0) {
-            $query1 .= "e.id IN (";
+            $query1 .= "r.id IN (";
         }
         else {
-            $query1 .= " AND e.id IN (";
+            $query1 .= " AND r.id IN (";
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
