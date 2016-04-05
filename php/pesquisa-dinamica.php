@@ -98,7 +98,11 @@ class Search{
         {
 ?>
             <html>
-                <h3>Entidades que se relacionam com <?php echo $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));?></h3>
+                <h3>Entidades que se relacionam com 
+<?php
+                echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];
+?>
+                </h3>
                 <table class="table">
                     <thead>
                         <th>Entidade</th>
