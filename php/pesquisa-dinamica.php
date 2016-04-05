@@ -733,7 +733,7 @@ class Search{
 
     private function validaInt ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
-            $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int'.$count.'']);
+            $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$count.'']);
             if(ctype_digit($int_escaped))
             {	
                     //Se todo o input do user são numeros então converter para inteitro
