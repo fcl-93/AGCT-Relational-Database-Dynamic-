@@ -772,7 +772,7 @@ class Search{
                 $querydinamica .= " AND e.id IN ".geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
             }
         }
-        if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores.
+        if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
                 $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica).")";
                 $primeiraVez = false;
