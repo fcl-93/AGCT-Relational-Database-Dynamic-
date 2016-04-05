@@ -697,7 +697,6 @@ class Search{
         }
         $querydinamica = $query1Ref = $query1Ent = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
-        $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count." controla ".$controla." <br>";
             //CheckBoxes não foram selecionadas
@@ -725,20 +724,20 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipo == "ET") {
-                    $query1Ent = $this->filtro1Tabela($query1Ent, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ent = $this->filtro1Tabela($query1Ent, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
                 }
                 else if ($tipo == "VT") {
-                    $query1Ref = $this->filtros2Tabela($query1Ref, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ref = $this->filtros2Tabela($query1Ref, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     echo $query1Ref."<br>";
                     if ($query1Ref === true) {
                         break;
                     }
                 }
                 else if ($tipo == "RL") {
-                    $query1Rel = $this->filtros3Tabela($query1Rel, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1Rel = $this->filtros3Tabela($query1Rel, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
                     if ($query1Rel === true) {
                         break;
                     }
@@ -841,9 +840,9 @@ class Search{
         
     }
     
-    private function filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
-        echo "entrei aqui2";
-        if ($controla == 0) {
+    private function filtro1Tabela($querydinamica, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+        echo "entrei filtro tabela 1";
+        if ($count == 0) {
             $querydinamica .= "e.id IN (";
         }
         else {
@@ -887,14 +886,14 @@ class Search{
         return $querydinamica;
     }
    
-    private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
-        echo "entrei filtros 2 controla ".$controla;
+    private function filtros2Tabela($query1, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+        echo "entrei filtros 2 controla ".$count;
         echo $query1."<br>";
         
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
-        if ($controla == $_SESSION['countPrintedProps']) {
+        if ($count == $_SESSION['countPrintedProps']) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
@@ -955,12 +954,12 @@ class Search{
         return $query1;
     }
 
-private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
-        echo "entrei filtros 3 controla ".$controla;
+private function filtros3Tabela($query1, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+        echo "entrei filtros 3 controla ".$count;
         echo $query1."<br>";
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
-        if ($controla == $_SESSION['vtPropCount']) {
+        if ($count == $_SESSION['vtPropCount']) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "r.id IN (";
         }
