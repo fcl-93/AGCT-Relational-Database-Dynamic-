@@ -762,20 +762,20 @@ class Search{
         }
         if (strlen($query1Ref) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
-                $querydinamica .= $query1Ref.")";
+                $querydinamica .= geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
                 $primeiraVez = false;
             }
             else {
-                $querydinamica .= " AND e.id IN ".$query1Ref.")";
+                $querydinamica .= " AND e.id IN ".geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
             }
         }
         if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
-                $querydinamica .= $query1Ref.")";
+                $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica).")";
                 $primeiraVez = false;
             }
             else {
-                $querydinamica .= " AND e.id IN ".$query1Ref.")";
+                $querydinamica .= " AND e.id IN ".$this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica).")";
             }
         }
         if($erro)
