@@ -1132,7 +1132,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
                     echo $instancias['id'];
                 }
                 else {
-                    echo $instancias['entity_name'];   
+                    echo $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];   
                 }
 ?>
                 </td>
