@@ -685,7 +685,7 @@ class Search{
         echo "entrei aqui controla ".$controla;
         echo $query1."<br>";
         $saveNames = array();
-        $res_GetEntId = $this->bd->getMysqli("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
+        $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $resGetEntId->fetch_assoc();
 
         if ($controla == 0) {
