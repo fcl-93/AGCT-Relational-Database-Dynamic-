@@ -720,13 +720,13 @@ class Search{
         
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
-
+ echo "Id da propriedade".$idDaPropriedade."<br>";
         if ($controla == 0) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
         else {
-            echo "Id da propriedade".$idDaPropriedade."<br>";
+           
             echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             print_r($this->saveNames);
