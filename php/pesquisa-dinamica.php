@@ -86,6 +86,7 @@ class Search{
      * @param type $idDaRel
      */
     private function showPropRelQSRel($idDaRel){
+         print_r($idDaRel);
 ?>
         <html>
             <h3>Entidades relacionadas com a primeira</h3>
@@ -99,7 +100,8 @@ class Search{
                 <tbody>
 <?php
         $count = 0;
-        while($count <= count($idDaRel))
+       
+        while($count < count($idDaRel))
         {
 ?>
                 <tr>
@@ -125,7 +127,6 @@ class Search{
                          <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
 <?php
                     }
-                    else{
 ?>
                         <td><?php echo $read_GetRelProps['name']?></td>
                         <td><input type="checkbox" name="check2Ent<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
@@ -197,7 +198,6 @@ class Search{
 ?>
                             </td>                              
 <?php
-                    }
                 $x--;
                 }
                 
