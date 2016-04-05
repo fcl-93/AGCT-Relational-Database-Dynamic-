@@ -88,7 +88,7 @@ class Search{
     private function showPropRelQSRel($idDaRel){
 ?>
         <html>
-            <table>
+            <table class="table">
                 <thead>
                     <th>Entidade</th>
                     <th>Propriedade</th>
@@ -103,7 +103,7 @@ class Search{
 ?>
                 <tr>
 <?php
-            $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel);
+            $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$count]);
             $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
 
             if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
