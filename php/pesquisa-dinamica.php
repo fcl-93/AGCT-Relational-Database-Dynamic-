@@ -644,21 +644,21 @@ class Search{
             $querydinamica .= " AND e.id IN (";
         }
         if ($tipoValor == "int") {
-            if (validaInt($count, $tipo) === false) {
+            if ($this->validaInt($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaInt($count, $tipo);
+                $valor = $this->validaInt($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
-            if (validaDouble($count, $tipo) === false) {
+            if ($this->validaDouble($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaDouble($count, $tipo);
+                $valor = $this->validaDouble($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
@@ -732,7 +732,7 @@ class Search{
 
 
     private function validaInt ($count, $tipo) {
-        if (verificaOperadores($count)) {
+        if ($this->verificaOperadores($count)) {
             $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int'.$count.'']);
             if(ctype_digit($int_escaped))
             {	
@@ -764,7 +764,7 @@ class Search{
     }
     
     private function validaDouble ($count, $tipo) {
-        if (verificaOperadores($count)) {
+        if ($this->verificaOperadores($count)) {
             $double_escaped = $this->bd->userInputVal($_REQUEST['double'.$tipo.$count.'']);
             if(is_numeric($double_escaped))
             {
