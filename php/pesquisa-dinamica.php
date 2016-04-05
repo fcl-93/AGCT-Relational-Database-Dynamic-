@@ -1123,7 +1123,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
     
     
     private function apresentaResultado ($querydinamica) {
-        echo $querydinamica;
+        echo "<br><br>".$querydinamica."<br><br>";
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
 ?>
