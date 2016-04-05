@@ -633,7 +633,7 @@ class Search{
             $conta = 0;
             $guardaEnt = array();
             $query1REL = $this->bd->runQuery($query1REL);
-            while ($entRef = $query1->fetch_assoc()) {
+            while ($entRef = $query1REL->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
                 $query2 = "SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE ent_type1_id = ".$idEnt." OR ent_type2_id = ".$idEnt;
                 $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
@@ -797,7 +797,7 @@ private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$gua
             }
             else {
                 $valor = $this->validaInt($count, $tipo);
-                $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = r.id)";
+                $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
@@ -807,23 +807,23 @@ private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$gua
             }
             else {
                 $valor = $this->validaDouble($count, $tipo);
-                $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = r.id)";
+                $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
-            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = r.id)";
+            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
-            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = r.id)";
+            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
-            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = r.id";
+            $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         echo $query1."<br>";
