@@ -218,7 +218,7 @@ class Search{
      * one entity equal the one we have choosed
      */
     private function showRelation(){
-        $guardaRelTpId = $array();
+        $guardaRelTpId =  array();
         $count = $_SESSION['vtPropCount'];
         $res_GetRelType = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id =".$this->bd->userInputVal($_REQUEST['ent'])." OR ent_type2_id=".$this->bd->userInputVal($_REQUEST['ent'])."");
         if($res_GetRelType->num_rows == 0)
