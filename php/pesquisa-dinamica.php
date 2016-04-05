@@ -573,7 +573,17 @@ class Search{
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
-                
+                if ($checkSelectedVT > 0 && $checkSelectedRL > 0) {
+                    $query1Ent = $this->filtro1Tabela($query1Ent, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    if ($querydinamica === true) {
+                        break;
+                    }
+                    $query1Ref = $this->filtros2Tabela($query1Ref, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    echo $query1."<br>";
+                    if ($query1 === true) {
+                        break;
+                    }
+                }
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
                     $query1Ent = $this->filtro1Tabela($query1Ent, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
