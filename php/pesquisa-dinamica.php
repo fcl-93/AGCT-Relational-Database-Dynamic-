@@ -698,7 +698,7 @@ class Search{
         $querydinamica = $query1Ref = $query1Ent = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
-            echo "count ".$count." controla ".$controla." <br>";
+            echo "count ".$count;
             //CheckBoxes não foram selecionadas
             if(empty($_REQUEST['checkET'.$count]) && empty($_REQUEST['checkVT'.$count]) && empty($_REQUEST['checkRL'.$count])) {
                 //significa que não foi selecionado
