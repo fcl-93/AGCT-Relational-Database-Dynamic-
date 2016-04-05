@@ -1115,7 +1115,6 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</td>
                     <th>Instância</td>
                 </tr>
             </thead>
@@ -1126,8 +1125,17 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
         while($instancias =$instEnt->fetch_assoc()) {
 ?>
             <tr>
-                <td><?php echo $instancias['id'];?></td>
-                <td><?php echo $instancias['entity_name'];?></td>
+                <td>
+<?php
+                $getEntName = "SELECT entity_name FROM entity WHERE id = ".$instancias['id'];
+                if ($this->bd->runQuery($getEntName)->num_rows == 0) {
+                    echo $instancias['id'];
+                }
+                else {
+                    echo $instancias['entity_name'];   
+                }
+?>
+                </td>
             </tr>	
 <?php
             array_push($arrayInstId,$instancias['id']);
