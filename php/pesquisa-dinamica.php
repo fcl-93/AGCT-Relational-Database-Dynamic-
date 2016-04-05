@@ -725,6 +725,9 @@ class Search{
             $query1 .= "e.id IN (";
         }
         else {
+            echo in_array($read_GetEntId['ent_type_id'],$saveNames);
+            echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
+            print_r($saveNames);
             if(in_array($read_GetEntId['ent_type_id'],$saveNames))
             {
                 $query1 .= " AND e.id IN (";
