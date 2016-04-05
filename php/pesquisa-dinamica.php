@@ -88,6 +88,7 @@ class Search{
     private function showPropRelQSRel($idDaRel){
 ?>
         <html>
+            <h3>Entidades relacionadas com a primeira</h3>
             <table class="table">
                 <thead>
                     <th>Entidade</th>
@@ -98,7 +99,7 @@ class Search{
                 <tbody>
 <?php
         $count = 0;
-        while($count < count($idDaRel))
+        while($count <= count($idDaRel))
         {
 ?>
                 <tr>
