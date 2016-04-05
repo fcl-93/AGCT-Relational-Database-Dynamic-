@@ -86,114 +86,122 @@ class Search{
      * @param type $idDaRel
      */
     private function showPropRelQSRel($idDaRel){
-         print_r($idDaRel);
-?>
-        <html>
-            <h3>Entidades relacionadas com a primeira</h3>
-            <table class="table">
-                <thead>
-                    <th>Entidade</th>
-                    <th>Propriedade</th>
-                    <th>Seleção</th>
-                    <th>Valor</th>
-                </thead>
-                <tbody>
-<?php
-        $count = 0;
-       
-        while($count < count($idDaRel))
+         //print_r($idDaRel);
+        if(count($idDaRel) == 0)
         {
+?>
+            <h3>Entidades que se relacionam com <?php echo $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));?></h3>
+            <p>Não existem entidades que se relacionem com a entidade selecionada</p>
+<?php            
+        }
+        else
+        {
+?>
+            <html>
+                <h3>Entidades que se relacionam com <?php echo $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));?></h3>
+                <table class="table">
+                    <thead>
+                        <th>Entidade</th>
+                        <th>Propriedade</th>
+                        <th>Seleção</th>
+                        <th>Valor</th>
+                    </thead>
+                    <tbody>
+<?php
+            $count = 0;
+       
+            while($count < count($idDaRel))
+            {
 ?>
                 <tr>
 <?php
-            $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$count]);
-            $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
+                    $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$count]);
+                    $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
 
-            if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
-            {
-                $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type2_id']);
-            }
-            else
-            {
-                $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type1_id']);
-            }
-            $numProps = $res_GetRelProps->num_rows;
-                $x = $numProps;
-                while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
-                    if($x == $numProps)
+                    if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
                     {
-                        $_readName = $this->bd->runQuery("SELECT * FROM ent_type WHERE id = ".$read_GetRelProps['ent_type_id']);
-?>
-                         <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
-<?php
+                        $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type2_id']);
                     }
+                    else
+                    {
+                        $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type1_id']);
+                    }
+                    $numProps = $res_GetRelProps->num_rows;
+                    $x = $numProps;
+                    while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
+                        if($x == $numProps)
+                        {
+                            $_readName = $this->bd->runQuery("SELECT * FROM ent_type WHERE id = ".$read_GetRelProps['ent_type_id']);
 ?>
-                        <td><?php echo $read_GetRelProps['name']?></td>
-                        <td><input type="checkbox" name="checkER<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
-                        <td>
+                            <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
 <?php
-                            switch ($read_GetRelProps['value_type']) {
-                                case 'enum':
-                                //get enum values if the component valu_type is enum
-                                $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
+                        }
+?>
+                            <td><?php echo $read_GetRelProps['name']?></td>
+                            <td><input type="checkbox" name="checkER<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
+                            <td>
+<?php
+                                switch ($read_GetRelProps['value_type']) {
+                                    case 'enum':
+                                    //get enum values if the component valu_type is enum
+                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
  ?>
-                                <select name="selectER<?php echo $count ?>">
+                                    <select name="selectER<?php echo $count ?>">
 <?php
-                                    while($read_AlldVal = $res_AlldVal->fetch_assoc()){
+                                        while($read_AlldVal = $res_AlldVal->fetch_assoc()){
 ?>                                            
-                                        <option><?php echo $read_AlldVal['value']; ?></option>
+                                            <option><?php echo $read_AlldVal['value']; ?></option>
 <?php
-                                    }
-?>                              </select>
-<?php
-                                    break;
-                                case 'bool':
-?>
-                                    <input type="radio" name="radioER<?php echo $count?>" value="true">True
-                                    <input type="radio" name="radioER<?php echo $count?>" value="false">False
-<?php
-                                    break;
-				case 'double':
-?>
-                                    <select name="operators<?php echo $count?>">
-                                        <option> </option> <!--This solves the problem that operatores always where sent in set state-->
-<?php
-                                        foreach($this->operators as$key=>$value)
-                                        {
-?>
-                                            <option><?php echo $value;?></option>
-<?php                                   
                                         }
-?>
-                                    </select>
-                                    <input type="text" name="doubleER<?php echo $count;?>">
-<?php                                                
-                                    break;
-				case 'text':
-?>
-                                    <input type="text" name="textER<?php echo $count; ?>">
-<?php
-                                    break;
-				case 'int':
-?>
-                                    <select name="operators<?php echo $count?>">
-                                        <option> </option> <!--This solves the problem that operatores always where sent in set state-->
-<?php                                   foreach($this->operators as$key=>$value)
-                                        {
-?>
-                                            <option><?php echo $value;?></option>
-<?php                                   
-                                        }
-?>
-                                    </select>
-                                        <input type="text" name="intER<?php echo $count ?>">
+?>                                  </select>
 <?php
                                         break;
-                                case 'ent_ref':
+                                    case 'bool':
 ?>
-                                    <input type="hidden" name="ent_refER" value="<?php echo $read_PropRelEnt['id'] ?>">
+                                        <input type="radio" name="radioER<?php echo $count?>" value="true">True
+                                        <input type="radio" name="radioER<?php echo $count?>" value="false">False
 <?php
-                                    break;
+                                        break;
+                                    case 'double':
+?>
+                                        <select name="operators<?php echo $count?>">
+                                            <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php
+                                            foreach($this->operators as$key=>$value)
+                                            {
+?>
+                                                <option><?php echo $value;?></option>
+<?php                                   
+                                            }
+?>
+                                        </select>
+                                        <input type="text" name="doubleER<?php echo $count;?>">
+<?php                                                
+                                        break;
+                                    case 'text':
+?>
+                                        <input type="text" name="textER<?php echo $count; ?>">
+<?php
+                                        break;
+                                    case 'int':
+?>
+                                        <select name="operators<?php echo $count?>">
+                                            <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php                                       foreach($this->operators as$key=>$value){
+?>
+                                                <option><?php echo $value;?></option>
+<?php                                   
+                                            }
+?>
+                                        </select>
+                                            <input type="text" name="intER<?php echo $count ?>">
+<?php
+                                            break;
+                                    case 'ent_ref':
+?>
+                                        <input type="hidden" name="ent_refER" value="<?php echo $read_PropRelEnt['id'] ?>">
+<?php
+                                        break;
                             }
 ?>
                             </td>                              
@@ -209,6 +217,7 @@ class Search{
                
 <?php
         }
+    }
         $_SESSION['ER'] = $count;
 ?>
                 </tbody>
