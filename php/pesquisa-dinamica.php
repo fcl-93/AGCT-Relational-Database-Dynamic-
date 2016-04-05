@@ -601,13 +601,13 @@ class Search{
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-            $queryTabela1 = $query1Ent;
+            $querydinamica = $query1Ent;
         }
         if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-            $queryTabela2 = $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica);
+            $querydinamica = $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica);
         }
         if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-            $queryTabela2 = $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica);
+            $querydinamica = $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica);
         }
         if($erro)
         {
