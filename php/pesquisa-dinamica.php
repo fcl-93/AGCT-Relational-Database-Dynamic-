@@ -695,7 +695,7 @@ class Search{
             }
             $i++;
         }
-        $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
+        $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $query1Ref = $query1Ent = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $primeiraVezET = $primeiraVezVT = $primeiraVezRL = true;
@@ -753,18 +753,30 @@ class Search{
         {
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
-        if ($checkSelectedET > 0 && $checkSelectedVT > 0) {
-            echo "<br><br>query dinamica ".$querydinamica." query1ent".$query1Ent;
-            $querydinamica = $querydinamica." e.id IN (".$query1Ent.") AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
+        $primeiraVez = true;
+        if (strlen($query1Ent) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            if ($primeiraVez) {
+                $querydinamica .= $query1Ent.")";
+                $primeiraVez = false;
+            }
         }
-        if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-            $querydinamica = $query1Ent;
+        if (strlen($query1Ref) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            if ($primeiraVez) {
+                $querydinamica .= $query1Ref.")";
+                $primeiraVez = false;
+            }
+            else {
+                $querydinamica .= " AND e.id IN ".$query1Ref.")";
+            }
         }
-        if ($checkSelectedET === 0 && $checkSelectedRL === 0) {
-            $querydinamica = $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica);
-        }
-        if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-            $querydinamica = $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica);
+        if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            if ($primeiraVez) {
+                $querydinamica .= $query1Ref.")";
+                $primeiraVez = false;
+            }
+            else {
+                $querydinamica .= " AND e.id IN ".$query1Ref.")";
+            }
         }
         if($erro)
         {
@@ -1132,14 +1144,15 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
                     echo $instancias['id'];
                 }
                 else {
-                    echo $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];   
+                    $entity_name = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
+                    echo $entity_name;
                 }
 ?>
                 </td>
             </tr>	
 <?php
             array_push($arrayInstId,$instancias['id']);
-            array_push($arrayInstComp,$instancias['entity_name']); 
+            array_push($arrayInstComp,$entity_name); 
         }
 ?>
             </tbody>
