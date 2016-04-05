@@ -54,7 +54,7 @@ class Search{
     }
     
     /**
-     * 
+     * This is the form that will allow the user to  make his searchs
      * 
      */
     private function tableChsStt(){
