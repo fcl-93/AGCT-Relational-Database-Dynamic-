@@ -488,7 +488,19 @@ class InsereRelacoes
                  exit;
             }
             else {
-                $_REQUEST['ent'] = substr_replace($this->bd->userInputVal($_REQUEST['ent']),"",0,12); 
+                if(is_numeric($_REQUEST['ent']))
+                {
+                }
+                else
+                {
+                    //this comes from the bottom it cuts out of the string the url that is used to make the ajax pushes
+                    
+                  $_REQUEST['ent'] = substr_replace($this->bd->userInputVal($_REQUEST['ent']),"",0,12);    
+                }
+                
+                
+                
+               
                 //print_r($_REQUEST);
                
             }
