@@ -7,10 +7,12 @@ class Search{
  
     private $bd;
     private $operators;
+    private $saveNames;
     public function __construct()
     {
         $this->bd = new Db_Op();
         $this->operators = operadores();
+        $this->saveNames = array();
         $this->checkUser();
     }
     
@@ -714,7 +716,7 @@ class Search{
     private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
         echo "entrei aqui controla ".$controla;
         echo $query1."<br>";
-        $saveNames = array();
+        
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
 
