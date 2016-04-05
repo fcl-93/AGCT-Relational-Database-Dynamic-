@@ -684,11 +684,25 @@ class Search{
     private function filtros2Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
         echo "entrei aqui controla ".$controla;
         echo $query1."<br>";
+        $saveNames = array();
+        $res_GetEntId = $this->bd->getMysqli("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
+        $read_GetEntId = $resGetEntId->fetch_assoc();
+
         if ($controla == 0) {
+            array_push($saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
         else {
-            $query1 .= " AND e.id IN (";
+            if(in_array($read_GetEntId['ent_type_id'],$saveNames))
+            {
+                $query1 .= " AND e.id IN (";
+            }
+            else
+            {
+                array_push($saveNames, $read_GetEntId['ent_type_id']);
+                $query1 .= " OR e.id IN (";        
+                        
+            }
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
