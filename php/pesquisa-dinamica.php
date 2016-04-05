@@ -546,6 +546,7 @@ class Search{
             $i++;
         }
         $querydinamica = $query1 = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
+        $query1REL = "SELECT DISTINCT r.id FROM relation WHERE ";
         $controla = 0;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count." controla ".$controla." <br>";
@@ -587,7 +588,7 @@ class Search{
                     }
                 }
                 else if ($checkSelectedET === 0 && $checkSelectedVT === 0) {
-                    $query1 = $this->filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1 = $this->filtros3Tabela($query1REL, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
