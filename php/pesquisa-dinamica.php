@@ -726,6 +726,7 @@ class Search{
             $query1 .= "e.id IN (";
         }
         else {
+            echo "Id da propriedade".$idDaPropriedade."<br>";
             echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             print_r($this->saveNames);
