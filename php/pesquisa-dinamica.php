@@ -695,7 +695,7 @@ class Search{
             }
             $i++;
         }
-        $querydinamica = "SELECT DISTINCT e.id, e.entity_name FROM entity AS e, value AS v WHERE ";
+        $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Ref = $query1Ent = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $primeiraVezET = $primeiraVezVT = $primeiraVezRL = true;
@@ -728,7 +728,7 @@ class Search{
                 if ($tipo == "ET") {
                     $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     $primeiraVezET = false;
-                    if ($querydinamica === true) {
+                    if ($query1Ent === true) {
                         break;
                     }
                 }
