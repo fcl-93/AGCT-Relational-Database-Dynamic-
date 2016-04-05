@@ -692,21 +692,21 @@ class Search{
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
-            if (validaInt($count, $tipo) === false) {
+            if ($this->validaInt($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaInt($count, $tipo);
+                $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
-            if (validaDouble($count, $tipo) === false) {
+            if ($this->validaDouble($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaDouble($count, $tipo);
+                $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
