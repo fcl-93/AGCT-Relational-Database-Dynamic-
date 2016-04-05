@@ -633,7 +633,7 @@ class Search{
             $conta = 0;
             $guardaEnt = array();
             $query1REL = $this->bd->runQuery($query1REL);
-            while ($entRef = $query1->fetch_assoc()) {
+            while ($entRef = $query1REL->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
                 $query2 = "SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE ent_type1_id = ".$idEnt." OR ent_type2_id = ".$idEnt;
                 $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
