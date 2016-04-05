@@ -637,7 +637,7 @@ class Search{
             $query1REL = $this->bd->runQuery($query1REL);
             while ($rel = $query1REL->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
-                $query2 = "SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id =".$rel["id"];
+                $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
                 $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
                 if ($idEmtRel["ent_type1_id"] == $idEnt) {
                     array_push($guardaEnt, $idEmtRel["ent_type1_id"]);
@@ -787,11 +787,28 @@ class Search{
 private function filtros3Tabela($query1, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
         echo "entrei aqui controla ".$controla;
         echo $query1."<br>";
+        $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
+        $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controla == 0) {
+            array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "r.id IN (";
         }
         else {
-            $query1 .= " AND r.id IN (";
+           
+            //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
+            //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
+            if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
+            {
+                $query1 .= " AND r.id IN (";
+                //echo "entrei no AND";
+            }
+            else
+            {
+                array_push($this->saveNames, $read_GetEntId['ent_type_id']);
+                $query1 .= " OR r.id IN (";        
+                        
+            }
+            //print_r($this->saveNames);
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
