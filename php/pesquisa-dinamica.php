@@ -113,8 +113,8 @@ class Search{
                     <tbody>
 <?php
             $count = $_SESSION['relPropCount'];
-            while($count < count($idDaRel))
-            {
+            $run = 0;
+            while($run < count($idDaRel)){
 ?>
                 <tr>
 <?php
@@ -214,7 +214,7 @@ class Search{
                 </tr>
 <?php
                 }
-                
+            $run++;    
             $count++;
 ?>
                
@@ -624,7 +624,7 @@ class Search{
 ?>
             <h3>Pesquisa Dinâmica - escolher componente</h3>
 <?php
-            $res_getEnt = $this->bd->runQuery("SELECT DISTINCT id, name FROM  ent_type"); //get all entities from ent type 
+            $res_getEnt = $this->bd->runQuery("SELECT  id, name FROM  ent_type"); //get all entities from ent type 
             if($res_getEnt->num_rows == 0)
             {
 ?>
