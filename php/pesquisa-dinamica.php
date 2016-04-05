@@ -721,20 +721,20 @@ class Search{
         $read_GetEntId = $res_GetEntId->fetch_assoc();
 
         if ($controla == 0) {
-            array_push($saveNames, $read_GetEntId['ent_type_id']);
+            array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
         else {
-            echo in_array($read_GetEntId['ent_type_id'],$saveNames);
+            echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
-            print_r($saveNames);
-            if(in_array($read_GetEntId['ent_type_id'],$saveNames))
+            print_r($this->saveNames);
+            if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
             {
                 $query1 .= " AND e.id IN (";
             }
             else
             {
-                array_push($saveNames, $read_GetEntId['ent_type_id']);
+                array_push($this->saveNames, $read_GetEntId['ent_type_id']);
                 $query1 .= " OR e.id IN (";        
                         
             }
