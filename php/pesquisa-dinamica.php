@@ -791,11 +791,11 @@ class Search{
         while ($entRef = $query1->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
-            echo "<br><br>query1".$query2;
+            echo "<br><br>query2".$query2;
             $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
             //obtem o id das entidades que satisfazem a pesquisa
             $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
-            echo "<br><br>query1".$query3;
+            echo "<br><br>query3".$query3;
             $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
             echo "entRef ".$entRef["id"]." idPropEntRef ".$idPropEntRef." entidadesComCorrespondencia " .$entidadesComCorrespondencia."<br>";
             array_push($guardaEntRef, $entidadesComCorrespondencia);
