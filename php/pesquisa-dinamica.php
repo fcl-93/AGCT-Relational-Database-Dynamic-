@@ -572,7 +572,7 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($checkSelectedVT === 0 && $checkSelectedRL === 0) {
-                    $querydinamica = $this->filtros1Tabela($controla,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $querydinamica = $this->filtro1Tabela($querydinamica, $controla, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     if ($querydinamica === true) {
                         break;
                     }
@@ -601,13 +601,14 @@ class Search{
             echo "entrei aqui 3";
             $conta = 0;
             $guardaEntRef = array();
-            while ($entRef = $this->bd->runQuery($query1)->fetch_assoc()) {
+            $query1 = $this->bd->runQuery($query1);
+            while ($entRef = $query1->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
                 $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
                 $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
                 //obtem o id das entidades que satisfazem a pesquisa
                 $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
-                $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["id"];
+                $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
                 array_push($guardaEntRef, $entidadesComCorrespondencia);
             }
             echo "<br>".$querydinamica."<br>";
@@ -616,9 +617,9 @@ class Search{
                     $querydinamica .= "e.id IN (";
                 }
                 else {
-                    $querydinamica .= " AND e.id IN (";
+                    $querydinamica .= " OR e.id IN (";
                 }
-                $querydinamica .= "SELECT e.id FROM entity WHERE id = ".$entidades.")";
+                $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
                 $conta++;
                 echo "<br>".$querydinamica."<br>";
             }
@@ -643,21 +644,21 @@ class Search{
             $querydinamica .= " AND e.id IN (";
         }
         if ($tipoValor == "int") {
-            if (validaInt($count, $tipo) === false) {
+            if ($this->validaInt($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaInt($count, $tipo);
+                $valor = $this->validaInt($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
-            if (validaDouble($count, $tipo) === false) {
+            if ($this->validaDouble($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaDouble($count, $tipo);
+                $valor = $this->validaDouble($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
@@ -691,21 +692,21 @@ class Search{
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
-            if (validaInt($count, $tipo) === false) {
+            if ($this->validaInt($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaInt($count, $tipo);
+                $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
-            if (validaDouble($count, $tipo) === false) {
+            if ($this->validaDouble($count, $tipo) === false) {
                 return true;
             }
             else {
-                $valor = validaDouble($count, $tipo);
+                $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
@@ -731,7 +732,7 @@ class Search{
 
 
     private function validaInt ($count, $tipo) {
-        if (verificaOperadores($count)) {
+        if ($this->verificaOperadores($count)) {
             $int_escaped = mysqli_real_escape_string($link,$_REQUEST['int'.$count.'']);
             if(ctype_digit($int_escaped))
             {	
@@ -763,7 +764,7 @@ class Search{
     }
     
     private function validaDouble ($count, $tipo) {
-        if (verificaOperadores($count)) {
+        if ($this->verificaOperadores($count)) {
             $double_escaped = $this->bd->userInputVal($_REQUEST['double'.$tipo.$count.'']);
             if(is_numeric($double_escaped))
             {
