@@ -81,12 +81,142 @@ class Search{
             </html>
 <?php
     }
+    /**
+     * This method will show all the properties form the entity that is related to the one we have chosed
+     * @param type $idDaRel
+     */
+    private function showPropRelQSRel($idDaRel){
+?>
+        <html>
+            <table>
+                <thead>
+                    <th>Entidade</th>
+                    <th>Propriedade</th>
+                    <th>Seleção</th>
+                    <th>Valores</th>
+                </thead>
+                <tbody>
+<?php
+        $count = 0;
+        while($i < $count($idDaRel))
+        {
+?>
+                <tr>
+<?php
+            $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel);
+            $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
+
+            if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
+            {
+                $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type2_id']);
+            }
+            else
+            {
+                $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id=".$_GetIdEnt['ent_type1_id']);
+            }
+            $numProps = $res_GetRelProps->num_rows;
+            
+                while($read_GetRelProps = $res_GetRelProps->fetch_assoc())
+                {
+                    if($count == 0)
+                    {
+                        $_readName = $this->bd->runQuery("SELECT * FROM ent_type WHERE id = ".$read_GetRelProps['ent_type_id']);
+?>
+                         <td rowspan="<?php echo $numProps;?>"><?php echo $_readName->fetch_assoc()['name'];?></td>
+<?php
+                    }
+                    else
+                    {
+?>
+                        <td><?php echo $read_GetRelProps['name']?></td>
+                        <td><input type="checkbox" name="check2Ent<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
+                        <td>
+<?php
+                            switch ($read_GetRelProps['value_type']) {
+                                case 'enum':
+                                //get enum values if the component valu_type is enum
+                                $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
+ ?>
+                                <select name="selectVT<?php echo $count ?>">
+<?php
+                                    while($read_AlldVal = $res_AlldVal->fetch_assoc()){
+?>                                            
+                                        <option><?php echo $read_AlldVal['value']; ?></option>
+<?php
+                                    }
+?>                              </select>
+<?php
+                                    break;
+                                case 'bool':
+?>
+                                    <input type="radio" name="radioVT<?php echo $count?>" value="true">True
+                                    <input type="radio" name="radioVT<?php echo $count?>" value="false">False
+<?php
+                                    break;
+				case 'double':
+?>
+                                    <select name="operators<?php echo $count?>">
+                                        <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php
+                                        foreach($this->operators as$key=>$value)
+                                        {
+?>
+                                            <option><?php echo $value;?></option>
+<?php                                   }
+?>
+                                    </select>
+                                    <input type="text" name="doubleVT<?php echo $count;?>">
+<?php                                                
+                                    break;
+				case 'text':
+?>
+                                    <input type="text" name="textVT<?php echo $count; ?>">
+<?php
+                                    break;
+				case 'int':
+?>
+                                    <select name="operators<?php echo $count?>">
+                                        <option> </option> <!--This solves the problem that operatores always where sent in set state-->
+<?php                                   foreach($this->operators as$key=>$value)
+                                        {
+?>
+                                            <option><?php echo $value;?></option>
+<?php                                   }
+?>
+                                    </select>
+                                        <input type="text" name="intVT<?php echo $count ?>">
+<?php
+                                        break;
+                                case 'ent_ref':
+?>
+                                    <input type="hidden" name="ent_refVT" value="<?php echo $read_PropRelEnt['id'] ?>">
+<?php
+                                    break;
+                            }
+?>
+                            </td>                              
+<?php
+                    }
+                }            
+            $i++;
+?>
+                </tr>
+<?php
+        }
+        $_SESSION['secondEnt'] = $count;
+?>
+                </tbody>
+            </table>
+        </html>
+<?php
+    }
     
     /**
      * This method will print table showing all the relation types and their atributes/properties where there is 
      * one entity equal the one we have choosed
      */
     private function showRelation(){
+        $guardaRelTpId = $array();
         $count = $_SESSION['vtPropCount'];
         $res_GetRelType = $this->bd->runQuery("SELECT * FROM rel_type WHERE ent_type1_id =".$this->bd->userInputVal($_REQUEST['ent'])." OR ent_type2_id=".$this->bd->userInputVal($_REQUEST['ent'])."");
         if($res_GetRelType->num_rows == 0)
@@ -115,6 +245,7 @@ class Search{
 <?php
             while($read_GetRelType = $res_GetRelType->fetch_assoc())
             {
+                array_push($guardaRelTpId, $read_GetRelType['id']);
                 $res_GetRelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$read_GetRelType['id']);
 ?>
                 <tr>
@@ -204,6 +335,7 @@ class Search{
                 </table>
             </html>
 <?php
+        $this->showPropRelQSRel($guardaRelTpId);
         }
     }
     
