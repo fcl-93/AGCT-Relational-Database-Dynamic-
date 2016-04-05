@@ -129,7 +129,7 @@ class Search{
                     }
 ?>
                         <td><?php echo $read_GetRelProps['name']?></td>
-                        <td><input type="checkbox" name="check2Ent<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
+                        <td><input type="checkbox" name="checkER<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
                         <td>
 <?php
                             switch ($read_GetRelProps['value_type']) {
@@ -137,7 +137,7 @@ class Search{
                                 //get enum values if the component valu_type is enum
                                 $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
  ?>
-                                <select name="selectVT<?php echo $count ?>">
+                                <select name="selectER<?php echo $count ?>">
 <?php
                                     while($read_AlldVal = $res_AlldVal->fetch_assoc()){
 ?>                                            
@@ -149,8 +149,8 @@ class Search{
                                     break;
                                 case 'bool':
 ?>
-                                    <input type="radio" name="radioVT<?php echo $count?>" value="true">True
-                                    <input type="radio" name="radioVT<?php echo $count?>" value="false">False
+                                    <input type="radio" name="radioER<?php echo $count?>" value="true">True
+                                    <input type="radio" name="radioER<?php echo $count?>" value="false">False
 <?php
                                     break;
 				case 'double':
@@ -166,12 +166,12 @@ class Search{
                                         }
 ?>
                                     </select>
-                                    <input type="text" name="doubleVT<?php echo $count;?>">
+                                    <input type="text" name="doubleER<?php echo $count;?>">
 <?php                                                
                                     break;
 				case 'text':
 ?>
-                                    <input type="text" name="textVT<?php echo $count; ?>">
+                                    <input type="text" name="textER<?php echo $count; ?>">
 <?php
                                     break;
 				case 'int':
@@ -186,12 +186,12 @@ class Search{
                                         }
 ?>
                                     </select>
-                                        <input type="text" name="intVT<?php echo $count ?>">
+                                        <input type="text" name="intER<?php echo $count ?>">
 <?php
                                         break;
                                 case 'ent_ref':
 ?>
-                                    <input type="hidden" name="ent_refVT" value="<?php echo $read_PropRelEnt['id'] ?>">
+                                    <input type="hidden" name="ent_refER" value="<?php echo $read_PropRelEnt['id'] ?>">
 <?php
                                     break;
                             }
@@ -199,7 +199,9 @@ class Search{
                             </td>                              
 <?php
                 $x--; 
-                ?></tr><?php
+?>
+                </tr>
+<?php
                 }
                 
             $count++;
@@ -207,7 +209,7 @@ class Search{
                
 <?php
         }
-        $_SESSION['secondEnt'] = $count;
+        $_SESSION['ER'] = $count;
 ?>
                 </tbody>
             </table>
