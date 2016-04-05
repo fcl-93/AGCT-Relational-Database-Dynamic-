@@ -633,15 +633,15 @@ class Search{
             $conta = 0;
             $guardaEnt = array();
             $query1REL = $this->bd->runQuery($query1REL);
-            while ($entRef = $query1REL->fetch_assoc()) {
+            while ($rel = $query1REL->fetch_assoc()) {
                 //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
-                $query2 = "SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE ent_type1_id = ".$idEnt." OR ent_type2_id = ".$idEnt;
+                $query2 = "SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id =".$rel["id"];
                 $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
-                if (is_null($idEmtRel["ent_type1_id"])) {
-                    array_push($guardaEnt, $idEmtRel["ent_type2_id"]);
+                if ($idEmtRel["ent_type1_id"] == $idEnt) {
+                    array_push($guardaEnt, $idEmtRel["ent_type1_id"]);
                 }
                 else {
-                    array_push($guardaEnt, $idEmtRel["ent_type1_id"]);
+                    array_push($guardaEnt, $idEmtRel["ent_type2_id"]);
                 }
             }
             echo "<br>".$querydinamica."<br>";
