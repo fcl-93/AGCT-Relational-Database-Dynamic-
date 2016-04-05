@@ -198,12 +198,13 @@ class Search{
 ?>
                             </td>                              
 <?php
-                $x--;
+                $x--; 
+                ?></tr><?php
                 }
                 
             $count++;
 ?>
-                </tr>
+               
 <?php
         }
         $_SESSION['secondEnt'] = $count;
