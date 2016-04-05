@@ -494,7 +494,7 @@ class InsereRelacoes
             }
             echo "bef";
             echo $_REQUEST['ent'];
-            echo "aft;"
+            echo "aft;";
             //after
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
             $read_EntType = $res_EntType->fetch_assoc();
