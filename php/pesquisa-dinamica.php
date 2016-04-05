@@ -720,19 +720,19 @@ class Search{
         
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
- echo "Id da propriedade".$idDaPropriedade."<br>";
+        //echo "Id da propriedade".$idDaPropriedade."<br>";
         if ($controla == 0) {
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "e.id IN (";
         }
         else {
            
-            echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
-            echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
+            //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
+            //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
             {
                 $query1 .= " AND e.id IN (";
-                echo "entrei no AND";
+                //echo "entrei no AND";
             }
             else
             {
@@ -740,7 +740,7 @@ class Search{
                 $query1 .= " OR e.id IN (";        
                         
             }
-            print_r($this->saveNames);
+            //print_r($this->saveNames);
         }
         echo $query1."<br>";
         if ($tipoValor == "int") {
