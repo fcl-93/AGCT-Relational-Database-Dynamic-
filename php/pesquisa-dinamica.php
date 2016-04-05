@@ -686,7 +686,7 @@ class Search{
         echo $query1."<br>";
         $saveNames = array();
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
-        $read_GetEntId = $resGetEntId->fetch_assoc();
+        $read_GetEntId = $res_GetEntId->fetch_assoc();
 
         if ($controla == 0) {
             array_push($saveNames, $read_GetEntId['ent_type_id']);
