@@ -118,7 +118,7 @@ class Search{
 ?>
                 <tr>
 <?php
-                    $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$count]);
+                    $_resGetIdEnt = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$idDaRel[$run]);
                     $_GetIdEnt = $_resGetIdEnt->fetch_assoc();
 
                     if($_GetIdEnt['ent_type1_id'] == $this->bd->userInputVal($_REQUEST['ent']))
