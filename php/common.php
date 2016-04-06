@@ -22,8 +22,8 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
             <script type="text/javascript" >
             
             $(document).ready(function() { 
-    $("#tabletopage").tablesorterPager({container: $("#pager")}); 
-}); 
+                $("table").tablesorterPager({container: $("#pager")}); 
+            }); 
             </script>
            
             <script src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.balloon.min.js">
