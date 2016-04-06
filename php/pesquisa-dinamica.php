@@ -696,6 +696,7 @@ class Search{
             $i++;
         }
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
+        $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $query1Ref = $query1Ent = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $primeiraVezET = $primeiraVezVT = $primeiraVezRL = true;
@@ -765,20 +766,20 @@ class Search{
             echo "<b>devia entrar aqui<b>";
             if ($primeiraVez) {
                 echo "<b>devia entrar aqui 2<b>";
-                $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
+                $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
                 $primeiraVez = false;
             }
             else {
-                $querydinamica .= " AND e.id IN ".$this->geraQueryTabela2($query1Ref,$idEnt,$querydinamica).")";
+                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
             }
         }
         if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
-                $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica).")";
+                $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
                 $primeiraVez = false;
             }
             else {
-                $querydinamica .= " AND e.id IN ".$this->geraQueryTabela3($query1Rel, $idEnt, $querydinamica).")";
+                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
             }
         }
         if($erro)
