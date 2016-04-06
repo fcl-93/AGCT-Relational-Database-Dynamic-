@@ -665,13 +665,14 @@ class Search{
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
-        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount'];
-        $numeroDechecksImpressos = $_SESSION['relPropCount'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
+        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount']." ".$_SESSION['ER'];
+        $numeroDechecksImpressos = $_SESSION['ER'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
         $checkSelectedET = 0;
         $checkSelectedVT = 0;
         $checkSelectedRL = 0;
+        $checkSelectedER = 0;
         $i = 0;
         $guardanomePropSelec = array();
         $guardaValorDaProp = array();
@@ -691,6 +692,11 @@ class Search{
             else if(isset($_REQUEST['checkRL'.$i])){
                 //significa que foi selecionada
                 $checkSelectedRL++;
+                $checkSelected++;
+            }
+            else if(isset($_REQUEST['checkRL'.$i])){
+                //significa que foi selecionada
+                $checkSelectedER++;
                 $checkSelected++;
             }
             $i++;
@@ -715,6 +721,10 @@ class Search{
                 else if (isset($_REQUEST['checkVT'.$count])) {
                     $idDaPropriedade = $_REQUEST['checkVT'.$count];
                     $tipo = "VT";
+                }
+                else if (isset($_REQUEST['checkER'.$count])) {
+                    $idDaPropriedade = $_REQUEST['checkER'.$count];
+                    $tipo = "ER";
                 }
                 else {
                     $idDaPropriedade = $_REQUEST['checkRL'.$count];
