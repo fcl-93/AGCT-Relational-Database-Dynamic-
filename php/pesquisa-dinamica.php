@@ -694,7 +694,7 @@ class Search{
                 $checkSelectedRL++;
                 $checkSelected++;
             }
-            else if(isset($_REQUEST['checkRL'.$i])){
+            else if(isset($_REQUEST['checkER'.$i])){
                 //significa que foi selecionada
                 $checkSelectedER++;
                 $checkSelected++;
@@ -703,9 +703,9 @@ class Search{
         }
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
-        $query1Ref = $query1Ent = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
+        $query1Ref = $query1Ent = $query1ER = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
-        $primeiraVezET = $primeiraVezVT = $primeiraVezRL = true;
+        $primeiraVezET = $primeiraVezVT = $primeiraVezRL = $primeiraVezER = true;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count;
             //CheckBoxes não foram selecionadas
@@ -758,6 +758,15 @@ class Search{
                         break;
                     }
                 }
+                else if($tipo == "ER") 
+                {
+                    $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $primeiraVezER = false;
+                    if ($query1ER === true) {
+                        break;
+                    }
+                
+                }
             }
         }
         if($checkSelected == 0)
@@ -790,6 +799,15 @@ class Search{
             }
             else {
                 $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+            }
+        }
+        if (strlen($query1ER) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            if ($primeiraVez) {
+                $querydinamica .= $this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                $primeiraVez = false;
+            }
+            else {
+                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
             }
         }
         if($erro)
@@ -870,6 +888,45 @@ class Search{
         
     }
     
+    private function geraQueryTabela4($query1ER, $idEnt, $querydinamica){
+    echo "entrei gera query 4";
+        $conta = 0;
+        $guardaEnt = array();
+        $query1ER = $this->bd->runQuery($query1ER);
+        while ($er = $query1ER->fetch_assoc()) {
+            //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
+            $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
+            $idER = $this->bd->runQuery($query2)->fetch_assoc();
+            $tpEnt1 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity1_id']);
+            while($idEnt = $tpEnt1->fetch_assoc())
+            {
+                if ($idER["entity1_id"] == $idEnt) {
+                    array_push($guardaEnt, $idER["entity1_id"]);
+                }
+            }
+            $tpEnt2 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity2_id']);
+            while($idEnt = $tpEnt2->fetch_assoc())
+            {
+                 if ($idER["entity2_id"] == $idEnt) {
+                    array_push($guardaEnt, $idER["entity2_id"]);
+                }
+            }
+        }
+        echo "<br>".$querydinamica."<br>";
+        foreach ($guardaEnt as $entidades) {
+            if ($conta == 0) {
+                $querydinamica .= "e.id IN (";
+            }
+            else {
+                $querydinamica .= " OR e.id IN (";
+            }
+            $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
+            $conta++;
+            echo "<br>".$querydinamica."<br>";
+        }
+        echo "<br>".$querydinamica."<br>";
+        return $querydinamica;    
+    }
     private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
         echo "entrei filtro tabela 1";
         if ($controlo) {
@@ -1050,6 +1107,73 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
         return $query1;
     }
     
+private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo){
+      echo "entrei filtros 2 controla ".$count;
+        echo $query1."<br>";
+        
+        $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
+        $read_GetEntId = $res_GetEntId->fetch_assoc();
+        //echo "Id da propriedade".$idDaPropriedade."<br>";
+        if ($controlo) {
+            array_push($this->saveNames, $read_GetEntId['ent_type_id']);
+            $query1 .= "e.id IN (";
+        }
+        else {
+           
+            //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
+            //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
+            if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
+            {
+                $query1 .= " AND e.id IN (";
+                //echo "entrei no AND";
+            }
+            else
+            {
+                array_push($this->saveNames, $read_GetEntId['ent_type_id']);
+                $query1 .= " OR e.id IN (";        
+                        
+            }
+            //print_r($this->saveNames);
+        }
+        echo $query1."<br>";
+        if ($tipoValor == "int") {
+            if ($this->validaInt($count, $tipo) === false) {
+                return true;
+            }
+            else {
+                $valor = $this->validaInt($count, $tipo);
+                $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+            }
+        }
+        else if ($tipoValor == "double") {
+            if ($this->validaDouble($count, $tipo) === false) {
+                return true;
+            }
+            else {
+                $valor = $this->validaDouble($count, $tipo);
+                $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+            }
+        }
+        else  if ($tipoValor == "text"){
+            $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
+            $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        }
+        else  if ($tipoValor == "enum"){
+            $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
+            $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        }
+        else  if ($tipoValor == "bool"){
+            $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
+            $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        }
+        echo $query1."<br>";
+        return $query1;
+}    
     private function validaInt ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
             $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$tipo.$count.'']);
