@@ -711,7 +711,7 @@ class Search{
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             echo "count ".$count;
             //CheckBoxes não foram selecionadas
-            if(empty($_REQUEST['checkET'.$count]) && empty($_REQUEST['checkVT'.$count]) && empty($_REQUEST['checkRL'.$count])) {
+            if(empty($_REQUEST['checkET'.$count]) && empty($_REQUEST['checkVT'.$count]) && empty($_REQUEST['checkRL'.$count]) && empty($_REQUEST['checkER'.$count])) {
                 //significa que não foi selecionado
             }
             //checkboxes selecionadas.
