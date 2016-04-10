@@ -210,13 +210,12 @@ class Search{
                             </td>                              
 <?php
                 $x--; 
-                
-            $count++;
 ?>
                 </tr>
 <?php
                 }
             $run++;    
+            $count++;
 ?>
                
 <?php
