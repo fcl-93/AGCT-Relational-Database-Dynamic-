@@ -714,6 +714,7 @@ class Search{
             }
             //checkboxes selecionadas.
             else {
+                echo "toun no else";
                 if (isset($_REQUEST['checkET'.$count])) {
                     $idDaPropriedade = $_REQUEST['checkET'.$count];
                     $tipo = "ET";
@@ -730,6 +731,7 @@ class Search{
                     $idDaPropriedade = $_REQUEST['checkRL'.$count];
                     $tipo = "RL";
                 }
+                echo $tipo;
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
                 $queryNomeValProp = $this->bd->runQuery($queryNomeValProp);
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
