@@ -702,6 +702,7 @@ class Search{
             }
             $i++;
         }
+        echo "Checks:".$numeroDechecksImpressos." ".$checkSelectedET." ".$checkSelectedVT." "." ".$checkSelectedRL." ".$checkSelectedER."<br>"; 
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Ref = $query1Ent = $query1ER = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
