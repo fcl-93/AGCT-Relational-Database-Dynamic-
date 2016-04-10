@@ -901,16 +901,16 @@ class Search{
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
             $idER = $this->bd->runQuery($query2)->fetch_assoc();
             $tpEnt1 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity1_id']);
-            while($idEnt = $tpEnt1->fetch_assoc())
+            while($read_TpEnt1 = $tpEnt1->fetch_assoc())
             {
-                if ($idER["entity1_id"] == $idEnt) {
+                if ($read_TpEnt1['ent_type_id']== $idEnt) {
                     array_push($guardaEnt, $idER["entity1_id"]);
                 }
             }
             $tpEnt2 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity2_id']);
-            while($idEnt = $tpEnt2->fetch_assoc())
+            while($read_TpEnt2 = $tpEnt2->fetch_assoc())
             {
-                 if ($idER["entity2_id"] == $idEnt) {
+                 if ($read_TpEnt2['ent_type_id']== $idEnt) {
                     array_push($guardaEnt, $idER["entity2_id"]);
                 }
             }
