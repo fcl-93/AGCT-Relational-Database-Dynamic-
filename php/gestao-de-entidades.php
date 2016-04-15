@@ -356,12 +356,30 @@ class Entidade
 	 */
 	public function disableEnt()
 	{
-		$res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+                $id = $this->bd->userInputVal($_REQUEST['ent_id']);
+                
+		$res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$id);
 		$read_EntTypeD = $res_EntTypeD->fetch_assoc();
-		$this->bd->runQuery("UPDATE ent_type SET state='inactive' WHERE id =".$_REQUEST['ent_id']);
+                
+                if($this->gereHist->addHist($id,$this->bd))
+                {
+                    $this->bd->runQuery("UPDATE ent_type SET state='inactive', updated_on='".date("Y-m-d H:i:s",time())."' WHERE id =".$id);
 ?>
-			<p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
-			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+                    <p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
+                    <p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+<?php
+                }
+                else
+                {
+?>
+                        <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
+<?php
+                        goBack();
+                }
+                
+                
+?>
+			
 <?php 		
 	}
 	
@@ -370,15 +388,30 @@ class Entidade
 	 */
 	public function enableEnt()
 	{
-		$res_EntTypeA = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$_REQUEST['ent_id']);
+            
+                $id = $this->bd->userInputVal($_REQUEST['ent_id']);
+                
+		$res_EntTypeA = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$id);
 		$read_EntTypeA = $res_EntTypeA->fetch_assoc();
-		$this->bd->runQuery("UPDATE ent_type SET state='active' WHERE id =".$_REQUEST['ent_id']);
-?>
+		
+                
+                 if($this->gereHist->addHist($id,$this->bd))
+                {
+                    $this->bd->runQuery("UPDATE ent_type SET state='active', updated_on='".date("Y-m-d H:i:s",time())."' WHERE id =".$id);
+?>                        
 		<html>
 		 	<p>A entidade <?php echo $read_EntTypeA['name'] ?> foi ativada</p>
 		 	<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 		</html>
 <?php 		
+                }
+                else
+                {
+?>
+                        <p>A entidade <?php echo $read_EntTypeA['name'] ?>  não pode ser ativada</p>
+<?php
+                        goBack();
+                }
 	}
 	
 	/**
@@ -392,8 +425,8 @@ class Entidade
 			$sanitizeName = $this->bd->userInputVal($_REQUEST['nome']);
                         
                         //get time stamp 
-                        $time = $_SERVER['REQUEST_TIME'];
-			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."',".$time.")";
+                        //$time = $_SERVER['REQUEST_TIME'];
+			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."','".date("Y-m-d H:i:s",time())."')";
 			$res_querState = $this->bd->runQuery($queryInsert);
                         
                       
@@ -430,8 +463,6 @@ class EntHist{
         $res_getEntTp = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$id."");
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
-        $t = date("Y-m-d H:i:s",time());
-        echo $t;
         if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".date("Y-m-d H:i:s",time())."',".$id.")"))
         {
             return true;
