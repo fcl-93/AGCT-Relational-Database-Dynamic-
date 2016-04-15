@@ -143,7 +143,8 @@ class Unidade
          * This method will disable unit-types that enabled.
          */
         private function desactivate(){
-            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive' WHERE id=".$_REQUEST['unit_id']))
+            $this->atualizaHistorico();
+            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".$_SERVER['REQUEST_TIME'] ."' WHERE id=".$_REQUEST['unit_id']))
             {
 ?>
                         <html>
@@ -157,6 +158,7 @@ class Unidade
          * This method will activate unit-types that are disabled
          */
         private function activate(){
+            $this->atualizaHistorico();
             if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'active' WHERE id=".$_REQUEST['unit_id']))
             {
 ?>
@@ -166,6 +168,15 @@ class Unidade
                         </html>
 <?php
             }
+        }
+        
+        private function atualizaHistorico () {
+            $selectAtributos = "SELECT * FROM prop_unit_type WHERE id = ".$_REQUEST['unit_id'];
+            $selectAtributos = $this->bd->runQuery($selectAtributos);
+            $atributos = $selectAtributos->fetch_assoc();
+            $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`,`inactive_on`, `prop_unit_type_id`) "
+                    . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".$_SERVER['REQUEST_TIME'] ."',".$_REQUEST["unit_id"].")";
+            $updateHist = $this->bd->runQuery($updateHist);
         }
         
         
@@ -220,7 +231,7 @@ class Unidade
 		{
 			//print_r($_REQUEST);
 			$sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
-			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`) VALUES (null,'".$sanitizedName."')");
+			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`, `updated_on`) VALUES (null,'".$sanitizedName."','".$_SERVER['REQUEST_TIME'] ."')");
 ?>
 			<html>
 				<h3>Gestão de unidades - introdução</h3>
