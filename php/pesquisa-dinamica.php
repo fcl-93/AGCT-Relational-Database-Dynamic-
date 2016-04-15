@@ -826,7 +826,7 @@ class Search{
                     }
                 }
             }
-            if (strlen($query1ER) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+            if (strlen($query1ER) > 56 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
