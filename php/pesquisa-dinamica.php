@@ -666,6 +666,7 @@ class Search{
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
+        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount']." ".$_SESSION['ER'];
         $numeroDechecksImpressos = $_SESSION['ER'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
@@ -701,18 +702,21 @@ class Search{
             }
             $i++;
         }
+        echo "Checks:".$numeroDechecksImpressos." ".$checkSelectedET." ".$checkSelectedVT." "." ".$checkSelectedRL." ".$checkSelectedER."<br>"; 
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Ref = $query1Ent = $query1ER = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $primeiraVezET = $primeiraVezVT = $primeiraVezRL = $primeiraVezER = true;
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
+            echo "count ".$count;
             //CheckBoxes não foram selecionadas
             if(empty($_REQUEST['checkET'.$count]) && empty($_REQUEST['checkVT'.$count]) && empty($_REQUEST['checkRL'.$count]) && empty($_REQUEST['checkER'.$count])) {
                 //significa que não foi selecionado
             }
             //checkboxes selecionadas.
             else {
+                echo "toun no else";
                 if (isset($_REQUEST['checkET'.$count])) {
                     $idDaPropriedade = $_REQUEST['checkET'.$count];
                     $tipo = "ET";
@@ -729,6 +733,7 @@ class Search{
                     $idDaPropriedade = $_REQUEST['checkRL'.$count];
                     $tipo = "RL";
                 }
+                echo $tipo;
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
                 $queryNomeValProp = $this->bd->runQuery($queryNomeValProp);
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
@@ -745,6 +750,7 @@ class Search{
                 else if ($tipo == "VT") {
                     $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
                     $primeiraVezVT = false;
+                    echo $query1Ref."<br>";
                     if ($query1Ref === true) {
                         break;
                     }
@@ -773,6 +779,7 @@ class Search{
         }
         else {
             $primeiraVez = true;
+            echo "Tamanhos ".strlen($query1Ent)." ".strlen($query1Ref)." ".strlen($query1Rel);
             if (strlen($query1Ent) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
                 if ($primeiraVez) {
                     $querydinamica .= $query1Ent.")";
@@ -780,7 +787,9 @@ class Search{
                 }
             }
             if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo "<b>devia entrar aqui<b>";
                 if ($primeiraVez) {
+                    echo "<b>devia entrar aqui 2<b>";
                     if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
                     }
@@ -845,13 +854,16 @@ class Search{
             goBack();
         }
         else {
+            echo "check selected: ".$checkSelected." checksimpressos: ".$numeroDechecksImpressos;
             $this->apresentaResultado ($querydinamica);
         }
     }
     
     private function geraQueryTabela2($query1,$idEnt,$querydinamica) {
+        echo "entrei gera query 2";
         $conta = 0;
         $guardaEntRef = array();
+        echo "<br><br>query1".$query1;
         $query1 = $this->bd->runQuery($query1);
         if (!$query1 || $query1->num_rows === 0) {
             return false;
@@ -859,6 +871,7 @@ class Search{
         while ($entRef = $query1->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
+            echo "<br><br>query2".$query2;
             $propEntRef = $this->bd->runQuery($query2);
             if (!$propEntRef || $propEntRef->num_rows === 0) {
                 return false;
@@ -868,9 +881,13 @@ class Search{
             }
             //obtem o id das entidades que satisfazem a pesquisa
             $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
+            echo "<br><br>query3".$query3;
             $entidadesComCorrespondencia = $this->bd->runQuery($query3)->fetch_assoc()["value"];
+            echo "entRef ".$entRef["id"]." idPropEntRef ".$idPropEntRef." entidadesComCorrespondencia " .$entidadesComCorrespondencia."<br>";
             array_push($guardaEntRef, $entidadesComCorrespondencia);
         }
+        print_r($guardaEntRef);
+        echo "<br>".$querydinamica."<br>";
         foreach ($guardaEntRef as $entidades) {
             if ($conta == 0) {
                 $querydinamica .= "e.id IN (";
@@ -880,11 +897,14 @@ class Search{
             }
             $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
             $conta++;
+            echo "<br>".$querydinamica."<br>";
         }
+        echo "<br>".$querydinamica."<br>";
         return $querydinamica;
     }
     
     private function geraQueryTabela3($query1REL, $idEnt, $querydinamica) {
+        echo "entrei gera query 3";
         $conta = 0;
         $guardaEnt = array();
         $query1REL = $this->bd->runQuery($query1REL);
@@ -908,6 +928,7 @@ class Search{
                 array_push($guardaEnt, $idEmtRel["entity2_id"]);
             }
         }
+        echo "<br>".$querydinamica."<br>";
         foreach ($guardaEnt as $entidades) {
             if ($conta == 0) {
                 $querydinamica .= "e.id IN (";
@@ -917,12 +938,15 @@ class Search{
             }
             $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
             $conta++;
+            echo "<br>".$querydinamica."<br>";
         }
+        echo "<br>".$querydinamica."<br>";
         return $querydinamica;
         
     }
     
     private function geraQueryTabela4($query1ER, $idEnt, $querydinamica){
+    echo "entrei gera query 4";
         $conta = 0;
         $guardaEnt = array();
         $query1ER = $this->bd->runQuery($query1ER);
@@ -953,6 +977,7 @@ class Search{
                 }
            }
         }
+        echo "<br>".$querydinamica."<br>";
         foreach ($guardaEnt as $entidades) {
             if ($conta == 0) {
                 $querydinamica .= "e.id IN (";
@@ -962,10 +987,13 @@ class Search{
             }
             $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
             $conta++;
+            echo "<br>".$querydinamica."<br>";
         }
+        echo "<br>".$querydinamica."<br>";
         return $querydinamica;    
     }
     private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+        echo "entrei filtro tabela 1";
         if ($controlo) {
             $querydinamica .= "e.id IN (";
         }
@@ -1011,6 +1039,9 @@ class Search{
     }
    
     private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+        echo "entrei filtros 2 controla ".$count;
+        echo $query1."<br>";
+        
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1035,6 +1066,7 @@ class Search{
             }
             //print_r($this->saveNames);
         }
+        echo $query1."<br>";
         if ($tipoValor == "int") {
             if ($this->validaInt($count, $tipo) === false) {
                 return true;
@@ -1070,10 +1102,13 @@ class Search{
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        echo $query1."<br>";
         return $query1;
     }
 
 private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+        echo "entrei filtros 3 controla ".$count;
+        echo $query1."<br>";
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controlo) {
@@ -1097,6 +1132,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             }
             //print_r($this->saveNames);
         }
+        echo $query1."<br>";
         if ($tipoValor == "int") {
             if ($this->validaInt($count, $tipo) === false) {
                 return true;
@@ -1132,10 +1168,14 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        echo $query1."<br>";
         return $query1;
     }
     
 private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo){
+      echo "entrei filtros 2 controla ".$count;
+        echo $query1."<br>";
+        
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1160,6 +1200,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             }
             //print_r($this->saveNames);
         }
+        echo $query1."<br>";
         if ($tipoValor == "int") {
             if ($this->validaInt($count, $tipo) === false) {
                 return true;
@@ -1195,6 +1236,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
             $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        echo $query1."<br>";
         return $query1;
 }    
     private function validaInt ($count, $tipo) {
