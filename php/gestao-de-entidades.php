@@ -432,7 +432,7 @@ class EntHist{
         //create a copy in the history table  
         $t = date("Y-m-d H:i:s",time());
         echo $t;
-        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."',".date("Y-m-d H:i:s",time()).",".$id.")"))
+        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".date("Y-m-d H:i:s",time())."',".$id.")"))
         {
             return true;
         }
