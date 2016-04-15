@@ -430,8 +430,7 @@ class EntHist{
         $res_getEntTp = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$id."");
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
-          $time = $_SERVER['REQUEST_TIME'];
-        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."',". $time.",".$id.")"))
+        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."',".time().",".$id.")"))
         {
             return true;
         }
