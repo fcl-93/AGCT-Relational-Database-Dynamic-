@@ -779,43 +779,76 @@ class Search{
         }
         $primeiraVez = true;
         echo "Tamanhos ".strlen($query1Ent)." ".strlen($query1Ref)." ".strlen($query1Rel);
-        if (strlen($query1Ent) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+        if (strlen($query1Ent) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
                 $querydinamica .= $query1Ent.")";
                 $primeiraVez = false;
             }
         }
-        if (strlen($query1Ref) > 56) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+        if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             echo "<b>devia entrar aqui<b>";
             if ($primeiraVez) {
                 echo "<b>devia entrar aqui 2<b>";
-                $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
-                $primeiraVez = false;
+                if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
+                    $primeiraVez = false;   
+                }
             }
             else {
-                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
+                if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
+                }
             }
         }
-        if (strlen($query1Rel) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+        if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
-                $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
-                $primeiraVez = false;
+                if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                    $primeiraVez = false;
+                }
             }
             else {
-                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                }
             }
         }
-        if (strlen($query1ER) > 46) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+        if (strlen($query1ER) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
             if ($primeiraVez) {
-                $querydinamica .= $this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
-                $primeiraVez = false;
+                if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= $this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                    $primeiraVez = false;
+                }
             }
             else {
-                $querydinamica .= " AND e.id IN (".$this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    $erro = true;
+                }
+                else {
+                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                }
             }
         }
         if($erro)
         {
+?>
+            <p>Não existem entidades que respeitem a pesquisa efetuada.</p>
+<?php
             goBack();
         }
         else {
@@ -834,7 +867,13 @@ class Search{
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
             echo "<br><br>query2".$query2;
-            $idPropEntRef = $this->bd->runQuery($query2)->fetch_assoc()["id"];
+            $propEntRef = $this->bd->runQuery($query2);
+            if (!$propEntRef) {
+                return false;
+            }
+            else {
+                $idPropEntRef = $propEntRef->fetch_assoc()["id"];  
+            }
             //obtem o id das entidades que satisfazem a pesquisa
             $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
             echo "<br><br>query3".$query3;
@@ -868,6 +907,9 @@ class Search{
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
             $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
+            if (!$idEmtRel) {
+                return false;
+            }
             if ($idEmtRel["entity1_id"] == $idEnt) {
                 array_push($guardaEnt, $idEmtRel["entity1_id"]);
             }
@@ -900,7 +942,10 @@ class Search{
         while ($er = $query1ER->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
-             $runQuery2 = $this->bd->runQuery($query2);
+            $runQuery2 = $this->bd->runQuery($query2);
+            if (!$runQuery2) {
+                return false;
+            }
            while($idER = $runQuery2 ->fetch_assoc() ){
                 $tpEnt1 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity1_id']);
                 while($read_TpEnt1 = $tpEnt1->fetch_assoc())
@@ -1267,6 +1312,13 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         echo "<br><br>".$querydinamica."<br><br>";
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
+        if ($instEnt->num_rows === 0) {
+?>
+            <p>Não existem entidades que respeitem a pesquisa efetuada.</p>
+<?php
+            goBack();
+        }
+        else {
 ?>
         <table class="table">
             <thead>
@@ -1276,32 +1328,33 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             </thead>
             <tbody>
 <?php
-        $arrayInstId = array();
-        $arrayInstComp = array();
-        while($instancias =$instEnt->fetch_assoc()) {
+            $arrayInstId = array();
+            $arrayInstComp = array();
+            while($instancias =$instEnt->fetch_assoc()) {
 ?>
             <tr>
                 <td>
 <?php
-                $getEntName = "SELECT entity_name FROM entity WHERE id = ".$instancias['id'];
-                if ($this->bd->runQuery($getEntName)->num_rows == 0) {
-                    echo $instancias['id'];
-                }
-                else {
-                    $entity_name = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
-                    echo $entity_name;
-                }
+                    $getEntName = "SELECT entity_name FROM entity WHERE id = ".$instancias['id'];
+                    if ($this->bd->runQuery($getEntName)->num_rows == 0) {
+                        echo $instancias['id'];
+                    }
+                    else {
+                        $entity_name = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
+                        echo $entity_name;
+                    }
 ?>
                 </td>
             </tr>	
 <?php
-            array_push($arrayInstId,$instancias['id']);
-            array_push($arrayInstComp,$entity_name); 
-        }
+                array_push($arrayInstId,$instancias['id']);
+                array_push($arrayInstComp,$entity_name); 
+            }
 ?>
             </tbody>
         </table>
 <?php
+        }
     }
 }
 ?>
