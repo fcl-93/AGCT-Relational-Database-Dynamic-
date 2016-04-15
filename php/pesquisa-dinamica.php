@@ -865,7 +865,7 @@ class Search{
         $guardaEntRef = array();
         echo "<br><br>query1".$query1;
         $query1 = $this->bd->runQuery($query1);
-        if (!$query1) {
+        if (!$query1 || $query1->num_rows === 0) {
             return false;
         }
         while ($entRef = $query1->fetch_assoc()) {
@@ -873,7 +873,7 @@ class Search{
             $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
             echo "<br><br>query2".$query2;
             $propEntRef = $this->bd->runQuery($query2);
-            if (!$propEntRef) {
+            if (!$propEntRef || $propEntRef->num_rows === 0) {
                 return false;
             }
             else {
@@ -908,14 +908,14 @@ class Search{
         $conta = 0;
         $guardaEnt = array();
         $query1REL = $this->bd->runQuery($query1REL);
-        if (!$query1REL) {
+        if (!$query1REL || $query1REL->num_rows === 0) {
             return false;
         }
         while ($rel = $query1REL->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
             $idEmtRel = $this->bd->runQuery($query2);
-            if (!$idEmtRel) {
+            if (!$idEmtRel || $idEmtRel->num_rows === 0) {
                 return false;
             }
             else {
@@ -950,14 +950,14 @@ class Search{
         $conta = 0;
         $guardaEnt = array();
         $query1ER = $this->bd->runQuery($query1ER);
-        if (!$query1ER) {
+        if (!$query1ER || $query1ER->num_rows === 0) {
             return false;
         }
         while ($er = $query1ER->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
             $runQuery2 = $this->bd->runQuery($query2);
-            if (!$runQuery2) {
+            if (!$runQuery2 || $runQuery2->num_rows === 0) {
                 return false;
             }
            while($idER = $runQuery2 ->fetch_assoc() ){
