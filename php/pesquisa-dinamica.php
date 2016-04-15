@@ -666,7 +666,6 @@ class Search{
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
         $idEnt = $_SESSION['id']; // vem pelo session é o id da entidade selecionada.
-        echo $_SESSION['countPrintedProps']." ". $_SESSION['relPropCount']." ".$_SESSION['vtPropCount']." ".$_SESSION['ER'];
         $numeroDechecksImpressos = $_SESSION['ER'];	//numero de checkboxes impressas na pagina anterior == ao numero de propriedades.
         //percorre o request 
         $checkSelected = 0;
@@ -730,7 +729,6 @@ class Search{
                     $idDaPropriedade = $_REQUEST['checkRL'.$count];
                     $tipo = "RL";
                 }
-                echo $tipo;
                 $queryNomeValProp = "SELECT name, value_type FROM property where id = ".$idDaPropriedade;
                 $queryNomeValProp = $this->bd->runQuery($queryNomeValProp);
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
