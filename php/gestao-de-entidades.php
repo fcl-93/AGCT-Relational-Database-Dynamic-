@@ -426,7 +426,7 @@ class Entidade
                         
                         //get time stamp 
                         //$time = $_SERVER['REQUEST_TIME'];
-			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."','".date("Y-m-d H:i:s",time())."')";
+			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`, `update_on`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."','".date("Y-m-d H:i:s",time())."')";
 			$res_querState = $this->bd->runQuery($queryInsert);
                         
                       
