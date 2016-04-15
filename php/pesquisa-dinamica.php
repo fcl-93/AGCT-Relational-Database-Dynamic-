@@ -777,70 +777,72 @@ class Search{
         {
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
-        $primeiraVez = true;
-        echo "Tamanhos ".strlen($query1Ent)." ".strlen($query1Ref)." ".strlen($query1Rel);
-        if (strlen($query1Ent) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-            if ($primeiraVez) {
-                $querydinamica .= $query1Ent.")";
-                $primeiraVez = false;
-            }
-        }
-        if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-            echo "<b>devia entrar aqui<b>";
-            if ($primeiraVez) {
-                echo "<b>devia entrar aqui 2<b>";
-                if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
-                }
-                else {
-                    $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
-                    $primeiraVez = false;   
-                }
-            }
-            else {
-                if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
-                }
-                else {
-                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
-                }
-            }
-        }
-        if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-            if ($primeiraVez) {
-                if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
-                }
-                else {
-                    $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+        else {
+            $primeiraVez = true;
+            echo "Tamanhos ".strlen($query1Ent)." ".strlen($query1Ref)." ".strlen($query1Rel);
+            if (strlen($query1Ent) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                if ($primeiraVez) {
+                    $querydinamica .= $query1Ent.")";
                     $primeiraVez = false;
                 }
             }
-            else {
-                if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
+            if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo "<b>devia entrar aqui<b>";
+                if ($primeiraVez) {
+                    echo "<b>devia entrar aqui 2<b>";
+                    if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
+                        $primeiraVez = false;   
+                    }
                 }
                 else {
-                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                    if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= " AND e.id IN (".$this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
+                    }
                 }
             }
-        }
-        if (strlen($query1ER) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-            if ($primeiraVez) {
-                if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
+            if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                if ($primeiraVez) {
+                    if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= $this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                        $primeiraVez = false;
+                    }
                 }
                 else {
-                    $querydinamica .= $this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
-                    $primeiraVez = false;
+                    if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= " AND e.id IN (".$this->geraQueryTabela3($query1Rel, $idEnt, $cabecalhoQuery).")";
+                    }
                 }
             }
-            else {
-                if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
-                    $erro = true;
+            if (strlen($query1ER) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                if ($primeiraVez) {
+                    if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= $this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                        $primeiraVez = false;
+                    }
                 }
                 else {
-                    $querydinamica .= " AND e.id IN (".$this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                    if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                        $erro = true;
+                    }
+                    else {
+                        $querydinamica .= " AND e.id IN (".$this->geraQueryTabela4($query1ER, $idEnt, $cabecalhoQuery).")";
+                    }
                 }
             }
         }
@@ -863,6 +865,9 @@ class Search{
         $guardaEntRef = array();
         echo "<br><br>query1".$query1;
         $query1 = $this->bd->runQuery($query1);
+        if (!$query1) {
+            return false;
+        }
         while ($entRef = $query1->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT id FROM property WHERE fk_ent_type_id = ".$idEnt." AND value_type = 'ent_ref' AND ent_type_id IN (SELECT ent_type_id FROM entity WHERE id = '".$entRef["id"]."')";
@@ -903,12 +908,18 @@ class Search{
         $conta = 0;
         $guardaEnt = array();
         $query1REL = $this->bd->runQuery($query1REL);
+        if (!$query1REL) {
+            return false;
+        }
         while ($rel = $query1REL->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE id =".$rel["id"];
-            $idEmtRel = $this->bd->runQuery($query2)->fetch_assoc();
+            $idEmtRel = $this->bd->runQuery($query2);
             if (!$idEmtRel) {
                 return false;
+            }
+            else {
+               $idEmtRel = $idEmtRel->fetch_assoc();
             }
             if ($idEmtRel["entity1_id"] == $idEnt) {
                 array_push($guardaEnt, $idEmtRel["entity1_id"]);
@@ -939,6 +950,9 @@ class Search{
         $conta = 0;
         $guardaEnt = array();
         $query1ER = $this->bd->runQuery($query1ER);
+        if (!$query1ER) {
+            return false;
+        }
         while ($er = $query1ER->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
