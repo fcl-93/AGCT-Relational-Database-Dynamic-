@@ -12,12 +12,13 @@ $entity = new Entidade();
 class Entidade
 {
     private $bd;
-    
+    private $gereHist;
     /**
      * Constructor
      */
     public function __construct(){
         $this->bd = new Db_Op();
+        $this->gereHist = new EntHist();
         $this->checkUser();
     }
     /**
@@ -319,11 +320,30 @@ class Entidade
 
 		//	print_r($_REQUEST);
 		//	echo "UPDATE `ent_type` SET `name`=".$sanitizeName.",`state`=".$_REQUEST['atv_int']." WHERE id = ".$_REQUEST['ent_id']."";
-			$res_EntTypeAS =  $this->bd->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$_REQUEST['ent_id']."");
+                        
+                        
+                        $id = $this->bd->userInputVal($_REQUEST['ent_id']);
+                        if($this->gereHist->addHist($id,$this->bd))
+                        {
+                            $res_EntTypeAS =  $this->bd->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$id."");
+                        
+                                                    
 ?>
-			<p>Alterou os dados da entidade com sucesso.</p>
-			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+                		<p>Alterou os dados da entidade com sucesso.</p>
+        			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 <?php 
+                        }
+                        else
+                        {
+?>
+                            <h3>Gestão de Componentes - Edição</h3>
+                            <p>O tipo de entidade não foi alterado.</p>
+                            
+<?php
+                            goBack ();
+                        }
+                        
+                        
 		}
 		else
 		{
@@ -370,8 +390,13 @@ class Entidade
 		{
 			//print_R($_REQUEST);
 			$sanitizeName = $this->bd->userInputVal($_REQUEST['nome']);
-			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."')";
+                        
+                        //get time stamp 
+                        $time = $_SERVER['REQUEST_TIME'];
+			$queryInsert = "INSERT INTO `ent_type`(`id`, `name`, `state`) VALUES (NULL,'".$sanitizeName."','".$_REQUEST['atv_int']."',".$time.")";
 			$res_querState = $this->bd->runQuery($queryInsert);
+                        
+                      
 ?>
 				<p>Inseriu os dados de uma nova entidade com sucesso</p>
 				<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
@@ -383,5 +408,39 @@ class Entidade
 		}
 
 	}
+}
+
+
+class EntHist{
+    
+    public function __construct(){
+        
+    }
+    
+    /**
+     * This method will add a backup to the mirror table of ent_type all the tuples in that table are
+     * @param type $id
+     * @return boolean
+     */
+    public function addHist($id,$bd)
+    {
+       
+        
+        //gets info from the ent_type that id about to get changed
+        $res_getEntTp = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$id."");
+        $read_getEntTp = $res_getEntTp->fetch_assoc();
+        //create a copy in the history table  
+        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."',".time().",".$id.")"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+                                     
+                        
+                        
+    }
 }
 ?>
