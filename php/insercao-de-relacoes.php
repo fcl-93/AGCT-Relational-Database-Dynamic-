@@ -231,6 +231,7 @@ class InsereRelacoes
                             <option value="10">10 per page</option>
                         </select>
                     </form>
+                </div>
             </html>
 
 <?php
