@@ -326,21 +326,24 @@ class Entidade
                         if($this->gereHist->addHist($id,$this->bd))
                         {
                             $res_EntTypeAS =  $this->bd->runQuery("UPDATE `ent_type` SET `name`='".$sanitizeName."',`state`='".$_REQUEST['atv_int']."' WHERE id = ".$id."");
+                        
+                                                    
+?>
+                		<p>Alterou os dados da entidade com sucesso.</p>
+        			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+<?php 
                         }
                         else
                         {
 ?>
                             <h3>Gestão de Componentes - Edição</h3>
                             <p>O tipo de entidade não foi alterado.</p>
+                            
 <?php
+                            goBack ();
                         }
                         
                         
-                        
-?>
-			<p>Alterou os dados da entidade com sucesso.</p>
-			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
-<?php 
 		}
 		else
 		{
@@ -428,7 +431,7 @@ class EntHist{
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
         
-        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."',".$read_getEntTp['updated_on'].",".$_SERVER['REQUEST_TIME'].",".$id.")"))
+        if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".$_SERVER['REQUEST_TIME']."',".$id.")"))
         {
             return true;
         }
