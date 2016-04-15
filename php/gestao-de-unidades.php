@@ -175,7 +175,7 @@ class Unidade
             $selectAtributos = $this->bd->runQuery($selectAtributos);
             $atributos = $selectAtributos->fetch_assoc();
             $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`, `prop_unit_type_id`) "
-                    . "VALUES (".$atributos["name"].",".$atributos["state"].",".$atributos["updated_on"].",".$_REQUEST["unit_id"].")";
+                    . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."',".$_REQUEST["unit_id"].")";
             $updateHist = $this->bd->runQuery($updateHist);
         }
         
