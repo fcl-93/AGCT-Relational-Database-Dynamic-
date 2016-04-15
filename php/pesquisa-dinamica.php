@@ -1281,7 +1281,6 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
     
     
     private function apresentaResultado ($querydinamica) {
-        echo "<br><br>".$querydinamica."<br><br>";
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
