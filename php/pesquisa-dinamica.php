@@ -900,21 +900,23 @@ class Search{
         while ($er = $query1ER->fetch_assoc()) {
             //obtem o id de todas a propriedades ent_ref do tipo de entidade que tem uma referência ao tipo de entidade pretendido
             $query2 = "SELECT entity1_id, entity2_id FROM relation WHERE entity1_id =".$er['id']." OR entity2_id=".$er['id']."";
-            $idER = $this->bd->runQuery($query2)->fetch_assoc();
-            $tpEnt1 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity1_id']);
-            while($idEnt = $tpEnt1->fetch_assoc())
-            {
-                if ($idER["entity1_id"] == $idEnt) {
-                    array_push($guardaEnt, $idER["entity1_id"]);
+             $runQuery2 = $this->bd->runQuery($query2);
+           while($idER = $runQuery2 ->fetch_assoc() ){
+                $tpEnt1 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity1_id']);
+                while($read_TpEnt1 = $tpEnt1->fetch_assoc())
+                {
+                    if ($read_TpEnt1['ent_type_id']== $idEnt) {
+                        array_push($guardaEnt, $idER["entity1_id"]);
+                    }
                 }
-            }
-            $tpEnt2 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity2_id']);
-            while($idEnt = $tpEnt2->fetch_assoc())
-            {
-                 if ($idER["entity2_id"] == $idEnt) {
-                    array_push($guardaEnt, $idER["entity2_id"]);
+                $tpEnt2 = $this->bd->runQuery("SELECT ent_type_id FROM entity WHERE id=".$idER['entity2_id']);
+                while($read_TpEnt2 = $tpEnt2->fetch_assoc())
+                {
+                     if ($read_TpEnt2['ent_type_id']== $idEnt) {
+                        array_push($guardaEnt, $idER["entity2_id"]);
+                    }
                 }
-            }
+           }
         }
         echo "<br>".$querydinamica."<br>";
         foreach ($guardaEnt as $entidades) {
