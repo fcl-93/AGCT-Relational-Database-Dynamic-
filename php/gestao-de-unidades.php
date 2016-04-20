@@ -144,7 +144,7 @@ class Unidade
          */
         private function desactivate(){
             $this->atualizaHistorico();
-            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".$_SERVER['REQUEST_TIME'] ."' WHERE id=".$_REQUEST['unit_id']))
+            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
             {
 ?>
                         <html>
@@ -175,7 +175,7 @@ class Unidade
             $selectAtributos = $this->bd->runQuery($selectAtributos);
             $atributos = $selectAtributos->fetch_assoc();
             $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`,`inactive_on`, `prop_unit_type_id`) "
-                    . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".$_SERVER['REQUEST_TIME'] ."',".$_REQUEST["unit_id"].")";
+                    . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
             $updateHist = $this->bd->runQuery($updateHist);
         }
         
@@ -231,7 +231,7 @@ class Unidade
 		{
 			//print_r($_REQUEST);
 			$sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
-			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`, `updated_on`) VALUES (null,'".$sanitizedName."','".$_SERVER['REQUEST_TIME'] ."')");
+			$this->bd->runQuery("INSERT INTO `prop_unit_type`(`id`, `name`, `updated_on`) VALUES (null,'".$sanitizedName."','".date("Y-m-d H:i:s",time())."')");
 ?>
 			<html>
 				<h3>Gestão de unidades - introdução</h3>
