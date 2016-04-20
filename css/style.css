@@ -1,53 +1,41 @@
-/* tables */
-table.tablesorter {
-	font-family:arial;
-	background-color: #CDCDCD;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
-	width: 100%;
-	text-align: left;
+/* pager wrapper, div */
+.tablesorter-pager {
+  padding: 5px;
 }
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #e6EEEE;
-	border: 1px solid #FFF;
-	font-size: 8pt;
-	padding: 4px;
+/* pager wrapper, in thead/tfoot */
+td.tablesorter-pager {
+  background-color: #e6eeee;
+  margin: 0; /* needed for bootstrap .pager gets a 18px bottom margin */
 }
-table.tablesorter thead tr .header {
-	background-image: url(bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-}
-table.tablesorter tbody td {
-	color: #3D3D3D;
-	padding: 4px;
-	background-color: #FFF;
-	vertical-align: top;
-}
-table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
-}
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(asc.gif);
-}
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(desc.gif);
-}
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #8dbdd8;
+/* pager navigation arrows */
+.tablesorter-pager img {
+  vertical-align: middle;
+  margin-right: 2px;
+  cursor: pointer;
 }
 
-.first{
-    background-image: url(../images/first.png);
-}
-.next{
-     background-image: url(../images/next.png);
+/* pager output text */
+.tablesorter-pager .pagedisplay {
+  padding: 0 5px 0 5px;
+  width: 50px;
+  text-align: center;
 }
 
-.last{
-    background-image: url(../images/last.png);
+/* pager element reset (needed for bootstrap) */
+.tablesorter-pager select {
+  margin: 0;
+  padding: 0;
 }
-.prev{
-     background-image: url(../images/prev.png);
+
+/*** css used when "updateArrows" option is true ***/
+/* the pager itself gets a disabled class when the number of rows is less than the size */
+.tablesorter-pager.disabled {
+  display: none;
+}
+/* hide or fade out pager arrows when the first or last row is visible */
+.tablesorter-pager .disabled {
+  /* visibility: hidden */
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  cursor: default;
 }

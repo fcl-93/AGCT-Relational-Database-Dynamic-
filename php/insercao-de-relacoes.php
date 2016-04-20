@@ -216,21 +216,22 @@ class InsereRelacoes
 ?>                               
                                 </tbody>
                             </table>
-                                
-                <div id="pager" class="pager">
-                    <form>
-                        <img src="/custom/images/first.png" class="first"/>
-                        <img src="/custom/images/prev.png" class="prev"/>
-                        <input type="text" class="pagedisplay"/>
-                        <img  src="/custom/images/next.png" class="next"/>
-                        <img src="/custom/images/last.png" class="last"/>
-                        <select class="pagesize">
-                            <option value="">>LIMIT</option>
-                            <option value="2">2 per page</option>
-                            <option value="5">5 per page</option>
-                            <option value="10">10 per page</option>
-                        </select>
-                    </form>
+                      <div id="pager" class="pager">
+                            <form>
+                                <img src="/custom/images/first.png" class="first"/>
+                                <img src="/custom/images/prev.png" class="prev"/>
+                                <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+                                <img src="/custom/images/next.png" class="next"/>
+                                <img src="/custom/images/last.png" class="last"/>
+                                    <select class="pagesize">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="all">All Rows</option>
+                                    </select>
+                            </form>
+                      </div>          
             </html>
 
 <?php
