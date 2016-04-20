@@ -520,7 +520,7 @@ class ValoresPermitidos
 ?>
                                 
                                     <p>O nome do valor enum selecionado não pode ser alterado para <?php echo $_REQUEST['valor'] ?>.</p>
-                                    <p>	Clique em <?php goBack(); ?> para voltar atrás.</p>
+                                    <p>	Clique em <?php goBack(); ?></p>
 <?php
                                 }
                                 
@@ -585,8 +585,7 @@ class ValPerHist{
         {
             $read_oldEnum = $res_oldEnum->fetch_assoc();
             
-            if($bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`)"
-                    . " VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$id.",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."'"))
+            if($bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."'"))
             {
                 //the history was created
                 return true;
