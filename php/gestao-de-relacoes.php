@@ -152,6 +152,7 @@ class RelationManage
         $nomes = $getNomes->fetch_assoc();
         $idNome1 = $nomes["ent_type1_id"];
         $idNome2 = $nomes["ent_type2_id"];
+        $this->gereHist->atualizaHistorico($this->db);
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "ativar")
         {
