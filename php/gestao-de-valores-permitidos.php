@@ -534,8 +534,13 @@ class ValoresPermitidos
 	 * This method will activate the enum.
 	 */
 	public function activate(){
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+            
+            $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+            if($this->histVal->addHist($getEnum, $this->bd))
+            {
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$getEnum);
+                //gets the name of the enum that has been enabled 
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 	<html>
@@ -543,20 +548,45 @@ class ValoresPermitidos
 	 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 	</html>
 <?php
+            }
+            else
+            {
+                
+?>
+                    <p>O valor enum selecionado não pode ser ativado.</p>
+                    <p>	Clique em <?php goBack(); ?></p>
+<?php
+            }
 	}
 	/**
 	 * This method will desactivate the enum values
 	 */
 	public function desactivate(){
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
-		$read_enumName = $res_enumName->fetch_assoc();
+            
+                $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+                if($this->histVal->addHist($getEnum, $this->bd))
+                {
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
+                    //get the name to show to the users after the item is disabled
+                    $res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
+                    $read_enumName = $res_enumName->fetch_assoc();
 ?>
 		<html>
 		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
 		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 		</html>
+<?php 
+                }
+                else
+                {
+?>
+                    <p>O valor enum selecionado não pode ser desativado.</p>
+                    <p>	Clique em <?php goBack(); ?></p>
 <?php
+        
+                }
+            
+
 	}
 	
 }
