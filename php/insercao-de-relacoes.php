@@ -12,11 +12,13 @@ $novaRelacao = new InsereRelacoes();
 class InsereRelacoes
 {
 	private $bd;
+        private $gereInsRel;
 	/**
 	 * Constructor
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
+                $this->gereInsRel = new RelHist();
 		$this->numProp = 0;
 		$this->checkUser();
 	}
@@ -231,7 +233,7 @@ class InsereRelacoes
          * and the other with the existing properties and their values in your ralation
 	 */
         public function editRlationProps(){
-            //get relation tipo from the relation selected
+            //get relation type from the relation selected
             $res_relTypeId = $this->bd->runQuery("SELECT rel_type_id FROM relation WHERE id=".$_REQUEST['rel']);
             $read_relTypeId = $res_relTypeId->fetch_assoc();
             
@@ -675,23 +677,37 @@ class InsereRelacoes
 	 * This method will activate the relation the user selected.
 	 */
 	public function activate(){
-            if($this->bd->runQuery("UPDATE relation SET state='active' WHERE id=".$_REQUEST['rel']))
+            
+            $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
+                if($this->bd->runQuery("UPDATE relation SET state='active' WHERE id=".$idRel))
+                {
+?>
+                   <html>
+                        <p>A relação foi ativada.</p>
+                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                   </html>
+<?php
+                }
+                else
+                {
 ?>
                 <html>
-                    <p>A relação foi ativada.</p>
-                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                    <p>A ativação da relação falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
                 </html>
 <?php
+                }
             }
             else
             {
-                ?>
+?>
                 <html>
                     <p>A ativação da relação falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
                 </html>
-                <?php
-                goBack();
+<?php   
             }
         }
         
@@ -699,23 +715,36 @@ class InsereRelacoes
 	 * This method will desactivate the relation the user selected.
 	 */
 	public function desactivate(){
-            if($this->bd->runQuery("UPDATE relation SET state='inactive' WHERE id=".$_REQUEST['rel']))
+             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
+                if($this->bd->runQuery("UPDATE relation SET state='inactive' WHERE id=".$idRel))
+                {
 ?>
-                <html>
-                    <p>A relação foi desativada.</p>
-                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                </html>
+                    <html>
+                        <p>A relação foi desativada.</p>
+                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                    </html>
 <?php
+                }
+                else
+                {
+?>
+                    <html>
+                        <p>A desativação da relação falhou.</p>
+                         <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                }
             }
             else
             {
-                ?>
-                <html>
-                    <p>A desativação da relação falhou.</p>
-                </html>
-                <?php
-                goBack();
+?>
+                    <html>
+                        <p>A desativação da relação falhou.</p>
+                         <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php                
             }
         }
 	
@@ -1117,5 +1146,33 @@ class InsereRelacoes
         
         
         
+}
+
+/**
+ * This class has all the methods to manage all the history of the table hist_relation
+ */
+class RelHist{
+    
+    public function __construct(){}
+    /**
+     * This method will make a backup from all the change that are made in the relations
+     * @param type $id -> id form the selected relation
+     * @param type $bd -> is an object that will allow ius to use the database functions
+     * @return boolean
+     */
+    public function addHist($id,$bd){
+        $res_oldRel = $bd->runQuery("SELECT * FROM relation WHERE id=".$id);
+        if($res_oldRel->num_rows == 1)
+        {
+            $read_oldRel = $res_oldRel->fetch_assoc();
+            if($bd->runQuery("INSERT INTO `hist_relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`, `relation_id`, `active_on`, `inactive_on`) "
+                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",".$read_oldRel['update_on'].",'".date("Y-m-d H:i:s",time())."')"))
+            {
+               return true;
+            }
+           
+        }
+        return false;    
+    }
 }
 ?>
