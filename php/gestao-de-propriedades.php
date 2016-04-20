@@ -1003,8 +1003,17 @@ class PropHist{
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
-        $updateHist = "INSERT INTO `hist_property`(`name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `active_on`, `inactive_on`, `property_id`) "
-                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type_id"]."','".$atributos["rel_type_id"]."','".$atributos["value_type"]."','".$atributos["form_field_name"]."','".$atributos["form_field_type"]."','".$atributos["unit_type_id"]."','".$atributos["form_field_order"]."','".$atributos["mandatory"]."','".$atributos["state"]."','".$atributos["fk_ent_type_id"]."','".$atributos["form_field_size"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
+        $i = 0;
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo == "updated_on") {
+                $atributo = "active_on";
+            }
+            $attr .= "'".$atributo."',";
+            $val .= "'".$valor."',"; 
+            $i++;
+        }
+        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
+                . "VALUES (".$val.date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$bd->runQuery($updateHist);
     }   
 }
