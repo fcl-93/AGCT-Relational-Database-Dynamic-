@@ -584,7 +584,7 @@ class ValPerHist{
         if($res_oldEnum->num_rows == 1)
         {
             $read_oldEnum = $res_oldEnum->fetch_assoc();
-            
+            echo "INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`)" " VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."'";
             if($bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`)"
                     . " VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."'")
                     )
