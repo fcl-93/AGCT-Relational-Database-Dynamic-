@@ -671,7 +671,7 @@ class PropertyManage
             $queryUpdate .= "'inactive'";
             $estado = "desativada";
         }
-        $queryUpdate .= "WHERE id =".$_REQUEST['prop_id'];
+        $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['prop_id'];
         $this->db->runQuery($queryUpdate);
         $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
 ?>
@@ -974,7 +974,7 @@ class PropertyManage
         {
             $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence"];
         }
-        $queryUpdate .= " WHERE id = ".$_REQUEST["idProp"];
+        $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
 	$update = $this->db->runQuery($queryUpdate);
         if (!$update)
         {
