@@ -129,7 +129,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
-        $this->gereHist->atualizaHistorico($this->bd);
+        $this->gereHist->atualizaHistorico($this->db);
         $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
