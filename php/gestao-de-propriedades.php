@@ -1003,14 +1003,15 @@ class PropHist{
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
-        $i = 0;
+        $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
             }
-            $attr .= "'".$atributo."',";
-            $val .= "'".$valor."',"; 
-            $i++;
+            if ($atributo != "id" && !is_null($valor)) {
+                $attr .= "'".$atributo."',";
+                $val .= "'".$valor."',"; 
+            }
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val.date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
