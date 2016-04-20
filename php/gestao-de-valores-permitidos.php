@@ -10,11 +10,13 @@ $addValues = new ValoresPermitidos();
 class ValoresPermitidos
 {
 	private $bd;
+        private $histVal;
 	/**
 	 * Contructor
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
+                $this->histVal = new ValPerHist();
 		$this->checkUser();
 	}
 	/**
@@ -70,7 +72,8 @@ class ValoresPermitidos
 		{
 ?>
 			<html>
-				<p>Não tem sessão iniciada.</p>
+                            <p> O utilizador não se encontra logado.</p>
+                            <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
 			</html>
 <?php
 		}
@@ -477,8 +480,7 @@ class ValoresPermitidos
 		if($this->ssvalidation())
 		{
 			//echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
-			$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);
-			
+			$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
 			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')");
 ?>
 		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
@@ -499,15 +501,29 @@ class ValoresPermitidos
 	 */
 	public function changeEnum(){
 		if($this->ssvalidation())
-		{	
+		{               //new name
 				$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
-				$this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'] );
+				//History generation 
+                                $getEnumId = $this->bd->userInputVal($_REQUEST['enum_id']);
+                                
+                                if($this->histVal->addHist($getEnumId, $this->bd)){
+                                    //insert the new value for the enum.
+                                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$getEnumId);
 				//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
 ?>
-				<p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
-				<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+                                    <p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
+                                    <p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
-
+                                }
+                                else
+                                {
+?>
+                                
+                                    <p>O nome do valor enum selecionado não pode ser alterado para <?php echo $_REQUEST['valor'] ?>.</p>
+                                    <p>	Clique em <?php goBack(); ?></p>
+<?php
+                                }
+                                
 		}
 		else
 		{
@@ -518,8 +534,13 @@ class ValoresPermitidos
 	 * This method will activate the enum.
 	 */
 	public function activate(){
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
+            
+            $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+            if($this->histVal->addHist($getEnum, $this->bd))
+            {
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$getEnum);
+                //gets the name of the enum that has been enabled 
+		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
 		$read_enumName = $res_enumName->fetch_assoc();
 ?>
 	<html>
@@ -527,20 +548,82 @@ class ValoresPermitidos
 	 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 	</html>
 <?php
+            }
+            else
+            {
+                
+?>
+                    <p>O valor enum selecionado não pode ser ativado.</p>
+                    <p>	Clique em <?php goBack(); ?></p>
+<?php
+            }
 	}
 	/**
 	 * This method will desactivate the enum values
 	 */
 	public function desactivate(){
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$_REQUEST['enum_id']);
-		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$_REQUEST['enum_id']);
-		$read_enumName = $res_enumName->fetch_assoc();
+            
+                $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+                if($this->histVal->addHist($getEnum, $this->bd))
+                {
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
+                    //get the name to show to the users after the item is disabled
+                    $res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
+                    $read_enumName = $res_enumName->fetch_assoc();
 ?>
 		<html>
 		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
 		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
 		</html>
+<?php 
+                }
+                else
+                {
+?>
+                    <p>O valor enum selecionado não pode ser desativado.</p>
+                    <p>	Clique em <?php goBack(); ?></p>
 <?php
+        
+                }
+            
+
 	}
 	
 }
+/**
+ * History table gestion class 
+ * will have all the methods to change the history
+ */
+class ValPerHist{
+    
+    //Constructor
+    public function __construct(){}
+    
+    /**
+     * Will an item to the table hist_prop_allowed_value
+     * to generate the historic with all modifications.
+     *
+     * @param type $id -> enum from the id that will be changed, this id comes sanitized.
+     * @param type $bd -> database object to allow me to use the database run querys.
+     * @return boolean 
+     */
+    public function addHist($id,$bd){
+        //get the old enum
+        $res_oldEnum = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$id);      
+        
+        if($res_oldEnum->num_rows == 1)
+        {
+            $read_oldEnum = $res_oldEnum->fetch_assoc();
+           
+            if($bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."')"))
+            {
+                //the history was created
+                return true;
+            }
+        }//the history is not created due to an error in one of the queries or insertions.
+        return false;
+        
+    }
+}
+
+?>
