@@ -1006,10 +1006,10 @@ class PropHist{
         $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
-                $atributo = "active_on";
+                $atributo = "`active_on`";
             }
             if ($atributo != "id" && !is_null($valor)) {
-                $attr .= "'".$atributo."',";
+                $attr .= "`".$atributo."`,";
                 $val .= "'".$valor."',"; 
             }
         }
