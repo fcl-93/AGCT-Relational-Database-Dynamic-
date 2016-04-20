@@ -404,7 +404,7 @@ class RelHist{
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_type_id`) "
                 . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
-        $updateHist = $this->bd->runQuery($updateHist);
+        $updateHist =$bd->runQuery($updateHist);
     }   
 }
 //instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
