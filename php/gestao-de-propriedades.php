@@ -1014,7 +1014,7 @@ class PropHist{
             }
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                . "VALUES (".$val.date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
+                . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$bd->runQuery($updateHist);
     }   
 }
