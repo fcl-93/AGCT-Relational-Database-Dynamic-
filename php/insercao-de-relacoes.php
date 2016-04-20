@@ -1166,7 +1166,7 @@ class RelHist{
         {
             $read_oldRel = $res_oldRel->fetch_assoc();
             if($bd->runQuery("INSERT INTO `hist_relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`, `relation_id`, `active_on`, `inactive_on`) "
-                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",".$read_oldRel['update_on'].",'".date("Y-m-d H:i:s",time())."')"))
+                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['update_on']."','".date("Y-m-d H:i:s",time())."')"))
             {
                return true;
             }
