@@ -398,7 +398,7 @@ class RelHist{
         
     }
     
-    private function atualizaHistorico () {
+    public function atualizaHistorico () {
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
         $selectAtributos = $this->bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
