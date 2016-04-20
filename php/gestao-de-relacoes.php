@@ -129,7 +129,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
-        $this->gereHist->atualizaHistorico();
+        $this->gereHist->atualizaHistorico($this->bd);
         $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
@@ -398,9 +398,9 @@ class RelHist{
         
     }
     
-    public function atualizaHistorico () {
+    public function atualizaHistorico ($bd) {
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
-        $selectAtributos = $this->bd->runQuery($selectAtributos);
+        $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_type_id`) "
                 . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
