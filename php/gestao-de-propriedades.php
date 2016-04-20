@@ -8,6 +8,7 @@ class PropertyManage
 {
     private $db;            // Object from DB_Op that contains the access to the database
     private $capability;    // Wordpress's Capability for this component
+    private $gereHist;
 
     /**
      * Constructor method
@@ -15,6 +16,7 @@ class PropertyManage
     public function __construct(){
         $this->db = new Db_Op();
         $this->capability = "manage_properties";
+        $this->gereHist = new PropHist();
         $this->executaScript();
     }
 
@@ -657,6 +659,7 @@ class PropertyManage
     private function estadoAtivarDesativar()
     {
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $this->gereHist->atualizaHistorico($this->db);
         $queryUpdate = "UPDATE property SET state=";
         if ($_REQUEST["estado"] === "ativar")
         {
@@ -951,6 +954,7 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
+        $this->gereHist->atualizaHistorico($this->db);
         $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
         if(!empty($_REQUEST["tamanho"]))
 	{
@@ -987,6 +991,22 @@ class PropertyManage
 <?php
         }
     }
+}
+
+class PropHist{
+    
+    public function __construct(){
+        
+    }
+    
+    public function atualizaHistorico ($bd) {
+        $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "INSERT INTO `hist_property`(`name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `active_on`, `inactive_on`, `property_id`) "
+                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type_id"]."','".$atributos["rel_type_id"]."','".$atributos["value_type"]."','".$atributos["form_field_name"]."','".$atributos["form_field_type"]."','".$atributos["unit_type_id"]."','".$atributos["form_field_order"]."','".$atributos["mandatory"]."','".$atributos["state"]."','".$atributos["fk_ent_type_id"]."','".$atributos["form_field_size"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
+        $updateHist =$bd->runQuery($updateHist);
+    }   
 }
 
 // instantiation of an object from the class PropertyManage. This instantiation is responsable to get the script work as expected.

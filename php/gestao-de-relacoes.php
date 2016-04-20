@@ -129,8 +129,8 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
-        $this->gereHist->atualizaHistorico($this->bd);
-        $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"];
+        $this->gereHist->atualizaHistorico($this->db);
+        $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"]." WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
@@ -152,6 +152,7 @@ class RelationManage
         $nomes = $getNomes->fetch_assoc();
         $idNome1 = $nomes["ent_type1_id"];
         $idNome2 = $nomes["ent_type2_id"];
+        $this->gereHist->atualizaHistorico($this->db);
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "ativar")
         {
@@ -402,9 +403,9 @@ class RelHist{
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
-        $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_type_id`) "
-                . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
-        $updateHist = $this->bd->runQuery($updateHist);
+        $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
+                . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
+        $updateHist =$bd->runQuery($updateHist);
     }   
 }
 //instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
