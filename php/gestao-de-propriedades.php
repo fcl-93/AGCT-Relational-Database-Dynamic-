@@ -1026,7 +1026,7 @@ class PropHist{
 ?>
         <form>
             <p>Introduza uma data: <input type="text" id="datepicker"></p>
-            <input type="submit">Apresentar histórico
+            <input type="submit" value="Apresentar histórico">
         </form>
 <?php
         //apresento histórico
