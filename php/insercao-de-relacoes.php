@@ -1167,8 +1167,8 @@ class RelHist{
      * @return boolean
      */
     public function addHist($id,$bd){
-        $this->db->getMysqli()->autocommit(false);
-	$this->db->getMysqli()->begin_transaction();
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
         
         $res_oldRel = $bd->runQuery("SELECT * FROM relation WHERE id=".$id);
         if($res_oldRel->num_rows == 1)
