@@ -149,7 +149,7 @@ class Search{
                                 switch ($read_GetRelProps['value_type']) {
                                     case 'enum':
                                     //get enum values if the component valu_type is enum
-                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
+                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetRelProps['id']." AND prop_allowed_value.state = 'active'");
  ?>
                                     <select name="selectER<?php echo $count ?>">
 <?php
@@ -517,7 +517,7 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps["id"]." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_PropRelEnt["id"]." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
