@@ -1311,7 +1311,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
                         echo $instancias['id'];
                     }
                     else {
-                        $entity = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
+                        $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id']
 ?>
