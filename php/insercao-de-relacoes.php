@@ -851,27 +851,42 @@ class InsereRelacoes
                     {
                         $newValue =$_REQUEST['textbox'.$i];
                     }
-                    
-                    
-                    
-                   if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`, `relation_id`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",'".$newValue."','".date('Y-m-d')."','".date('H:i:s')."','".wp_get_current_user()->user_login."',".$_REQUEST['iddarel'].")"))
-                   {
+                    $id = $this->bd->userInputVal($_REQUEST['iddarel']);
+                    if($this->gereInsRel->addHist($id, $this->bd))
+                    {
+                        if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',".$id.",'active','".date("Y-m-d H:i:s",time())."')"))
+                        {
 ?>
-                    <html>
-                        <p>As propriedades foram adicionadas à relação.</p>
-                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                    </html>
+                            <html>
+                                <p>As propriedades foram adicionadas à relação.</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
 <?php
-                   }
-                   else
-                   {
+                        $this->bd->getMysqli()->commit();
+                        }
+                        else
+                        {
 ?>
-                    <html>
-                        <p>Erro ao Adicionar as propriedades.</p>
-                        <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                    </html>
+                            <html>
+                                <p>Erro ao Adicionar as propriedades à relação.</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
 <?php
-                   }
+                         $this->bd->getMysqli()->rollback();
+                        }
+                    }
+                    else
+                    {
+?>
+                            <html>
+                                <p>Erro ao Adicionar as propriedades à relação.</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
+<?php  
+                        $this->bd->getMysqli()->rollback();
+                    }
+                    
+
                     
                 }
             }
@@ -1206,5 +1221,8 @@ class RelHist{
         }
         return false;    
     }
+    
+    
+    
 }
 ?>
