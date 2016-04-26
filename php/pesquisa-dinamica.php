@@ -623,7 +623,7 @@ class Search{
         else
         {
 ?>
-            <h3>Pesquisa Dinâmica - escolher componente</h3>
+            <h3>Pesquisa Dinâmica - escolher tipo de entidade</h3>
 <?php
             $res_getEnt = $this->bd->runQuery("SELECT  id, name FROM  ent_type"); //get all entities from ent type 
             if($res_getEnt->num_rows == 0)
@@ -644,17 +644,17 @@ class Search{
                 while($read_getEnt = $res_getEnt->fetch_assoc())
                 {
                     //need to filter the entities previously selected.
-                    $res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
+                    //$res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
 ?>
 <?php               
-                            while($read_Filter = $res_FilterEntities->fetch_assoc())
-                            {
+                            //while($read_Filter = $res_FilterEntities->fetch_assoc())
+                            //{
 ?>          
                                 <ul>
-                                    <li><a href="pesquisa-dinamica?estado=escolha&ent=<?php echo $read_Filter['id']; ?>">[<?php echo $read_Filter['name']; ?>]</a></li>
+                                    <li><a href="pesquisa-dinamica?estado=escolha&ent=<?php echo $read_getEnt['id']; ?>">[<?php echo $read_getEnt['name']; ?>]</a></li>
                                 </ul>
 <?php
-                            }
+                            //}
                 }
 ?>              </li>
             </ul>
