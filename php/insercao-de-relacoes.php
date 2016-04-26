@@ -689,6 +689,7 @@ class InsereRelacoes
                         <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                    </html>
 <?php
+                 $this->bd->getMysqli()->commit();
                 }
                 else
                 {
@@ -698,6 +699,7 @@ class InsereRelacoes
                     <p>Clique em <?php goBack();?>.</p>
                 </html>
 <?php
+                 $this->bd->getMysqli()->rollback();
                 }
             }
             else
@@ -708,6 +710,7 @@ class InsereRelacoes
                     <p>Clique em <?php goBack();?>.</p>
                 </html>
 <?php   
+            $this->bd->getMysqli()->rollback();
             }
         }
         
@@ -726,6 +729,7 @@ class InsereRelacoes
                         <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                     </html>
 <?php
+                $this->bd->getMysqli()->commit();
                 }
                 else
                 {
@@ -735,6 +739,7 @@ class InsereRelacoes
                          <p>Clique em <?php goBack();?>.</p>
                     </html>
 <?php
+                 $this->bd->getMysqli()->rollback();
                 }
             }
             else
@@ -744,7 +749,8 @@ class InsereRelacoes
                         <p>A desativação da relação falhou.</p>
                          <p>Clique em <?php goBack();?>.</p>
                     </html>
-<?php                
+<?php             
+            $this->bd->getMysqli()->rollback();
             }
         }
 	
@@ -1161,6 +1167,9 @@ class RelHist{
      * @return boolean
      */
     public function addHist($id,$bd){
+        $this->db->getMysqli()->autocommit(false);
+	$this->db->getMysqli()->begin_transaction();
+        
         $res_oldRel = $bd->runQuery("SELECT * FROM relation WHERE id=".$id);
         if($res_oldRel->num_rows == 1)
         {
