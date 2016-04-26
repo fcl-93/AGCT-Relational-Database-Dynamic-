@@ -1164,10 +1164,21 @@ class RelHist{
         $res_oldRel = $bd->runQuery("SELECT * FROM relation WHERE id=".$id);
         if($res_oldRel->num_rows == 1)
         {
+            $inactive = date("Y-m-d H:i:s",time());
             $read_oldRel = $res_oldRel->fetch_assoc();
             if($bd->runQuery("INSERT INTO `hist_relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`, `relation_id`, `active_on`, `inactive_on`) "
-                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".date("Y-m-d H:i:s",time())."')"))
+                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".$inactive."')"))
             {
+                
+              $res_valFromRel = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
+              while($readSVal = $res_valFromRel->fecth_assoc())
+              {
+                  if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",".$readSVal['value'].",".$readSVal['producer'].",".$id.",".$readSVal['id'].",".$readSVal['updated_on'].",'".date("Y-m-d H:i:s",time())."',".$readSVal['state'].")"))
+                  {
+                      return false;
+                  }
+              }
+                
                return true;
             }
            
