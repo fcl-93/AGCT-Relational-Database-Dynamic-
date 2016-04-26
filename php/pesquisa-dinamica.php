@@ -1337,11 +1337,13 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
     public function estadoApresentacao() {
         $idEnt = $_REQUEST["id"];
         $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
-        $entName = $this->bd->runQuery($queryEnt)["name"];
+        $ent = $this->bd->runQuery($queryEnt);
+        $entName = $ent["name"];
+        $ent_type = $ent["id"];
 ?>
         <h3><?php echo $entName;?></h3>
 <?php
-        $queryProp = "SELECT * FROM property WHERE entity_id = ".$idEnt;
+        $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$ent_type;
         $queryProp = $this->bd->runQuery($queryProp);
         
         while ($prop = $queryProp->fetch_assoc()) {
