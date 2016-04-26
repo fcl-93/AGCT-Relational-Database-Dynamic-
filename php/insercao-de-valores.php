@@ -496,10 +496,10 @@ class InsertValues{
     private function insertEntityValues($idEnt) {
         $tipo = $_SESSION["tipo"];
         if ($tipo === "ent") {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."')";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."','".date("Y-m-d H:i:s",time()).")";
         }
         else {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."')";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."','".date("Y-m-d H:i:s",time())."')";
         }
         
         $resInsertInst = $this->db->runQuery($queryInsertInst);
@@ -539,8 +539,8 @@ class InsertValues{
                                 $ultRef = $selUltRef->fetch_assoc();
                                 $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
                             }
-                            $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) "
-                                . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
+                            $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `updated_on`) "
+                                . "VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".wp_get_current_user()->user_login."','".date("Y-m-d H:i:s",time())."')");
 
                             if(!$insertVal)
                             {								
