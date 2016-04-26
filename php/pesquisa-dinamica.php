@@ -1348,7 +1348,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             <h3>Entidade <?php echo $idEnt;?> - Propriedades</h3>
 <?php            
         }
-        $ent_type = $ent["id"];
+        $ent_type = $ent["ent_type_id"];
 
         $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$ent_type;
         $queryProp = $this->bd->runQuery($queryProp);
