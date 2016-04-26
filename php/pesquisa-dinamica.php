@@ -1317,7 +1317,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id']
 ?>
-                        <a href="estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
+                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
 <?php
                     }
 ?>
