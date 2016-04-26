@@ -806,7 +806,7 @@ class InsereRelacoes
                      $id = $this->bd->userInputVal($_REQUEST['iddarel']);
                     if($this->gereInsRel->addHist($id, $this->bd))
                     {
-                        if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."',`date`='".date('Y-m-d')."',`time`='".date('H:i:s')."' WHERE id=".$_REQUEST['check'.$i]))
+                        if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."', `updated_on`='".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['check'.$i]))
                         {
 ?>
                             <html>
