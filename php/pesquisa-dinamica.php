@@ -1358,7 +1358,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             $queryValue = $this->bd->runQuery($queryValue);
             while ($value = $queryValue->fetch_assoc()) {
 ?>
-                <p><label><?php $prop["name"];?>:</label> <?php echo $value["value"];?></p>
+                <p><label><?php echo $prop["name"];?>:</label> <?php echo $value["value"];?></p>
 <?php
             }
         }
