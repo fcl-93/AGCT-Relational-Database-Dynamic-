@@ -30,7 +30,9 @@ class Search{
                 else if($_REQUEST['estado'] == 'execucao'){
                     $this->estadoExecucao();
                 }                
-                
+                else if($_REQUEST['estado'] == 'apresentacao'){
+                    $this->estadoApresentacao();
+                } 
                 
                 
                 
@@ -1315,7 +1317,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id']
 ?>
-                        <a href="&estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
+                        <a href="estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
 <?php
                     }
 ?>
@@ -1329,6 +1331,27 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             </tbody>
         </table>
 <?php
+        }
+    }
+    
+    public function estadoApresentacao() {
+        $idEnt = $_REQUEST["id"];
+        $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
+        $entName = $this->bd->runQuery($queryProp)["name"];
+?>
+        <h3><?php echo $entName;?></h3>
+<?php
+        $queryProp = "SELECT * FROM property WHERE entity_id = ".$idEnt;
+        $queryProp = $this->bd->runQuery($queryProp);
+        
+        while ($prop = $queryProp->fetch_assoc()) {
+            $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND entity_id = ".$idEnt;
+            $queryValue = $this->bd->runQuery($queryValue);
+            while ($value = $queryValue->fetch_assoc()) {
+?>
+                <p><label><?php $prop["name"];?>:</label> <?php echo $value;?></p>
+<?php
+            }
         }
     }
 }
