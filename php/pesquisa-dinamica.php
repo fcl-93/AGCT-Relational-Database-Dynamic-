@@ -209,13 +209,13 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
-                                                        $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                                                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
                                                         //array associativo que guarda o resultado que vem da query 
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
@@ -364,13 +364,13 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
-                                                        $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                                                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
                                                         //array associativo que guarda o resultado que vem da query 
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
@@ -517,13 +517,13 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
-                                                        $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                                                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
                                                         //array associativo que guarda o resultado que vem da query 
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
@@ -663,13 +663,13 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->db->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$id." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
-                                                        $nomeEntRef = $this->db->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
-                                                        $selecionainstancia = $this->db->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
                                                         //array associativo que guarda o resultado que vem da query 
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
