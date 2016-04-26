@@ -358,7 +358,8 @@ class Search{
 <?php
                                     break;
 				case 'ent_ref':
-<select name="ent_refER<?php echo $count ?>">
+?>
+                                        <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
                                                
@@ -510,7 +511,8 @@ class Search{
 <?php
                                                     break;
 					case 'ent_ref':
-<select name="ent_refER<?php echo $count ?>">
+?>
+                                            <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
                                                
@@ -655,7 +657,8 @@ class Search{
 <?php
                                                     break;
 					case 'ent_ref':
-<select name="ent_refER<?php echo $count ?>">
+?>
+                                            <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
                                                
