@@ -1338,11 +1338,18 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         $idEnt = $_REQUEST["id"];
         $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
         $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
-        $entName = $ent["name"];
-        $ent_type = $ent["id"];
+        if (!is_null ($ent["entity_name"])) {
 ?>
-        <h3><?php echo $entName;?></h3>
+            <h3>Entidade <?php echo $entName;?> - Propriedades</h3>
 <?php
+        }
+        else {
+?>
+            <h3>Entidade <?php echo $idEnt;?> - Propriedades</h3>
+<?php            
+        }
+        $ent_type = $ent["id"];
+
         $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$ent_type;
         $queryProp = $this->bd->runQuery($queryProp);
         
