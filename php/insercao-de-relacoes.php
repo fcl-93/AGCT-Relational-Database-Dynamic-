@@ -854,7 +854,7 @@ class InsereRelacoes
                     $id = $this->bd->userInputVal($_REQUEST['iddarel']);
                     if($this->gereInsRel->addHist($id, $this->bd))
                     {
-                        if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',".$id.",active,'".date("Y-m-d H:i:s",time())."')"))
+                        if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,NULL,".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',".$id.",'active','".date("Y-m-d H:i:s",time())."')"))
                         {
 ?>
                             <html>
