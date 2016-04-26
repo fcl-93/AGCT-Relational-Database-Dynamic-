@@ -689,6 +689,7 @@ class InsereRelacoes
                         <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                    </html>
 <?php
+                 $this->bd->getMysqli()->commit();
                 }
                 else
                 {
@@ -698,6 +699,7 @@ class InsereRelacoes
                     <p>Clique em <?php goBack();?>.</p>
                 </html>
 <?php
+                 $this->bd->getMysqli()->rollback();
                 }
             }
             else
@@ -708,6 +710,7 @@ class InsereRelacoes
                     <p>Clique em <?php goBack();?>.</p>
                 </html>
 <?php   
+            $this->bd->getMysqli()->rollback();
             }
         }
         
@@ -726,6 +729,7 @@ class InsereRelacoes
                         <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                     </html>
 <?php
+                $this->bd->getMysqli()->commit();
                 }
                 else
                 {
@@ -735,6 +739,7 @@ class InsereRelacoes
                          <p>Clique em <?php goBack();?>.</p>
                     </html>
 <?php
+                 $this->bd->getMysqli()->rollback();
                 }
             }
             else
@@ -744,7 +749,8 @@ class InsereRelacoes
                         <p>A desativação da relação falhou.</p>
                          <p>Clique em <?php goBack();?>.</p>
                     </html>
-<?php                
+<?php             
+            $this->bd->getMysqli()->rollback();
             }
         }
 	
@@ -1161,13 +1167,39 @@ class RelHist{
      * @return boolean
      */
     public function addHist($id,$bd){
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+        
         $res_oldRel = $bd->runQuery("SELECT * FROM relation WHERE id=".$id);
         if($res_oldRel->num_rows == 1)
         {
+            $inactive = date("Y-m-d H:i:s",time());
             $read_oldRel = $res_oldRel->fetch_assoc();
             if($bd->runQuery("INSERT INTO `hist_relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`, `relation_id`, `active_on`, `inactive_on`) "
-                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".date("Y-m-d H:i:s",time())."')"))
+                    . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".$inactive."')"))
             {
+                
+              $resSVal = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
+              while($readSVal = $resSVal->fetch_assoc())
+              {
+                  if($readSVal['entity_id']=='')
+                  {
+                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,NULL,".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                      {
+                        return false;
+                      }
+                  }
+                  else
+                  {
+                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                      {
+                        return false;
+                      }
+                  }
+                  
+                 
+              }
+                
                return true;
             }
            
