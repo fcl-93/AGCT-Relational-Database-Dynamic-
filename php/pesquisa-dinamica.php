@@ -1408,7 +1408,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
                         $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id'];
-                        if (!is_null ($entity_name)) {
+                        if (!empty ($entity_name)) {
 ?>
                             <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
 <?php
