@@ -1456,8 +1456,22 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND entity_id = ".$idEnt;
             $queryValue = $this->bd->runQuery($queryValue);
             while ($value = $queryValue->fetch_assoc()) {
+                if ($prop["value_type"] != "ent_ref") {
+                    $valor = $value["value"];
+                }
+                else {
+                    $queryEnt = "SELECT * FROM entity WHERE id = ".$value["value"];
+                    $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
+                    if (!empty ($ent["entity_name"])) {
+                        $valor = $ent["entity_name"];
+                    }
+                    else {
+                        $valor = $value["value"];
+                    }
+                    
+                }
 ?>
-                <p><label><?php echo $prop["name"];?>:</label> <?php echo $value["value"];?></p>
+                <p><label><?php echo $prop["name"];?>:</label> <?php echo $valor;?></p>
 <?php
             }
         }
