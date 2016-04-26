@@ -69,7 +69,7 @@ class Search{
         
 ?>
             <html>
-                <form>
+                <form method="POST">
 <?php
                     $this->showPropEnt();
                     $this->showPropValueType();
@@ -533,7 +533,7 @@ class Search{
                                     switch ($read_GetProp['value_type']) {
                                         case 'enum':
                                             //get enum values if the component valu_type is enum
-                                            $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetProp['id']." AND prop_allowed_value.state = 'active");
+                                            $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetProp['id']." AND prop_allowed_value.state = 'active'");
  ?>
                                             <select name="selectET<?php echo $count ?>">
 <?php
@@ -1306,13 +1306,17 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             <tr>
                 <td>
 <?php
-                    $getEntName = "SELECT entity_name FROM entity WHERE id = ".$instancias['id'];
+                    $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
                     if ($this->bd->runQuery($getEntName)->num_rows == 0) {
                         echo $instancias['id'];
                     }
                     else {
-                        $entity_name = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
-                        echo $entity_name;
+                        $entity = $this->bd->runQuery($getEntName)->fetch_assoc()['entity_name'];
+                        $entity_name = $entity['entity_name'];
+                        $entity_id = $entity['id']
+?>
+                        <a href="&estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
+<?php
                     }
 ?>
                 </td>
