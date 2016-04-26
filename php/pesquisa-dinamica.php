@@ -663,7 +663,7 @@ class Search{
 <?php
                                                
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
-                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps." = id");
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetProp." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
                                                     {
 
