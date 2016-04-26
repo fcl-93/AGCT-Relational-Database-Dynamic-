@@ -234,7 +234,7 @@ class PropertyManage
                         {
                 ?>
                             <td><?php echo $arraySelec["id"]; ?></td>
-                            <td><a href="?estado=historico&id=<?phpecho $arraySelec["id"];?>"><?php echo $arraySelec["name"]; ?></a></td>
+                            <td><a href="?estado=historico&id=<?php echo $arraySelec["id"];?>"><?php echo $arraySelec["name"]; ?></a></td>
                             <td><?php echo $arraySelec["value_type"]; ?></td>
                             <td><?php echo $arraySelec["form_field_name"]; ?></td>
                             <td><?php echo $arraySelec["form_field_type"]; ?></td>
