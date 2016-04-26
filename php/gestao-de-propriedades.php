@@ -525,7 +525,7 @@ class PropertyManage
         {
             $queryInsere .= ', `fk_ent_type_id`';
         }
-        $queryInsere .= ') VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
+        $queryInsere .= ', `updated_on`) VALUES (NULL,\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',';
         if(!empty($_REQUEST["entidadePertence"]))
         {
            $queryInsere .= $_REQUEST["entidadePertence"];
@@ -542,12 +542,9 @@ class PropertyManage
         $queryInsere .= ','.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).','.$_REQUEST["obrigatorio"].',"active"';
 	if (!empty($_REQUEST["entidadeReferenciada"]))
         {
-            $queryInsere .=  ','.$_REQUEST["entidadeReferenciada"].')';
+            $queryInsere .=  ','.$_REQUEST["entidadeReferenciada"];
         }
-        else
-        {
-            $queryInsere .=  ')';
-        }
+        $queryInsere .=  ', "'.date("Y-m-d H:i:s",time()).'")';
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
