@@ -803,27 +803,41 @@ class InsereRelacoes
                     {
                         $newValue =$_REQUEST['textbox'.$i];
                     }
-                    
-                    if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."',`date`='".date('Y-m-d')."',`time`='".date('H:i:s')."' WHERE id=".$_REQUEST['check'.$i]))
+                     $id = $this->bd->userInputVal($_REQUEST['iddarel']);
+                    if($this->gereInsRel->addHist($id, $this->bd))
                     {
+                        if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."',`date`='".date('Y-m-d')."',`time`='".date('H:i:s')."' WHERE id=".$_REQUEST['check'.$i]))
+                        {
 ?>
-                        <html>
-                            <p>A propriedades  foi atualizada</p>
-                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                        </html>
+                            <html>
+                                <p>A propriedades foi atualizada</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
 <?php
+                            $this->bd->getMysqli()->commit();
+                        }
+                        else
+                        {
+?>
+                            <html>
+                                <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
+<?php
+                            $this->bd->getMysqli()->rollback();
+                        }
                     }
                     else
                     {
 ?>
-                        <html>
-                            <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
-                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                        </html>
-<?php
+                            <html>
+                                <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
+                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                            </html>
+<?php                       
+                    $this->bd->getMysqli()->rollback();
                     }
-                    
-                    
+                     
                 }
             }
         }
