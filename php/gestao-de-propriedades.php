@@ -1030,7 +1030,7 @@ class PropHist{
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
         $selectAtributos = $this->db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
-        $updateHist = "UPDATE property SET";
+        $updateHist = "UPDATE property SET ";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
