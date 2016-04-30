@@ -45,59 +45,71 @@ class ExportValues{
 	$objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $frase);	 
 
 	//The second line will have the names form-field-name as headers
-	
-	$linha = 2;
-	$coluna = 'A';
+        $linha = 2;
+        $coluna = 'A';
 
-	for($i = 0; $i < count($arrayId); $i++)
-	{
-            $get_form_field_name = "SELECT form_field_name FROM property WHERE id = ".$arrayId[$i];
-            $fieldformnames = $this->db->runQuery($get_form_field_name);
-            while($names = $fieldformnames->fetch_assoc())
+	if (count($arrayId) === 0) {
+            
+            for($i = 0; $i < count($arrayId); $i++)
             {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $names['form_field_name']);
+                $get_form_field_name = "SELECT form_field_name FROM property WHERE id = ".$arrayId[$i];
+                $fieldformnames = $this->db->runQuery($get_form_field_name);
+                while($names = $fieldformnames->fetch_assoc())
+                {
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $names['form_field_name']);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                    $coluna++;
+                }
+            }
+
+            $percorre = 0;
+            $linha = 3;
+            $coluna = 'A';
+            while($percorre < count($arrayNomes) )
+            {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayNomes[$percorre]);
                 $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
                 $coluna++;
+                $percorre++;
             }
-	}
+
+            $percorre = 0;
+            $linha = 4;
+            $coluna = 'A';
+            while($percorre < count($arrayValores) )
+            {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayValores[$percorre]);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
+                $coluna++;
+                $percorre++;
+            }
+            $linha = 6;
+            $coluna1 = 'A';
+            $coluna2 = 'B';
+        }
+        else {
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, "Não foram selecionadas quaisquer propriedades como filtro.");
+            $linha = 4;
+            $coluna1 = 'A';
+            $coluna2 = 'B';
+        }
+	
+
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna1.$linha,'ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna2.$linha'Instâncias');
 
 	$percorre = 0;
-	$linha = 3;
-	$coluna = 'A';
-	while($percorre < count($arrayNomes) )
-	{
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayNomes[$percorre]);
-            $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
-            $coluna++;
-            $percorre++;
-	}
-
-	$percorre = 0;
-	$linha = 4;
-	$coluna = 'A';
-	while($percorre < count($arrayValores) )
-	{
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayValores[$percorre]);
-            $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
-            $coluna++;
-            $percorre++;
-	}
-
-
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A6','ID');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B6','Instâncias');
-
-	$percorre = 0;
-	$linha = 7;
+	$linha++;
 	$coluna = 'A';
 	while($percorre < count($arrayInst))
 	{
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha,$arrayInstId[$percorre]);
-        $coluna++;
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha,$arrayInst[$percorre]);
-        $coluna = 'A';
-        $linha++;
-        $percorre++;
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha,$arrayInstId[$percorre]);
+            $coluna++;
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha,$arrayInst[$percorre]);
+            $coluna = 'A';
+            $linha++;
+            $percorre++;
 	}
 	// a terceira linha os nomes em si das propriedades.
 

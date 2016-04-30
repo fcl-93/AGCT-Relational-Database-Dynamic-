@@ -12,6 +12,7 @@ class Search{
     private $guardaidDosSelecionados;
     private $guardanomePropSelec;
     private $guardaValorDaProp;
+    private $frase;
     public function __construct()
     {
         $this->bd = new Db_Op();
@@ -800,6 +801,9 @@ class Search{
             }
             $i++;
         }
+        $queryEntType = "SELECT name FROM ent_type WHERE id = ".$idEnt;
+        $tipoEntidade = $this->bd->runQuery($queryEntType)->fetch_assoc()["name"];
+        $this->frase = "Pesquisa de todas as entidades do tipo ".$tipoEntidade;
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Ref = $query1Ent = $query1ER = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
@@ -833,6 +837,8 @@ class Search{
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
+                
+                $this->frase .= " cuja propriedade ".$nomeProp." é ";
                 
                 if ($tipo == "ET") {
                     $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
@@ -1078,6 +1084,7 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else if ($tipoValor == "double") {
@@ -1087,6 +1094,7 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else  if ($tipoValor == "text"){
@@ -1101,6 +1109,7 @@ class Search{
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
+        $this->frase .= $valor;
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $querydinamica;
     }
@@ -1137,6 +1146,7 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else if ($tipoValor == "double") {
@@ -1146,6 +1156,7 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else  if ($tipoValor == "text"){
@@ -1160,6 +1171,7 @@ class Search{
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
+        $this->frase .= $valor;
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
@@ -1195,6 +1207,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nome
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else if ($tipoValor == "double") {
@@ -1204,6 +1217,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nome
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else  if ($tipoValor == "text"){
@@ -1218,7 +1232,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nome
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
         }
-        
+        $this->frase .= $valor;
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
@@ -1255,6 +1269,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else if ($tipoValor == "double") {
@@ -1264,6 +1279,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else  if ($tipoValor == "text"){
@@ -1278,6 +1294,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
+        $this->frase .= $valor;
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
 }    
@@ -1361,22 +1378,11 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         array_push($this->guardaidDosSelecionados,$idDaPropriedade);
         array_push($this->guardanomePropSelec, $nomeProp);
         array_push($this->guardaValorDaProp,$valor);
-        echo "array id prop";
-        print_r ($this->guardanomePropSelec);
-        echo "array nome prop";
-        print_r ($this->guardanomePropSelec);
-        echo "array valor prop";
-        print_r ($this->guardaValorDaProp);
-        echo "id prop";
-        print_r ($idDaPropriedade);
-        echo "nome prop";
-        print_r ($nomeProp);
-        echo "valor prop";
-        print_r ($valor);
     }
     
     
     private function apresentaResultado ($querydinamica) {
+        echo $this->frase;        
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
@@ -1433,12 +1439,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         </table>
 <?php
             $excelGen = new ExportValues();
-            print_r ($this->guardaidDosSelecionados);
-            print_r ($this->guardanomePropSelec);
-            print_r ($this->guardaValorDaProp);
-            print_r ($arrayInstId);
-            print_r ($arrayInstComp);
-            $excelGen->geraExcel($querydinamica,"frase",$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
+            $excelGen->geraExcel($querydinamica,$this->frase,$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
