@@ -1032,7 +1032,7 @@ class PropHist{
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE property SET ";
         foreach ($atributos as $atributo => $valor) {
-            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && !is_null($valor)) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "property_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
         }
