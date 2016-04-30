@@ -1516,21 +1516,29 @@ class Search{
     public function changeState(){
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
-        
+        $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state='active'");
         if($getRel->num_rows == 0){
             if($estado == 'active')
             {
-                $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);            
+?>
+                <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
+                <p>Clique em <a href="/pesquisa-dinamica/">Inserção de relações</a></p>
+<?php
             }
             else if ($estado == 'inactive')
             {
                 $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+?>
+                <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
+                <p>Clique em <a href="/pesquisa-dinamica/">Inserção de relações</a></p>
+<?php 
+                
             }
         }
         else
         {
-            $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
 ?>
                 <p>Necessita de desativar relações a que a instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> pertence,</p>
                 <p>para poder proceder à sua desativação </p>
