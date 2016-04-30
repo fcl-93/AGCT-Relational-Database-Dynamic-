@@ -1688,8 +1688,11 @@ class Search{
      */
     public function updatEntVal(){
         if($this->ssValidationUp()){
-            //$this->bd->userInputVal($_REQUEST['']);
-            //$this->bd->runQuery("SELECT * FROM value WHERE id=".)
+            $idVal = $this->bd->userInputVal($_REQUEST['id']);
+            $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();
+            
+            $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
+            
                     
                     
         }
