@@ -1603,7 +1603,6 @@ class Search{
 ?>
                 <td><?php echo $prop["name"];?></td>
                 <td><?php echo $valor;?></td>
-               <!-- <p><label>:</label> </p>-->
             </tr>
 <?php
             }
