@@ -1036,7 +1036,7 @@ class PropHist{
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
         }
-        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop'];
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
         $updateHist .= "WHERE id = ".$_REQUEST['prop'];
         $updateHist =$this->db->runQuery($updateHist);
     }
