@@ -1735,15 +1735,15 @@ class Search{
     
     public function ssValidationUp()
     {
-        $idVal = $this->bd->userInputVal($_REQUEST['id']);
-        $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
-        $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
-        
         for($x = 0; x <= $_SESSION['updateValue']; $x++)
         {
+            $idVal = $this->bd->userInputVal($_REQUEST['check'.$x]);
+            $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
+            $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
+            
             if(isset($_REQUEST['check'.$x]))
             {
-                 if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
+                 if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
                 {
 ?>
                     <html>
@@ -1754,19 +1754,19 @@ class Search{
                 }
                 else
                 {
-                    if(isset($_REQUEST['select'.$i]))
+                    if(isset($_REQUEST['select'.$x]))
                     {}
-                    else if(isset($_REQUEST['radio'.$i]))
+                    else if(isset($_REQUEST['radio'.$x]))
                     {}
-                    else if(isset($_REQUEST['textbox'.$i]))
+                    else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
+                        $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                         $getPropId = $res_getPropId->fetch_assoc();
                                     
                         $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
                         $getValue_Type = $res_getValue_Type->fetch_assoc();
                                    
-                        if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
+                        if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$x]))== false)
                         {
 ?>
                             <html>
