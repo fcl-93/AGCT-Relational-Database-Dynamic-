@@ -26,7 +26,7 @@ class ExportValues{
      * @param array $arrayInstId (array with id of the instances from the result of the dynamic search)
      * @param array $arrayInst (array with names of the instances from the result of the dynamic search)
      */
-    private function geraExcel($querydinamica,$frase,$arrayId,$arrayNomes, $arrayValores,$arrayInstId,$arrayInst) {
+    public function geraExcel($querydinamica,$frase,$arrayId,$arrayNomes, $arrayValores,$arrayInstId,$arrayInst) {
         // Create new PHPExcel object
 	$objPHPExcel = new PHPExcel();
 

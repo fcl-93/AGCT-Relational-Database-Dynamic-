@@ -1,5 +1,6 @@
 <?php
 require_once("custom/php/common.php");
+require_once("custom/php/exportacao-de-valores.php");
 
 $pesquisa = new Search();
 
@@ -8,12 +9,18 @@ class Search{
     private $bd;
     private $operators;
     private $saveNames;
+    private $guardaidDosSelecionados;
+    private $guardanomePropSelec;
+    private $guardaValorDaProp;
     public function __construct()
     {
         $this->bd = new Db_Op();
         $this->operators = operadores();
         $this->saveNames = array();
         $this->checkUser();
+        $this->$guardanomePropSelec = array();
+        $this->$guardaValorDaProp = array();
+        $this->$guardaidDosSelecionados = array();
     }
     
     public function checkUser(){
@@ -149,7 +156,7 @@ class Search{
                                 switch ($read_GetRelProps['value_type']) {
                                     case 'enum':
                                     //get enum values if the component valu_type is enum
-                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_PropRelEnt['id']." AND prop_allowed_value.state = 'active'");
+                                    $res_AlldVal = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE prop_allowed_value.property_id = ".$read_GetRelProps['id']." AND prop_allowed_value.state = 'active'");
  ?>
                                     <select name="selectER<?php echo $count ?>">
 <?php
@@ -203,8 +210,31 @@ class Search{
 <?php
                                             break;
                                     case 'ent_ref':
+ ?>
+                                        <select name="ent_refER<?php echo $count ?>">
+                                            <option></option>
+<?php
+                                               
+                                                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps["id"]." = id");
+                                                    while($FK = $selecionaFK->fetch_assoc())
+                                                    {
+
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        //array associativo que guarda o resultado que vem da query 
+                                                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                                                        {
+                                                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
 ?>
-                                        <input type="hidden" name="ent_refER" value="<?php echo $read_PropRelEnt['id'] ?>">
+                                                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                                        }
+                                                    }
+                                                
+?>
+                                            </select></br>
 <?php
                                         break;
                             }
@@ -335,8 +365,31 @@ class Search{
 <?php
                                     break;
 				case 'ent_ref':
-?>  
-                                    <input type="hidden" name="ent_refRL" value="<?php echo $read_GetRelProps['id'] ?>">
+?>
+                                        <select name="ent_refER<?php echo $count ?>">
+                                            <option></option>
+<?php
+                                               
+                                                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps["id"]." = id");
+                                                    while($FK = $selecionaFK->fetch_assoc())
+                                                    {
+
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        //array associativo que guarda o resultado que vem da query 
+                                                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                                                        {
+                                                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+?>
+                                                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                                        }
+                                                    }
+                                                
+?>
+                                            </select></br>
 <?php
                                     break;
                             }
@@ -466,7 +519,30 @@ class Search{
                                                     break;
 					case 'ent_ref':
 ?>
-                                                    <input type="hidden" name="ent_refVT" value="<?php echo $read_PropRelEnt['id'] ?>">
+                                            <select name="ent_refER<?php echo $count ?>">
+                                            <option></option>
+<?php
+                                               
+                                                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_PropRelEnt["id"]." = id");
+                                                    while($FK = $selecionaFK->fetch_assoc())
+                                                    {
+
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        //array associativo que guarda o resultado que vem da query 
+                                                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                                                        {
+                                                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+?>
+                                                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                                        }
+                                                    }
+                                                
+?>
+                                            </select></br>
 <?php
                                             break;
                                     }
@@ -589,7 +665,30 @@ class Search{
                                                     break;
 					case 'ent_ref':
 ?>
-                                                    <input type="hidden" name="ent_refET" value="<?php echo $read_GetProp['id'] ?>">
+                                            <select name="ent_refER<?php echo $count ?>">
+                                            <option></option>
+<?php
+                                               
+                                                    //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
+                                                    $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetProp["id"]." = id");
+                                                    while($FK = $selecionaFK->fetch_assoc())
+                                                    {
+
+                                                        $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
+                                                        // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
+                                                        $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
+                                                        //array associativo que guarda o resultado que vem da query 
+                                                        while($nomeinstancia = $selecionainstancia->fetch_assoc())
+                                                        {
+                                                            //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+?>
+                                                            <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                                        }
+                                                    }
+                                                
+?>
+                                            </select></br>
 <?php
                                             break;
                                     }
@@ -676,9 +775,7 @@ class Search{
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
         $i = 0;
-        $guardanomePropSelec = array();
-        $guardaValorDaProp = array();
-        $guardaidDosSelecionados = array();
+        
         $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
             if(isset($_REQUEST['checkET'.$i])) {
@@ -738,21 +835,21 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipo == "ET") {
-                    $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezET = false;
                     if ($query1Ent === true) {
                         break;
                     }
                 }
                 else if ($tipo == "VT") {
-                    $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezVT = false;
                     if ($query1Ref === true) {
                         break;
                     }
                 }
                 else if ($tipo == "RL") {
-                    $query1Rel = $this->filtros3Tabela($query1Rel, $primeiraVezRL, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1Rel = $this->filtros3Tabela($query1Rel, $primeiraVezRL, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezRL = false;
                     if ($query1Rel === true) {
                         break;
@@ -760,7 +857,7 @@ class Search{
                 }
                 else if($tipo == "ER") 
                 {
-                    $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezER = false;
                     if ($query1ER === true) {
                         break;
@@ -847,7 +944,7 @@ class Search{
             goBack();
         }
         else {
-            $this->apresentaResultado ($querydinamica);
+            $this->apresentaResultado ($querydinamica,$guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp);
         }
     }
     
@@ -967,7 +1064,7 @@ class Search{
         }
         return $querydinamica;    
     }
-    private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+    private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo) {
         if ($controlo) {
             $querydinamica .= "e.id IN (";
         }
@@ -981,7 +1078,6 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -991,28 +1087,25 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $querydinamica;
     }
    
-    private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+    private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1044,7 +1137,6 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1054,28 +1146,25 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
 
-private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controlo) {
@@ -1106,7 +1195,6 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1116,28 +1204,26 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
     
-private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo){
+private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo){
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1169,7 +1255,6 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1179,24 +1264,21 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
 }    
     private function validaInt ($count, $tipo) {
@@ -1275,14 +1357,26 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         }
     }
     
-    private function preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor) {
-        array_push($guardaidDosSelecionados,$idDaPropriedade);
-        array_push($guardanomePropSelec, $nomeProp);
-        array_push($guardaValorDaProp,$valor);
+    private function preencheArrays ($idDaPropriedade,$nomeProp,$valor) {
+        array_push($this->$guardaidDosSelecionados,$idDaPropriedade);
+        array_push($this->$guardanomePropSelec, $nomeProp);
+        array_push($this->$guardaValorDaProp,$valor);
+        echo "array id prop";
+        print_r ($this->$guardaidDosSelecionados);
+        echo "array nome prop";
+        print_r ($this->$guardanomePropSelec);
+        echo "array valor prop";
+        print_r ($this->$guardaValorDaProp);
+        echo "id prop";
+        print_r ($idDaPropriedade);
+        echo "nome prop";
+        print_r ($nomeProp);
+        echo "valor prop";
+        print_r ($valor);
     }
     
     
-    private function apresentaResultado ($querydinamica) {
+    private function apresentaResultado ($querydinamica, $guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp) {
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
@@ -1315,10 +1409,17 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
                     else {
                         $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
                         $entity_name = $entity['entity_name'];
-                        $entity_id = $entity['id']
+                        $entity_id = $entity['id'];
+                        if (!empty ($entity_name)) {
 ?>
-                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
+                            <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
 <?php
+                        }
+                        else {
+?>
+                            <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_id;?></a>
+<?php
+                        }
                     }
 ?>
                 </td>
@@ -1331,6 +1432,13 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             </tbody>
         </table>
 <?php
+            $excelGen = new ExportValues();
+            print_r ($this->$guardaidDosSelecionados);
+            print_r ($this->$guardanomePropSelec);
+            print_r ($this->$guardaValorDaProp);
+            print_r ($arrayInstId);
+            print_r ($arrayInstComp);
+            $excelGen->geraExcel($querydinamica,"frase",$this->$guardaidDosSelecionados,$this->$guardanomePropSelec,$this->$guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
@@ -1338,7 +1446,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         $idEnt = $_REQUEST["id"];
         $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
         $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
-        if (!is_null ($ent["entity_name"])) {
+        if (!empty ($ent["entity_name"])) {
 ?>
             <h3>Entidade <?php echo $ent["entity_name"];?> - Propriedades</h3>
 <?php
@@ -1357,8 +1465,22 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND entity_id = ".$idEnt;
             $queryValue = $this->bd->runQuery($queryValue);
             while ($value = $queryValue->fetch_assoc()) {
+                if ($prop["value_type"] != "ent_ref") {
+                    $valor = $value["value"];
+                }
+                else {
+                    $queryEnt = "SELECT * FROM entity WHERE id = ".$value["value"];
+                    $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
+                    if (!empty ($ent["entity_name"])) {
+                        $valor = $ent["entity_name"];
+                    }
+                    else {
+                        $valor = $value["value"];
+                    }
+                    
+                }
 ?>
-                <p><label><?php echo $prop["name"];?>:</label> <?php echo $value["value"];?></p>
+                <p><label><?php echo $prop["name"];?>:</label> <?php echo $valor;?></p>
 <?php
             }
         }

@@ -98,12 +98,16 @@ class PropertyManage
             }
            
         }
+        elseif($_REQUEST['estado'] =='historico')
+        {
+             $this->gereHist->estadoHistorico();
+        }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
             $this->estadoAtivarDesativar();		
         }
     }
-
+    
     /**
      * Method that checks if there are any Properties in the previous selected type of property (entity or relation)
      * @param string $tipo ("relation" if we want to check properties's relation, "entity" for entities's properties)
@@ -176,7 +180,7 @@ class PropertyManage
                 <?php
                     }
                 ?>
-                    <th>ID1</th>
+                    <th>ID</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
                     <th>Nome do campo no formulário</th>
@@ -226,7 +230,7 @@ class PropertyManage
                         {
                 ?>
                             <td><?php echo $arraySelec["id"]; ?></td>
-                            <td><?php echo $arraySelec["name"]; ?></td>
+                            <td><a href="?estado=historico&id=<?php echo $arraySelec["id"];?>"><?php echo $arraySelec["name"]; ?></a></td>
                             <td><?php echo $arraySelec["value_type"]; ?></td>
                             <td><?php echo $arraySelec["form_field_name"]; ?></td>
                             <td><?php echo $arraySelec["form_field_type"]; ?></td>
@@ -992,8 +996,10 @@ class PropertyManage
 
 class PropHist{
     
+    private $db;            // Object from DB_Op that contains the access to the database
+    
     public function __construct(){
-        
+         $this->db = new Db_Op();
     }
     
     public function atualizaHistorico ($bd) {
@@ -1013,7 +1019,34 @@ class PropHist{
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$bd->runQuery($updateHist);
-    }   
+    }
+    
+    public function estadoHistorico () {
+        //meto um datepicker
+?>
+        <form>
+            <p>Introduza uma data: <input type="text" id="datepicker"></p>
+            <input type="submit" value="Apresentar histórico">
+        </form>
+<?php
+        //apresento histórico
+        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on";
+        $queryHistorico = $this->db->runQuery($queryHistorico);
+        while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+            <p><label>Data de Ativação:</label> <?php echo $hist["active_on"];?>
+            <p><label>Data de Desativação:</label> <?php echo $hist["inactive_on"];?>
+            <p><label>Tipo de valor:</label> <?php echo $hist["value_type"];?>
+            <p><label>Nome do campo no formulário:</label> <?php echo $hist["form_field_name"];?>
+            <p><label>Tipo do campo no formulário:</label> <?php echo $hist["form_field_type"];?>
+            <p><label>Tipo de unidade:</label> <?php echo $hist["unit_type"];?>
+            <p><label>Ordem do campo no formulário:</label> <?php echo $hist["form_field_order"];?>
+            <p><label>Tamanho do campo no formulário:</label> <?php echo $hist["form_field_size"];?>
+            <p><label>Obrigatório:</label> <?php echo $hist["mandatory"];?>
+            <p><label>Estado:</label> <?php echo $hist["state"];?>    
+<?php
+        }
+    }
 }
 
 // instantiation of an object from the class PropertyManage. This instantiation is responsable to get the script work as expected.
