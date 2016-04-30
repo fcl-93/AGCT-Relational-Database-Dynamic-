@@ -1617,7 +1617,7 @@ class Search{
 ?>
            </tbody>
         </table>
-            <button type="submit">Atualizar</button>
+           <input type="submit" value="Atualizar">
     </form>        
 <?php
     
