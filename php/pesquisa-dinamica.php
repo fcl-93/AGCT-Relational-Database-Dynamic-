@@ -1573,7 +1573,7 @@ class Search{
         $queryProp = $this->bd->runQuery($queryProp);
 ?>
         <html>
-        <table>
+        <table class="table">
             <thead>
                 <th>Propriedade</th>
                 <th>Valor Atual</th>
