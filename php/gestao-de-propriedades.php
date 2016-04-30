@@ -102,6 +102,10 @@ class PropertyManage
         {
              $this->gereHist->estadoHistorico();
         }
+        elseif($_REQUEST['estado'] =='voltar')
+        {
+             $this->gereHist->estadoVoltar();
+        }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
             $this->estadoAtivarDesativar();		
@@ -660,7 +664,7 @@ class PropertyManage
     private function estadoAtivarDesativar()
     {
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
-        $this->gereHist->atualizaHistorico($this->db);
+        $this->gereHist->atualizaHistorico();
         $queryUpdate = "UPDATE property SET state=";
         if ($_REQUEST["estado"] === "ativar")
         {
@@ -955,7 +959,7 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        $this->gereHist->atualizaHistorico($this->db);
+        $this->gereHist->atualizaHistorico();
         $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
         if(!empty($_REQUEST["tamanho"]))
 	{
@@ -1002,9 +1006,9 @@ class PropHist{
          $this->db = new Db_Op();
     }
     
-    public function atualizaHistorico ($bd) {
+    public function atualizaHistorico () {
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
-        $selectAtributos = $bd->runQuery($selectAtributos);
+        $selectAtributos = $this->db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
@@ -1018,7 +1022,23 @@ class PropHist{
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
-        $updateHist =$bd->runQuery($updateHist);
+        $updateHist =$this->db->runQuery($updateHist);
+    }
+    
+    public function estadoVoltar () {
+        $this->atualizaHistorico();
+        $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
+        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "UPDATE property SET";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && !is_null($valor)) {
+                $updateHist .= $atributo." = '".$valor."',"; 
+            }
+        }
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop'];
+        $updateHist .= "WHERE id = ".$_REQUEST['prop'];
+        $updateHist =$this->db->runQuery($updateHist);
     }
     
     public function estadoHistorico () {
@@ -1036,16 +1056,17 @@ class PropHist{
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Ativação:</th>
-                    <th>Data de Desativação:</th>
-                    <th>Tipo de valor:</th>
-                    <th>Nome do campo no formulário:</th>
-                    <th>Tipo do campo no formulário:</th>
-                    <th>Tipo de unidade:</th>
-                    <th>Ordem do campo no formulário:</th>
-                    <th>Tamanho do campo no formulário:</th>
-                    <th>Obrigatório:</th>
-                    <th>Estado:</th>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
+                    <th>Tamanho do campo no formulário</th>
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -1098,6 +1119,7 @@ class PropHist{
                     }
 ?>
                     </td>
+                    <td><a href ="estado=voltar&hist=<?php echo $hist["id"];?>&prop=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
         }
