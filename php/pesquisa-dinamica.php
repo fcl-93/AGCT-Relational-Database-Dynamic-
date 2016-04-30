@@ -1571,8 +1571,21 @@ class Search{
 
         $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$ent_type;
         $queryProp = $this->bd->runQuery($queryProp);
-        
+?>
+        <html>
+        <table>
+            <thead>
+                <th>Propriedade</th>
+                <th>Valor Atual</th>
+                <th>Novo Valor</th>
+                <th>Selecionar</th>
+            </thead>
+            <tbody>
+<?php
         while ($prop = $queryProp->fetch_assoc()) {
+?>
+            <tr>
+<?php
             $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND entity_id = ".$idEnt;
             $queryValue = $this->bd->runQuery($queryValue);
             while ($value = $queryValue->fetch_assoc()) {
@@ -1591,10 +1604,17 @@ class Search{
                     
                 }
 ?>
-                <p><label><?php echo $prop["name"];?>:</label> <?php echo $valor;?></p>
+                <td><?php echo $prop["name"];?></td>
+                <td><?php echo $valor;?></td>
+            </tr>
 <?php
             }
         }
+?>
+           </tbody>
+        </table>
+<?php
+    
     }
     
     /**
