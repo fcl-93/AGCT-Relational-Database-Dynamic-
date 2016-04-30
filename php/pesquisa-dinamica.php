@@ -1607,7 +1607,9 @@ class Search{
                 <td><?php echo $prop["name"];?></td>
                 <td><?php echo $valor;?></td>
                 <td><input type="text" name="nomeProp"></td>
-                <td><input type="checkbox" name="selProp"></td>
+                <td>
+                <input type="checkbox" name="idProp" value="<?php echo $prop["id"] ?>">
+                </td>
             </tr>
 <?php
             }
