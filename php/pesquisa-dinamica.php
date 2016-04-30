@@ -1521,11 +1521,11 @@ class Search{
         if($getRel->num_rows == 0){
             if($estado == 'active')
             {
-                $this->bd->runQuery("UPDATE `entity` SET `state`=active,`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
             }
             else if ($estado == 'inactive')
             {
-                $this->bd->runQuery("UPDATE `entity` SET `state`=inactive,`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
             }
         }
         else
