@@ -887,10 +887,24 @@ class Search{
                     }
                 }
                 else if ($tipo == "RL") {
-                    if ($primeiraVezRL) {
-                        
-                        $getEnt1 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
-                        $getEnt2 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
+                    $idRel = "SELECT DISTINCT r.* FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt;
+                    $rel = $this->bd->runQuery($idRel)->fetch_assoc();
+                    $idRel = $rel["id"];
+                    foreach ($arrayRL as $id) {
+                        if ($rel["id"] == $id) {
+                            $relExiste = true;
+                            break;
+                        }
+                        else {
+                            $relExiste = false;
+                        }
+                    }
+                    if (!$relExiste) {
+                        array_push($arrayRL, $rel["id"]);
+                        $ent1 = $rel["ent_type1_id"];
+                        $ent2 = $rel["ent_type2_id"];
+                        $getEnt1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+                        $getEnt2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
                         $getEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["name"];
                         $getEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["name"];
                         $this->frase .= " que está presente na relação do tipo ".$getEnt1." - ".$getEnt2." cuja propriedade ".$nomeProp." é ";
@@ -906,20 +920,27 @@ class Search{
                 }
                 else if($tipo == "ER") 
                 {
-                    if ($primeiraVezER) {
-                        $getEnt1 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
-                        $getEnt2 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
-                        $getIDEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["id"];
-                        $getIDEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["id"];
-                        $getEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["name"];
-                        $getEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["name"];
-                        if ($getIDEnt1 == $idEnt) {
-                            $this->frase .= " que têm uma relação com a entidade do tipo ".$getEnt2." cuja propriedade ".$nomeProp." é ";
+                    $idRel = "SELECT DISTINCT r.* FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt;
+                    $rel = $this->bd->runQuery($idRel)->fetch_assoc();
+                    $idRel = $rel["id"];
+                    foreach ($arrayRL as $id) {
+                        if ($rel["id"] == $id) {
+                            $relExiste = true;
+                            break;
                         }
                         else {
-                            $this->frase .= " que têm uma relação com a entidade do tipo ".$getEnt1." cuja propriedade ".$nomeProp." é ";
+                            $relExiste = false;
                         }
-                        
+                    }
+                    if (!$relExiste) {
+                        array_push($arrayRL, $rel["id"]);
+                        $ent1 = $rel["ent_type1_id"];
+                        $ent2 = $rel["ent_type2_id"];
+                        $getEnt1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+                        $getEnt2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
+                        $getEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["name"];
+                        $getEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["name"];
+                        $this->frase .= " que têm uma relação com a entidade do tipo ".$getEnt2." cuja propriedade ".$nomeProp." é ";
                     }
                     else {
                         $this->frase .= ", cuja propriedade ".$nomeProp." é ";
