@@ -338,6 +338,7 @@ class GereForms
                         return false;
                     }
                     //
+                    $numOrdem = array();
                     for($i = 1; $i <= $_SESSION['propSelected']; $i++)
                     {
                             if((!is_numeric($_REQUEST["ordem".$i]) || $_REQUEST["ordem".$i] < 1) && isset($_REQUEST["idProp".$i]))
@@ -356,9 +357,20 @@ class GereForms
 <?php 
                                 return false;
                             }
+                            array_push($numOrdem, $_REQUEST['ordem'.$i]);
+                    }
+                    //Check if there is any duplicated value in order (campo ordem) field
+                    $duplicatedValueChecka = array_count_values($numOrdem);
+                    foreach ($duplicatedValueChecka as $key => $value) {
+                        if($value > 1)
+                        {
+?>
+                                <p>Os campos ordem não devem ter valores iguais.</p><br>
+<?php
+                        return false;
+                        }
                     }
                     return true;
-
                 }	
                 else 
                 {
@@ -683,10 +695,7 @@ class GereForms
             }
             else
             {
-?>
-                   <p>O seu formulário não pôde ser atualizado porque ocorreu um erro.</p>
-                   <p>Clique em <?php goBack(); ?></p>  
-<?php
+                   goBack(); 
             }
 
         }
