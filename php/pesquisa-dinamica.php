@@ -17,14 +17,10 @@ class Search{
         $this->bd = new Db_Op();
         $this->operators = operadores();
         $this->saveNames = array();
-        $this->checkUser();
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
         $this->guardanomePropSelec = array();
-        echo 'arrays';
-        print_r ($this->guardaidDosSelecionados);
-        print_r ($this->guardanomePropSelec);
-        print_r ($this->guardaValorDaProp);
+        $this->checkUser();
     }
     
     public function checkUser(){
