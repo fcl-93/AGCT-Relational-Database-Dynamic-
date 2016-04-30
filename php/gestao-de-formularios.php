@@ -511,7 +511,7 @@ class GereForms
 	 */
 	public function activate(){
             $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
-            if($this->gereFormHist->addHist($id, $bd))
+            if($this->gereFormHist->addHist( $idForm,$this->bd))
             {
                 $this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$idForm);
 		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
@@ -541,7 +541,7 @@ class GereForms
 	  */
 	public function desactivate(){
             $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
-            if($this->gereFormHist->addHist($idForm, $bd))
+            if($this->gereFormHist->addHist($idForm, $this->bd))
             {
                 $this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$idForm);
 		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
