@@ -1432,6 +1432,11 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         </table>
 <?php
             $excelGen = new ExportValues();
+            print_r ($guardaidDosSelecionados);
+            print_r ($guardanomePropSelec);
+            print_r ($guardaValorDaProp);
+            print_r ($arrayInstId);
+            print_r ($arrayInstComp);
             $excelGen->geraExcel($querydinamica,"frase",$guardaidDosSelecionados,$guardanomePropSelec,$guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
