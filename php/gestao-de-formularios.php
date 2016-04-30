@@ -361,10 +361,10 @@ class GereForms
                     }
                     //Check if there is any duplicated value in order (campo ordem) field
                     $duplicatedValueCheck = array_count_values($numOrdem);
-                    foreach ($duplicatedValueChecka as $key => $value) {
+                    print_r($duplicatedValueCheck);
+                    foreach ($duplicatedValueCheck as $key => $value) {
                         if($value > 1)
                         {
-                            print_r($duplicatedValueCheck);
                             ?>
                                 <p>Os campos ordem não devem ter valores iguais.</p><br>
 <?php
