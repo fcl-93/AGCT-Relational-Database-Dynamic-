@@ -782,6 +782,7 @@ class Search{
         $checkSelectedVT = 0;
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
+        $arrayVT = array();
         $i = 0;
         
         $erro = false;
@@ -858,11 +859,18 @@ class Search{
                         break;
                     }
                 }
-                else if ($tipo == "VT") {
-                    if ($primeiraVezVT) {
-                        
-                        $getEntRef = "SELECT e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
-                        $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
+                else if ($tipo == "VT") {   
+                    $getEntRef = "SELECT e.id, e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
+                    $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
+
+                    foreach ($array_push as $id) {
+                        if ($getEntRef["id"] == $id) {
+                            $vtExiste = true;
+                            break;
+                        }
+                    }
+                    if (!$vtExiste) {
+                        array_push($arrayVT, $getEntRef["id"]);
                         $this->frase .= " que referencie uma entidade do tipo ".$getEntRef["name"]." cuja propriedade ".$nomeProp." é ";
                     }
                     else {
