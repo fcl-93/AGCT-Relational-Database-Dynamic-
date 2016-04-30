@@ -18,7 +18,7 @@ class Search{
         $this->operators = operadores();
         $this->saveNames = array();
         $this->checkUser();
-        $this->guardanomePropSelec = array();
+        $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
         $this->guardanomePropSelec = array();
     }
