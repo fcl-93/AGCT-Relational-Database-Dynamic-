@@ -97,7 +97,7 @@ class ExportValues{
 
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna1.$linha,'ID');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna2.$linha'Instâncias');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna2.$linha,'Instâncias');
 
 	$percorre = 0;
 	$linha++;
