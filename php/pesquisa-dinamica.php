@@ -1358,7 +1358,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
     }
     
     private function preencheArrays ($idDaPropriedade,$nomeProp,$valor) {
-        array_push($this->guardanomePropSelec,$idDaPropriedade);
+        array_push($this->guardaidDosSelecionados,$idDaPropriedade);
         array_push($this->guardanomePropSelec, $nomeProp);
         array_push($this->guardaValorDaProp,$valor);
         echo "array id prop";
