@@ -41,11 +41,14 @@ class Search{
                 else if($_REQUEST['estado'] == 'apresentacao'){
                     $this->estadoApresentacao();
                 } 
-                else if ($_REQUEST['estado'] == 'changestate')
+                else if ($_REQUEST['estado'] == 'desactivate')
                 {
-                    
+                    $this->changeState();
                 }
-                
+                else if ($_REQUEST['estado'] == 'activate')
+                {
+                    $this->changeState();
+                }
                 
                 
             }
@@ -1074,6 +1077,7 @@ class Search{
         }
         return $querydinamica;    
     }
+    
     private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo) {
         if ($controlo) {
             $querydinamica .= "e.id IN (";
@@ -1180,7 +1184,7 @@ class Search{
         return $query1;
     }
 
-private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
+    private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controlo) {
@@ -1241,7 +1245,7 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nome
         return $query1;
     }
     
-private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo){
+    private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo){
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1302,6 +1306,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
 }    
+    
     private function validaInt ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
             $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$tipo.$count.'']);
@@ -1384,7 +1389,6 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         array_push($this->guardaValorDaProp,$valor);
     }
     
-    
     private function apresentaResultado ($querydinamica) {
         echo $this->frase;        
         $instEnt = $this->bd->runquery($querydinamica);		
@@ -1440,13 +1444,13 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
                     if($readState['state'] == "active")
                     {
 ?>
-                        <a href="?estado=changestate&id=<?php echo $entity_id;?>">[Desativar]</a>
+                        <a href="?estado=desactivate&id=<?php echo $entity_id;?>">[Desativar]</a>
 <?php                    
                     }
                     else
                     {
 ?>
-                        <a href="?estado=changestate&id=<?php echo $entity_id;?>">[Ativar]</a>
+                        <a href="?estado=activate&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
 ?>
@@ -1506,6 +1510,33 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
                 <p><label><?php echo $prop["name"];?>:</label> <?php echo $valor;?></p>
 <?php
             }
+        }
+    }
+    
+    public function changeState(){
+        $id = $this->bd->userInputVal($_REQUEST['ent']);
+        $estado = $this->bd->userInputVal($_REQUEST['estado']);
+        
+        $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id."OR entity2_id =".$id);
+        if($getRel->num_rows == 0){
+            if($estado == 'active')
+            {
+                $this->bd->runQuery("UPDATE `entity` SET `state`=active,`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+            }
+            else if ($estado == 'inactive')
+            {
+                $this->bd->runQuery("UPDATE `entity` SET `state`=inactive,`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+            }
+        }
+        else
+        {
+            $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+?>
+                <p>Necessita de desativar relações a que a instância <?php $readVal['name'] == "" ?  $readVal['id']: $readVal['name'] ?> pertence,</p>
+                <p>para poder proceder à sua desativação </p>
+                <p>Clique em <a href="/insercao-de-relacoes/">Inserção de relações</a</p>
+                <p>ou Clique em <?php goBack() ?> para voltar à página anterior.</p>
+<?php
         }
     }
 }
