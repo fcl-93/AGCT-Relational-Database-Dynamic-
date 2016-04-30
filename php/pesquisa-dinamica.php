@@ -994,6 +994,7 @@ class Search{
         if($erro)
         {
 ?>
+            <p><?php echo $this->frase;?></p>
             <p>Não existem entidades que respeitem a pesquisa efetuada.</p>
 <?php
             goBack();
