@@ -1032,20 +1032,41 @@ class PropHist{
         //apresento histórico
         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on";
         $queryHistorico = $this->db->runQuery($queryHistorico);
+?>
+        <table>
+            <tr>
+                <th>Data de Ativação:</th>
+                <th>Data de Desativação:</th>
+                <th>Tipo de valor:</th>
+                <th>Nome do campo no formulário:</th>
+                <th>Tipo do campo no formulário:</th>
+                <th>Tipo de unidade:</th>
+                <th>Ordem do campo no formulário:</th>
+                <th>Tamanho do campo no formulário:</th>
+                <th>Obrigatório:</th>
+                <th>Estado:</th>
+            </tr>
+<?php
         while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-            <p><label>Data de Ativação:</label> <?php echo $hist["active_on"];?>
-            <p><label>Data de Desativação:</label> <?php echo $hist["inactive_on"];?>
-            <p><label>Tipo de valor:</label> <?php echo $hist["value_type"];?>
-            <p><label>Nome do campo no formulário:</label> <?php echo $hist["form_field_name"];?>
-            <p><label>Tipo do campo no formulário:</label> <?php echo $hist["form_field_type"];?>
-            <p><label>Tipo de unidade:</label> <?php echo $hist["unit_type"];?>
-            <p><label>Ordem do campo no formulário:</label> <?php echo $hist["form_field_order"];?>
-            <p><label>Tamanho do campo no formulário:</label> <?php echo $hist["form_field_size"];?>
-            <p><label>Obrigatório:</label> <?php echo $hist["mandatory"];?>
-            <p><label>Estado:</label> <?php echo $hist["state"];?>    
+            <tr>
+                <td><?php echo $hist["active_on"];?></td>
+                <td><?php echo $hist["inactive_on"];?></td>
+                <td><?php echo $hist["value_type"];?></td>
+                <td><?php echo $hist["form_field_name"];?></td>
+                <td><?php echo $hist["form_field_type"];?></td>
+                <td><?php echo $hist["unit_type"];?></td>
+                <td><?php echo $hist["form_field_order"];?></td>
+                <td><?php echo $hist["form_field_size"];?></td>
+                <td><?php echo $hist["mandatory"];?></td>
+                <td><?php echo $hist["state"];?></td>
+            </tr>
+            
 <?php
         }
+?>
+        </table>
+<?php
     }
 }
 
