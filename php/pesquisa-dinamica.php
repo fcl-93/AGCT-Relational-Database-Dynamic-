@@ -1642,7 +1642,7 @@ class Search{
                         }
 ?>
                 </td>
-                <td><input type="checkbox" name="idProp<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
+                <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
             </tr>
 <?php
             }
@@ -1728,7 +1728,7 @@ class Search{
         }
     }
     
-   /* public function ssValidationUp()
+    public function ssValidationUp()
     {
         $idVal = $this->bd->userInputVal($_REQUEST['id']);
         $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
@@ -1736,7 +1736,7 @@ class Search{
         
         for($x = 0; x <= $_SESSION['updateValue']; $x++)
         {
-            if(isset($_REQUEST['idProp'.$x]))
+            if(isset($_REQUEST['check'.$x]))
             {
                  if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
                 {
@@ -1744,38 +1744,38 @@ class Search{
                     <html>
                         <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                     </html>
-<?php
-                                return false;
+<?php       
+                    return false;
                 }
-                            else
-                            {
-                                if(isset($_REQUEST['select'.$i]))
-                                {}
-                                else if(isset($_REQUEST['radio'.$i]))
-                                {}
-                                else if(isset($_REQUEST['textbox'.$i]))
-                                {
-                                    $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
-                                    $getPropId = $res_getPropId->fetch_assoc();
+                else
+                {
+                    if(isset($_REQUEST['select'.$i]))
+                    {}
+                    else if(isset($_REQUEST['radio'.$i]))
+                    {}
+                    else if(isset($_REQUEST['textbox'.$i]))
+                    {
+                        $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
+                        $getPropId = $res_getPropId->fetch_assoc();
                                     
-                                    $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
-                                    $getValue_Type = $res_getValue_Type->fetch_assoc();
+                        $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
+                        $getValue_Type = $res_getValue_Type->fetch_assoc();
                                    
-                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
-                                    {
-                                        ?>
-                        <html>
-                            <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
-                        </html>
+                        if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
+                        {
+?>
+                            <html>
+                                <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                            </html>
                         
-                                            <?php
+<?php
                                         return false;
-                                    }
-                                }
-                            }
-                            $count++;
                         }
                     }
+            }
+                            $count++;
+            }
+        }
                     
                 if($count == 0)
                 {
@@ -1787,67 +1787,70 @@ class Search{
                     return false;
                 }
                     return true;
-                    
-                    
-                }
-            else if($_REQUEST['flag'] == 'atributosNovos')
-                {
-                    $count = 0;
-                    for($i=0; $i <=  $_SESSION['propImpressas']; $i++)
+           
+        }
+    
+    
+            /**
+         * Check if a value is an integer or a bool or a double.
+         * @param type $value_type ->type of that value
+         * @param type $valores -> value to checl
+         * @return boolean
+         */
+        private function typeValidation($value_type,$valores){
+            switch($value_type) {
+                case 'int':
+                    if(ctype_digit($valores))
                     {
-                        if(isset($_REQUEST['check'.$i]))
-                        {
-                           // echo $i;
-                            if(empty($_REQUEST['select'.$i]) && empty($_REQUEST['radio'.$i]) && empty($_REQUEST['textbox'.$i]))
-                            {
-?>
-                                <html>
-                                    <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
-                                </html>
-<?php
-                                return false;
-                            }
-                            else
-                            {
-                                if(isset($_REQUEST['select'.$i])){}
-                                else if(isset($_REQUEST['radio'.$i])){}
-                                else if(isset($_REQUEST['textbox'.$i]))
-                                {                                    
-                                    $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$i]));
-                                    $getValue_Type = $res_getValue_Type->fetch_assoc();
-                                   
-                                    if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$i]))== false)
-                                    {
-?>
-                                        <html>
-                                            <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
-                                        </html>                        
-<?php
-                                        return false;
-                                    }
-                               }
-                            }
-                            $count++;
-                        }
+                        $valores = (int)$valores;
+                        $tipoCorreto = true;
                     }
-                    
-                        if($count == 0)
-                        {
-?>
-                            <html>
-                                 <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
-                            </html>
-<?php
-                            return false;
-                        }
-                        return true;
+                    else
+                    {
+    ?>
+                        <p>O valor introduzido não está correto. Certifique-se que introduziu um valor numérico</p>
+    <?php
+                        $tipoCorreto = false;
+
                     }
-            else if($_REQUEST['flag'] == 'naoeditar')
-            {
-                        return true;
+                break;
+                case 'double':
+                    if(is_numeric($valores))
+                    {
+                        $valores = floatval($valores);
+                        $tipoCorreto = true;
+                    }
+                    else
+                    {
+?>
+                        <p>O valor introduzido não está correto. Certifique-se que introduziu um valor numérico</p>
+<?php
+                        $tipoCorreto = false;
+                    }
+                break;
+                case 'bool':
+                    if($valores == 'true' || $valores == 'false')
+                    {
+                        $valores = boolval($valores);
+                        $tipoCorreto = true;
+                    }
+                    else
+                    {
+?>
+                        <p>O valor introduzido para o campo <?php echo $propriedadesExcel[$i];?> não está correto. Certifique-se que introduziu um valor true ou false</p>
+<?php
+                        $tipoCorreto = false;
+                    }
+                    break;
+                default:
+                    $tipoCorreto = true;
+                    break;
             }
-        }*/
+            return $tipoCorreto;
+        }    
+        
     }
+    
 
 /**
  * This class will manage the history that is created for the entity table
