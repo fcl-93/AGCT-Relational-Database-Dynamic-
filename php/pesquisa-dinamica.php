@@ -52,6 +52,10 @@ class Search{
                 {
                     $this->changeState();
                 }
+                else if ($_REQUEST['estado'] = 'updateValoresEnt')
+                {
+                    $this->updatEntVal();
+                }
                 
                 
             }
@@ -1654,6 +1658,7 @@ class Search{
 <?php
             $_SESSION['updateValue'] = $x;
 ?>
+            <input type="hidden" name="estado" value="updateValoresEnt"><br>
            <input type="submit" value="Atualizar">
     </form>        
 <?php
