@@ -703,7 +703,7 @@ class HistDeForms{
         if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
            //get all the properties from the seleced form
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
-           if($resCf_Prop->num_rows() > 0)
+           if($resCf_Prop->num_rows > 0)
            {
                 while($resCf_Prop = $resCf_Prop->fetch_assoc())
                 {
