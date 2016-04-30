@@ -100,7 +100,7 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico($tipo);
+             $this->gereHist->estadoHistorico();
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
