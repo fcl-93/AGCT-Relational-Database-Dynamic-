@@ -102,7 +102,7 @@ class InsereRelacoes
                                  {
 ?>                                     
                             <html>
-                                <table  class="table">
+                                <table  class="table" id="sortedTable">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -218,7 +218,19 @@ class InsereRelacoes
 ?>                               
                                 </tbody>
                             </table>   
-            </html>
+	<form>
+		<img src="custom/images/first.png" class="first">
+		<img src=".custom/images/prev.png" class="prev">
+		<input type="text" class="pagedisplay">
+		<img src="custom/images/next.png" class="next">
+		<img src="custom/images/last.png" class="last">
+		<select class="pagesize">
+			<option selected="selected" value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+		</select>
+	</form>
 
 <?php
         $this->createNewRel();
