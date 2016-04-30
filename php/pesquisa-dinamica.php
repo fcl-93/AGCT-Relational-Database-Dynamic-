@@ -21,6 +21,7 @@ class Search{
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
         $this->guardanomePropSelec = array();
+        echo 'arrays';
         print_r ($this->guardaidDosSelecionados);
         print_r ($this->guardanomePropSelec);
         print_r ($this->guardaValorDaProp);
