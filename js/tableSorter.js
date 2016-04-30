@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 $(document).ready(function() { 
-    $("#sortedTable") 
-    .tablesorter() 
-    .tablesorterPager({container: $("#pager")}); 
+    $("#sortedTable").tablesorter();
+    $("#pagerTable").tablesorter().tablesorterPager({container: $("#pager")}); 
+    
 });
