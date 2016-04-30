@@ -220,7 +220,7 @@ class InsereRelacoes
                             </table>   
 	<form>
 		<img src="custom/images/first.png" class="first">
-		<img src=".custom/images/prev.png" class="prev">
+		<img src="custom/images/prev.png" class="prev">
 		<input type="text" class="pagedisplay">
 		<img src="custom/images/next.png" class="next">
 		<img src="custom/images/last.png" class="last">
