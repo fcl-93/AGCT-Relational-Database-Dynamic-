@@ -83,7 +83,7 @@ class Search{
             $_SESSION["id"] = $_REQUEST["ent"];
         }
         else {
-            $_SESSION["tipo"] = "rel";
+            $_SES0SION["tipo"] = "rel";
             $_SESSION["id"] = $_REQUEST["rel"];
         }
         
@@ -1609,14 +1609,18 @@ class Search{
                 <td><?php echo $prop["name"];?></td>
                 <td><?php echo $valor;?></td>
                 <td><input type="text" name="nomeProp<?php echo $x?>"></td>
-                <td><input type="checkbox" name="idProp<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>
+                <td><input type="checkbox" name="idProp<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
             </tr>
 <?php
             }
+            $x++;
         }
 ?>
            </tbody>
         </table>
+<?php
+            $_SESSION['updateValue'] = $x;
+?>
            <input type="submit" value="Atualizar">
     </form>        
 <?php
@@ -1677,8 +1681,34 @@ class Search{
         }
     }
     
+    
+    
+    /**
+     * Updates the values for the selected entity
+     */
     public function updatEntVal(){
-        
+        if($this->ssValidationUp()){
+            $idVal = $this->bd->userInputVal($_REQUEST['id']);
+            $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();
+            
+            $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
+            
+                    
+                    
+        }
+    }
+    
+    public function ssValidationUp()
+    {
+         for($x = 0; x <= $_SESSION['updateValue']; $x++)
+        {
+            if(isset($_REQUEST['idProp'.$x])){
+                if($_REQUEST['nomeProp'.$x] == ""){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 
