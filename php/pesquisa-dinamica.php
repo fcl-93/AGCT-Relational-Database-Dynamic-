@@ -1357,6 +1357,18 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         array_push($guardaidDosSelecionados,$idDaPropriedade);
         array_push($guardanomePropSelec, $nomeProp);
         array_push($guardaValorDaProp,$valor);
+        echo "array id prop";
+        print_r ($guardaidDosSelecionados);
+        echo "array nome prop";
+        print_r ($guardanomePropSelec);
+        echo "array valor prop";
+        print_r ($guardaValorDaProp);
+        echo "id prop";
+        print_r ($idDaPropriedade);
+        echo "nome prop";
+        print_r ($nomeProp);
+        echo "valor prop";
+        print_r ($valor);
     }
     
     
