@@ -939,7 +939,7 @@ class Search{
             goBack();
         }
         else {
-            $this->apresentaResultado ($querydinamica);
+            $this->apresentaResultado ($querydinamica,$guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp);
         }
     }
     
@@ -1374,7 +1374,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
     }
     
     
-    private function apresentaResultado ($querydinamica) {
+    private function apresentaResultado ($querydinamica, $guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp) {
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
@@ -1430,6 +1430,8 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             </tbody>
         </table>
 <?php
+            $excelGen = new ExportValues();
+            $excelGen->geraExcel($querydinamica,"frase",$guardaidDosSelecionados,$guardanomePropSelec,$guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
