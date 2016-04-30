@@ -712,6 +712,11 @@ class HistDeForms{
                         return false;
                     }
                 }
+                //updates the current form updated_on field 
+                if(!$bd->runQuery("UPDATE `custom_form` SET `updated_on`='".$inactive."' WHERE id=".$id))
+                {
+                    return false;
+                }
                 return true;
            }
         }
