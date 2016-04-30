@@ -1514,7 +1514,7 @@ class Search{
     }
     
     public function changeState(){
-        $id = $this->bd->userInputVal($_REQUEST['ent']);
+        $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
         
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id."OR entity2_id =".$id);
