@@ -66,7 +66,7 @@ class ExportValues{
 	$coluna = 'A';
 	while($percorre < count($arrayNomes) )
 	{
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayNomes[$percorre]['name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coluna.$linha, $arrayNomes[$percorre]);
             $objPHPExcel->getActiveSheet()->getColumnDimension($coluna)->setAutoSize(true);
             $coluna++;
             $percorre++;
