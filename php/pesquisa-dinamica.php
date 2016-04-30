@@ -1390,7 +1390,8 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         <table class="table">
             <thead>
                 <tr>
-                    <th>Instância</td>
+                    <th>Instância</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
@@ -1420,6 +1421,23 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
                             <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_id;?></a>
 <?php
                         }
+                    }
+?>
+                </td>
+                <td>
+<?php
+                    $readState = $this->bd->runQuery("SELECT state FROM entity WHERE id=".$entity_id)->fetch_assoc();
+                    if($readState['state'] == "active")
+                    {
+?>
+                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Desativar]</a>
+<?php                    
+                    }
+                    else
+                    {
+?>
+                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Ativar]</a>
+<?php
                     }
 ?>
                 </td>
