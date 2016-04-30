@@ -48,7 +48,7 @@ class ExportValues{
         $linha = 2;
         $coluna = 'A';
 
-	if (count($arrayId) === 0) {
+	if (count($arrayId) == 0) {
             
             for($i = 0; $i < count($arrayId); $i++)
             {
