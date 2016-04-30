@@ -1573,6 +1573,10 @@ class Search{
         }
     }
     
+    /**
+     * This method will handle the activation and the the desativation of the
+     * entities.
+     */
     public function changeState(){
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
