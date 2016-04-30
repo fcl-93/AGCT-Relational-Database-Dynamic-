@@ -1033,7 +1033,7 @@ class PropHist{
         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on";
         $queryHistorico = $this->db->runQuery($queryHistorico);
 ?>
-        <table>
+        <table class="table">
             <tr>
                 <th>Data de Ativação:</th>
                 <th>Data de Desativação:</th>
