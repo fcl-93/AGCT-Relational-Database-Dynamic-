@@ -1525,7 +1525,7 @@ class Search{
                 $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);            
 ?>
                 <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
-                <p>Clique em <a href="/pesquisa-dinamica/">Inserção de relações</a></p>
+                <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php
             }
             else if ($estado == 'inactive')
@@ -1533,7 +1533,7 @@ class Search{
                 $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
 ?>
                 <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
-                <p>Clique em <a href="/pesquisa-dinamica/">Inserção de relações</a></p>
+                <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php 
                 
             }
