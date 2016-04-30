@@ -786,7 +786,10 @@ class Search{
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
         $arrayVT = array();
+        $arrayRL = array();
+        $arrayER = array();
         $vtExiste = false;
+        $relExiste = false;
         $i = 0;
         
         $erro = false;
@@ -926,7 +929,7 @@ class Search{
                     $idRel = "SELECT DISTINCT r.* FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt;
                     $rel = $this->bd->runQuery($idRel)->fetch_assoc();
                     $idRel = $rel["id"];
-                    foreach ($arrayRL as $id) {
+                    foreach ($arrayER as $id) {
                         if ($rel["id"] == $id) {
                             $relExiste = true;
                             break;
@@ -936,7 +939,7 @@ class Search{
                         }
                     }
                     if (!$relExiste) {
-                        array_push($arrayRL, $rel["id"]);
+                        array_push($arrayER, $rel["id"]);
                         $ent1 = $rel["ent_type1_id"];
                         $ent2 = $rel["ent_type2_id"];
                         $getEnt1 = "SELECT name FROM ent_type WHERE id = ".$ent1;

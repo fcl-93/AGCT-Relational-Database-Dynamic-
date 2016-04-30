@@ -1030,22 +1030,81 @@ class PropHist{
         </form>
 <?php
         //apresento histórico
-        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on";
+        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         $queryHistorico = $this->db->runQuery($queryHistorico);
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação:</th>
+                    <th>Data de Desativação:</th>
+                    <th>Tipo de valor:</th>
+                    <th>Nome do campo no formulário:</th>
+                    <th>Tipo do campo no formulário:</th>
+                    <th>Tipo de unidade:</th>
+                    <th>Ordem do campo no formulário:</th>
+                    <th>Tamanho do campo no formulário:</th>
+                    <th>Obrigatório:</th>
+                    <th>Estado:</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
         while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-            <p><label>Data de Ativação:</label> <?php echo $hist["active_on"];?>
-            <p><label>Data de Desativação:</label> <?php echo $hist["inactive_on"];?>
-            <p><label>Tipo de valor:</label> <?php echo $hist["value_type"];?>
-            <p><label>Nome do campo no formulário:</label> <?php echo $hist["form_field_name"];?>
-            <p><label>Tipo do campo no formulário:</label> <?php echo $hist["form_field_type"];?>
-            <p><label>Tipo de unidade:</label> <?php echo $hist["unit_type"];?>
-            <p><label>Ordem do campo no formulário:</label> <?php echo $hist["form_field_order"];?>
-            <p><label>Tamanho do campo no formulário:</label> <?php echo $hist["form_field_size"];?>
-            <p><label>Obrigatório:</label> <?php echo $hist["mandatory"];?>
-            <p><label>Estado:</label> <?php echo $hist["state"];?>    
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["value_type"];?></td>
+                    <td><?php echo $hist["form_field_name"];?></td>
+                    <td><?php echo $hist["form_field_type"];?></td>
+                    <td>
+<?php
+                        if (empty($hist["unit_type_id"]))
+                        {
+                            echo "-";
+                        }
+                        else
+                        {
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                        }
+?>
+                    </td>
+                    <td><?php echo $hist["form_field_order"];?></td>
+                    <td><?php echo $hist["form_field_size"]; ?></td>
+                    <td>
+<?php
+                        if ($hist["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
+ ?>
+                    </td>
+                    <td>
+
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+                </tr>
 <?php
         }
+?>
+            <tbody>
+        </table>
+<?php
     }
 }
 
