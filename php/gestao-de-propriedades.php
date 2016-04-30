@@ -1034,37 +1034,40 @@ class PropHist{
         $queryHistorico = $this->db->runQuery($queryHistorico);
 ?>
         <table class="table">
-            <tr>
-                <th>Data de Ativação:</th>
-                <th>Data de Desativação:</th>
-                <th>Tipo de valor:</th>
-                <th>Nome do campo no formulário:</th>
-                <th>Tipo do campo no formulário:</th>
-                <th>Tipo de unidade:</th>
-                <th>Ordem do campo no formulário:</th>
-                <th>Tamanho do campo no formulário:</th>
-                <th>Obrigatório:</th>
-                <th>Estado:</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Data de Ativação:</th>
+                    <th>Data de Desativação:</th>
+                    <th>Tipo de valor:</th>
+                    <th>Nome do campo no formulário:</th>
+                    <th>Tipo do campo no formulário:</th>
+                    <th>Tipo de unidade:</th>
+                    <th>Ordem do campo no formulário:</th>
+                    <th>Tamanho do campo no formulário:</th>
+                    <th>Obrigatório:</th>
+                    <th>Estado:</th>
+                </tr>
+            </thead>
+            <tbody>
 <?php
         while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-            <tr>
-                <td><?php echo $hist["active_on"];?></td>
-                <td><?php echo $hist["inactive_on"];?></td>
-                <td><?php echo $hist["value_type"];?></td>
-                <td><?php echo $hist["form_field_name"];?></td>
-                <td><?php echo $hist["form_field_type"];?></td>
-                <td><?php echo $hist["unit_type"];?></td>
-                <td><?php echo $hist["form_field_order"];?></td>
-                <td><?php echo $hist["form_field_size"];?></td>
-                <td><?php echo $hist["mandatory"];?></td>
-                <td><?php echo $hist["state"];?></td>
-            </tr>
-            
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["value_type"];?></td>
+                    <td><?php echo $hist["form_field_name"];?></td>
+                    <td><?php echo $hist["form_field_type"];?></td>
+                    <td><?php echo $hist["unit_type"];?></td>
+                    <td><?php echo $hist["form_field_order"];?></td>
+                    <td><?php echo $hist["form_field_size"];?></td>
+                    <td><?php echo $hist["mandatory"];?></td>
+                    <td><?php echo $hist["state"];?></td>
+                </tr>
 <?php
         }
 ?>
+            <tbody>
         </table>
 <?php
     }
