@@ -102,7 +102,7 @@ class InsereRelacoes
                                  {
 ?>                                     
                             <html>
-                                <table class="table" id="sortedTable">
+                                <table class="table" id="pagerTable">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
