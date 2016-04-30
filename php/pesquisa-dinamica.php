@@ -41,11 +41,11 @@ class Search{
                 else if($_REQUEST['estado'] == 'apresentacao'){
                     $this->estadoApresentacao();
                 } 
-                else if ($_REQUEST['estado'] == 'desactivate')
+                else if ($_REQUEST['estado'] == 'inactive')
                 {
                     $this->changeState();
                 }
-                else if ($_REQUEST['estado'] == 'activate')
+                else if ($_REQUEST['estado'] == 'active')
                 {
                     $this->changeState();
                 }
@@ -1444,13 +1444,13 @@ class Search{
                     if($readState['state'] == "active")
                     {
 ?>
-                        <a href="?estado=desactivate&id=<?php echo $entity_id;?>">[Desativar]</a>
+                        <a href="?estado=inactive&id=<?php echo $entity_id;?>">[Desativar]</a>
 <?php                    
                     }
                     else
                     {
 ?>
-                        <a href="?estado=activate&id=<?php echo $entity_id;?>">[Ativar]</a>
+                        <a href="?estado=active&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
 ?>
