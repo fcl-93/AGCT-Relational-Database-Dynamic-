@@ -1,5 +1,6 @@
 <?php
 require_once("custom/php/common.php");
+require_once("custom/php/exportacao-de-valores.php");
 
 $pesquisa = new Search();
 
