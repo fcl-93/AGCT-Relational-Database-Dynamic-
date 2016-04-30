@@ -100,7 +100,7 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico();
+             $this->gereHist->estadoHistorico($tipo);
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -1058,11 +1058,46 @@ class PropHist{
                     <td><?php echo $hist["value_type"];?></td>
                     <td><?php echo $hist["form_field_name"];?></td>
                     <td><?php echo $hist["form_field_type"];?></td>
-                    <td><?php echo $hist["unit_type"];?></td>
+                    <td>
+<?php
+                        if (empty($hist["unit_type_id"]))
+                        {
+                            echo "-";
+                        }
+                        else
+                        {
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                        }
+?>
+                    </td>
                     <td><?php echo $hist["form_field_order"];?></td>
-                    <td><?php echo $hist["form_field_size"];?></td>
-                    <td><?php echo $hist["mandatory"];?></td>
-                    <td><?php echo $hist["state"];?></td>
+                    <td><?php echo $arraySelec["form_field_size"]; ?></td>
+                    <td>
+<?php
+                        if ($hist["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
+ ?>
+                    </td>
+                    <td>
+
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
                 </tr>
 <?php
         }
