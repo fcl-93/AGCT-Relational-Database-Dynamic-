@@ -1610,7 +1610,7 @@ class Search{
                 <td><?php echo $valor;?></td>
                 <td>
 <?php
-                    $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['id'])->fetch_assoc();
+                    $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
                     if($getValType['value_type'] == 'bool')
                     {
                                         
@@ -1639,7 +1639,8 @@ class Search{
 ?>
                             <input type="text" name="<?php echo 'textbox'.$x ?>">
 <?php  
-                        }?>
+                        }
+?>
                 </td>
                 <td><input type="checkbox" name="idProp<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
             </tr>
