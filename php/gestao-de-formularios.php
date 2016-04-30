@@ -705,9 +705,9 @@ class HistDeForms{
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
            if($resCf_Prop->num_rows > 0)
            {
-                while($resCf_Prop = $resCf_Prop->fetch_assoc())
+                while($readCf_Prop = $resCf_Prop->fetch_assoc())
                 {
-                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$resCf_Prop['property_id'].",".$resCf_Prop['field_order'].",".$resCf_Prop['mandatory_form'].",'".$resCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
+                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
                     {
                         return false;
                     }
