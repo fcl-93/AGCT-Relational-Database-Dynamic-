@@ -1688,8 +1688,8 @@ class Search{
      */
     public function updatEntVal(){
         if($this->ssValidationUp()){
-            $this->bd->userInputVal($_REQUEST['']);
-            $this->bd->runQuery("SELECT * FROM value WHERE id=".)
+            //$this->bd->userInputVal($_REQUEST['']);
+            //$this->bd->runQuery("SELECT * FROM value WHERE id=".)
                     
                     
         }
