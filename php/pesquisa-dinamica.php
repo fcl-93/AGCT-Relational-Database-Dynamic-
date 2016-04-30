@@ -1572,6 +1572,7 @@ class Search{
         $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$ent_type;
         $queryProp = $this->bd->runQuery($queryProp);
 ?>
+    <form>
         <html>
         <table class="table">
             <thead>
@@ -1616,6 +1617,8 @@ class Search{
 ?>
            </tbody>
         </table>
+            <button type="submit">Atualizar</button>
+    </form>        
 <?php
     
     }
@@ -1672,6 +1675,10 @@ class Search{
 <?php
                 $this->bd->getMysqli()->rollback();
         }
+    }
+    
+    public function updatEntVal(){
+        
     }
 }
 
