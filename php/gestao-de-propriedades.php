@@ -1030,7 +1030,7 @@ class PropHist{
         </form>
 <?php
         //apresento histórico
-        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on";
+        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         $queryHistorico = $this->db->runQuery($queryHistorico);
 ?>
         <table class="table">
