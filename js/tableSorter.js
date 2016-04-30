@@ -5,6 +5,6 @@
  */
 $(document).ready(function() { 
     $("#sortedTable") 
-    .tablesorter({widthFixed: true, widgets: ['zebra']}) 
+    .tablesorter() 
     .tablesorterPager({container: $("#pager")}); 
 });
