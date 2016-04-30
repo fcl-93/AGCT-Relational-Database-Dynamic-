@@ -1582,6 +1582,7 @@ class Search{
             </thead>
             <tbody>
 <?php
+        $x = 0;
         while ($prop = $queryProp->fetch_assoc()) {
 ?>
             <tr>
@@ -1606,10 +1607,8 @@ class Search{
 ?>
                 <td><?php echo $prop["name"];?></td>
                 <td><?php echo $valor;?></td>
-                <td><input type="text" name="nomeProp"></td>
-                <td>
-                <input type="checkbox" name="idProp" value="<?php echo $prop["id"] ?>">
-                </td>
+                <td><input type="text" name="nomeProp<?php echo $x?>"></td>
+                <td><input type="checkbox" name="idProp<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>
             </tr>
 <?php
             }
