@@ -627,54 +627,66 @@ class GereForms
         public function updateForm(){
             if($this->ssvalidation())
             {
-                $this->bd->getMysqli()->autocommit(false);
-		$this->bd->getMysqli()->begin_transaction();
-                if(!$this->bd->runQuery("UPDATE custom_form  SET name = '".$this->bd->userInputVal($_REQUEST["nome"])."' WHERE id = ".$_REQUEST['form_id'].""))
+                $id = $this->bd->userInputVal($_REQUEST['form_id']);
+                
+                if($this->gereFormHist->addHist($id,$this->bd))
                 {
-                    //erro a fazer update ao form
-                    $this->bd->getMysqli()->rollback();
-                }
-                else 
-                {
-                    $id = $_REQUEST['form_id'];
-                    $control = true;
-                    if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
+                    if(!$this->bd->runQuery("UPDATE custom_form  SET name = '".$this->bd->userInputVal($_REQUEST["nome"])."' WHERE id = ".$id.""))
                     {
                         //erro a fazer update ao form
-                         $control = false;
-                         $this->bd->getMysqli()->rollback();
+                        $this->bd->getMysqli()->rollback();
                     }
-                    else
-                    {
-                        for($i = 1; $i <= $_SESSION['propSelected']; $i++)
-                            {
-                                    if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i])) 
-                                    {
-                                            
-                                            
-                                            if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
-                                            {
-                                                   //erro a fazer update ao form
-                                                 $control = false;
-                                                   $this->bd->getMysqli()->rollback();
-                                            }
-                                    }
-                            }
-                            if($control)
-                            {
+                    else{
+                        $control = true;
+                        if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
+                        {
+                            //erro a fazer update ao form
+                             $control = false;
+                             $this->bd->getMysqli()->rollback();
+                        }
+                        else{
+                            for($i = 1; $i <= $_SESSION['propSelected']; $i++)
+                                {
+                                        if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i])) 
+                                        {
+
+
+                                                if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
+                                                {
+                                                       //erro a fazer update ao form
+                                                     $control = false;
+                                                       $this->bd->getMysqli()->rollback();
+                                                }
+                                        }
+                                }
+                                if($control)
+                                {
 ?>
-                                <p>Atualizou o seu formulário com sucesso</p>
-                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
-                                                
+                                    <p>Atualizou o seu formulário com sucesso</p>
+                                    <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+
 <?php
-                                $this->bd->getMysqli()->commit();   
-                            }
-                    }   
+                                    $this->bd->getMysqli()->commit();   
+                                }
+                        }   
+                    } 
                 }
+                else
+                {
+?>
+                        <p>O seu formulário não pôde ser atualizado porque ocorreu um erro.</p>
+                        <p>Clique em <?php goBack(); ?></p>
+<?php
+                        $this->bd->getMysqli()->rollback();
+                }
+ 
             }
             else
             {
-                goBack();            
+?>
+                   <p>O seu formulário não pôde ser atualizado porque ocorreu um erro.</p>
+                   <p>Clique em <?php goBack(); ?></p>  
+<?php
             }
 
         }
