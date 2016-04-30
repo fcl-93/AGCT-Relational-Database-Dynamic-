@@ -17,10 +17,10 @@ class Search{
         $this->bd = new Db_Op();
         $this->operators = operadores();
         $this->saveNames = array();
+        $this->guardaidDosSelecionados = array();
+        $this->guardaValorDaProp = array();
+        $this->guardanomePropSelec = array();
         $this->checkUser();
-        $this->$guardanomePropSelec = array();
-        $this->$guardaValorDaProp = array();
-        $this->$guardaidDosSelecionados = array();
     }
     
     public function checkUser(){
@@ -944,7 +944,7 @@ class Search{
             goBack();
         }
         else {
-            $this->apresentaResultado ($querydinamica,$guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp);
+            $this->apresentaResultado ($querydinamica);
         }
     }
     
@@ -1358,15 +1358,15 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
     }
     
     private function preencheArrays ($idDaPropriedade,$nomeProp,$valor) {
-        array_push($this->$guardaidDosSelecionados,$idDaPropriedade);
-        array_push($this->$guardanomePropSelec, $nomeProp);
-        array_push($this->$guardaValorDaProp,$valor);
+        array_push($this->guardaidDosSelecionados,$idDaPropriedade);
+        array_push($this->guardanomePropSelec, $nomeProp);
+        array_push($this->guardaValorDaProp,$valor);
         echo "array id prop";
-        print_r ($this->$guardaidDosSelecionados);
+        print_r ($this->guardanomePropSelec);
         echo "array nome prop";
-        print_r ($this->$guardanomePropSelec);
+        print_r ($this->guardanomePropSelec);
         echo "array valor prop";
-        print_r ($this->$guardaValorDaProp);
+        print_r ($this->guardaValorDaProp);
         echo "id prop";
         print_r ($idDaPropriedade);
         echo "nome prop";
@@ -1376,7 +1376,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
     }
     
     
-    private function apresentaResultado ($querydinamica, $guardaidDosSelecionados, $guardanomePropSelec, $guardaValorDaProp) {
+    private function apresentaResultado ($querydinamica) {
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
@@ -1433,12 +1433,12 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         </table>
 <?php
             $excelGen = new ExportValues();
-            print_r ($this->$guardaidDosSelecionados);
-            print_r ($this->$guardanomePropSelec);
-            print_r ($this->$guardaValorDaProp);
+            print_r ($this->guardaidDosSelecionados);
+            print_r ($this->guardanomePropSelec);
+            print_r ($this->guardaValorDaProp);
             print_r ($arrayInstId);
             print_r ($arrayInstComp);
-            $excelGen->geraExcel($querydinamica,"frase",$this->$guardaidDosSelecionados,$this->$guardanomePropSelec,$this->$guardaValorDaProp,$arrayInstId,$arrayInstComp);
+            $excelGen->geraExcel($querydinamica,"frase",$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
