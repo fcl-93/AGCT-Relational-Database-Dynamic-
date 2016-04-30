@@ -1735,7 +1735,7 @@ class Search{
     
     public function ssValidationUp()
     {
-        for($x = 0; x <= $_SESSION['updateValue']; $x++)
+        for($x = 0; $x <= $_SESSION['updateValue']; $x++)
         {
             $idVal = $this->bd->userInputVal($_REQUEST['check'.$x]);
             $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
