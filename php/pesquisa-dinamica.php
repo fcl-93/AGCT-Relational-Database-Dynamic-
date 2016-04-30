@@ -859,7 +859,7 @@ class Search{
                     }
                 }
                 else if ($tipo == "VT") {
-                    if ($primeiraVezET) {
+                    if ($primeiraVezVT) {
                         
                         $getEntRef = "SELECT e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
                         $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
@@ -875,7 +875,7 @@ class Search{
                     }
                 }
                 else if ($tipo == "RL") {
-                    if ($primeiraVezET) {
+                    if ($primeiraVezRL) {
                         
                         $getEnt1 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
                         $getEnt2 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
@@ -894,7 +894,7 @@ class Search{
                 }
                 else if($tipo == "ER") 
                 {
-                    if ($primeiraVezET) {
+                    if ($primeiraVezER) {
                         $getEnt1 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
                         $getEnt2 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
                         $getIDEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["id"];
