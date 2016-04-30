@@ -9,12 +9,18 @@ class Search{
     private $bd;
     private $operators;
     private $saveNames;
+    private $guardaidDosSelecionados;
+    private $guardanomePropSelec;
+    private $guardaValorDaProp;
     public function __construct()
     {
         $this->bd = new Db_Op();
         $this->operators = operadores();
         $this->saveNames = array();
         $this->checkUser();
+        $this->$guardanomePropSelec = array();
+        $this->$guardaValorDaProp = array();
+        $this->$guardaidDosSelecionados = array();
     }
     
     public function checkUser(){
@@ -769,9 +775,7 @@ class Search{
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
         $i = 0;
-        $guardanomePropSelec = array();
-        $guardaValorDaProp = array();
-        $guardaidDosSelecionados = array();
+        
         $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
             if(isset($_REQUEST['checkET'.$i])) {
@@ -831,21 +835,21 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
                 
                 if ($tipo == "ET") {
-                    $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezET = false;
                     if ($query1Ent === true) {
                         break;
                     }
                 }
                 else if ($tipo == "VT") {
-                    $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo);
+                    $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezVT = false;
                     if ($query1Ref === true) {
                         break;
                     }
                 }
                 else if ($tipo == "RL") {
-                    $query1Rel = $this->filtros3Tabela($query1Rel, $primeiraVezRL, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1Rel = $this->filtros3Tabela($query1Rel, $primeiraVezRL, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezRL = false;
                     if ($query1Rel === true) {
                         break;
@@ -853,7 +857,7 @@ class Search{
                 }
                 else if($tipo == "ER") 
                 {
-                    $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo);
+                    $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezER = false;
                     if ($query1ER === true) {
                         break;
@@ -1060,7 +1064,7 @@ class Search{
         }
         return $querydinamica;    
     }
-    private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp, $tipoValor, $tipo) {
+    private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo) {
         if ($controlo) {
             $querydinamica .= "e.id IN (";
         }
@@ -1097,11 +1101,11 @@ class Search{
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
-        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $querydinamica;
     }
    
-    private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+    private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1156,11 +1160,11 @@ class Search{
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
-        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
 
-private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo) {
+private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controlo) {
@@ -1215,11 +1219,11 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
         }
         
-        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
     
-private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$guardaidDosSelecionados,$guardanomePropSelec,$nomeProp, $guardaValorDaProp,$tipoValor, $tipo){
+private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo){
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         //echo "Id da propriedade".$idDaPropriedade."<br>";
@@ -1274,7 +1278,7 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
-        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
+        $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
 }    
     private function validaInt ($count, $tipo) {
@@ -1353,16 +1357,16 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         }
     }
     
-    private function preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor) {
-        array_push($guardaidDosSelecionados,$idDaPropriedade);
-        array_push($guardanomePropSelec, $nomeProp);
-        array_push($guardaValorDaProp,$valor);
+    private function preencheArrays ($idDaPropriedade,$nomeProp,$valor) {
+        array_push($this->$guardaidDosSelecionados,$idDaPropriedade);
+        array_push($this->$guardanomePropSelec, $nomeProp);
+        array_push($this->$guardaValorDaProp,$valor);
         echo "array id prop";
-        print_r ($guardaidDosSelecionados);
+        print_r ($this->$guardaidDosSelecionados);
         echo "array nome prop";
-        print_r ($guardanomePropSelec);
+        print_r ($this->$guardanomePropSelec);
         echo "array valor prop";
-        print_r ($guardaValorDaProp);
+        print_r ($this->$guardaValorDaProp);
         echo "id prop";
         print_r ($idDaPropriedade);
         echo "nome prop";
@@ -1429,12 +1433,12 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
         </table>
 <?php
             $excelGen = new ExportValues();
-            print_r ($guardaidDosSelecionados);
-            print_r ($guardanomePropSelec);
-            print_r ($guardaValorDaProp);
+            print_r ($this->$guardaidDosSelecionados);
+            print_r ($this->$guardanomePropSelec);
+            print_r ($this->$guardaValorDaProp);
             print_r ($arrayInstId);
             print_r ($arrayInstComp);
-            $excelGen->geraExcel($querydinamica,"frase",$guardaidDosSelecionados,$guardanomePropSelec,$guardaValorDaProp,$arrayInstId,$arrayInstComp);
+            $excelGen->geraExcel($querydinamica,"frase",$this->$guardaidDosSelecionados,$this->$guardanomePropSelec,$this->$guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
