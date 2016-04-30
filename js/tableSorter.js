@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$().ready(function(){
-    $("#sortedTable")
-    .tablesorter()
+$(document).ready(function() { 
+    $("table") 
+    .tablesorter({widthFixed: true, widgets: ['zebra']}) 
     .tablesorterPager({container: $("#pager")}); 
 });
-
