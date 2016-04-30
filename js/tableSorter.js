@@ -5,6 +5,6 @@
  */
 $(document).ready(function() { 
     $("#sortedTable").tablesorter();
-    $("#pagerTable").tablesorterPager({container: $("#pager")}); 
+    $("#pagerTable").tablesorter().tablesorterPager({container: $("#pager")}); 
     
 });
