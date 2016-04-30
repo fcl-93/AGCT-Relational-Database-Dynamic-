@@ -4,7 +4,7 @@ require_once("custom/php/common.php");
 $gerencia = new GereForms();
 
 /**
- This method present in this class will handle all the operations that we can do in 
+ The methods that are present in this class will handle all the operations that we can do in 
  * the page gestão de formularios
  *  @author fabio
  * 
@@ -645,5 +645,47 @@ class GereForms
             }
 
         }
+}
+
+
+
+/**
+ * The methods prsent in this class will add the change the users do in the custom
+ * forms they have created
+ */
+class HistDeForms{
+    
+    public function __construct() {
+    }
+    
+    public function addHist($id,$bd){
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+        
+        //gets info from the form that we will be changing 
+        $res_getEntTp = $bd->runQuery("SELECT * FROM custom_form WHERE id=".$id."");
+        $read_getEntTp = $res_getEntTp->fetch_assoc();
+        
+        $inactive = date("Y-m-d H:i:s",time());
+        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
+           //get all the properties from the seleced form
+           $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
+           if($resCf_Prop->num_rows() > 0)
+           {
+                while($resCf_Prop = $resCf_Prop->fetch_assoc())
+                {
+                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$resCf_Prop['property_id'].",".$resCf_Prop['field_order'].",".$resCf_Prop['mandatory_form'].",'".$resCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+           }
+        }
+        return false;
+        
+        
+              
+    }
 }
 ?>
