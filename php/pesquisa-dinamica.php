@@ -789,6 +789,7 @@ class Search{
         $arrayRL = array();
         $arrayER = array();
         $vtExiste = false;
+        $relExiste = false;
         $i = 0;
         
         $erro = false;
