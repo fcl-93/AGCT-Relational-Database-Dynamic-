@@ -13,7 +13,7 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
             <link rel="stylesheet" type="text/css" href="<?php echo get_bloginfo('wpurl');?>/custom/css/jquery-ui.css">
             
             
-            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.3.js"></script> 
+            <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-1.12.3.min.js"></script> 
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-migrate-1.4.0.js"></script> 
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery-ui.min.js"></script>
             <script type="text/javascript" src="<?php echo get_bloginfo('wpurl');?>/custom/js/jquery.tablesorter.min.js"></script>
