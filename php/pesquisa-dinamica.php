@@ -40,6 +40,10 @@ class Search{
                 else if($_REQUEST['estado'] == 'apresentacao'){
                     $this->estadoApresentacao();
                 } 
+                else if ($_REQUEST['estado'] == 'changestate')
+                {
+                    
+                }
                 
                 
                 
