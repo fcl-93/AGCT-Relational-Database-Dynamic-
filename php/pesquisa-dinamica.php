@@ -863,7 +863,7 @@ class Search{
                     $getEntRef = "SELECT e.id, e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
                     $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
 
-                    foreach ($array_push as $id) {
+                    foreach ($arrayVT as $id) {
                         if ($getEntRef["id"] == $id) {
                             $vtExiste = true;
                             break;
