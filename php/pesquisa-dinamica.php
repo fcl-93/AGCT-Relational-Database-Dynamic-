@@ -1074,7 +1074,6 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1084,24 +1083,21 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         return $querydinamica;
     }
    
@@ -1137,7 +1133,6 @@ class Search{
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1147,24 +1142,21 @@ class Search{
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         return $query1;
     }
 
@@ -1199,7 +1191,6 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1209,24 +1200,22 @@ private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$guar
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        
+        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         return $query1;
     }
     
@@ -1262,7 +1251,6 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             else {
                 $valor = $this->validaInt($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else if ($tipoValor == "double") {
@@ -1272,24 +1260,21 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$g
             else {
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-                $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
-            $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         }
+        $this->preencheArrays ($guardaidDosSelecionados,$idDaPropriedade,$guardanomePropSelec,$nomeProp,$guardaValorDaProp,$valor);
         return $query1;
 }    
     private function validaInt ($count, $tipo) {
