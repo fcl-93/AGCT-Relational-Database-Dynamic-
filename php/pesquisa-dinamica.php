@@ -1430,13 +1430,13 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
                     if($readState['state'] == "active")
                     {
 ?>
-                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Desativar]</a>
+                        <a href="?estado=changestate&id=<?php echo $entity_id;?>">[Desativar]</a>
 <?php                    
                     }
                     else
                     {
 ?>
-                        <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Ativar]</a>
+                        <a href="?estado=changestate&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
 ?>
