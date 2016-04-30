@@ -782,6 +782,7 @@ class Search{
         $checkSelectedVT = 0;
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
+        $arrayVT = array();
         $i = 0;
         
         $erro = false;
@@ -845,16 +846,36 @@ class Search{
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
                 
-                $this->frase .= " cuja propriedade ".$nomeProp." é ";
-                
                 if ($tipo == "ET") {
+                    if ($primeiraVezET) {
+                        $this->frase .= " cuja propriedade ".$nomeProp." é ";
+                    }
+                    else {
+                        $this->frase .= ", cuja propriedade ".$nomeProp." é ";
+                    }
                     $query1Ent = $this->filtro1Tabela($query1Ent, $primeiraVezET, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezET = false;
                     if ($query1Ent === true) {
                         break;
                     }
                 }
-                else if ($tipo == "VT") {
+                else if ($tipo == "VT") {   
+                    $getEntRef = "SELECT e.id, e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
+                    $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
+
+                    foreach ($arrayVT as $id) {
+                        if ($getEntRef["id"] == $id) {
+                            $vtExiste = true;
+                            break;
+                        }
+                    }
+                    if (!$vtExiste) {
+                        array_push($arrayVT, $getEntRef["id"]);
+                        $this->frase .= " que referencie uma entidade do tipo ".$getEntRef["name"]." cuja propriedade ".$nomeProp." é ";
+                    }
+                    else {
+                        $this->frase .= ", cuja propriedade ".$nomeProp." é ";
+                    }
                     $query1Ref = $this->filtros2Tabela($query1Ref, $primeiraVezVT, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo);
                     $primeiraVezVT = false;
                     if ($query1Ref === true) {
@@ -862,6 +883,17 @@ class Search{
                     }
                 }
                 else if ($tipo == "RL") {
+                    if ($primeiraVezRL) {
+                        
+                        $getEnt1 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
+                        $getEnt2 = "SELECT name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
+                        $getEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["name"];
+                        $getEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["name"];
+                        $this->frase .= " que está presente na relação do tipo ".$getEnt1." - ".$getEnt2." cuja propriedade ".$nomeProp." é ";
+                    }
+                    else {
+                        $this->frase .= ", cuja propriedade ".$nomeProp." é ";
+                    }
                     $query1Rel = $this->filtros3Tabela($query1Rel, $primeiraVezRL, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezRL = false;
                     if ($query1Rel === true) {
@@ -870,6 +902,24 @@ class Search{
                 }
                 else if($tipo == "ER") 
                 {
+                    if ($primeiraVezER) {
+                        $getEnt1 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type1_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
+                        $getEnt2 = "SELECT id, name FROM ent_type WHERE id in (SELECT DISTINCT r.ent_type2_id FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt.")";
+                        $getIDEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["id"];
+                        $getIDEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["id"];
+                        $getEnt1 = $this->bd->runQuery($getEnt1)->fetch_assoc()["name"];
+                        $getEnt2 = $this->bd->runQuery($getEnt2)->fetch_assoc()["name"];
+                        if ($getIDEnt1 == $idEnt) {
+                            $this->frase .= " que têm uma relação com a entidade do tipo ".$getEnt2." cuja propriedade ".$nomeProp." é ";
+                        }
+                        else {
+                            $this->frase .= " que têm uma relação com a entidade do tipo ".$getEnt1." cuja propriedade ".$nomeProp." é ";
+                        }
+                        
+                    }
+                    else {
+                        $this->frase .= ", cuja propriedade ".$nomeProp." é ";
+                    }
                     $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezER = false;
                     if ($query1ER === true) {
@@ -952,6 +1002,7 @@ class Search{
         if($erro)
         {
 ?>
+            <p><?php echo $this->frase;?></p>
             <p>Não existem entidades que respeitem a pesquisa efetuada.</p>
 <?php
             goBack();
@@ -1390,7 +1441,9 @@ class Search{
     }
     
     private function apresentaResultado ($querydinamica) {
-        echo $this->frase;        
+?>
+        <p><?php echo $this->frase;?></p>
+<?php
         $instEnt = $this->bd->runquery($querydinamica);		
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
