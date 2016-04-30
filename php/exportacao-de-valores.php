@@ -47,7 +47,7 @@ class ExportValues{
 	//The second line will have the names form-field-name as headers
         $linha = 2;
         $coluna = 'A';
-
+        print_r($arrayId);
 	if (count($arrayId) == 0) {
             
             for($i = 0; $i < count($arrayId); $i++)
