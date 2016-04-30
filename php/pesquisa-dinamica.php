@@ -1534,7 +1534,7 @@ class Search{
 ?>
                 <p>Necessita de desativar relações a que a instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> pertence,</p>
                 <p>para poder proceder à sua desativação </p>
-                <p>Clique em <a href="/insercao-de-relacoes/">Inserção de relações</a</p>
+                <p>Clique em <a href="/insercao-de-relacoes/">Inserção de relações</a></p>
                 <p>ou Clique em <?php goBack() ?> para voltar à página anterior.</p>
 <?php
         }
