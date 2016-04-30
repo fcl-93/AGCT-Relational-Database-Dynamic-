@@ -1517,7 +1517,7 @@ class Search{
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
         
-        $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id);
+        $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state=active");
         if($getRel->num_rows == 0){
             if($estado == 'active')
             {
