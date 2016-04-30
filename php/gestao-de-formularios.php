@@ -13,12 +13,14 @@ class GereForms
 {
 	private $bd;
 	private $numProp; //printed properties in the table
+        private $gereFormHist;
 	/**
 	 * Constructor
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
-		$this->numProp = 0;
+		$this->gereFormHist = new HistDeForms();
+                $this->numProp = 0;
 		$this->checkUser();
 	}
 	
@@ -508,30 +510,61 @@ class GereForms
 	 * This method will activate the custom form the user selected.
 	 */
 	public function activate(){
-		$this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$_REQUEST['form_id']);
-		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+            $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            if($this->gereFormHist->addHist($id, $bd))
+            {
+                $this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$idForm);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
 		$read_formName = $res_formName->fetch_assoc();
-		?>
+?>
 		<html>
-		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado</p>
-		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado.</p>
+		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar.</p>
 		</html>
-	<?php
-		}
+<?php
+                $this->bd->getMysqli()->commit();
+            }
+            else
+            {
+?>
+		<html>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> não pôde ser ativado.</p>
+                        <p>Ocorreu um erro. Clique em <?php goBack(); ?></p>
+		</html>
+<?php
+                $this->bd->getMysqli()->rollback();
+            }
+           
+        }
 	/**
 	  * This method will desactivate the custom form the user selected
 	  */
 	public function desactivate(){
-			$this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$_REQUEST['form_id']);
-			$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
-			$read_formName = $res_formName->fetch_assoc();
-	?>
-			<html>
-			 	<p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
-			 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
-			</html>
+            $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            if($this->gereFormHist->addHist($idForm, $bd))
+            {
+                $this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$idForm);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
+		$read_formName = $res_formName->fetch_assoc();
+?>
+		<html>
+                    <p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
+                    <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+            	</html>
 <?php
-		}
+                $this->bd->getMysqli()->commit();
+            }
+            else
+            {
+?>
+		<html>
+                    <p>O formulário <?php echo $read_formName['name'] ?> não foi desativado</p>
+                    <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		</html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
 	
 	/**
 	 * This method will handle the insertion that a user will make in the database.
