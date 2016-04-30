@@ -13,10 +13,13 @@ class Search{
     private $guardanomePropSelec;
     private $guardaValorDaProp;
     private $frase;
+    private $gereInsts;
+    
     public function __construct()
     {
         $this->bd = new Db_Op();
         $this->operators = operadores();
+        $this->gereInsts = new entityHist();
         $this->saveNames = array();
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
@@ -1595,25 +1598,38 @@ class Search{
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
         $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
-        echo $estado;
+        //echo $estado;
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state='active'");
         if($getRel->num_rows == 0){
-            if($estado == 'active')
-            {
-                $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);            
+            if($this->gereInsts->addHist($id,$this->bd)){
+                if($estado == 'active')
+                {
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                   
 ?>
-                <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
-                <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
+                    <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
+                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php
-            }
-            else if ($estado == 'inactive')
-            {
-                $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                    $this->bd->getMysqli()->commit();   
+                }
+                else if ($estado == 'inactive')
+                {
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
+                    
 ?>
-                <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
-                <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
+                    <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
+                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php 
-                
+                    $this->bd->getMysqli()->commit();   
+                }
+            }
+            else
+            {
+?>
+                <p>Clique em <a href="/insercao-de-relacoes/">Inserção de relações</a></p>
+                <p>ou Clique em <?php goBack() ?> para voltar à página anterior.</p>
+<?php
+                $this->bd->getMysqli()->rollback();
             }
         }
         else
@@ -1624,7 +1640,39 @@ class Search{
                 <p>Clique em <a href="/insercao-de-relacoes/">Inserção de relações</a></p>
                 <p>ou Clique em <?php goBack() ?> para voltar à página anterior.</p>
 <?php
+                $this->bd->getMysqli()->rollback();
         }
     }
 }
+
+/**
+ * This class will manage the history that is created for the entity table
+ */
+class entityHist{
+                                        
+    public function __construct() {
+       
+    }
+    
+    /**
+     * Adds the previous entity version to the table hist_ent and gives permision to create a new entity
+     * @param type $id -> from the entity that we want to change
+     * @param type $bd -> object to allow us to make changes in the database
+     * @return boolean
+     */
+    public function addHist($id,$bd){
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+        
+        $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+        
+        $inactive = date("Y-m-d H:i:s",time());
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactive."')")){
+                return false;
+        }
+        return true;
+    }
+}
+
 ?>
+
