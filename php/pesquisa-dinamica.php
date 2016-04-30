@@ -13,10 +13,13 @@ class Search{
     private $guardanomePropSelec;
     private $guardaValorDaProp;
     private $frase;
+    private $gereInsts;
+    
     public function __construct()
     {
         $this->bd = new Db_Op();
         $this->operators = operadores();
+        $this->gereInsts = new entityHist();
         $this->saveNames = array();
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
@@ -1577,7 +1580,7 @@ class Search{
         //echo $estado;
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state='active'");
         if($getRel->num_rows == 0){
-            if(addHist($id,$this->bd)){
+            if($this->gereInsts->addHist($id,$this->bd)){
                 if($estado == 'active')
                 {
                     $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
@@ -1621,12 +1624,21 @@ class Search{
     }
 }
 
+/**
+ * This class will manage the history that is created for the entity table
+ */
 class entityHist{
                                         
     public function __construct() {
        
     }
     
+    /**
+     * Adds the previous entity version to the table hist_ent and gives permision to create a new entity
+     * @param type $id -> from the entity that we want to change
+     * @param type $bd -> object to allow us to make changes in the database
+     * @return boolean
+     */
     public function addHist($id,$bd){
         $bd->getMysqli()->autocommit(false);
 	$bd->getMysqli()->begin_transaction();
