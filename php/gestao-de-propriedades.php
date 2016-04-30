@@ -1072,7 +1072,7 @@ class PropHist{
 ?>
                     </td>
                     <td><?php echo $hist["form_field_order"];?></td>
-                    <td><?php echo $arraySelec["form_field_size"]; ?></td>
+                    <td><?php echo $hist["form_field_size"]; ?></td>
                     <td>
 <?php
                         if ($hist["mandatory"] == 1)
