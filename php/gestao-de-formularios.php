@@ -357,7 +357,9 @@ class GereForms
 <?php 
                                 return false;
                             }
-                            array_push($numOrdem, $_REQUEST['ordem'.$i]);
+                            if($_REQUEST['ordem'.$i] != ""){
+                                array_push($numOrdem, $_REQUEST['ordem'.$i]);
+                            }
                     }
                     //Check if there is any duplicated value in order (campo ordem) field
                     $duplicatedValueCheck = array_count_values($numOrdem);
