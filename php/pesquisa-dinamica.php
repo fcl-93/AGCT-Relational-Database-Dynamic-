@@ -21,6 +21,9 @@ class Search{
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
         $this->guardanomePropSelec = array();
+        print_r ($this->guardaidDosSelecionados);
+        print_r ($this->guardanomePropSelec);
+        print_r ($this->guardaValorDaProp);
     }
     
     public function checkUser(){
@@ -1433,12 +1436,12 @@ private function filtros4Tabela($query1ER, $controlo, $count,$idDaPropriedade,$n
         </table>
 <?php
             $excelGen = new ExportValues();
-            print_r ($this->guardanomePropSelec);
+            print_r ($this->guardaidDosSelecionados);
             print_r ($this->guardanomePropSelec);
             print_r ($this->guardaValorDaProp);
             print_r ($arrayInstId);
             print_r ($arrayInstComp);
-            $excelGen->geraExcel($querydinamica,"frase",$this->guardanomePropSelec,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
+            $excelGen->geraExcel($querydinamica,"frase",$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
     
