@@ -1119,7 +1119,7 @@ class PropHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
         }
