@@ -4,7 +4,7 @@ require_once("custom/php/common.php");
 $gerencia = new GereForms();
 
 /**
- This method present in this class will handle all the operations that we can do in 
+ The methods that are present in this class will handle all the operations that we can do in 
  * the page gestão de formularios
  *  @author fabio
  * 
@@ -13,12 +13,14 @@ class GereForms
 {
 	private $bd;
 	private $numProp; //printed properties in the table
+        private $gereFormHist;
 	/**
 	 * Constructor
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
-		$this->numProp = 0;
+		$this->gereFormHist = new HistDeForms();
+                $this->numProp = 0;
 		$this->checkUser();
 	}
 	
@@ -508,30 +510,61 @@ class GereForms
 	 * This method will activate the custom form the user selected.
 	 */
 	public function activate(){
-		$this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$_REQUEST['form_id']);
-		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
+            $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            if($this->gereFormHist->addHist( $idForm,$this->bd))
+            {
+                $this->bd->runQuery("UPDATE `custom_form` SET state='active' WHERE id=".$idForm);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
 		$read_formName = $res_formName->fetch_assoc();
-		?>
+?>
 		<html>
-		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado</p>
-		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> foi ativado.</p>
+		 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar.</p>
 		</html>
-	<?php
-		}
+<?php
+                $this->bd->getMysqli()->commit();
+            }
+            else
+            {
+?>
+		<html>
+		 	<p>O formulário <?php echo $read_formName['name'] ?> não pôde ser ativado.</p>
+                        <p>Ocorreu um erro. Clique em <?php goBack(); ?></p>
+		</html>
+<?php
+                $this->bd->getMysqli()->rollback();
+            }
+           
+        }
 	/**
 	  * This method will desactivate the custom form the user selected
 	  */
 	public function desactivate(){
-			$this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$_REQUEST['form_id']);
-			$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$_REQUEST['form_id']);
-			$read_formName = $res_formName->fetch_assoc();
-	?>
-			<html>
-			 	<p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
-			 	<p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
-			</html>
+            $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            if($this->gereFormHist->addHist($idForm, $this->bd))
+            {
+                $this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$idForm);
+		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
+		$read_formName = $res_formName->fetch_assoc();
+?>
+		<html>
+                    <p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
+                    <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+            	</html>
 <?php
-		}
+                $this->bd->getMysqli()->commit();
+            }
+            else
+            {
+?>
+		<html>
+                    <p>O formulário <?php echo $read_formName['name'] ?> não foi desativado</p>
+                    <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+		</html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
 	
 	/**
 	 * This method will handle the insertion that a user will make in the database.
@@ -594,56 +627,115 @@ class GereForms
         public function updateForm(){
             if($this->ssvalidation())
             {
-                $this->bd->getMysqli()->autocommit(false);
-		$this->bd->getMysqli()->begin_transaction();
-                if(!$this->bd->runQuery("UPDATE custom_form  SET name = '".$this->bd->userInputVal($_REQUEST["nome"])."' WHERE id = ".$_REQUEST['form_id'].""))
+                $id = $this->bd->userInputVal($_REQUEST['form_id']);
+                
+                if($this->gereFormHist->addHist($id,$this->bd))
                 {
-                    //erro a fazer update ao form
-                    $this->bd->getMysqli()->rollback();
-                }
-                else 
-                {
-                    $id = $_REQUEST['form_id'];
-                    $control = true;
-                    if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
+                    if(!$this->bd->runQuery("UPDATE custom_form  SET name = '".$this->bd->userInputVal($_REQUEST["nome"])."' WHERE id = ".$id.""))
                     {
                         //erro a fazer update ao form
-                         $control = false;
-                         $this->bd->getMysqli()->rollback();
+                        $this->bd->getMysqli()->rollback();
                     }
-                    else
-                    {
-                        for($i = 1; $i <= $_SESSION['propSelected']; $i++)
-                            {
-                                    if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i])) 
-                                    {
-                                            
-                                            
-                                            if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
-                                            {
-                                                   //erro a fazer update ao form
-                                                 $control = false;
-                                                   $this->bd->getMysqli()->rollback();
-                                            }
-                                    }
-                            }
-                            if($control)
-                            {
+                    else{
+                        $control = true;
+                        if(!$this->bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$id))
+                        {
+                            //erro a fazer update ao form
+                             $control = false;
+                             $this->bd->getMysqli()->rollback();
+                        }
+                        else{
+                            for($i = 1; $i <= $_SESSION['propSelected']; $i++)
+                                {
+                                        if(isset($_REQUEST["idProp".$i]) && isset($_REQUEST["ordem".$i]) && isset($_REQUEST["obrigatorio".$i])) 
+                                        {
+
+
+                                                if(!$this->bd->runQuery("INSERT INTO `custom_form_has_prop`(`custom_form_id`, `property_id`, `field_order`, `mandatory_form`) VALUES (".$id.",".$_REQUEST["idProp".$i].",'".$this->bd->userInputVal($_REQUEST["ordem".$i])."',".$this->bd->userInputVal($_REQUEST["obrigatorio".$i]).")"))
+                                                {
+                                                       //erro a fazer update ao form
+                                                     $control = false;
+                                                       $this->bd->getMysqli()->rollback();
+                                                }
+                                        }
+                                }
+                                if($control)
+                                {
 ?>
-                                <p>Atualizou o seu formulário com sucesso</p>
-                                <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
-                                                
+                                    <p>Atualizou o seu formulário com sucesso</p>
+                                    <p>Clique em <a href="/gestao-de-formularios/">Continuar</a> para avançar</p>
+
 <?php
-                                $this->bd->getMysqli()->commit();   
-                            }
-                    }   
+                                    $this->bd->getMysqli()->commit();   
+                                }
+                        }   
+                    } 
                 }
+                else
+                {
+?>
+                        <p>O seu formulário não pôde ser atualizado porque ocorreu um erro.</p>
+                        <p>Clique em <?php goBack(); ?></p>
+<?php
+                        $this->bd->getMysqli()->rollback();
+                }
+ 
             }
             else
             {
-                goBack();            
+?>
+                   <p>O seu formulário não pôde ser atualizado porque ocorreu um erro.</p>
+                   <p>Clique em <?php goBack(); ?></p>  
+<?php
             }
 
         }
+}
+
+
+
+/**
+ * The methods prsent in this class will add the change the users do in the custom
+ * forms they have created
+ */
+class HistDeForms{
+    
+    public function __construct() {
+    }
+    
+    public function addHist($id,$bd){
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+        
+        //gets info from the form that we will be changing 
+        $res_getEntTp = $bd->runQuery("SELECT * FROM custom_form WHERE id=".$id."");
+        $read_getEntTp = $res_getEntTp->fetch_assoc();
+        
+        $inactive = date("Y-m-d H:i:s",time());
+        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
+           //get all the properties from the seleced form
+           $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
+           if($resCf_Prop->num_rows > 0)
+           {
+                while($readCf_Prop = $resCf_Prop->fetch_assoc())
+                {
+                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
+                    {
+                        return false;
+                    }
+                }
+                //updates the current form updated_on field 
+                if(!$bd->runQuery("UPDATE `custom_form` SET `updated_on`='".$inactive."' WHERE id=".$id))
+                {
+                    return false;
+                }
+                return true;
+           }
+        }
+        return false;
+        
+        
+              
+    }
 }
 ?>
