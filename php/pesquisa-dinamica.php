@@ -783,6 +783,7 @@ class Search{
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
         $arrayVT = array();
+        $vtExiste = false;
         $i = 0;
         
         $erro = false;
@@ -867,6 +868,9 @@ class Search{
                         if ($getEntRef["id"] == $id) {
                             $vtExiste = true;
                             break;
+                        }
+                        else {
+                            $vtExiste = false;
                         }
                     }
                     if (!$vtExiste) {
