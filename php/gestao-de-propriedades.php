@@ -1101,18 +1101,7 @@ class PropHist{
     }
     
     public function estadoHistorico () {
-        //meto um datepicker
-?>
-        <form>
-            Verificar histórico:<br>
-            <input type="radio">até ao dia<br>
-            <input type="radio">a partir do dia<br>
-            <input type="radio">no dia<br>
-            <input type="text" id="datepicker" placeholder="Introduza uma data">
-            <input type="submit" value="Apresentar histórico">
-        </form>
-<?php
-        //apresento histórico
+        //meto um datepicker        
         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         $queryHistorico = $this->db->runQuery($queryHistorico);
         if ($queryHistorico->num_rows == 0) {
@@ -1123,81 +1112,90 @@ class PropHist{
         }
         else {
 ?>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Data de Ativação</th>
-                        <th>Data de Desativação</th>
-                        <th>Propriedade</th>
-                        <th>Tipo de valor</th>
-                        <th>Nome do campo no formulário</th>
-                        <th>Tipo do campo no formulário</th>
-                        <th>Tipo de unidade</th>
-                        <th>Ordem do campo no formulário</th>
-                        <th>Tamanho do campo no formulário</th>
-                        <th>Obrigatório</th>
-                        <th>Estado</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-<?php
-            while ($hist = $queryHistorico->fetch_assoc()) {
-?>
-                    <tr>
-                        <td><?php echo $hist["active_on"];?></td>
-                        <td><?php echo $hist["inactive_on"];?></td>
-                        <td><?php echo $hist["name"];?></td>
-                        <td><?php echo $hist["value_type"];?></td>
-                        <td><?php echo $hist["form_field_name"];?></td>
-                        <td><?php echo $hist["form_field_type"];?></td>
-                        <td>
-<?php
-                            if (empty($hist["unit_type_id"]))
-                            {
-                                echo "-";
-                            }
-                            else
-                            {
-                                $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                                echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
-                            }
-?>
-                        </td>
-                        <td><?php echo $hist["form_field_order"];?></td>
-                        <td><?php echo $hist["form_field_size"]; ?></td>
-                        <td>
-<?php
-                            if ($hist["mandatory"] == 1)
-                            {
-                                echo "sim";
-                            }
-                            else
-                            {
-                                echo " não";
-                            }
- ?>
-                        </td>
-                        <td>
+        <form>
+            Verificar histórico:<br>
+            <input type="radio">até ao dia<br>
+            <input type="radio">a partir do dia<br>
+            <input type="radio">no dia<br>
+            <input type="text" id="datepicker" placeholder="Introduza uma data">
+            <input type="submit" value="Apresentar histórico">
+        </form>
 
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
+                    <th>Tamanho do campo no formulário</th>
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
 <?php
-                        if ($hist["state"] === "active")
+        while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["name"];?></td>
+                    <td><?php echo $hist["value_type"];?></td>
+                    <td><?php echo $hist["form_field_name"];?></td>
+                    <td><?php echo $hist["form_field_type"];?></td>
+                    <td>
+<?php
+                        if (empty($hist["unit_type_id"]))
                         {
-                            echo 'Ativo';
+                            echo "-";
                         }
                         else
                         {
-                            echo 'Inativo';
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
                         }
 ?>
-                        </td>
-                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
-                    </tr>
+                    </td>
+                    <td><?php echo $hist["form_field_order"];?></td>
+                    <td><?php echo $hist["form_field_size"]; ?></td>
+                    <td>
 <?php
-            }
+                        if ($hist["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
 ?>
-                <tbody>
-            </table>
+                    </td>
+                    <td>
+
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                </tr>
+<?php
+        }
+?>
+            <tbody>
+        </table>
 <?php
         }
     }
