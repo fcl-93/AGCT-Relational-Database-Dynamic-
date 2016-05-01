@@ -654,7 +654,49 @@ class PropertyManage
             goBack();
             return false;
         }
+        if ($_REQUEST["estado"] == "update") {
+          $this->checkforChanges();
+        }
 	return true;
+    }
+    
+    /**
+     * This method checks if the user did any changes in the state editar
+     * @return boolean  
+     */
+    private function checkforChanges () {
+        $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
+        $getProp = $this->db->runQuery($getProp)->fetch_assoc();
+        if ($_REQUEST['nome'] != $getProp["name"]) {
+            return true;
+        }
+        else if ($_REQUEST['tipoValor'] != $getProp["value_type"]) {
+            return true;
+        }
+        else if ($_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+            return true;
+        }
+        else if ($_REQUEST['formType'] != $getProp["form_field_type"]) {
+            return true;
+        }
+       else  if ($_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
+            return true;
+        }
+        else if ($_REQUEST['ordem'] != $getProp["form_field_order"]) {
+            return true;
+        }
+        else if ($_REQUEST['tamanho'] != $getProp["form_field_size"]) {
+            return true;
+        }
+        else if ($_REQUEST['mandatory'] != $getProp["mandatory"]) {
+            return true;
+        }
+        else if ($_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
