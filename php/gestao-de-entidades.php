@@ -517,10 +517,10 @@ class EntHist{
                                    while($readHE = $resHE->fetch_assoc()){
 ?>
                                        <tr>
-                                           <td><?php $readHE['active_on']?></td>
-                                           <td><?php $readHE['inactive_on']?></td>
-                                           <td><?php $readHE['name']?></td>
-                                           <td><?php $readHE['state']?></td>
+                                           <td><?php echo $readHE['active_on']?></td>
+                                           <td><?php echo $readHE['inactive_on']?></td>
+                                           <td><?php echo $readHE['name']?></td>
+                                           <td><?php echo $readHE['state']?></td>
                                            <td><a href="?estado=voltar&hist=<?php echo $readHE['id']?>">Voltar para esta versão</a></td>
                                        </tr>
 <?php                                       
