@@ -1117,6 +1117,7 @@ class PropHist{
                 <tr>
                     <th>Data de Ativação</th>
                     <th>Data de Desativação</th>
+                    <th>Propriedade</th>
                     <th>Tipo de valor</th>
                     <th>Nome do campo no formulário</th>
                     <th>Tipo do campo no formulário</th>
@@ -1133,6 +1134,7 @@ class PropHist{
         while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
                 <tr>
+                    <td><?php echo $hist["name"];?></td>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
                     <td><?php echo $hist["value_type"];?></td>
