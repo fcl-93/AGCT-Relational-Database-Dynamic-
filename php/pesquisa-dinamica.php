@@ -1727,14 +1727,16 @@ class Search{
     public function updatEntVal(){
         if($this->ssValidationUp()){
             
-            
+            echo "updating ";
                     
                     
         }
+ else {echo "not updating";}
     }
     
     public function ssValidationUp()
     {
+        $count = 0;
         for($x = 0; $x <= $_SESSION['updateValue']; $x++)
         {           
             if(isset($_REQUEST['check'.$x]))
