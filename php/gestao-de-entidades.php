@@ -58,7 +58,7 @@ class Entidade
 			}
                         else if($_REQUEST['estado'] == 'historico')
                         {
-                            $this->gereHist->showHist();
+                            $this->gereHist->tableHist($this->$_REQUEST['ent_id'],$this->bd);
                         }
 			
 		}
