@@ -1727,20 +1727,63 @@ class Search{
     public function updatEntVal(){
         if($this->ssValidationUp()){
             
+            $this->bd->getMysqli()->autocommit(false);
+            $this->bd->getMysqli()->begin_transaction();
             
+            $updated_on = date("Y-m-d H:i:s",time());
+            $error = false;
+            for($x = 0; $x <= $_SESSION['updateValue']; $x++)
+            { 
+                if(isset($_REQUEST['check'.$x]))
+                {
+                     if(isset($_REQUEST['select'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        {
+                            $error = true;
+                        }
+                    }
+                    else if(isset($_REQUEST['radio'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        {
+                            $error = true;
+                        }
+                    }
+                    else if(isset($_REQUEST['textbox'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        {
+                            $error = true;
+                        }
+                    }
                     
+                }
+            }   
+            
+            if($error == false)
+            {
+                $this->bd->getMysqli()->commit();
+                echo "Change where saved";
+            }
+            else
+            {
+                $this->bd->getMysqli()->rollback();
+                echo "Something went worng";
+            }
                     
         }
     }
     
+    /**
+     * Ensures that all data that will be inserted in the database is what was supossed.
+     * @return boolean -> true = all ok, false = something wrong happened
+     */
     public function ssValidationUp()
     {
+        $count = 0;
         for($x = 0; $x <= $_SESSION['updateValue']; $x++)
-        {
-            $idVal = $this->bd->userInputVal($_REQUEST['check'.$x]);
-            $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
-            $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
-            
+        {           
             if(isset($_REQUEST['check'.$x]))
             {
                  if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
@@ -1748,6 +1791,7 @@ class Search{
 ?>
                     <html>
                         <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                        <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                     </html>
 <?php       
                     return false;
@@ -1771,6 +1815,7 @@ class Search{
 ?>
                             <html>
                                 <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                                 <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                             </html>
                         
 <?php
@@ -1787,6 +1832,7 @@ class Search{
 ?>
                     <html>
                         <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
+                        <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                     </html>
 <?php
                     return false;
