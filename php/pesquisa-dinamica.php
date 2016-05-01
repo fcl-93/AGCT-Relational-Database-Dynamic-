@@ -1739,21 +1739,21 @@ class Search{
                 {
                      if(isset($_REQUEST['select'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['radio'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
                         {
                             $error = true;
                         }
