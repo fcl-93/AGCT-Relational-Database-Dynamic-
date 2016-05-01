@@ -526,8 +526,9 @@ class RelHist{
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $hist["ent_type1_id"];?></td>
-                    <td><?php echo $hist["ent_type2_id"];?></td>
+                    <td><?php echo $this->getEntityName($hist["ent_type1_id"]);?></td>
+                    <td><?php echo $this->getEntityName($hist["ent_type2_id"]);?></td>
+                    <td><?php echo $hist["state"];?></td>
                     <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
