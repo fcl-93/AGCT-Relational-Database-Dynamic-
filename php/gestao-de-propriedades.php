@@ -1104,10 +1104,10 @@ class PropHist{
         //meto um datepicker
 ?>
         <form>
-            <p>Verificar histórico</p>
+            Verificar histórico:
             <input type="radio">até ao dia<br>
             <input type="radio">a partir do dia<br>
-            <input type="radio">desde o dia<br>
+            <input type="radio">no dia<br>
             <input type="text" id="datepicker">
             <input type="submit" value="Apresentar histórico">
         </form>
@@ -1120,83 +1120,85 @@ class PropHist{
             <p>Não existe histórico para a propriedade escolhida</p>
 <?php
         }
+        else {
 ?>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Data de Ativação</th>
-                    <th>Data de Desativação</th>
-                    <th>Propriedade</th>
-                    <th>Tipo de valor</th>
-                    <th>Nome do campo no formulário</th>
-                    <th>Tipo do campo no formulário</th>
-                    <th>Tipo de unidade</th>
-                    <th>Ordem do campo no formulário</th>
-                    <th>Tamanho do campo no formulário</th>
-                    <th>Obrigatório</th>
-                    <th>Estado</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data de Ativação</th>
+                        <th>Data de Desativação</th>
+                        <th>Propriedade</th>
+                        <th>Tipo de valor</th>
+                        <th>Nome do campo no formulário</th>
+                        <th>Tipo do campo no formulário</th>
+                        <th>Tipo de unidade</th>
+                        <th>Ordem do campo no formulário</th>
+                        <th>Tamanho do campo no formulário</th>
+                        <th>Obrigatório</th>
+                        <th>Estado</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
 <?php
-        while ($hist = $queryHistorico->fetch_assoc()) {
+            while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-                <tr>
-                    <td><?php echo $hist["active_on"];?></td>
-                    <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $hist["name"];?></td>
-                    <td><?php echo $hist["value_type"];?></td>
-                    <td><?php echo $hist["form_field_name"];?></td>
-                    <td><?php echo $hist["form_field_type"];?></td>
-                    <td>
+                    <tr>
+                        <td><?php echo $hist["active_on"];?></td>
+                        <td><?php echo $hist["inactive_on"];?></td>
+                        <td><?php echo $hist["name"];?></td>
+                        <td><?php echo $hist["value_type"];?></td>
+                        <td><?php echo $hist["form_field_name"];?></td>
+                        <td><?php echo $hist["form_field_type"];?></td>
+                        <td>
 <?php
-                        if (empty($hist["unit_type_id"]))
-                        {
-                            echo "-";
-                        }
-                        else
-                        {
-                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
-                        }
+                            if (empty($hist["unit_type_id"]))
+                            {
+                                echo "-";
+                            }
+                            else
+                            {
+                                $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                                echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                            }
 ?>
-                    </td>
-                    <td><?php echo $hist["form_field_order"];?></td>
-                    <td><?php echo $hist["form_field_size"]; ?></td>
-                    <td>
+                        </td>
+                        <td><?php echo $hist["form_field_order"];?></td>
+                        <td><?php echo $hist["form_field_size"]; ?></td>
+                        <td>
 <?php
-                        if ($hist["mandatory"] == 1)
-                        {
-                            echo "sim";
-                        }
-                        else
-                        {
-                            echo " não";
-                        }
+                            if ($hist["mandatory"] == 1)
+                            {
+                                echo "sim";
+                            }
+                            else
+                            {
+                                echo " não";
+                            }
  ?>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
 
 <?php
-                    if ($hist["state"] === "active")
-                    {
-                        echo 'Ativo';
-                    }
-                    else
-                    {
-                        echo 'Inativo';
-                    }
+                        if ($hist["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
 ?>
-                    </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
-                </tr>
+                        </td>
+                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    </tr>
+<?php
+            }
+?>
+                <tbody>
+            </table>
 <?php
         }
-?>
-            <tbody>
-        </table>
-<?php
     }
 }
 
