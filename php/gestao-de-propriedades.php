@@ -1117,7 +1117,7 @@ class PropHist{
         $queryHistorico = $this->db->runQuery($queryHistorico);
         if ($queryHistorico->num_rows == 0) {
 ?>
-            <p>Não existe histórico para o tipo de relação escolhido</p>
+            <p>Não existe histórico para a propriedade escolhida</p>
 <?php
         }
 ?>
