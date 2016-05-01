@@ -380,10 +380,7 @@ class RelationManage
     private function checkforChanges () {
         $getProp = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"];
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        if ($_REQUEST['nome'] != $getProp["name"]) {
-            return true;
-        }
-        else if ($_REQUEST['ent1'] != $getProp["ent_type1_id"]) {
+        if ($_REQUEST['ent1'] != $getProp["ent_type1_id"]) {
             return true;
         }
         else if ($_REQUEST['ent2'] != $getProp["ent_type2_id"]) {
