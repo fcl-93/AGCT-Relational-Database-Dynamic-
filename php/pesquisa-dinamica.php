@@ -1640,11 +1640,11 @@ class Search{
 <?php               }
                     else if($getValType['value_type'] == 'ent_ref')
                     {
-                        $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$getValType['fk_ent_type_id']);
+                        //$getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$getValType['fk_ent_type_id']);
 ?>                      
                         <select name="<?php echo 'select'.$x ?>">
 <?php
-                            while($readEntToRef = $getEntToRef->fetch_assoc()){
+                          /*  while($readEntToRef = $getEntToRef->fetch_assoc()){
                                if($readEntToRef['entity_name'] == "")
                                {
 ?>
@@ -1657,7 +1657,7 @@ class Search{
                                    <option  value="<?php echo $readEntToRef['entity_name']; ?>"><?php echo $readEntToRef['entity_name']; ?></option>
 <?php
                                 }
-                            }
+                            }*/
 ?>
                         </select>
 <?php
