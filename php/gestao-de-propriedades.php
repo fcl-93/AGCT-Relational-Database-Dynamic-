@@ -1108,7 +1108,7 @@ class PropHist{
             <input type="radio">até ao dia<br>
             <input type="radio">a partir do dia<br>
             <input type="radio">no dia<br>
-            <input type="text" id="datepicker">
+            <input type="text" id="datepicker" placeholder="Introduza uma data">
             <input type="submit" value="Apresentar histórico">
         </form>
 <?php
