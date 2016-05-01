@@ -1104,7 +1104,7 @@ class PropHist{
         //meto um datepicker
 ?>
         <form>
-            Verificar histórico:
+            Verificar histórico:<br>
             <input type="radio">até ao dia<br>
             <input type="radio">a partir do dia<br>
             <input type="radio">no dia<br>
