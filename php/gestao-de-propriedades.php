@@ -695,6 +695,10 @@ class PropertyManage
             return true;
         }
         else {
+?>
+            <p>Não efetuou qualquer alteração aos valores já existentes.</p><br>
+<?php
+            goBack();
             return false;
         }
     }
