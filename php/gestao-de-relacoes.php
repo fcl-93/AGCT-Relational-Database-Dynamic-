@@ -338,11 +338,59 @@ class RelationManage
     private function validarDados() {
         if (empty($_REQUEST["ent1"]) || empty($_REQUEST["ent2"]))
         {
-            echo '<p>Deve selecionar uma entidade em ambos os campos!<p>';
+?>
+        <p>Deve selecionar uma entidade em ambos os campos!<p>
+<?php
             return false;
         }
-        else {
+        if($_REQUEST['estado'] == 'update'&& !$this->checkforChanges()) {
+            return false;
+        }
+        if ($this->verificaRelSemelhante()) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * This method checks if there is already a simetric relation in the databse.
+     * For example the relation type Casa-Serviço should be inserted in the 
+     * database if there is already a relation type Serviço-Casa
+     * @return boolean  
+     */
+    private function verificaRelSemelhante () {
+        $getRel = "SELECT * FROM rel_type WHERE (ent_type1_id = ".$_REQUEST["ent1"]." AND ent_type2_id = ".$_REQUEST["ent2"].") "
+                . "OR (ent_type1_id = ".$_REQUEST["ent2"]." AND ent_type2_id = ".$_REQUEST["ent1"].")";
+        if ($this->db->runQuery($getRel)->num_rows > 0) {
             return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /**
+     * This method checks if the user did any changes in the state editar
+     * @return boolean  
+     */
+    private function checkforChanges () {
+        $getProp = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"];
+        $getProp = $this->db->runQuery($getProp)->fetch_assoc();
+        if ($_REQUEST['nome'] != $getProp["name"]) {
+            return true;
+        }
+        else if ($_REQUEST['ent1'] != $getProp["ent_type1_id"]) {
+            return true;
+        }
+        else if ($_REQUEST['ent2'] != $getProp["ent_type2_id"]) {
+            return true;
+        }
+        else {
+?>
+            <p>Não efetuou qualquer alteração aos valores já existentes.</p><br>
+<?php
+            goBack();
+            return false;
         }
     }
     
