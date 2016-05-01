@@ -133,7 +133,7 @@ class Db_Op
      * @param int $id of the entity
      * @return string the name od the entity
      */
-    private function getEntityName($id) {
+    public function getEntityName($id) {
         $queryEnt = "SELECT name FROM ent_type WHERE id = ".$id;
         $nome = $this->runQuery($queryEnt)->fetch_assoc()["name"];
         return $nome;
