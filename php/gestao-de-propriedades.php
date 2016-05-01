@@ -234,7 +234,7 @@ class PropertyManage
                         {
                 ?>
                             <td><?php echo $arraySelec["id"]; ?></td>
-                            <td><a href="?estado=historico&id=<?php echo $arraySelec["id"];?>"><?php echo $arraySelec["name"]; ?></a></td>
+                            <td><?php echo $arraySelec["name"]; ?></td>
                             <td><?php echo $arraySelec["value_type"]; ?></td>
                             <td><?php echo $arraySelec["form_field_name"]; ?></td>
                             <td><?php echo $arraySelec["form_field_type"]; ?></td>
@@ -274,6 +274,7 @@ class PropertyManage
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                                    <a href="?estado=historico&id=<?php echo $arraySelec["id"];?>">[Histórico]</a>
                                 </td>
                 <?php
                             }
@@ -284,6 +285,7 @@ class PropertyManage
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
+                                    <a href="?estado=historico&id=<?php echo $arraySelec["id"];?>">[Histórico]</a>
                                 </td>
                 <?php
                             }
