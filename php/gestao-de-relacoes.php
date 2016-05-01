@@ -176,7 +176,7 @@ class RelationManage
         $this->db->runQuery($queryUpdate);
 ?>
         <html>
-            <p>A relação <?php echo $this->getEntityName($idNome1)."-".$this->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
+            <p>A relação <?php echo $this->db->getEntityName($idNome1)."-".$this->db->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
             <br>
             <p>Clique em <a href="/gestao-de-relacoes"/>Continuar</a> para avançar</p>
         </html>
@@ -245,8 +245,8 @@ class RelationManage
 ?>
                 <tr>
                     <td><?php echo $rel["id"];?></td>
-                    <td><?php echo $this->getEntityName($rel["ent_type1_id"]);?></td>
-                    <td><?php echo $this->getEntityName($rel["ent_type2_id"]);?></td>
+                    <td><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
+                    <td><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
 <?php
             if ($rel["state"] === "active")
             {
@@ -406,17 +406,6 @@ class RelationManage
     }
     
     /**
-     * Method that returns the entity name with the given ID
-     * @param int $id of the entity
-     * @return string the name od the entity
-     */
-    private function getEntityName($id) {
-        $queryEnt = "SELECT name FROM ent_type WHERE id = ".$id;
-        $nome = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
-        return $nome;
-    }
-    
-    /**
      * This method inserts in the selectboxes all the entities that exists in DB
      */
     private function getEntities() {
@@ -526,8 +515,8 @@ class RelHist{
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $this->getEntityName($hist["ent_type1_id"]);?></td>
-                    <td><?php echo $this->getEntityName($hist["ent_type2_id"]);?></td>
+                    <td><?php echo $this->db->getEntityName($hist["ent_type1_id"]);?></td>
+                    <td><?php echo $this->db->getEntityName($hist["ent_type2_id"]);?></td>
                     <td><?php echo $hist["state"];?></td>
                     <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>

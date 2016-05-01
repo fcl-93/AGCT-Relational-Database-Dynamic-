@@ -127,6 +127,17 @@ class Db_Op
     			return array(); // Return an empty array to avoid possible errors/warnings if array is passed to foreach() without first being checked with !empty().
     		}
     	}
+        
+    /**
+     * Method that returns the entity name with the given ID
+     * @param int $id of the entity
+     * @return string the name od the entity
+     */
+    private function getEntityName($id) {
+        $queryEnt = "SELECT name FROM ent_type WHERE id = ".$id;
+        $nome = $this->runQuery($queryEnt)->fetch_assoc()["name"];
+        return $nome;
+    }
    
 }
 
