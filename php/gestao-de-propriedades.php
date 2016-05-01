@@ -676,7 +676,7 @@ class PropertyManage
         else if ($_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
             return true;
         }
-        else if ($_REQUEST['formType'] != $getProp["form_field_type"]) {
+        else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
             return true;
         }
        else  if ($_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
