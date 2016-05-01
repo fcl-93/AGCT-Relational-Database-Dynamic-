@@ -1038,6 +1038,18 @@ class PropHist{
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
         $updateHist =$this->db->runQuery($updateHist);
+        if ($updateHist) {
+?>
+            <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else {
+?>
+            <p>Não foi possível reverter a propriedade para a versão selecionada</p>
+<?php
+            goBack();
+        }
     }
     
     public function estadoHistorico () {
