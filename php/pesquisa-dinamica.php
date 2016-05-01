@@ -1730,7 +1730,6 @@ class Search{
             $this->bd->getMysqli()->autocommit(false);
             $this->bd->getMysqli()->begin_transaction();
             
-            $idVal = $this->bd->userInputVal($_REQUEST['id']);
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
@@ -1739,21 +1738,21 @@ class Search{
                 {
                      if(isset($_REQUEST['select'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x])))
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['radio'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))
                         {
                             $error = true;
                         }
