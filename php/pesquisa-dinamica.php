@@ -1638,7 +1638,7 @@ class Search{
 ?>
                         </select>
 <?php               }
-                    else if($getValType['value_type'] = 'ent_ref')
+                    else if($getValType['value_type'] == 'ent_ref')
                     {
                         $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id".$getValType['fk_ent_type_id']);
 ?>                      
