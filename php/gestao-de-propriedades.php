@@ -688,7 +688,7 @@ class PropertyManage
         else if ($_REQUEST['tamanho'] != $getProp["form_field_size"]) {
             return true;
         }
-        else if ($_REQUEST['mandatory'] != $getProp["mandatory"]) {
+        else if ($_REQUEST['obrigatorio'] != $getProp["mandatory"]) {
             return true;
         }
         else if (!empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
