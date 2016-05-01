@@ -1792,6 +1792,7 @@ class Search{
 ?>
                     <html>
                         <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
+                        <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                     </html>
 <?php       
                     return false;
@@ -1815,6 +1816,7 @@ class Search{
 ?>
                             <html>
                                 <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
+                                 <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                             </html>
                         
 <?php
