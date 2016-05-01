@@ -1637,13 +1637,37 @@ class Search{
                             }
 ?>
                         </select>
-<?php                   }
-                        else
-                        {
+<?php               }
+                    else if($getValType['value_type'] = 'ent_ref')
+                    {
+                        $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id".$getValType['fk_ent_type_id']);
+?>                      
+                        <select name="<?php echo 'select'.$x ?>">
+<?php
+                            while($readEntToRef = $getEntToRef->fetch_assoc()){
+                               if($readEntToRef['entity_name'] == "")
+                               {
+?>
+                                   <option  value="<?php echo $readEntToRef['id']; ?>"><?php echo $readEntToRef['id']; ?></option>
+<?php
+                               }
+                               else
+                               {
+?>
+                                   <option  value="<?php echo $readEntToRef['entity_name']; ?>"><?php echo $readEntToRef['entity_name']; ?></option>
+<?php
+                                }
+                            }
+?>
+                        </select>
+<?php
+                    }
+                    else
+                    {
 ?>
                             <input type="text" name="<?php echo 'textbox'.$x ?>">
 <?php  
-                        }
+                    }
 ?>
                 </td>
                 <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
