@@ -495,7 +495,7 @@ class EntHist{
      */
     public function tableHist($id,$bd){
 ?>
-                        <table>
+                        <table class="table">
                             <thead>
                                 <th>Data de Ativação</th>
                                 <th>Data de Desativação</th>
