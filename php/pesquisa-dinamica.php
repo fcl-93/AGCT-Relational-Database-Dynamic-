@@ -1657,7 +1657,7 @@ class Search{
                                    <option  value="<?php echo $readEntToRef['id']; ?>"><?php echo $readEntToRef['entity_name']; ?></option>
 <?php
                                 }
-                            }*/
+                            }
 ?>
                         </select>
 <?php
