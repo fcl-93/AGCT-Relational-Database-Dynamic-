@@ -1783,12 +1783,19 @@ class Search{
             if($error == false)
             {
                 $this->bd->getMysqli()->commit();
-                echo "Change where saved";
+?>
+                <p>Os valores das propriedades da entidade selecionada foram alterados.</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+                
+<?php
             }
             else
             {
                 $this->bd->getMysqli()->rollback();
-                echo "Something went worng";
+?>
+                <p>Ocorreu um erro na alteração valores das propriedades da entidade selecionada.</p>
+                <p>Clique em <?php goBack()?> para voltar a página anterior</p>
+<?php
             }
                     
         }
@@ -1950,9 +1957,16 @@ class entityHist{
         return true;
     }
     
+    /**
+     * Adds the previous values t the table hist_values and gives permission to create a new value
+     * @param type $id -> of the value we will change
+     * @param type $bd -> database object to alllow 
+     * @param type $inactiveTime -> 
+     * @return boolean
+     */
     public function addHistValues($id,$bd,$inactiveTime){
         $getOldVal = $bd->runQuery("SELECT * FROM value WHERE id=".$id)->fetch_assoc();
-        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",".$getOldVal['value'].",".$getOldVal['producer'].",".$getOldVal['relation_id'].",".$getOldVal['id'].",[value-8],[value-9],[value-10])"))
+        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",".$getOldVal['value'].",".$getOldVal['producer'].",".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactiveTime."',".$getOldVal['state'].")"))
         {
             return false;
         }
