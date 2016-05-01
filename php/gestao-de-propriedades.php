@@ -679,7 +679,7 @@ class PropertyManage
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
             return true;
         }
-       else  if ($_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
+       else  if (!empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
             return true;
         }
         else if ($_REQUEST['ordem'] != $getProp["form_field_order"]) {
@@ -691,7 +691,7 @@ class PropertyManage
         else if ($_REQUEST['mandatory'] != $getProp["mandatory"]) {
             return true;
         }
-        else if ($_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
+        else if (!empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
             return true;
         }
         else {
