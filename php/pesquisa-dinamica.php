@@ -1736,11 +1736,7 @@ class Search{
     public function ssValidationUp()
     {
         for($x = 0; $x <= $_SESSION['updateValue']; $x++)
-        {
-            $idVal = $this->bd->userInputVal($_REQUEST['check'.$x]);
-            $getValue = $this->bd->runQuery("SELECT * FROM value WHERE id=".$idVal)->fetch_assoc();    
-            $this->bd->runQuery("SELECT * FROM property WHERE id=".$getValue['property_id']);
-            
+        {           
             if(isset($_REQUEST['check'.$x]))
             {
                  if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
