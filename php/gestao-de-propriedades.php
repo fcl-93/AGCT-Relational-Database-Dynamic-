@@ -1104,13 +1104,22 @@ class PropHist{
         //meto um datepicker
 ?>
         <form>
-            <p>Introduza uma data: <input type="text" id="datepicker"></p>
+            <p>Verificar histórico</p>
+            <input type="radio">até ao dia<br>
+            <input type="radio">a partir do dia<br>
+            <input type="radio">desde o dia<br>
+            <input type="text" id="datepicker">
             <input type="submit" value="Apresentar histórico">
         </form>
 <?php
         //apresento histórico
         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         $queryHistorico = $this->db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <p>Não existe histórico para o tipo de relação escolhido</p>
+<?php
+        }
 ?>
         <table class="table">
             <thead>
