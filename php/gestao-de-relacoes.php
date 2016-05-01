@@ -73,6 +73,14 @@ class RelationManage
         {
             $this->estadoEditar();
         }
+        elseif($_REQUEST['estado'] =='historico')
+        {
+             $this->gereHist->estadoHistorico();
+        }
+        elseif($_REQUEST['estado'] =='voltar')
+        {
+             $this->gereHist->estadoVoltar();
+        }
         elseif($_REQUEST['estado'] =='update')
         {
             if($this->validarDados())
@@ -247,6 +255,7 @@ class RelationManage
                 <td>
                     <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                     <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                    <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
                 </td>
 <?php
             }
@@ -257,6 +266,7 @@ class RelationManage
                 <td>
                     <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                     <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                    <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
                 </td>
 <?php
             }
@@ -444,18 +454,89 @@ class RelationManage
 
 class RelHist{
     
+    private $db;            // Object from DB_Op that contains the access to the database
+    
     public function __construct(){
-        
+        $this->db = new Db_Op();
     }
     
-    public function atualizaHistorico ($bd) {
+    public function atualizaHistorico () {
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
-        $selectAtributos = $bd->runQuery($selectAtributos);
+        $selectAtributos = $this->db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
                 . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
-        $updateHist =$bd->runQuery($updateHist);
-    }   
+        $updateHist =$this->db->runQuery($updateHist);
+    }
+    
+    public function estadoVoltar () {
+        $this->atualizaHistorico();
+        $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$_REQUEST['hist'];
+        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "UPDATE rel_type SET ";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "rel_type_id" && !is_null($valor)) {
+                $updateHist .= $atributo." = '".$valor."',"; 
+            }
+        }
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel_id'];
+        $updateHist =$this->db->runQuery($updateHist);
+        if ($updateHist) {
+?>
+            <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
+            <p>Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else {
+?>
+            <p>Não foi possível reverter o tipo de relação para a versão selecionada</p>
+<?php
+            goBack();
+        }
+    }
+    
+    public function estadoHistorico () {
+        //meto um datepicker
+?>
+        <form>
+            <p>Introduza uma data: <input type="text" id="datepicker"></p>
+            <input type="submit" value="Apresentar histórico">
+        </form>
+<?php
+        //apresento histórico
+        $queryHistorico = "SELECT * FROM hist_rel_type WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        $queryHistorico = $this->db->runQuery($queryHistorico);
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["ent_type1_id"];?></td>
+                    <td><?php echo $hist["ent_type2_id"];?></td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                </tr>
+<?php
+        }
+?>
+            <tbody>
+        </table>
+<?php
+    }
 }
 //instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
 new RelationManage();
