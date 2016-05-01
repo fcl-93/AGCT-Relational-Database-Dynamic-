@@ -1041,12 +1041,12 @@ class PropHist{
         if ($updateHist) {
 ?>
             <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
-            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
             goBack();
         }
