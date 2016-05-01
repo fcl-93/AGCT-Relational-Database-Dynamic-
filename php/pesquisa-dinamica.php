@@ -1763,12 +1763,12 @@ class Search{
             
             if($error == false)
             {
-                $bd->getMysqli()->commit();
+                $this->bd->getMysqli()->commit();
                 echo "Change where saved";
             }
             else
             {
-                $bd->getMysqli()->rollback();
+                $this->bd->getMysqli()->rollback();
                 echo "Something went worng";
             }
                     
