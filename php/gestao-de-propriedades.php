@@ -654,8 +654,8 @@ class PropertyManage
             goBack();
             return false;
         }
-        if ($_REQUEST["estado"] == "update") {
-          $this->checkforChanges();
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
+          return false;
         }
 	return true;
     }
