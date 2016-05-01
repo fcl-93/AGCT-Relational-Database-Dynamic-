@@ -1738,21 +1738,40 @@ class Search{
                 {
                      if(isset($_REQUEST['select'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            {
+                                $error = true;
+                            }
+                        
+                        }
+                        else
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['radio'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            {
+                                $error = true;
+                            }
+                        }
+                        else 
                         {
                             $error = true;
                         }
                     }
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                        if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            {
+                                $error = true;
+                            }
+                        }
+                        else
                         {
                             $error = true;
                         }
@@ -1764,12 +1783,19 @@ class Search{
             if($error == false)
             {
                 $this->bd->getMysqli()->commit();
-                echo "Change where saved";
+?>
+                <p>Os valores das propriedades da entidade selecionada foram alterados.</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+                
+<?php
             }
             else
             {
                 $this->bd->getMysqli()->rollback();
-                echo "Something went worng";
+?>
+                <p>Ocorreu um erro na alteração valores das propriedades da entidade selecionada.</p>
+                <p>Clique em <?php goBack()?> para voltar a página anterior</p>
+<?php
             }
                     
         }
@@ -1927,6 +1953,33 @@ class entityHist{
         $inactive = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactive."')")){
                 return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Adds the previous values t the table hist_values and gives permission to create a new value
+     * @param type $id -> of the value we will change
+     * @param type $bd -> database object to alllow 
+     * @param type $inactiveTime -> 
+     * @return boolean
+     */
+    public function addHistValues($id,$bd,$inactiveTime){
+        $getOldVal = $bd->runQuery("SELECT * FROM value WHERE id=".$id)->fetch_assoc();
+        //echo $id;
+        if($getOldVal['relation_id'] == "")
+        {
+            if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',NULL,".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactiveTime."','".$getOldVal['state']."')"))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactiveTime."','".$getOldVal['state']."')"))
+            {
+                return false;
+            }
         }
         return true;
     }
