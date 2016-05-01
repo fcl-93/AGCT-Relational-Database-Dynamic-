@@ -1966,7 +1966,7 @@ class entityHist{
      */
     public function addHistValues($id,$bd,$inactiveTime){
         $getOldVal = $bd->runQuery("SELECT * FROM value WHERE id=".$id)->fetch_assoc();
-        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",".$getOldVal['value'].",".$getOldVal['producer'].",".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactiveTime."',".$getOldVal['state'].")"))
+        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactiveTime."',".$getOldVal['state'].")"))
         {
             return false;
         }
