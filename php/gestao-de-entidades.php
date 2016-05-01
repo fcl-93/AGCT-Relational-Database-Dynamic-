@@ -493,7 +493,7 @@ class EntHist{
      * @param type $id -> entity type id
      * @param type $bd -> object to work with database querys
      */
-    private function tableHist($id,$bd){
+    public function tableHist($id,$bd){
 ?>
                         <table>
                             <thead>
