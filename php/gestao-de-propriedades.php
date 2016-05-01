@@ -1119,6 +1119,7 @@ class PropHist{
 ?>
             <p>Não existe histórico para a propriedade escolhida</p>
 <?php
+            goBack();
         }
         else {
 ?>
