@@ -56,6 +56,10 @@ class Entidade
 				$this->insertEnt();
 				
 			}
+                        else if($_REQUEST['estado'] == 'historico')
+                        {
+                            $this->gereHist->showHist();
+                        }
 			
 		}
 		else
@@ -118,6 +122,7 @@ class Entidade
                                 <td>
                                     <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id'];?>">[Desativar]</a>
+                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id'];?>">[Histórico]</a> 
 				</td>
 <?php			}
 			else
@@ -127,6 +132,7 @@ class Entidade
 				<td>
                                     <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id'];?>">[Ativar]</a>
+                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id'];?>">[Histórico]</a>  
 				</td>	
 <?php                   }
 ?>
@@ -471,9 +477,59 @@ class EntHist{
         {
             return false;
         }
-                                     
+    }
+    
+    /**
+     * This method will show the history when the user presses a button called [Histórico].
+     * THe history is created when the user changes something in the 
+     * entity types that are in the table present in this component.
+     */                                 
+    public function showHist(){
+        
                         
-                        
+    }
+    /**
+     * This method will create a table where the history will be showned.
+     * @param type $id -> entity type id
+     * @param type $bd -> object to work with database querys
+     */
+    private function tableHist($id,$bd){
+?>
+                        <table>
+                            <thead>
+                                <th>Data de Ativação</th>
+                                <th>Data de Desativação</th>
+                                <th>Nome</th>
+                                <th>Estado</th>
+                                <th>Ação</th>
+                            </thead>
+                            <tbody>
+<?php
+                               $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id);
+                               if($resHE->num_rows < 1)
+                               {
+?>
+                                   <tr>Não existe registo referente à entidade selecionada no histórico</tr>
+<?php
+                               }
+                               else
+                               {
+                                   while($readHE = $resHE->fetch_assoc()){
+?>
+                                       <tr>
+                                           <td><?php $readHE['active_on']?></td>
+                                           <td><?php $readHE['inactive_on']?></td>
+                                           <td><?php $readHE['name']?></td>
+                                           <td><?php $readHE['state']?></td>
+                                           <td><a href="?estado=voltar&hist=<?php echo $readHE['id']?>">Voltar para esta versão</a></td>
+                                       </tr>
+<?php                                       
+                                   }
+                               }
+?>                                
+                            </tbody>
+                        </table>
+<?php
     }
 }
 ?>
