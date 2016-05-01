@@ -510,7 +510,7 @@ class EntHist{
                                {
 ?>
                                 <tr>
-                                    <td colspan="3">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
                                 </tr>
 <?php
                                }
