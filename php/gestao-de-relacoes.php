@@ -505,7 +505,7 @@ class RelHist{
         </form>
 <?php
         //apresento histórico
-        $queryHistorico = "SELECT * FROM hist_rel_type WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         $queryHistorico = $this->db->runQuery($queryHistorico);
 ?>
         <table class="table">
