@@ -234,6 +234,7 @@ class InsereRelacoes
                                 </select>
                               </form>
                             </div>
+                    </html>
 
 <?php
         $this->createNewRel();
