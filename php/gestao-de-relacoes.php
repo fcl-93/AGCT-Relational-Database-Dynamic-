@@ -362,6 +362,10 @@ class RelationManage
         $getRel = "SELECT * FROM rel_type WHERE (ent_type1_id = ".$_REQUEST["ent1"]." AND ent_type2_id = ".$_REQUEST["ent2"].") "
                 . "OR (ent_type1_id = ".$_REQUEST["ent2"]." AND ent_type2_id = ".$_REQUEST["ent1"].")";
         if ($this->db->runQuery($getRel)->num_rows > 0) {
+?>
+            <p>Já existe um tipo de relação com as entidades selecionadas</p>
+<?php
+            goBack();
             return true;
         }
         else {
