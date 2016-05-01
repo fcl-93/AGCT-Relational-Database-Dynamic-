@@ -509,7 +509,9 @@ class EntHist{
                                if($resHE->num_rows < 1)
                                {
 ?>
-                                   <tr><?php echo"Não existe registo referente à entidade selecionada no histórico"?></tr>
+                                <tr>
+                                    <td>Não existe registo referente à entidade selecionada no histórico</td>
+                                </tr>
 <?php
                                }
                                else
