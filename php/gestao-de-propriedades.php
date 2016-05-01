@@ -1134,9 +1134,9 @@ class PropHist{
         while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
                 <tr>
-                    <td><?php echo $hist["name"];?></td>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["name"];?></td>
                     <td><?php echo $hist["value_type"];?></td>
                     <td><?php echo $hist["form_field_name"];?></td>
                     <td><?php echo $hist["form_field_type"];?></td>
