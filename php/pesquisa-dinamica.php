@@ -1831,6 +1831,7 @@ class Search{
 ?>
                     <html>
                         <p>Deve selecionar pelo menos uma propriedade para atualizar</p>
+                        <p>Clique em <?php goBack()?> para voltar à página anterior</p>
                     </html>
 <?php
                     return false;
