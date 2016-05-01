@@ -1727,13 +1727,59 @@ class Search{
     public function updatEntVal(){
         if($this->ssValidationUp()){
             
-            echo "updating ";
+            $this->bd->getMysqli()->autocommit(false);
+            $this->bd->getMysqli()->begin_transaction();
+            
+            $idVal = $this->bd->userInputVal($_REQUEST['id']);
+            $updated_on = date("Y-m-d H:i:s",time());
+            $error = false;
+            for($x = 0; $x <= $_SESSION['updateValue']; $x++)
+            { 
+                if(isset($_REQUEST['check'.$x]))
+                {
+                     if(isset($_REQUEST['select'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        {
+                            $error = true;
+                        }
+                    }
+                    else if(isset($_REQUEST['radio'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        {
+                            $error = true;
+                        }
+                    }
+                    else if(isset($_REQUEST['textbox'.$x]))
+                    {
+                        if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`=[value-5],`updated_on`='".$updated_on."' WHERE id=".$idVal))
+                        {
+                            $error = true;
+                        }
+                    }
                     
+                }
+            }   
+            
+            if($error == false)
+            {
+                $bd->getMysqli()->commit();
+                echo "Change where saved";
+            }
+            else
+            {
+                $bd->getMysqli()->rollback();
+                echo "Something went worng";
+            }
                     
         }
- else {echo "not updating";}
     }
     
+    /**
+     * Ensures that all data that will be inserted in the database is what was supossed.
+     * @return boolean -> true = all ok, false = something wrong happened
+     */
     public function ssValidationUp()
     {
         $count = 0;
