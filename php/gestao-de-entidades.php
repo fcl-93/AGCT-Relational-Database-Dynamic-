@@ -60,6 +60,10 @@ class Entidade
                         {
                             $this->gereHist->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
                         }
+                        else if ($_REQUEST['estado'] == 'versionBack')
+                        {
+                            $this->gereHist->returnPreviousVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);
+                        }
 			
 		}
 		else
@@ -338,6 +342,8 @@ class Entidade
                 		<p>Alterou os dados da entidade com sucesso.</p>
         			<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 <?php 
+                            $this->bd->getMysqli()->commit();
+
                         }
                         else
                         {
@@ -347,6 +353,8 @@ class Entidade
                             
 <?php
                             goBack ();
+                            $this->bd->getMysqli()->rollback();
+
                         }
                         
                         
@@ -374,6 +382,7 @@ class Entidade
                     <p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
                     <p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 <?php
+                    $this->bd->getMysqli()->commit();
                 }
                 else
                 {
@@ -381,6 +390,8 @@ class Entidade
                         <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
 <?php
                         goBack();
+                        
+                        $this->bd->getMysqli()->rollback();                        
                 }
                 
                 
@@ -410,13 +421,16 @@ class Entidade
 		 	<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
 		</html>
 <?php 		
+                    $this->bd->getMysqli()->commit();
                 }
                 else
                 {
 ?>
                         <p>A entidade <?php echo $read_EntTypeA['name'] ?>  não pode ser ativada</p>
 <?php
-                        goBack();
+                      
+                        goBack();  
+                        $this->bd->getMysqli()->rollback();
                 }
 	}
 	
@@ -464,7 +478,8 @@ class EntHist{
     public function addHist($id,$bd)
     {
        
-        
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
         //gets info from the ent_type that id about to get changed
         $res_getEntTp = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$id."");
         $read_getEntTp = $res_getEntTp->fetch_assoc();
@@ -480,13 +495,36 @@ class EntHist{
     }
     
     /**
-     * This method will show the history when the user presses a button called [Histórico].
-     * THe history is created when the user changes something in the 
-     * entity types that are in the table present in this component.
+     * This method will change the atual entitie to an old one
+     * that is present in the history table
      */                                 
-    public function showHist(){
-        
-                        
+    public function returnPreviousVersion($id,$bd){
+        //gets the entity that is in the history
+        $goToEnt = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE id=".$id)->fetch_assoc();
+        //gets the entity that is present in the table entity type
+        if(addHist($goToEnt['ent_type_id'],$bd))
+        {
+            if($bd->runQuery("UPDATE `ent_type` SET `name`='".$goToEnt['name']."',`state`='".$goToEnt['state']."',`updated_on`='".date("Y-m-d H:i:s",time())."' WHERE id=".$goToEnt['ent_type_id']))
+            {
+?>                        
+		<html>
+		 	<p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+		 	<p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+		</html>
+<?php 	
+                 $bd->getMysqli()->commit();
+            }
+            else
+            {
+?>                        
+		<html>
+		 	<p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
+                        <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
+		</html>
+<?php 	                 
+                $bd->getMysqli()->rollback();
+            }
+        }
     }
     /**
      * This method will create a table where the history will be showned.
@@ -524,7 +562,7 @@ class EntHist{
                                            <td><?php echo $readHE['inactive_on']?></td>
                                            <td><?php echo $readHE['name']?></td>
                                            <td><?php echo $readHE['state']?></td>
-                                           <td><a href="?estado=voltar&hist=<?php echo $readHE['id']?>">Voltar para esta versão</a></td>
+                                           <td><a href="?estado=versionBack&histId=<?php echo $readHE['id']?>">Voltar para esta versão</a></td>
                                        </tr>
 <?php                                       
                                    }
