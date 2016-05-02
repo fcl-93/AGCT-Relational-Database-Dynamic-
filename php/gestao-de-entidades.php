@@ -502,7 +502,7 @@ class EntHist{
         //gets the entity that is in the history
         $goToEnt = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE id=".$id)->fetch_assoc();
         //gets the entity that is present in the table entity type
-        if(addHist($goToEnt['ent_type_id'],$bd))
+        if($this->addHist($goToEnt['ent_type_id'],$bd))
         {
             if($bd->runQuery("UPDATE `ent_type` SET `name`='".$goToEnt['name']."',`state`='".$goToEnt['state']."',`updated_on`='".date("Y-m-d H:i:s",time())."' WHERE id=".$goToEnt['ent_type_id']))
             {
