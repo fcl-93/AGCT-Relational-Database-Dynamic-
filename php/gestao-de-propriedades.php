@@ -1322,7 +1322,7 @@ class PropHist{
 <?php
                         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$arraySelec["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
                         $queryHistorico = $this->db->runQuery($queryHistorico);
-                        if ($query->num_rows == 0) {
+                        if ($queryHistorico->num_rows == 0) {
 ?>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $arraySelec["value_type"]; ?></td>
