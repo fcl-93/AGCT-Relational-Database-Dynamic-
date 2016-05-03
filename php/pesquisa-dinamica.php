@@ -64,7 +64,7 @@ class Search{
                 {
                     $this->gereInsts->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
                 }
-                else if($_REQUEST['estado']=='voltar')
+                else if($_REQUEST['estado']=='versionBack')
                 {}
                 
                 
