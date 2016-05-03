@@ -1122,12 +1122,14 @@ class PropHist{
     public function estadoHistorico () {
         //meto um datepicker        
 ?>
-        <form method="GET" action="?estado=historico&id=<?php echo $_REQUEST["id"]; ?>">
+        <form method="GET">
             Verificar histórico:<br>
             <input type="radio" name="ateDia">até ao dia<br>
             <input type="radio" name="partirDia">a partir do dia<br>
             <input type="radio" name="noDia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
 
