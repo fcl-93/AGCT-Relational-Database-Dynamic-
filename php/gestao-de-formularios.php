@@ -61,7 +61,7 @@ class GereForms
 				}
                                 else if($_REQUEST['estado'] == 'historico')
                                 {
-                                   $this->gereFormHist->tableHist($id, $this->bd);
+                                   $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
                                 }
 			}
 			else
@@ -138,7 +138,7 @@ class GereForms
 								</td>
 								<td>
 									<a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
-                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
+                                                                       
 <?php 
                                                                                        
 										if($readForm['state'] === 'active')
@@ -153,7 +153,8 @@ class GereForms
 											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
 <?php 
 										}
-?>
+?> 
+                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
 								</td>
 							</tr>
 <?php 
@@ -755,9 +756,67 @@ class HistDeForms{
     
     /**
      * This method will create a table where the history will be showned.
-     * @param type $id
+     * @param type $id -> id form the selected form
      * @param type $bd
      */
-    public function tableHist($id,$bd){}
+    public function tableHist($id,$bd){
+        $goToCN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
+        
+        $goToCFP = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id=".$id);
+        
+        
+?>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Nome do Formulário</td>
+                                    <td>Entidade<td>
+                                    <td>Propriedade</td>
+                                    <td>Tipo de unidade</td>
+                                    <td>Ordem do campo no formulário</td>
+                                    <td>Tamanho do campo no formulário</td>
+                                    <td>Obrigatório no forumulário customizado</td>
+                                    <td>Estado</td>
+                                    <td>Ação</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+<?php
+                            if($goToCN->num_rows == 0 || $goToCFP->num_rows == 0){
+?>                                
+                                <tr>
+                                    <td colspan="8">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td><?php goBack()?></td>
+                                </tr>
+<?php 
+                            }
+                            else
+                            {
+                                
+                            }
+?>
+                            </tbody>
+                        </table>
+<?php
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
 }
 ?>
