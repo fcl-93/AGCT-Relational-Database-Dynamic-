@@ -760,16 +760,14 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
-        $goToCN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
-        
-        $goToCFP = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id=".$id);
-        
+        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
         
 ?>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <td>Nome do Formulário</td>
+                                    <td>Entidade</td>
                                     <td>Propriedade</td>
                                     <td>Ordem do campo no formulário</td>
                                     <td>Obrigatório no forumulário customizado</td>
@@ -779,34 +777,45 @@ class HistDeForms{
                             </thead>
                             <tbody>
 <?php
-                            if($goToCN->num_rows == 0 || $goToCFP->num_rows == 0){
+                            if($goToCFN->num_rows == 0){
 ?>                                
                                 <tr>
-                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack()?></td>
                                 </tr>
 <?php 
                             }
                             else
                             {
-                                
-                                while($readCN = $goToCN->fetch_assoc()){
+                                while($readCFN = $goToCFN->fetch_assoc())
+                                {                                   
 ?>
                                     <tr>
-                                        <td rowspan="<?php echo $readCFP->num_rows?>"><?php echo $readCN['name']; ?></td>
-<?php                                        
-                                    while($readCFP = $goToCFP->fetch_assoc())
-                                        $propName = $bd->runQuery("SELECT * FROM property WHERE id= ".$readCFP['property_id'])->fetch_assoc();
-?>                                        
-                                        
-                                        <td><?php echo $propName['name']?></td>
-                                        <td><?php echo $readCFP['field_order']?></td>
-                                        <td><?php echo $readCFP['mandatory_form']?></td>
-                                        <td><?php echo $readCN['state']?></td>
-                                        <td><a href="?estado=versionBack&histId=<?php echo $goToCN['id']?>">Voltar para esta versão</a></td>
-<?php                                        
-                                    }
-                                }
+                                        <td><?php echo $readCFN['name'] ?></td>
+<?php
+                                        $goToCFP = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id=".$id." AND inactive_on = '".$readCFN['inactive_on']."'");
+                                        while($read_CFP = $goToCFP->fetch_assoc()){
+                                            //get property
+                                            $getProp = $bd->runQuery("SELECT * FROM property WHERE id=".$read_CFP['property_id']);
+                                            $readProp = $getProp->fetch_assoc();
+                                            $getEnt = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$readProp['ent_type_id']);
+                                            $readEnt = $getEnt->fetch_assoc();
+?>
+                                        <td><?php echo $readEnt['name']?></td>
+                                        <td><?php echo $readProp['name']?></td>
+                                        <td><?php echo $read_CFP['field_order']?></td>
+                                        <td><?php echo $read_CFP['mandatory_form']?></td>
+                                        <td><?php echo $readCFN['state']?></td>
+                                        <td><a href="?estado=versionBack&form_id=<?php echo $read_CFP['id']?>">Voltar para esta versão</a></td>
+<?php
+                                        }
+?>
+                                   </tr>
+<?php
+                                   }
+                               
+                            }
+                        
                             
 ?>
                             </tbody>
