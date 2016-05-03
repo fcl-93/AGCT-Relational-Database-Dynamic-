@@ -761,7 +761,6 @@ class HistDeForms{
      */
     public function tableHist($id,$bd){
         $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
-        
 ?>
                         <table class="table">
                             <thead>
@@ -787,33 +786,21 @@ class HistDeForms{
                             }
                             else
                             {
-                                while($readCFN = $goToCFN->fetch_assoc())
-                                {                                   
-?>
-                                    <tr>
-                                        <td><?php echo $readCFN['name'] ?></td>
-<?php
-                                        $goToCFP = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id=".$id." AND inactive_on = '".$readCFN['inactive_on']."'");
-                                        while($read_CFP = $goToCFP->fetch_assoc()){
-                                            //get property
-                                            $getProp = $bd->runQuery("SELECT * FROM property WHERE id=".$read_CFP['property_id']);
-                                            $readProp = $getProp->fetch_assoc();
-                                            $getEnt = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$readProp['ent_type_id']);
-                                            $readEnt = $getEnt->fetch_assoc();
-?>
-                                        <td><?php echo $readEnt['name']?></td>
-                                        <td><?php echo $readProp['name']?></td>
-                                        <td><?php echo $read_CFP['field_order']?></td>
-                                        <td><?php echo $read_CFP['mandatory_form']?></td>
-                                        <td><?php echo $readCFN['state']?></td>
-                                        <td><a href="?estado=versionBack&form_id=<?php echo $read_CFP['id']?>">Voltar para esta versão</a></td>
-<?php
-                                        }
-?>
-                                   </tr>
-<?php
-                                   }
-                               
+                                //get hist custom form
+                                $getNameOldFOrm = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
+                                while($readOldName = $getNameOldFOrm->fetch_assoc()){
+                                    $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE property_id=".$readOldName['custom_form_id']." AND inactive_on='".$readOldName['inactive_on']."'");
+                                    //$res_getProp = $this->bd->runQuery("SELECT p.* FROM property AS p, ent_type AS e WHERE  p.ent_type_id = e.id AND  e.id'".."' ORDER BY p.name ASC");
+                                }
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                             }
                         
                             
