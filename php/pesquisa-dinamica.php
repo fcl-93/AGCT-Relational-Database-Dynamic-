@@ -1633,7 +1633,9 @@ class Search{
                         <a href="?estado=active&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
+                    
 ?>
+                        <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id'];?>">[Histórico]</a>  
                 </td>
             </tr>	
 <?php
@@ -2100,6 +2102,9 @@ class entityHist{
         }
         return true;
     }
+    
+    
+     public function tableHist($id,$bd){}
 }
 
 ?>
