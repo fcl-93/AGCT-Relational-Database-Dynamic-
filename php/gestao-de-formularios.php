@@ -138,19 +138,19 @@ class GereForms
 								</td>
 								<td>
 									<a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
+                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
 <?php 
+                                                                                       
 										if($readForm['state'] === 'active')
 										{
 ?>
 											<a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
-                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>">[Histórico]</a>
 <?php 
 										}
 										else 
 										{
 ?>
 											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
-                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>">[Histórico]</a>
 <?php 
 										}
 ?>
