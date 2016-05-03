@@ -1122,12 +1122,12 @@ class PropHist{
     public function estadoHistorico () {
         //meto um datepicker        
 ?>
-        <form>
+        <form method="GET" action="">
             Verificar histórico:<br>
-            <input type="radio">até ao dia<br>
-            <input type="radio">a partir do dia<br>
-            <input type="radio">no dia<br>
-            <input type="text" id="datepicker" placeholder="Introduza uma data">
+            <input type="radio" name="ateDia">até ao dia<br>
+            <input type="radio" name="partirDia">a partir do dia<br>
+            <input type="radio" name="noDia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="submit" value="Apresentar histórico">
         </form>
 
@@ -1150,7 +1150,20 @@ class PropHist{
             </thead>
             <tbody>
 <?php
-        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["ateDia"])) {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["partirDia"])) {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC LIMIT BY 1";
+            }
+        }
         $queryHistorico = $this->db->runQuery($queryHistorico);
         if ($queryHistorico->num_rows == 0) {
 ?>
