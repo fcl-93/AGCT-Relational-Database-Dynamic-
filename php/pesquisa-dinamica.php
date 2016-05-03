@@ -1869,6 +1869,11 @@ class Search{
                             {
                                 $error = true;
                             }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                                $error = true;
+                            }
                         
                         }
                         else
@@ -1881,6 +1886,11 @@ class Search{
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
+                                $error = true;
+                            }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                                 $error = true;
                             }
                         }
@@ -1896,6 +1906,11 @@ class Search{
                             {
                                 $error = true;
                             }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                                $error = true;
+                            }
                         }
                         else
                         {
@@ -1905,11 +1920,7 @@ class Search{
                     
                 }
             }   
-            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-            $readId = $getEntId->fetch_assoc();
-            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                $error = true;
-            }
+            
             
             if($error == false)
             {
