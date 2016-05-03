@@ -1928,14 +1928,14 @@ class Search{
             {
                 if($readVals['relation_id'] == "")
                 {
-                    if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                        $error = true;
                     }
                 }
                 else
                 {
-                    if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                         $error = true;
                     }
