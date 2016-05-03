@@ -1163,7 +1163,7 @@ class PropHist{
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".(strtotime($_REQUEST["data"]) + 1)."' AND inactive_on > '".(strtotime($_REQUEST["data"]) - 1)."' ORDER BY inactive_on DESC LIMIT 1";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 1))."' AND inactive_on > '".date("Y-m-d", (strtotime($_REQUEST["data"]) - 1))."' ORDER BY inactive_on DESC LIMIT 1";
                 echo $queryHistorico;
             }
         }
