@@ -1635,7 +1635,7 @@ class Search{
                     }
                     
 ?>
-                        <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id'];?>">[Histórico]</a>  
+                        <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
 <?php
