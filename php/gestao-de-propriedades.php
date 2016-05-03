@@ -1039,6 +1039,7 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if ($this->gereHist->atualizaHistorico() == false) {
+            echo "#1";
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1067,6 +1068,7 @@ class PropertyManage
             $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
+                echo "#2";
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
