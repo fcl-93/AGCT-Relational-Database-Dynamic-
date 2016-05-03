@@ -1176,7 +1176,7 @@ class PropHist{
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_property WHERE inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $this->db->runQuery($queryHistorico);
@@ -1320,9 +1320,9 @@ class PropHist{
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
 <?php
-                        $queryHistorico = "SELECT * FROM hist_property WHERE inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$arraySelec["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
                         $queryHistorico = $this->db->runQuery($queryHistorico);
-                        if ($query->num_rows == 0) {
+                        if ($queryHistorico->num_rows == 0) {
 ?>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $arraySelec["value_type"]; ?></td>
@@ -1374,9 +1374,6 @@ class PropHist{
                         else {
                                  while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-                <tr>
-                    <td><?php echo $hist["active_on"];?></td>
-                    <td><?php echo $hist["inactive_on"];?></td>
                     <td><?php echo $hist["name"];?></td>
                     <td><?php echo $hist["value_type"];?></td>
                     <td><?php echo $hist["form_field_name"];?></td>
