@@ -803,7 +803,7 @@ class HistDeForms{
                                         <td><?php echo $readCFP['field_order']?></td>
                                         <td><?php echo $readCFP['mandatory_form']?></td>
                                         <td><?php echo $readCN['state']?></td>
-                                        <td><a href="?estado=versionBack&histId=<?php echo $readHE['id']?>">Voltar para esta versão</a></td>
+                                        <td><a href="?estado=versionBack&histId=<?php echo $goToCN['id']?>">Voltar para esta versão</a></td>
 <?php                                        
                                     }
                                 }
