@@ -1641,7 +1641,7 @@ class Search{
                     }
                     
 ?>
-                        <a href="pesquisa-dinamica?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
+                        <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
 <?php
