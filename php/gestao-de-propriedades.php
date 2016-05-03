@@ -1164,6 +1164,7 @@ class PropHist{
             }
             else {
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".(strtotime($_REQUEST["data"]) + 1)."' AND inactive_on > '".(strtotime($_REQUEST["data"]) - 1)."' ORDER BY inactive_on DESC LIMIT 1";
+                echo $queryHistorico;
             }
         }
         $queryHistorico = $this->db->runQuery($queryHistorico);
