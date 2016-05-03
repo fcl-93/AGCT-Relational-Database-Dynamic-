@@ -56,7 +56,7 @@ class Search{
                 {
                     $this->changeState();
                 }
-                else if ($_REQUEST['estado'] = 'updateValoresEnt')
+                else if ($_REQUEST['estado'] == 'updateValoresEnt')
                 {
                     $this->updatEntVal();
                 }
