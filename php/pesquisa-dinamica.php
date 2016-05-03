@@ -1086,13 +1086,19 @@ class Search{
         }
     }
     
-    /*
+    /**
+     * 
      * This method creates a query when the user selected on or more properties
      * presented in the table type where we found properties about entities that
      * has references to the selected entity.
      * Before we selected all the refered entities that have the properties selected.
      * In this method we will check if anyone of the results of that query is 
      * refered by one of the entities wich type is the selected
+     *
+     * @param type $query1 (query that selects all the entities that satisfy the properties selected)
+     * @param type $idEnt (the id of the entity type we want to search)
+     * @param type $querydinamica (the dynamic query that is alread built at the moment)
+     * @return boolean|string (false if there are any errors or non results, string otherwise with an updated version od the dynamic query)
      */
     private function geraQueryTabela2($query1,$idEnt,$querydinamica) {
         $conta = 0;
@@ -1129,13 +1135,19 @@ class Search{
         return $querydinamica;
     }
     
-    /*
+    /**
+     *
      * This method creates a query when the user selected one or more properties
      * presented in the table type where we found properties about relations that
      * where the ent type selected is envolved
      * Before we selected all the relations that have the properties selected.
      * In this method we will check if anyone of the results of that query has 
      * an entity wich type is the selected
+     *
+     * @param type $query1REL (query that selects all the relations that satisfy the properties selected)
+     * @param type $idEnt (the id of the entity type we want to search)
+     * @param type $querydinamica (the dynamic query that is alread built at the moment)
+     * @return boolean|string (false if there are any errors or non results, string otherwise with an updated version od the dynamic query)
      */
     private function geraQueryTabela3($query1REL, $idEnt, $querydinamica) {
         $conta = 0;
@@ -1175,7 +1187,8 @@ class Search{
         
     }
     
-     /*
+    /**
+     * 
      * This method creates a query when the user selected one or more properties
      * presented in the table type where we found properties about entities that
      * where involved in a relation between the ent type selected
@@ -1183,6 +1196,11 @@ class Search{
      * In this method we will check if there is any relation with the entities
      * presented in that results and if so what is the entity of the type we
      * want to search that is involved in the relation
+
+     * @param type $query1ER (query that selects all the entities that satisfy the properties selected)
+     * @param type $idEnt (the id of the entity type we want to search)
+     * @param type $querydinamica (the dynamic query that is alread built at the moment)
+     * @return boolean|string (false if there are any errors or non results, string otherwise with an updated version od the dynamic query)
      */
     private function geraQueryTabela4($query1ER, $idEnt, $querydinamica){
         $conta = 0;
@@ -1228,13 +1246,25 @@ class Search{
         return $querydinamica;    
     }
     
-    
-    private function filtro1Tabela($querydinamica,$controlo, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo) {
+    /**
+     * This method will create the query that returns all the entities of 
+     * the selected ent type that satisfy the selected properties
+     * 
+     * @param type $query1Ent (header of the query that will return all the entities of the selected ent type that satisfy the selected properties)
+     * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
+     * @param type $count (variable that indicates wich of the checkboxes is being analysed)
+     * @param type $idDaPropriedade (id of the selected property)
+     * @param type $nomeProp (name of the selected property)
+     * @param type $tipoValor (value type of the selected property)
+     * @param type $tipo (indicates which type of property is involved)
+     * @return boolean|string (true if there are any error with validations, the query if not)
+     */
+    private function filtro1Tabela($query1Ent,$controlo, $count,$idDaPropriedade,$nomeProp, $tipoValor, $tipo) {
         if ($controlo) {
-            $querydinamica .= "e.id IN (";
+            $query1Ent .= "e.id IN (";
         }
         else {
-            $querydinamica .= " AND e.id IN (";
+            $query1Ent .= " AND e.id IN (";
         }
         if ($tipoValor == "int") {
             if ($this->validaInt($count, $tipo) === false) {
@@ -1242,7 +1272,7 @@ class Search{
             }
             else {
                 $valor = $this->validaInt($count, $tipo);
-                $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $query1Ent .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
@@ -1252,27 +1282,42 @@ class Search{
             }
             else {
                 $valor = $this->validaDouble($count, $tipo);
-                $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+                $query1Ent .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
                 $this->frase .= $_REQUEST['operators'.$count]." ";
             }
         }
         else  if ($tipoValor == "text"){
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
-            $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+            $query1Ent .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
         }
         else  if ($tipoValor == "enum"){
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
-            $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
+            $query1Ent .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id)";
         }
         else  if ($tipoValor == "bool"){
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
-            $querydinamica .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
+            $query1Ent .= "SELECT e.id FROM entity AS e, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.entity_id = e.id";
         }
         $this->frase .= $valor;
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
-        return $querydinamica;
+        return $query1Ent;
     }
    
+    /**
+     * 
+     * This method will create the query that returns all the entities of 
+     * the ent type correpondent to the table type
+     * that satisfy the selected properties
+     * 
+     * @param type $query1 (header of the query that will return all the entities of the ent type correspondent to the table type that satisfy the selected properties)
+     * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
+     * @param type $count (variable that indicates wich of the checkboxes is being analysed)
+     * @param type $idDaPropriedade (id of the selected property)
+     * @param type $nomeProp (name of the selected property)
+     * @param type $tipoValor (value type of the selected property)
+     * @param type $tipo (indicates which type of property is involved)
+     * @return boolean|string (true if there are any error with validations, the query if not)
+     */
     private function filtros2Tabela($query1,$controlo, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
@@ -1335,6 +1380,20 @@ class Search{
         return $query1;
     }
 
+    /**
+     * 
+     * This method will create the query that returns all the entities of 
+     * the relation that satisfy the selected properties
+     * 
+     * @param type $query1 (header of the query that will return all the relations that satisfy the selected properties)
+     * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
+     * @param type $count (variable that indicates wich of the checkboxes is being analysed)
+     * @param type $idDaPropriedade (id of the selected property)
+     * @param type $nomeProp (name of the selected property)
+     * @param type $tipoValor (value type of the selected property)
+     * @param type $tipo (indicates which type of property is involved)
+     * @return boolean|string (true if there are any error with validations, the query if not)
+     */
     private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
@@ -1396,6 +1455,12 @@ class Search{
         return $query1;
     }
     
+    /**
+     * Method that validates the user input when it's type is suposed to be of an int
+     * @param type $count (the number of the input)
+     * @param type $tipo (the type of table where is the input)
+     * @return boolean
+     */
     private function validaInt ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
             $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$tipo.$count.'']);
@@ -1428,6 +1493,12 @@ class Search{
         }
     }
     
+    /**
+     * Method that validates the user input when it's type is suposed to be of an double
+     * @param type $count (the number of the input)
+     * @param type $tipo (the type of table where is the input)
+     * @return boolean
+     */
     private function validaDouble ($count, $tipo) {
         if ($this->verificaOperadores($count)) {
             $double_escaped = $this->bd->userInputVal($_REQUEST['double'.$tipo.$count.'']);
@@ -1459,6 +1530,11 @@ class Search{
         }
     }
     
+    /**
+     * Method that check if the user selected one operator
+     * @param type $count (the number of the input)
+     * @return boolean (true if user selected one operator, false otherwise)
+     */
     private function verificaOperadores ($count) {
         if(empty($_REQUEST['operators'.$count]))
         {
@@ -1472,12 +1548,25 @@ class Search{
         }
     }
     
+    /**
+     * This method populates the arrays that are used to save the properties and its values.
+     * @param type $idDaPropriedade (id of the property)
+     * @param type $nomeProp (name of the property)
+     * @param type $valor (value for the property)
+     */
     private function preencheArrays ($idDaPropriedade,$nomeProp,$valor) {
         array_push($this->guardaidDosSelecionados,$idDaPropriedade);
         array_push($this->guardanomePropSelec, $nomeProp);
         array_push($this->guardaValorDaProp,$valor);
     }
     
+    /**
+     * This method presents the results of tha dynamic search.
+     * First it writes a descritive sentence about the search
+     * Then it presents a table with all the results, where the user can edit, 
+     * view the history, or activate/desactivate
+     * @param type $querydinamica
+     */
     private function apresentaResultado ($querydinamica) {
 ?>
         <p><?php echo $this->frase;?></p>
@@ -1560,6 +1649,10 @@ class Search{
         }
     }
     
+    /**
+     * Method that creates the tables where the user can view and edit the values
+     * of properties for the entity selected in the previous state
+     */
     public function estadoApresentacao() {
         $idEnt = $_REQUEST["id"];
         $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
