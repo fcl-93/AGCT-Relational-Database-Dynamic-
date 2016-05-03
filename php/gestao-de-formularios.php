@@ -59,6 +59,10 @@ class GereForms
 				{
 					$this->desactivate();
 				}
+                                else if($_REQUEST['estado'] == 'historico')
+                                {
+                                   $this->gereFormHist->tableHist($id, $this->bd);
+                                }
 			}
 			else
 			{
@@ -139,12 +143,14 @@ class GereForms
 										{
 ?>
 											<a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
+                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>">[Histórico]</a>
 <?php 
 										}
 										else 
 										{
 ?>
 											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
+                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>">[Histórico]</a>
 <?php 
 										}
 ?>
@@ -744,10 +750,14 @@ class HistDeForms{
                 return true;
            }
         }
-        return false;
-        
-        
-              
+        return false;   
     }
+    
+    /**
+     * This method will create a table where the history will be showned.
+     * @param type $id
+     * @param type $bd
+     */
+    public function tableHist($id,$bd){}
 }
 ?>
