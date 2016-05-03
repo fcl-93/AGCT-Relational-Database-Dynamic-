@@ -1786,6 +1786,7 @@ class Search{
 <?php
             $_SESSION['updateValue'] = $x;
 ?>
+            <input type="hidden" name="id" value="<?php echo $_REQUEST['id']?>"><br>
             <input type="hidden" name="estado" value="updateValoresEnt"><br>
            <input type="submit" value="Atualizar">
     </form>        
