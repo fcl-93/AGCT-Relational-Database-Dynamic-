@@ -1922,7 +1922,7 @@ class Search{
                 }
             }   
             
-            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value)");
+            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value) AND v.updated_on !='".$updated_on."'");
             
             while($readVals = $getUnadedVals->fetch_assoc())
             {
