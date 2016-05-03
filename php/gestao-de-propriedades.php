@@ -1039,6 +1039,7 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if ($this->gereHist->atualizaHistorico() == false) {
+            echo "bah";
             print_r($this->gereHist->atualizaHistorico());
             echo "#1";
 ?>
