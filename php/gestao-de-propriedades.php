@@ -1119,7 +1119,7 @@ class PropHist{
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$this->db->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->createNewEnt($atributos["ent_type"]) == false) {
+            if ($this->createNewEnt($atributos["ent_type_id"]) == false) {
                 $this->db->getMysqli()->rollback();
                 goBack();
                 return false;
