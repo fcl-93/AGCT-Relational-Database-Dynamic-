@@ -1942,7 +1942,7 @@ class Search{
                     }
                     if($added == false)
                     {
-                        $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]." AND entity_id)"));
+                        $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                         $readId = $getEntId->fetch_assoc();
                         if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                             $error = true;
