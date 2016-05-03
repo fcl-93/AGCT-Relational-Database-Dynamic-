@@ -782,7 +782,7 @@ class HistDeForms{
                             if($goToCN->num_rows == 0 || $goToCFP->num_rows == 0){
 ?>                                
                                 <tr>
-                                    <td colspan="8">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack()?></td>
                                 </tr>
 <?php 
