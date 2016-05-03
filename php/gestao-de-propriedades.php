@@ -1300,14 +1300,14 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                        $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEntRel;
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $this->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaProp = "SELECT * FROM hist_property WHERE rel_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                        $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                     }
                     $resultSeleciona = $this->db->runQuery($selecionaProp);
                     $numLinhas = $resultSeleciona->num_rows;
@@ -1319,6 +1319,11 @@ class PropHist{
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
+<?php
+                        $queryHistorico = "SELECT * FROM hist_property WHERE inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                        $queryHistorico = $this->db->runQuery($queryHistorico);
+                        if ($query->num_rows == 0) {
+?>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $arraySelec["value_type"]; ?></td>
                         <td><?php echo $arraySelec["form_field_name"]; ?></td>
@@ -1352,7 +1357,7 @@ class PropHist{
                         </td>
                         <td>
 <?php
-                        if ($hist["state"] === "active")
+                        if ($arraySelec["state"] === "active")
                         {
                             echo 'Ativo';
                         }
@@ -1365,6 +1370,60 @@ class PropHist{
                         <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                     </tr>
 <?php
+                        }
+                        else {
+                            while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["name"];?></td>
+                    <td><?php echo $hist["value_type"];?></td>
+                    <td><?php echo $hist["form_field_name"];?></td>
+                    <td><?php echo $hist["form_field_type"];?></td>
+                    <td>
+<?php
+                        if (empty($hist["unit_type_id"]))
+                        {
+                            echo "-";
+                        }
+                        else
+                        {
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                        }
+?>
+                    </td>
+                    <td><?php echo $hist["form_field_order"];?></td>
+                    <td><?php echo $hist["form_field_size"]; ?></td>
+                    <td>
+<?php
+                        if ($hist["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
+?>
+                    </td>
+                    <td>
+
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                </tr>
+                        }
                 }
             }
 ?>
