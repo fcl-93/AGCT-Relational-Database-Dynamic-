@@ -61,7 +61,7 @@ class GereForms
 				}
                                 else if($_REQUEST['estado'] == 'historico')
                                 {
-                                   $this->gereFormHist->tableHist($id, $this->bd)
+                                   $this->gereFormHist->tableHist($id, $this->bd);
                                 }
 			}
 			else
