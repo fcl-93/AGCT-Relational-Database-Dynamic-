@@ -1300,14 +1300,14 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMTIT 1";
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $this->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaProp = "SELECT * FROM hist_property WHERE rel_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM hist_property WHERE rel_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
                     }
                     $resultSeleciona = $this->db->runQuery($selecionaProp);
                     $numLinhas = $resultSeleciona->num_rows;
