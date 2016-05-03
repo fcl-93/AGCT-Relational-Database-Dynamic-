@@ -1367,61 +1367,60 @@ class PropHist{
                         }
 ?>
                         </td>
-                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                        <td>-</td>
                     </tr>
 <?php
                         }
                         else {
-                                 while ($hist = $queryHistorico->fetch_assoc()) {
+                            while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
-                    <td><?php echo $hist["name"];?></td>
-                    <td><?php echo $hist["value_type"];?></td>
-                    <td><?php echo $hist["form_field_name"];?></td>
-                    <td><?php echo $hist["form_field_type"];?></td>
-                    <td>
+                                <td><?php echo $hist["name"];?></td>
+                                <td><?php echo $hist["value_type"];?></td>
+                                <td><?php echo $hist["form_field_name"];?></td>
+                                <td><?php echo $hist["form_field_type"];?></td>
+                                <td>
 <?php
-                        if (empty($hist["unit_type_id"]))
-                        {
-                            echo "-";
-                        }
-                        else
-                        {
-                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
-                        }
+                                if (empty($hist["unit_type_id"]))
+                                {
+                                    echo "-";
+                                }
+                                else
+                                {
+                                    $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                                    echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                                }
 ?>
-                    </td>
-                    <td><?php echo $hist["form_field_order"];?></td>
-                    <td><?php echo $hist["form_field_size"]; ?></td>
-                    <td>
+                                </td>
+                                <td><?php echo $hist["form_field_order"];?></td>
+                                <td><?php echo $hist["form_field_size"]; ?></td>
+                                <td>
 <?php
-                        if ($hist["mandatory"] == 1)
-                        {
-                            echo "sim";
-                        }
-                        else
-                        {
-                            echo " não";
-                        }
+                                if ($hist["mandatory"] == 1)
+                                {
+                                    echo "sim";
+                                }
+                                else
+                                {
+                                    echo " não";
+                                }
 ?>
-                    </td>
-                    <td>
-
+                                </td>
+                                <td>
 <?php
-                    if ($hist["state"] === "active")
-                    {
-                        echo 'Ativo';
-                    }
-                    else
-                    {
-                        echo 'Inativo';
-                    }
+                                if ($hist["state"] === "active")
+                                {
+                                    echo 'Ativo';
+                                }
+                                else
+                                {
+                                    echo 'Inativo';
+                                }
 ?>
-                    </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
-                </tr>
+                                </td>
+                                <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                            </tr>
 <?php
-            }
+                            }
                         }
                 }
             }
