@@ -1122,7 +1122,7 @@ class PropHist{
     public function estadoHistorico () {
         //meto um datepicker        
 ?>
-        <form method="GET" action="">
+        <form method="GET" action="?estado=historico&id=<?php echo $_REQUEST["id"]; ?>">
             Verificar histórico:<br>
             <input type="radio" name="ateDia">até ao dia<br>
             <input type="radio" name="partirDia">a partir do dia<br>
