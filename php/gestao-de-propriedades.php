@@ -1122,12 +1122,14 @@ class PropHist{
     public function estadoHistorico () {
         //meto um datepicker        
 ?>
-        <form method="GET" action="?estado=historico&id=<?php echo $_REQUEST["id"]; ?>">
+        <form method="GET">
             Verificar histórico:<br>
             <input type="radio" name="ateDia">até ao dia<br>
             <input type="radio" name="partirDia">a partir do dia<br>
             <input type="radio" name="noDia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
 
@@ -1155,13 +1157,14 @@ class PropHist{
         }
         else {
             if (isset($_REQUEST["ateDia"])) {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["partirDia"])) {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["ateDia"]." ORDER BY inactive_on DESC LIMIT BY 1";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on > '".date("Y-m-d", (strtotime($_REQUEST["data"]) - 86400))."' ORDER BY inactive_on DESC";
+                echo $queryHistorico;
             }
         }
         $queryHistorico = $this->db->runQuery($queryHistorico);
