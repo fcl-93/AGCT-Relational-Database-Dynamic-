@@ -1802,14 +1802,32 @@ class Search{
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
         $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+        $updated_on = date("Y-m-d H:i:s",time());
         //echo $estado;
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state='active'");
         if($getRel->num_rows == 0){
             if($this->gereInsts->addHist($id,$this->bd)){
                 if($estado == 'active')
                 {
-                    $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
-                   
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='".$updated_on."' WHERE id=".$id);
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    while($readVals = $getUnadedVals->fetch_assoc())
+                    {
+                        if($readVals['relation_id'] == "")
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                               $error = true;
+                            }
+                        }
+                        else
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                                $error = true;
+                            }
+                        }
+                    }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
@@ -1818,14 +1836,32 @@ class Search{
                 }
                 else if ($estado == 'inactive')
                 {
-                    $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
-                    
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$id);
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    while($readVals = $getUnadedVals->fetch_assoc())
+                    {
+                        if($readVals['relation_id'] == "")
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                               $error = true;
+                            }
+                        }
+                        else
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                                $error = true;
+                            }
+                        }
+                    }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php 
                     $this->bd->getMysqli()->commit();   
                 }
+                
             }
             else
             {
