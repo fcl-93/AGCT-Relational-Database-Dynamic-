@@ -1905,6 +1905,11 @@ class Search{
                     
                 }
             }   
+            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+            $readId = $getEntId->fetch_assoc();
+            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                $error = true;
+            }
             
             if($error == false)
             {
@@ -2082,6 +2087,16 @@ class entityHist{
         return true;
     }
     
+    public function addEntToHist($id,$bd,$inactiveTime){
+        $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+        
+        $inactive = date("Y-m-d H:i:s",time());
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
+                return false;
+        }
+        return true;
+    }
+    
     /**
      * Adds the previous values t the table hist_values and gives permission to create a new value
      * @param type $id -> of the value we will change
@@ -2110,15 +2125,18 @@ class entityHist{
     }
     
     
-     public function tableHist($id,$bd){
+     public function tableHist($id,$bd)
+     {
 ?>
-                    <table>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Data de Ativação</th>
                                 <th>Data de Desativação</th>
                                 <th>Id</th>
                                 <th>Nome</th>
+                                <th>Propriedade</th>
+                                <th>Valor</th>
                                 <th>Estado</th>
                                 <th>Ação</th>
                             </tr>
@@ -2130,7 +2148,7 @@ class entityHist{
                         {
 ?>
                             <tr>
-                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack(); ?></td>
                             </tr>
 <?php
@@ -2144,6 +2162,10 @@ class entityHist{
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
                                     <td><?php echo $readHistory['entity_name']?></td>
+                                    
+                                    
+                                    
+                                    
                                     <td><?php echo $readHistory['state']?></td>
                                     <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                         
