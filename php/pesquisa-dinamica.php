@@ -1895,6 +1895,7 @@ class Search{
             
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
+            $added =false;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
                 if(isset($_REQUEST['check'.$x]))
@@ -1906,11 +1907,6 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            while($readId = $getEntId->fetch_assoc()) 
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
                         
                         }
                         else
@@ -1925,11 +1921,6 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            $readId = $getEntId->fetch_assoc();
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
                         }
                         else 
                         {
@@ -1943,22 +1934,26 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            $readId = $getEntId->fetch_assoc();
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
                         }
                         else
                         {
                             $error = true;
                         }
                     }
+                    if($added == false)
+                    {
+                        $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                        $readId = $getEntId->fetch_assoc();
+                        if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                            $error = true;
+                        }
+                        $added = true;   
+                    }
                     
                 }
             }   
             
-            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value) AND v.updated_on !='".$updated_on."'");
+            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND  hv.updated_on !='".$updated_on."'");
             
             while($readVals = $getUnadedVals->fetch_assoc())
             {
