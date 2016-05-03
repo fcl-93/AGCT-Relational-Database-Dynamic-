@@ -1157,13 +1157,13 @@ class PropHist{
         }
         else {
             if (isset($_REQUEST["ateDia"])) {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["data"]." ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["partirDia"])) {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= ".$_REQUEST["data"]." ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= ".$_REQUEST["data"]." ORDER BY inactive_on DESC LIMIT BY 1";
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT BY 1";
             }
         }
         $queryHistorico = $this->db->runQuery($queryHistorico);
