@@ -1953,7 +1953,7 @@ class Search{
                 }
             }   
             
-            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND  hv.updated_on !='".$updated_on."'");
+            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND  hv.inactive_on !='".$updated_on."'");
             
             while($readVals = $getUnadedVals->fetch_assoc())
             {
