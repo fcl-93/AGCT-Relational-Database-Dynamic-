@@ -464,6 +464,7 @@ class PropertyManage
             <?php
             }
     }
+    
     /**
      * This method is responsible to automaticly create the name of the relations by joining the names of the two entities that are associated
      * @param string $queryNome1 (The query that gets the name of the first entity)
@@ -1050,10 +1051,17 @@ class PropHist{
     
     private $db;            // Object from DB_Op that contains the access to the database
     
+    /**
+     * Constructor method
+     */
     public function __construct(){
          $this->db = new Db_Op();
     }
     
+    /**
+     * This method is responsible for insert into the history a copy of the property
+     * before being updated
+     */
     public function atualizaHistorico () {
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
         $selectAtributos = $this->db->runQuery($selectAtributos);
@@ -1073,6 +1081,11 @@ class PropHist{
         $updateHist =$this->db->runQuery($updateHist);
     }
     
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     */
     public function estadoVoltar () {
         $this->atualizaHistorico();
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
@@ -1100,17 +1113,14 @@ class PropHist{
         }
     }
     
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected property.
+     * After that he presents a table with all the versions presented in the history
+     */
     public function estadoHistorico () {
         //meto um datepicker        
-        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
-        $queryHistorico = $this->db->runQuery($queryHistorico);
-        if ($queryHistorico->num_rows == 0) {
-?>
-            <p>Não existe histórico para a propriedade escolhida</p>
-<?php
-            goBack();
-        }
-        else {
 ?>
         <form>
             Verificar histórico:<br>
@@ -1140,7 +1150,18 @@ class PropHist{
             </thead>
             <tbody>
 <?php
-        while ($hist = $queryHistorico->fetch_assoc()) {
+        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        $queryHistorico = $this->db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="11">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
@@ -1192,12 +1213,13 @@ class PropHist{
                     <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
+            }
         }
 ?>
             <tbody>
         </table>
 <?php
-        }
+        
     }
 }
 

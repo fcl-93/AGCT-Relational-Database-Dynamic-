@@ -445,10 +445,17 @@ class RelHist{
     
     private $db;            // Object from DB_Op that contains the access to the database
     
+    /**
+     * Constructor method
+     */
     public function __construct(){
         $this->db = new Db_Op();
     }
     
+    /**
+     * This method is responsible for insert into the history a copy of the property
+     * before being updated
+     */
     public function atualizaHistorico () {
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
         $selectAtributos = $this->db->runQuery($selectAtributos);
@@ -458,6 +465,11 @@ class RelHist{
         $updateHist =$this->db->runQuery($updateHist);
     }
     
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a relation type to an old version
+     * saved in the history
+     */
     public function estadoVoltar () {
         $this->atualizaHistorico();
         $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$_REQUEST['hist'];
@@ -485,6 +497,12 @@ class RelHist{
         }
     }
     
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected relation type.
+     * After that he presents a table with all the versions presented in the history
+     */
     public function estadoHistorico () {
         //meto um datepicker
 ?>
@@ -510,7 +528,16 @@ class RelHist{
             </thead>
             <tbody>
 <?php
-        while ($hist = $queryHistorico->fetch_assoc()) {
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="11">Não existe registo referente ao tipo de relação selecionado no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
@@ -521,6 +548,7 @@ class RelHist{
                     <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
+            }
         }
 ?>
             <tbody>
