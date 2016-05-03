@@ -1122,11 +1122,13 @@ class PropHist{
         $updateHist =$this->db->runQuery($updateHist);
         if ($updateHist) {
             if ($this->createNewEnt($atributos["ent_type_id"]) == false) {
+                echo "#3";
                 $this->db->getMysqli()->rollback();
                 return false;
             }
         }
         else {
+            echo "#4";
             $this->db->getMysqli()->rollback();
             return false;
         }
@@ -1187,6 +1189,7 @@ class PropHist{
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
         $updateEntHist =$this->db->runQuery($updateEntHist);
         if (!$updateEntHist) {
+            echo "#5";
             $this->db->getMysqli()->rollback();
             return false;
         }
@@ -1194,6 +1197,7 @@ class PropHist{
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
             $updateEnt =$this->db->runQuery($updateEnt);
             if (!$updateEnt) {
+                echo "#6";
                 $this->db->getMysqli()->rollback();
                 return false;
             }
