@@ -1121,13 +1121,11 @@ class PropHist{
         if ($updateHist) {
             if ($this->createNewEnt($atributos["ent_type_id"]) == false) {
                 $this->db->getMysqli()->rollback();
-                goBack();
                 return false;
             }
         }
         else {
             $this->db->getMysqli()->rollback();
-            goBack();
             return false;
         }
     }
@@ -1188,7 +1186,6 @@ class PropHist{
         $updateEntHist =$this->db->runQuery($updateEntHist);
         if (!$updateEntHist) {
             $this->db->getMysqli()->rollback();
-            goBack();
             return false;
         }
         else {
@@ -1196,7 +1193,6 @@ class PropHist{
             $updateEnt =$this->db->runQuery($updateEnt);
             if (!$updateEnt) {
                 $this->db->getMysqli()->rollback();
-                goBack();
                 return false;
             }
             else {
