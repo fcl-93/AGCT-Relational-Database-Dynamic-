@@ -56,10 +56,16 @@ class Search{
                 {
                     $this->changeState();
                 }
-                else if ($_REQUEST['estado'] = 'updateValoresEnt')
+                else if ($_REQUEST['estado'] == 'updateValoresEnt')
                 {
                     $this->updatEntVal();
                 }
+                else if($_REQUEST['estado']=='historico')
+                {
+                    $this->gereInsts->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
+                }
+                else if($_REQUEST['estado']=='versionBack')
+                {}
                 
                 
             }
@@ -1633,7 +1639,9 @@ class Search{
                         <a href="?estado=active&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
+                    
 ?>
+                        <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
 <?php
@@ -1778,6 +1786,7 @@ class Search{
 <?php
             $_SESSION['updateValue'] = $x;
 ?>
+            <input type="hidden" name="id" value="<?php echo $_REQUEST['id']?>"><br>
             <input type="hidden" name="estado" value="updateValoresEnt"><br>
            <input type="submit" value="Atualizar">
     </form>        
@@ -1793,14 +1802,32 @@ class Search{
         $id = $this->bd->userInputVal($_REQUEST['id']);
         $estado = $this->bd->userInputVal($_REQUEST['estado']);
         $readVal = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+        $updated_on = date("Y-m-d H:i:s",time());
         //echo $estado;
         $getRel = $this->bd->runQuery("SELECT * FROM relation WHERE entity1_id=".$id." OR entity2_id=".$id." AND state='active'");
         if($getRel->num_rows == 0){
             if($this->gereInsts->addHist($id,$this->bd)){
                 if($estado == 'active')
                 {
-                    $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
-                   
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='".$updated_on."' WHERE id=".$id);
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    while($readVals = $getUnadedVals->fetch_assoc())
+                    {
+                        if($readVals['relation_id'] == "")
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                               $this->bd->getMysqli()->rollback();
+                            }
+                        }
+                        else
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                               $this->bd->getMysqli()->rollback();
+                            }
+                        }
+                    }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
@@ -1809,14 +1836,32 @@ class Search{
                 }
                 else if ($estado == 'inactive')
                 {
-                    $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='". date("Y-m-d H:i:s",time())."' WHERE id=".$id);
-                    
+                    $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$id);
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    while($readVals = $getUnadedVals->fetch_assoc())
+                    {
+                        if($readVals['relation_id'] == "")
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                               $this->bd->getMysqli()->rollback();
+                            }
+                        }
+                        else
+                        {
+                            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                            {
+                                $this->bd->getMysqli()->rollback();
+                            }
+                        }
+                    }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
 <?php 
                     $this->bd->getMysqli()->commit();   
                 }
+                
             }
             else
             {
@@ -1861,6 +1906,11 @@ class Search{
                             {
                                 $error = true;
                             }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                                $error = true;
+                            }
                         
                         }
                         else
@@ -1873,6 +1923,11 @@ class Search{
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
+                                $error = true;
+                            }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                                 $error = true;
                             }
                         }
@@ -1888,6 +1943,11 @@ class Search{
                             {
                                 $error = true;
                             }
+                            $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $readId = $getEntId->fetch_assoc();
+                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                                $error = true;
+                            }
                         }
                         else
                         {
@@ -1897,6 +1957,26 @@ class Search{
                     
                 }
             }   
+            
+            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value) AND v.updated_on !='".$updated_on."'");
+            
+            while($readVals = $getUnadedVals->fetch_assoc())
+            {
+                if($readVals['relation_id'] == "")
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                       $error = true;
+                    }
+                }
+                else
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                        $error = true;
+                    }
+                }
+            }
             
             if($error == false)
             {
@@ -2074,6 +2154,16 @@ class entityHist{
         return true;
     }
     
+    public function addEntToHist($id,$bd,$inactiveTime){
+        $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
+        
+        $inactive = date("Y-m-d H:i:s",time());
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
+                return false;
+        }
+        return true;
+    }
+    
     /**
      * Adds the previous values t the table hist_values and gives permission to create a new value
      * @param type $id -> of the value we will change
@@ -2100,6 +2190,63 @@ class entityHist{
         }
         return true;
     }
+    
+    
+     public function tableHist($id,$bd)
+     {
+?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data de Ativação</th>
+                                <th>Data de Desativação</th>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Propriedade</th>
+                                <th>Valor</th>
+                                <th>Estado</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<?php
+                        $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                        if($presetOld->num_rows == 0)
+                        {
+?>
+                            <tr>
+                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td><?php goBack(); ?></td>
+                            </tr>
+<?php
+                        }
+                        else
+                        {
+                            while($readHistory = $presetOld->fetch_assoc()){
+?>
+                                <tr>
+                                    <td><?php echo $readHistory['active_on']?></td>
+                                    <td><?php echo $readHistory['inactive_on']?></td>
+                                    <td><?php echo $readHistory['id']?></td>
+                                    <td><?php echo $readHistory['entity_name']?></td>
+                                    
+                                    
+                                    
+                                    
+                                    <td><?php echo $readHistory['state']?></td>
+                                    <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                        
+                                </tr>
+<?php                                
+                            }
+                        }
+                        
+                        
+?>
+                        </tbody>
+                    </table>
+<?php
+     }
 }
 
 ?>
