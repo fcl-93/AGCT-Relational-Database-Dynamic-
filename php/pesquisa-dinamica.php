@@ -1896,6 +1896,7 @@ class Search{
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             $added =false;
+            $guardaIds = array();
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
                 if(isset($_REQUEST['check'.$x]))
@@ -1906,12 +1907,15 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
+                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         
                         }
                         else
                         {
                             $error = true;
+                            break;
                         }
                     }
                     else if(isset($_REQUEST['radio'.$x]))
@@ -1920,11 +1924,14 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
+                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         }
                         else 
                         {
                             $error = true;
+                            break;
                         }
                     }
                     else if(isset($_REQUEST['textbox'.$x]))
@@ -1933,11 +1940,14 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
+                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         }
                         else
                         {
                             $error = true;
+                            break;
                         }
                     }
                     if($added == false)
@@ -1946,6 +1956,7 @@ class Search{
                         $readId = $getEntId->fetch_assoc();
                         if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                             $error = true;
+                            break;
                         }
                         $added = true;   
                     }
@@ -1953,7 +1964,11 @@ class Search{
                 }
             }   
             
-            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND  hv.inactive_on !='".$updated_on."'");
+            /*while(count($guardaIds) != 0)
+            {
+                $this->bd->runQuery("SELECT * FROM value WHERE");
+            }*/
+            //$getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE ");
             
             while($readVals = $getUnadedVals->fetch_assoc())
             {
@@ -1962,6 +1977,7 @@ class Search{
                     if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                        $error = true;
+                       break;
                     }
                 }
                 else
@@ -1969,6 +1985,7 @@ class Search{
                     if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                         $error = true;
+                        break;
                     }
                 }
             }
