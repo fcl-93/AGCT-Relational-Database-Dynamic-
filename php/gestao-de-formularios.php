@@ -766,11 +766,11 @@ class HistDeForms{
         
         
 ?>
-                        <table>
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <td>Nome do Formulário</td>
-                                    <td>Entidade<td>
+                                    <td>Entidade</td>
                                     <td>Propriedade</td>
                                     <td>Tipo de unidade</td>
                                     <td>Ordem do campo no formulário</td>
