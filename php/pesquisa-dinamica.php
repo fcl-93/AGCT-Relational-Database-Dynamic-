@@ -1898,16 +1898,6 @@ class Search{
             $added =false;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
-                if($added == false)
-                {
-                    $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]." AND entity_id)"));
-                    $readId = $getEntId->fetch_assoc();
-                    if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                        $error = true;
-                    }
-                    $added = true;   
-                }
-                
                 if(isset($_REQUEST['check'.$x]))
                 {
                      if(isset($_REQUEST['select'.$x]))
@@ -1949,6 +1939,15 @@ class Search{
                         {
                             $error = true;
                         }
+                    }
+                    if($added == false)
+                    {
+                        $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]." AND entity_id)"));
+                        $readId = $getEntId->fetch_assoc();
+                        if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
+                            $error = true;
+                        }
+                        $added = true;   
                     }
                     
                 }
