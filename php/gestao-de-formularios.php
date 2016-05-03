@@ -798,7 +798,7 @@ class HistDeForms{
                                             //get property
                                             $getProp = $bd->runQuery("SELECT * FROM property WHERE id=".$read_CFP['property_id']);
                                             $readProp = $getProp->fetch_assoc();
-                                            $getEnt = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$getProp['ent_type_id']);
+                                            $getEnt = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$readProp['ent_type_id']);
                                             $readEnt = $getEnt->fetch_assoc();
 ?>
                                         <td><?php echo $readEnt['name']?></td>
