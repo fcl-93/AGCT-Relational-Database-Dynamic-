@@ -1178,15 +1178,13 @@ class PropHist{
             $atributo .= $attr.", ";
             $valor .= $val.", ";
         }
-        $updateEntHist = "INSERT INTO hist_ent_type VALUES (".$atributo."inactive_on, ent_type_id) "
+        $updateEntHist = "INSERT INTO hist_ent_type (".$atributo."inactive_on, ent_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
         $updateEntHist =$this->db->runQuery($updateEntHist);
         if (!$updateEntHist) {
-?>
-            <p>Não foi possível atualizar a propriedade.</p>
-<?php
             $this->db->getMysqli()->rollback();
             goBack();
+            return false;
         }
         else {
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
@@ -1195,6 +1193,9 @@ class PropHist{
                 $this->db->getMysqli()->rollback();
                 goBack();
                 return false;
+            }
+            else {
+                return true;
             }
         }
     }
