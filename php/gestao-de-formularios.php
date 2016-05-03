@@ -782,7 +782,7 @@ class HistDeForms{
                             if($goToCN->num_rows == 0 || $goToCFP->num_rows == 0){
 ?>                                
                                 <tr>
-                                    <td colspan="8">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack()?></td>
                                 </tr>
 <?php 
@@ -803,6 +803,7 @@ class HistDeForms{
                                         <td><?php echo $readCFP['field_order']?></td>
                                         <td><?php echo $readCFP['mandatory_form']?></td>
                                         <td><?php echo $readCN['state']?></td>
+                                        <td><a href="?estado=versionBack&histId=<?php echo $goToCN['id']?>">Voltar para esta versão</a></td>
 <?php                                        
                                     }
                                 }
