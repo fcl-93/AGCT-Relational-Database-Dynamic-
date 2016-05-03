@@ -51,7 +51,7 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
 class Db_Op
 {
     //DB_HOST,DB_USER,DB_PASSWORD,DB_NAME these are contants present in the wordpress
-    public $mysqli;
+    private $mysqli;
   
     //This method will make the database connection
     public function __construct()
