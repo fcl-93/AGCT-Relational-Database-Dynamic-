@@ -1906,12 +1906,6 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            while($readId = $getEntId->fetch_assoc()) 
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
-                        
                         }
                         else
                         {
@@ -1925,11 +1919,6 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            $readId = $getEntId->fetch_assoc();
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
                         }
                         else 
                         {
@@ -1943,11 +1932,6 @@ class Search{
                             {
                                 $error = true;
                             }
-                            /*$getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                            $readId = $getEntId->fetch_assoc();
-                            if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
-                                $error = true;
-                            }*/
                         }
                         else
                         {
@@ -1958,8 +1942,7 @@ class Search{
                 }
             }   
             
-            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value) AND v.updated_on !='".$updated_on."'");
-            
+            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value) AND v.updated_on !='".$updated_on."'");
             while($readVals = $getUnadedVals->fetch_assoc())
             {
                 if($readVals['relation_id'] == "")
