@@ -1175,8 +1175,13 @@ class PropHist{
         $getEnt = $getEnt->fetch_assoc();
         $atributo = $valor = "";
         foreach ($getEnt as $attr => $val) {
-            $atributo .= $attr.", ";
-            $valor .= $val.", ";
+            if ($attr == "updated_on") {
+                $attr = "active_on";
+            }
+            if ($attr != "id" && !is_null($val)) {
+                $atributo .= "".$attr.", ";
+                $valor .= "'".$val."', "; 
+            }
         }
         $updateEntHist = "INSERT INTO hist_ent_type (".$atributo."inactive_on, ent_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
