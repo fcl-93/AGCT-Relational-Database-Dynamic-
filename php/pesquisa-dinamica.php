@@ -1921,6 +1921,25 @@ class Search{
                 }
             }   
             
+            $getUnadedVals = $this->bd->runQuery("SELECT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND v.id NOT IN (SELECT value_id FROM hist_value)");
+            
+            while($readVals = $getUnadedVals->fetch_assoc())
+            {
+                if($readVals['relation_id'] == "")
+                {
+                    if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                       $error = true;
+                    }
+                }
+                else
+                {
+                    if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                        $error = true;
+                    }
+                }
+            }
             
             if($error == false)
             {
