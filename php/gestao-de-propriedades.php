@@ -1300,7 +1300,7 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMTIT 1";
+                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
                     }
                     else
                     {
