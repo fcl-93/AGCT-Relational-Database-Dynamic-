@@ -811,9 +811,11 @@ class HistDeForms{
                                         }
 ?>
                                    </tr>
-                                }
+<?php
+                                   }
                                
                             }
+                        
                             
 ?>
                             </tbody>
