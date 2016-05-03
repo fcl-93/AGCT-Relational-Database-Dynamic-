@@ -170,6 +170,8 @@ class PropertyManage
             Verificar propriedades existentes no dia : 
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
             <input type="submit" value="Apresentar propriedades">
         </form>
         <table class="table">
@@ -1124,6 +1126,10 @@ class PropHist{
      * After that he presents a table with all the versions presented in the history
      */
     public function estadoHistorico () {
+        if ($_REQUEST["histAll"]) {
+            $this->apresentaHistTodas($_REQUEST["tipo"]);
+        }
+        else {
         //meto um datepicker        
 ?>
         <form method="GET">
@@ -1242,6 +1248,129 @@ class PropHist{
         </table>
 <?php
         
+    }
+    }
+    private function apresentaHistTodas ($tipo) {
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                <?php
+                    if ($tipo === "entity")
+                    {
+                ?>
+                    <th>Entidade</th>
+                <?php
+                    }
+                    else
+                    {
+                ?>
+                    <th>Relação</th>
+                <?php
+                    }
+                ?>
+                    <th>ID</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
+                    <th>Tamanho do campo no formulário</th>
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+                if ($tipo === "entity")
+                {
+                    $selecionaEntOrRel = "SELECT name, id FROM ent_type";
+                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
+                }
+                else
+                {
+                    $selecionaEntOrRel = "SELECT id FROM rel_type";
+                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
+                }
+                while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
+                {
+                    $idEntRel = $resEntRel["id"];
+                    if ($tipo === "entity")
+                    {
+                        $nome = $resEntRel["name"];
+                        $selecionaProp = "SELECT * FROM hist_property WHERE ent_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    }
+                    else
+                    {
+                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                        $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                        $selecionaProp = "SELECT * FROM hist_property WHERE rel_type_id =".$idEntRel." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    }
+                    $resultSeleciona = $this->db->runQuery($selecionaProp);
+                    $numLinhas = $resultSeleciona->num_rows;
+?>
+                <tr>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+<?php
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
+?>
+                        <td><?php echo $arraySelec["id"]; ?></td>
+                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td><?php echo $arraySelec["value_type"]; ?></td>
+                        <td><?php echo $arraySelec["form_field_name"]; ?></td>
+                        <td><?php echo $arraySelec["form_field_type"]; ?></td>
+                        <td>
+<?php
+                        if (empty($arraySelec["unit_type_id"]))
+                        {
+                            echo "-";
+                        }
+                        else
+                        {
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$arraySelec["unit_type_id"];
+                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                        }
+?>
+                        </td>
+                        <td><?php echo $arraySelec["form_field_order"];?></td>
+                        <td><?php echo $arraySelec["form_field_size"]; ?></td>
+                        <td>
+<?php
+                        if ($arraySelec["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
+ ?>
+                        </td>
+                        <td>
+<?php
+                        if ($hist["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
+?>
+                        </td>
+                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    </tr>
+<?php
+                }
+            }
+?>
+            </tbody>
+        </table>
+<?php
     }
 }
 
