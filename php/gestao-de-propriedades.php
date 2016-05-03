@@ -166,7 +166,12 @@ class PropertyManage
     private function apresentaTabela($tipo)
     {
     ?>
-    <html>
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
         <table class="table">
             <thead>
                 <tr>
@@ -298,7 +303,6 @@ class PropertyManage
                 ?>
             </tbody>
         </table>
-    </html>
     <?php
     }
     
@@ -1162,9 +1166,11 @@ class PropHist{
             else if (isset($_REQUEST["partirDia"])) {
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
-            else {
+            else if (isset($_REQUEST["dia"])){
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
-                echo $queryHistorico;
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_property WHERE inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $this->db->runQuery($queryHistorico);
