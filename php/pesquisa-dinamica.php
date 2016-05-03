@@ -60,6 +60,12 @@ class Search{
                 {
                     $this->updatEntVal();
                 }
+                else if($_REQUEST['estado']=='historico')
+                {
+                    $this->gereInsts->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
+                }
+                else if($_REQUEST['estado']=='voltar')
+                {}
                 
                 
             }
@@ -1635,7 +1641,7 @@ class Search{
                     }
                     
 ?>
-                        <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
+                        <a href="pesquisa-dinamica?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
 <?php
@@ -2104,7 +2110,54 @@ class entityHist{
     }
     
     
-     public function tableHist($id,$bd){}
+     public function tableHist($id,$bd){
+?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data de Ativação</th>
+                                <th>Data de Desativação</th>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Estado</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<?php
+                        $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                        if($presetOld->num_rows == 0)
+                        {
+?>
+                            <tr>
+                                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td><?php goBack(); ?></td>
+                            </tr>
+<?php
+                        }
+                        else
+                        {
+                            while($readHistory = $presetOld->fetch_assoc()){
+?>
+                                <tr>
+                                    <td><?php echo $readHistory['active_on']?></td>
+                                    <td><?php echo $readHistory['inactive_on']?></td>
+                                    <td><?php echo $readHistory['id']?></td>
+                                    <td><?php echo $readHistory['entity_name']?></td>
+                                    <td><?php echo $readHistory['state']?></td>
+                                    <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                        
+                                </tr>
+<?php                                
+                            }
+                        }
+                        
+                        
+?>
+                        </tbody>
+                    </table>
+<?php
+     }
 }
 
 ?>
