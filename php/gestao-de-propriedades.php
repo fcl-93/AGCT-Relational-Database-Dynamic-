@@ -1128,6 +1128,9 @@ class PropHist{
                 $this->db->getMysqli()->rollback();
                 return false;
             }
+            else {
+                return true;
+            }
         }
         else {
             echo "#4";
