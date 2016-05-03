@@ -770,11 +770,8 @@ class HistDeForms{
                             <thead>
                                 <tr>
                                     <td>Nome do Formulário</td>
-                                    <td>Entidade</td>
                                     <td>Propriedade</td>
-                                    <td>Tipo de unidade</td>
                                     <td>Ordem do campo no formulário</td>
-                                    <td>Tamanho do campo no formulário</td>
                                     <td>Obrigatório no forumulário customizado</td>
                                     <td>Estado</td>
                                     <td>Ação</td>
@@ -793,30 +790,27 @@ class HistDeForms{
                             else
                             {
                                 
-                            }
+                                while($readCN = $goToCN->fetch_assoc()){
+?>
+                                    <tr>
+                                        <td rowspan="<?php echo $readCFP->num_rows?>"><?php echo $readCN['name']; ?></td>
+<?php                                        
+                                    while($readCFP = $goToCFP->fetch_assoc())
+                                        $propName = $bd->runQuery("SELECT * FROM property WHERE id= ".$readCFP['property_id'])->fetch_assoc();
+?>                                        
+                                        
+                                        <td><?php echo $propName['name']?></td>
+                                        <td><?php echo $readCFP['field_order']?></td>
+                                        <td><?php echo $readCFP['mandatory_form']?></td>
+                                        <td><?php echo $readCN['state']?></td>
+<?php                                        
+                                    }
+                                }
+                            
 ?>
                             </tbody>
                         </table>
 <?php
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 }
 ?>
