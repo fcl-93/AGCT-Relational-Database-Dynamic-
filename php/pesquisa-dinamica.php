@@ -1947,7 +1947,7 @@ class Search{
                             break;
                         }
                     }
-                    //Backups the entity in the first interation
+                    //Backups the entity in the first iteration
                     if($added == false)
                     {
                         $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
