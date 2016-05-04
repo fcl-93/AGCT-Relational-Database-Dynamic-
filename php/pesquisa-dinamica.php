@@ -2249,6 +2249,7 @@ class entityHist{
                         }
                         else
                         {
+                            
                             while($readHistory = $presetOld->fetch_assoc()){
 ?>
                                 <tr>
@@ -2261,7 +2262,7 @@ class entityHist{
                                    
 ?>
                                      <td><?php echo $propName['name']?></td>
-                                     <td><?php echo $readHistory['value']?></td>
+                                     <td><?php print_r($readHistory)//echo $readHistory['value']?></td>
                                     <td><?php echo $readHistory['state']?></td>
                                     <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                         
