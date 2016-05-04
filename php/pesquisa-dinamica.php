@@ -2257,7 +2257,7 @@ class entityHist{
                                     <td><?php echo $readHistory['id']?></td>
                                     <td><?php echo $readHistory['entity_name']?></td>
 <?php
-                                    $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHistory['entity_id'])->fetch_assoc();
+                                    $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$id)->fetch_assoc();
                                    
 ?>
                                      <td><?php echo $propName['name']?></td>
