@@ -1243,7 +1243,7 @@ class PropHist{
                 $valor .= "'".$val."', "; 
             }
         }
-        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, ent_type_id) "
+        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idRel.")";
         $updateEntHist =$db->runQuery($updateEntHist);
         if (!$updateEntHist) {
