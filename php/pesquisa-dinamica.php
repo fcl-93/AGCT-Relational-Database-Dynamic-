@@ -2258,12 +2258,12 @@ class entityHist{
                                     <td><?php echo $readHistory['id']?></td>
                                     <td><?php echo $readHistory['entity_name']?></td>
 <?php                               echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
-                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER id BY ASC");
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
 ?>
-                                        <td><?php echo $propName['name']?></td>
+                                    <td rowspan="<?php echo $readHV->num_rows?>"><?php echo $propName['name']?></td>
                                         <td><?php echo $readHV['value']?></td>
 <?php
                                     }
