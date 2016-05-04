@@ -1947,6 +1947,7 @@ class Search{
                             break;
                         }
                     }
+                    //Backups the entity in the first interation
                     if($added == false)
                     {
                         $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
@@ -1961,7 +1962,7 @@ class Search{
                     
                 }
             }   
-            
+            //Backups the value that haven«t been changed
             $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on = '".$updated_on."'AND entity_id = ".$id.") AND entity_id = ".$id);
             while($readVals = $saveRemainValue->fetch_assoc())
             {
