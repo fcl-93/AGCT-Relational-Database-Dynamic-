@@ -100,11 +100,11 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico();
+             $this->gereHist->estadoHistorico($this->db);
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar();
+             $this->gereHist->estadoVoltar($this->db);
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -582,7 +582,7 @@ class PropertyManage
             }
             else
             {
-                if ($this->gereHist->createNewEnt($idEnt)) {
+                if ($this->gereHist->createNewEnt($idEnt, $db)) {
                     $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
@@ -731,7 +731,7 @@ class PropertyManage
     private function estadoAtivarDesativar()
     {
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
-        if ($this->gereHist->atualizaHistorico() == false) {
+        if ($this->gereHist->atualizaHistorico($this->db) == false) {
 ?>
             <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
 <?php 
@@ -753,7 +753,7 @@ class PropertyManage
             $queryUpdate= $this->db->runQuery($queryUpdate);
             if ($queryUpdate) {
                 $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
-                $this->db->getMysqli()->commit;
+                $this->db->getMysqli()->commit();
 ?>
                 <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
                 <br>
@@ -1038,9 +1038,9 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico() == false) {
+        if ($this->gereHist->atualizaHistorico($this->db) == false) {
             echo "beh";
-            var_dump($this->gereHist->atualizaHistorico());
+            var_dump($this->gereHist->atualizaHistorico($this->db));
             echo "#1";
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
@@ -1089,25 +1089,21 @@ class PropertyManage
 }
 
 class PropHist{
-    
-    private $db;            // Object from DB_Op that contains the access to the database
-    
     /**
      * Constructor method
      */
     public function __construct(){
-         $this->db = new Db_Op();
     }
     
     /**
      * This method is responsible for insert into the history a copy of the property
      * before being updated
      */
-    public function atualizaHistorico () {
-        $this->db->getMysqli()->autocommit(false);
-        $this->db->getMysqli()->begin_transaction();
+    public function atualizaHistorico ($db) {
+        $db->getMysqli()->autocommit(false);
+        $db->getMysqli()->begin_transaction();
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
@@ -1121,11 +1117,11 @@ class PropHist{
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
-        $updateHist =$this->db->runQuery($updateHist);
+        $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->createNewEnt($atributos["ent_type_id"]) == false) {
+            if ($this->createNewEnt($atributos["ent_type_id"], $db) == false) {
                 echo "#3";
-                $this->db->getMysqli()->rollback();
+                $db->getMysqli()->rollback();
                 return false;
             }
             else {
@@ -1134,7 +1130,7 @@ class PropHist{
         }
         else {
             echo "#4";
-            $this->db->getMysqli()->rollback();
+            $db->getMysqli()->rollback();
             return false;
         }
     }
@@ -1144,10 +1140,10 @@ class PropHist{
      * Basicly he does all the necessary queries to reverse a property to an old version
      * saved in the history
      */
-    public function estadoVoltar () {
-        $this->atualizaHistorico();
+    public function estadoVoltar ($db) {
+        $this->atualizaHistorico($db);
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE property SET ";
         foreach ($atributos as $atributo => $valor) {
@@ -1156,9 +1152,9 @@ class PropHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
-        $updateHist =$this->db->runQuery($updateHist);
+        $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            $this->db->getMysqli()->rollback();
+            $db->getMysqli()->rollback();
 ?>
             <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
@@ -1168,7 +1164,7 @@ class PropHist{
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
-            $this->db->getMysqli()->rollback();
+            $db->getMysqli()->rollback();
             goBack();
         }
     }
@@ -1176,9 +1172,9 @@ class PropHist{
     /**
      * Create a new version of ent_type because the properties of it changed
      */
-    public function createNewEnt ($idEnt) {
+    public function createNewEnt ($idEnt, $db) {
         $getEnt = "SELECT * FROM ent_type WHERE id = ".$idEnt;
-        $getEnt =$this->db->runQuery($getEnt);
+        $getEnt =$db->runQuery($getEnt);
         $getEnt = $getEnt->fetch_assoc();
         $atributo = $valor = "";
         foreach ($getEnt as $attr => $val) {
@@ -1192,18 +1188,18 @@ class PropHist{
         }
         $updateEntHist = "INSERT INTO hist_ent_type (".$atributo."inactive_on, ent_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
-        $updateEntHist =$this->db->runQuery($updateEntHist);
+        $updateEntHist =$db->runQuery($updateEntHist);
         if (!$updateEntHist) {
             echo "#5";
-            $this->db->getMysqli()->rollback();
+            $db->getMysqli()->rollback();
             return false;
         }
         else {
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
-            $updateEnt =$this->db->runQuery($updateEnt);
+            $updateEnt =$db->runQuery($updateEnt);
             if (!$updateEnt) {
                 echo "#6";
-                $this->db->getMysqli()->rollback();
+                $db->getMysqli()->rollback();
                 return false;
             }
             else {
@@ -1218,9 +1214,9 @@ class PropHist{
      * all the history of the selected property.
      * After that he presents a table with all the versions presented in the history
      */
-    public function estadoHistorico () {
+    public function estadoHistorico ($db) {
         if ($_REQUEST["histAll"]) {
-            $this->apresentaHistTodas($_REQUEST["tipo"]);
+            $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
         else {
         //meto um datepicker        
@@ -1272,7 +1268,7 @@ class PropHist{
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
         }
-        $queryHistorico = $this->db->runQuery($queryHistorico);
+        $queryHistorico = $db->runQuery($queryHistorico);
         if ($queryHistorico->num_rows == 0) {
 ?>
             <tr>
@@ -1300,7 +1296,7 @@ class PropHist{
                         else
                         {
                             $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                            echo $db->runQuery($queryUn)->fetch_assoc()["name"];
                         }
 ?>
                     </td>
@@ -1348,7 +1344,7 @@ class PropHist{
      * This method creates a table with a view of all the properties in the selected day
      * @param type $tipo (indicates if we are working with relations or entities)
      */
-    private function apresentaHistTodas ($tipo) {
+    private function apresentaHistTodas ($tipo, $db) {
 ?>
         <table class="table">
             <thead>
@@ -1385,12 +1381,12 @@ class PropHist{
                 if ($tipo === "entity")
                 {
                     $selecionaEntOrRel = "SELECT name, id FROM ent_type";
-                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
                 else
                 {
                     $selecionaEntOrRel = "SELECT id FROM rel_type";
-                    $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
@@ -1407,7 +1403,7 @@ class PropHist{
                         $nome = $this->criaNomeRel($queryNome1,$queryNome2);
                         $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                     }
-                    $resultSeleciona = $this->db->runQuery($selecionaProp);
+                    $resultSeleciona = $db->runQuery($selecionaProp);
                     $numLinhas = $resultSeleciona->num_rows;
 ?>
                 <tr>
@@ -1419,7 +1415,7 @@ class PropHist{
                         <td><?php echo $arraySelec["id"]; ?></td>
 <?php
                         $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$arraySelec["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
-                        $queryHistorico = $this->db->runQuery($queryHistorico);
+                        $queryHistorico = $db->runQuery($queryHistorico);
                         if ($queryHistorico->num_rows == 0) {
 ?>
                         <td><?php echo $arraySelec["name"]; ?></td>
@@ -1435,7 +1431,7 @@ class PropHist{
                         else
                         {
                             $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$arraySelec["unit_type_id"];
-                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                            echo $db->runQuery($queryUn)->fetch_assoc()["name"];
                         }
 ?>
                         </td>
@@ -1485,7 +1481,7 @@ class PropHist{
                                 else
                                 {
                                     $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                                    echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                                    echo $db->runQuery($queryUn)->fetch_assoc()["name"];
                                 }
 ?>
                                 </td>
