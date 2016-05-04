@@ -582,7 +582,14 @@ class PropertyManage
             }
             else
             {
-                if ($this->gereHist->createNewEnt($idEnt, $db)) {
+                if (!empty($_REQUEST["entidadePertence"]) && $this->gereHist->createNewEnt($_REQUEST["entidadePertence"], $db)) {
+                    $this->db->getMysqli()->commit();
+?>
+                    <p>Inseriu os dados de nova propriedade com sucesso.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+                }
+                else if (!empty($_REQUEST["relacaoPertence"]) && $this->gereHist->createNewRel($_REQUEST["relacaoPertence"], $db)) {
                     $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
@@ -694,7 +701,10 @@ class PropertyManage
         else if ($_REQUEST['tipoValor'] != $getProp["value_type"]) {
             return true;
         }
-        else if ($_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+        else if (!empty($getProp["entidadePertence"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+            return true;
+        }
+        else if (!empty($getProp["relacaoPertence"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"]) {
             return true;
         }
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
@@ -1106,6 +1116,7 @@ class PropHist{
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
+        $isEntity = false;
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
@@ -1114,13 +1125,20 @@ class PropHist{
                 $attr .= "`".$atributo."`,";
                 $val .= "'".$valor."',"; 
             }
+            if ($atributo == "ent_type_id" && is_null($valor)) {
+               $isEntity = true; 
+            }
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->createNewEnt($atributos["ent_type_id"], $db) == false) {
+            if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db) == false) {
                 echo "#3";
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else if ($isEntity && $this->createNewRel($atributos["rel_type_id"], $db) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
@@ -1196,6 +1214,45 @@ class PropHist{
         }
         else {
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
+            $updateEnt =$db->runQuery($updateEnt);
+            if (!$updateEnt) {
+                echo "#6";
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+    
+    /**
+     * Create a new version of ent_type because the properties of it changed
+     */
+    public function createNewRel ($idRel, $db) {
+        $getEnt = "SELECT * FROM rel_type WHERE id = ".$idRel;
+        $getEnt =$db->runQuery($getEnt);
+        $getEnt = $getEnt->fetch_assoc();
+        $atributo = $valor = "";
+        foreach ($getEnt as $attr => $val) {
+            if ($attr == "updated_on") {
+                $attr = "active_on";
+            }
+            if ($attr != "id" && !is_null($val)) {
+                $atributo .= "".$attr.", ";
+                $valor .= "'".$val."', "; 
+            }
+        }
+        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, ent_type_id) "
+                . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idRel.")";
+        $updateEntHist =$db->runQuery($updateEntHist);
+        if (!$updateEntHist) {
+            echo "#5";
+            $db->getMysqli()->rollback();
+            return false;
+        }
+        else {
+            $updateEnt = "UPDATE rel_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
             $updateEnt =$db->runQuery($updateEnt);
             if (!$updateEnt) {
                 echo "#6";
