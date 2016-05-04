@@ -1039,6 +1039,9 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if ($this->gereHist->atualizaHistorico() == false) {
+            echo "beh";
+            var_dump($this->gereHist->atualizaHistorico());
+            echo "#1";
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1067,6 +1070,7 @@ class PropertyManage
             $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
+                echo "#2";
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1119,15 +1123,18 @@ class PropHist{
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
         $updateHist =$this->db->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->createNewEnt($atributos["ent_type"]) == false) {
+            if ($this->createNewEnt($atributos["ent_type_id"]) == false) {
+                echo "#3";
                 $this->db->getMysqli()->rollback();
-                goBack();
                 return false;
+            }
+            else {
+                return true;
             }
         }
         else {
+            echo "#4";
             $this->db->getMysqli()->rollback();
-            goBack();
             return false;
         }
     }
@@ -1175,26 +1182,32 @@ class PropHist{
         $getEnt = $getEnt->fetch_assoc();
         $atributo = $valor = "";
         foreach ($getEnt as $attr => $val) {
-            $atributo .= $attr.", ";
-            $valor .= $val.", ";
+            if ($attr == "updated_on") {
+                $attr = "active_on";
+            }
+            if ($attr != "id" && !is_null($val)) {
+                $atributo .= "".$attr.", ";
+                $valor .= "'".$val."', "; 
+            }
         }
-        $updateEntHist = "INSERT INTO hist_ent_type VALUES (".$atributo."inactive_on, ent_type_id) "
+        $updateEntHist = "INSERT INTO hist_ent_type (".$atributo."inactive_on, ent_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
         $updateEntHist =$this->db->runQuery($updateEntHist);
         if (!$updateEntHist) {
-?>
-            <p>Não foi possível atualizar a propriedade.</p>
-<?php
+            echo "#5";
             $this->db->getMysqli()->rollback();
-            goBack();
+            return false;
         }
         else {
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
             $updateEnt =$this->db->runQuery($updateEnt);
             if (!$updateEnt) {
+                echo "#6";
                 $this->db->getMysqli()->rollback();
-                goBack();
                 return false;
+            }
+            else {
+                return true;
             }
         }
     }
