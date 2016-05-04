@@ -2257,7 +2257,7 @@ class entityHist{
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
                                     <td><?php echo $readHistory['entity_name']?></td>
-<?php
+<?php                               echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
                                     $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'")->fetch_assoc();
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
