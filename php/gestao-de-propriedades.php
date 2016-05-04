@@ -753,7 +753,7 @@ class PropertyManage
             $queryUpdate= $this->db->runQuery($queryUpdate);
             if ($queryUpdate) {
                 $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
-                $this->db->getMysqli()->commit;
+                $this->db->getMysqli()->commit();
 ?>
                 <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
                 <br>
