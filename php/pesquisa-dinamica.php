@@ -1896,7 +1896,6 @@ class Search{
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             $added =false;
-            $guardaIds = array();
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
                 if(isset($_REQUEST['check'.$x]))
@@ -1909,7 +1908,6 @@ class Search{
                                 $error = true;
                                 break;
                             }
-                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         
                         }
                         else
@@ -1926,7 +1924,6 @@ class Search{
                                 $error = true;
                                 break;
                             }
-                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         }
                         else 
                         {
@@ -1942,7 +1939,6 @@ class Search{
                                 $error = true;
                                 break;
                             }
-                            array_push($guardaIds, $this->bd->userInputVal($_REQUEST['check'.$x]));
                         }
                         else
                         {
@@ -1964,13 +1960,29 @@ class Search{
                 }
             }   
             
-            /*while(count($guardaIds) != 0)
+            $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on != ".$updated_on.") AND entity_id = ".$id);
+            while($readVals = $saveRemainValue->fetch_assoc())
             {
-                $this->bd->runQuery("SELECT * FROM value WHERE");
-            }*/
+                 if($readVals['relation_id'] == "")
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                       $error = true;
+                       break;
+                    }
+                }
+                else
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                        $error = true;
+                        break;
+                    }
+                }
+            }
             //$getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE ");
             
-            while($readVals = $getUnadedVals->fetch_assoc())
+            /*while($readVals = $getUnadedVals->fetch_assoc())
             {
                 if($readVals['relation_id'] == "")
                 {
@@ -1988,7 +2000,7 @@ class Search{
                         break;
                     }
                 }
-            }
+            }*/
             
             if($error == false)
             {
