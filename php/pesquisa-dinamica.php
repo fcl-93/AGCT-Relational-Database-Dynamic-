@@ -2256,13 +2256,19 @@ class entityHist{
                                     <td><?php echo $readHistory['active_on']?></td>
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
-                                    <td><?php //echo $readHistory['entity_name']?></td>
+                                    <td><?php echo $readHistory['entity_name']?></td>
 <?php
-                                    $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$id)->fetch_assoc();
+                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'")->fetch_assoc();
+                                    while($readHistValues = $readHistValues->fetch_assoc())
+                                    {
+                                        $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$id)->fetch_assoc();
+?>
+                                        <td><?php echo $propName['name']?></td>
+                                        <td><?php echo $readHistory['value']?></td>
+<?php
+                                    }
                                    
 ?>
-                                     <td><?php echo $propName['name']?></td>
-                                     <td><?php print_r($readHistory)//echo $readHistory['value']?></td>
                                     <td><?php echo $readHistory['state']?></td>
                                     <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                         
