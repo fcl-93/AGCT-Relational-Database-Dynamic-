@@ -694,7 +694,10 @@ class PropertyManage
         else if ($_REQUEST['tipoValor'] != $getProp["value_type"]) {
             return true;
         }
-        else if ($_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+        else if (!empty($getProp["entidadePertence"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+            return true;
+        }
+        else if (!empty($getProp["relacaoPertence"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"]) {
             return true;
         }
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
