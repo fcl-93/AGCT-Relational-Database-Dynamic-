@@ -1896,6 +1896,7 @@ class Search{
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             $added =false;
+            $id = 0;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
                 if(isset($_REQUEST['check'.$x]))
@@ -1906,12 +1907,14 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
                         
                         }
                         else
                         {
                             $error = true;
+                            break;
                         }
                     }
                     else if(isset($_REQUEST['radio'.$x]))
@@ -1920,11 +1923,13 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
                         }
                         else 
                         {
                             $error = true;
+                            break;
                         }
                     }
                     else if(isset($_REQUEST['textbox'.$x]))
@@ -1933,35 +1938,40 @@ class Search{
                             if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
+                                break;
                             }
                         }
                         else
                         {
                             $error = true;
+                            break;
                         }
                     }
+                    //Backups the entity in the first iteration
                     if($added == false)
                     {
                         $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                         $readId = $getEntId->fetch_assoc();
+                        $id = $readId['entity_id'];
                         if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                             $error = true;
+                            break;
                         }
                         $added = true;   
                     }
                     
                 }
             }   
-            
-            $getUnadedVals = $this->bd->runQuery("SELECT DISTINCT v.* FROM hist_value as hv, value as v WHERE v.entity_id=".$this->bd->userInputVal($_REQUEST['id'])." AND  hv.inactive_on !='".$updated_on."'");
-            
-            while($readVals = $getUnadedVals->fetch_assoc())
+            //Backups the value that haven«t been changed
+            $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on = '".$updated_on."'AND entity_id = ".$id.") AND entity_id = ".$id);
+            while($readVals = $saveRemainValue->fetch_assoc())
             {
-                if($readVals['relation_id'] == "")
+                 if($readVals['relation_id'] == "")
                 {
                     if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                        $error = true;
+                       break;
                     }
                 }
                 else
@@ -1969,9 +1979,31 @@ class Search{
                     if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
                     {
                         $error = true;
+                        break;
                     }
                 }
             }
+            //$getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE ");
+            
+            /*while($readVals = $getUnadedVals->fetch_assoc())
+            {
+                if($readVals['relation_id'] == "")
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',NULL,".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                       $error = true;
+                       break;
+                    }
+                }
+                else
+                {
+                    if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readVals['entity_id'].",".$readVals['property_id'].",'".$readVals['value']."','".$readVals['producer']."',".$readVals['relation_id'].",".$readVals['id'].",'".$readVals['updated_on']."','".$updated_on."','".$readVals['state']."')"))
+                    {
+                        $error = true;
+                        break;
+                    }
+                }
+            }*/
             
             if($error == false)
             {
@@ -2217,6 +2249,7 @@ class entityHist{
                         }
                         else
                         {
+                            
                             while($readHistory = $presetOld->fetch_assoc()){
 ?>
                                 <tr>
@@ -2224,10 +2257,18 @@ class entityHist{
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
                                     <td><?php echo $readHistory['entity_name']?></td>
-                                    
-                                    
-                                    
-                                    
+<?php
+                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'")->fetch_assoc();
+                                    while($readHV = $readHistValues->fetch_assoc())
+                                    {
+                                        $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
+?>
+                                        <td><?php echo $propName['name']?></td>
+                                        <td><?php echo $readHV['value']?></td>
+<?php
+                                    }
+                                   
+?>
                                     <td><?php echo $readHistory['state']?></td>
                                     <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                         
