@@ -2263,7 +2263,7 @@ class entityHist{
                                     {
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
 ?>
-                                        <td><?php echo $propName['name']?></td>
+                                    <td rowspan="<?php echo $readHV->num_rows?>"><?php echo $propName['name']?></td>
                                         <td><?php echo $readHV['value']?></td>
 <?php
                                     }
