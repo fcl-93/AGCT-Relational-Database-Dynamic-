@@ -1896,6 +1896,7 @@ class Search{
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             $added =false;
+            $id = 0;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
             { 
                 if(isset($_REQUEST['check'.$x]))
@@ -1950,6 +1951,7 @@ class Search{
                     {
                         $getEntId = $this->bd->runQuery("SELECT entity_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                         $readId = $getEntId->fetch_assoc();
+                        $id = $readId['entity_id'];
                         if(!$this->gereInsts->addEntToHist($readId['entity_id'],$this->bd,$updated_on)){
                             $error = true;
                             break;
