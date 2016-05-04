@@ -2255,7 +2255,7 @@ class entityHist{
                                     <td><?php echo $readHistory['active_on']?></td>
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
-                                    <td><?php echo $readHistory['entity_name']?></td>
+                                    <td><?php //echo $readHistory['entity_name']?></td>
 <?php
                                     $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$id)->fetch_assoc();
                                    
