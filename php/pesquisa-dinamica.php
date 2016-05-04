@@ -1960,7 +1960,7 @@ class Search{
                 }
             }   
             
-            $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on == ".$updated_on."AND entity_id = ".$id.") AND entity_id = ".$id.");
+            $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on == ".$updated_on."AND entity_id = ".$id.") AND entity_id = ".$id);
             while($readVals = $saveRemainValue->fetch_assoc())
             {
                  if($readVals['relation_id'] == "")
