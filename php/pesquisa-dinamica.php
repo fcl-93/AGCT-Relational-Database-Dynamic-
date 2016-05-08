@@ -2370,6 +2370,7 @@ class entityHist{
         $updated_on = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
         {
+                echo #NO BACKUP DA ENTITY;
                 $errorFound = true;
         }
         else
@@ -2394,7 +2395,7 @@ class entityHist{
         {
             while($moveToMain = $getOldAttr->fetch_assoc())
             {
-                if("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id'])
+                if($bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
                     $error = true;
                 }
@@ -2409,7 +2410,7 @@ class entityHist{
                 <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
                 <p>Clique em <?php goBack() ?> para voltar a página anterior</p>           
 <?php
-            $this->bd->getMysqli()->rollback();
+            $bd->getMysqli()->rollback();
         }
         else
         {
@@ -2417,7 +2418,7 @@ class entityHist{
                 <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
                 <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
 <?php
-            $this->bd->getMysqli()->commit();
+            $bd->getMysqli()->commit();
         }
         
         
