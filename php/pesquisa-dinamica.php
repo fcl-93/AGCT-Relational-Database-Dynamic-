@@ -1919,6 +1919,9 @@ class Search{
         */
         private function addAttrEnt()
         { 
+            
+        $this->bd->getMysqli()->autocommit(false);
+	$this->bd->getMysqli()->begin_transaction();
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
