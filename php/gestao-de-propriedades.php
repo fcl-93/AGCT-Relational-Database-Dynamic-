@@ -1094,6 +1094,7 @@ class PropHist{
     /**
      * This method is responsible for insert into the history a copy of the property
      * before being updated
+     * @param type $db (object form the class Db_Op)
      */
     public function atualizaHistorico ($db) {
         $db->getMysqli()->autocommit(false);
@@ -1144,6 +1145,7 @@ class PropHist{
      * This method controls the excution flow when the state is Voltar
      * Basicly he does all the necessary queries to reverse a property to an old version
      * saved in the history
+     * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
         $this->atualizaHistorico($db);
@@ -1177,6 +1179,8 @@ class PropHist{
     
     /**
      * Create a new version of ent_type because the properties of it changed
+     * @param type $idEnt (id of the ent_type we want to create a new version)
+     * @param type $db (object form the class Db_Op)
      */
     public function createNewEnt ($idEnt, $db) {
         $getEnt = "SELECT * FROM ent_type WHERE id = ".$idEnt;
@@ -1215,7 +1219,9 @@ class PropHist{
     }
     
     /**
-     * Create a new version of ent_type because the properties of it changed
+     * Create a new version of rel_type because the properties of it changed
+     * @param type $idRel (id of the rel_type we want to create a new version)
+     * @param type $db (object form the class Db_Op)
      */
     public function createNewRel ($idRel, $db) {
         $getEnt = "SELECT * FROM rel_type WHERE id = ".$idRel;
@@ -1260,6 +1266,7 @@ class PropHist{
      * He starts by presenting a datepicker with options to do a kind of filter of 
      * all the history of the selected property.
      * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
      */
     public function estadoHistorico ($db) {
         if (isset($_REQUEST["histAll"])) {
@@ -1270,9 +1277,9 @@ class PropHist{
 ?>
         <form method="GET">
             Verificar histórico:<br>
-            <input type="radio" name="ateDia">até ao dia<br>
-            <input type="radio" name="partirDia">a partir do dia<br>
-            <input type="radio" name="noDia">no dia<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
@@ -1302,13 +1309,13 @@ class PropHist{
             $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
         }
         else {
-            if (isset($_REQUEST["ateDia"])) {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
-            else if (isset($_REQUEST["partirDia"])) {
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
-            else if (isset($_REQUEST["dia"])){
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
                 $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
@@ -1390,6 +1397,7 @@ class PropHist{
     /**
      * This method creates a table with a view of all the properties in the selected day
      * @param type $tipo (indicates if we are working with relations or entities)
+     * @param type $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($tipo, $db) {
 ?>
