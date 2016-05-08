@@ -1718,7 +1718,16 @@ class Search{
                 }
 ?>
                 <td><?php echo $prop["name"];?></td>
-                <td><?php echo $valor;?></td>
+                <td><?php 
+                if($valor == "")
+                {
+                   echo "Sem Valor Atribuido";
+                }
+                else
+                {
+                    echo $value;
+                }
+                ;?></td>
                 <td>
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
