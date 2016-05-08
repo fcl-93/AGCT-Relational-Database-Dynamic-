@@ -2281,12 +2281,14 @@ class entityHist{
                                         <td><?php echo $readHV['value']?></td>
 <?php
                                    
-                                   
+                                   if($oneTimePrint2 == false){
 ?>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['state']?></td>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                 </tr>
                                      <?php
+                                     $oneTimePrint2 = true;
+                                   }
                                      $oneTimePrint = false;
                                     }
                                      ?>   
