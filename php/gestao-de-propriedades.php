@@ -799,7 +799,7 @@ class PropertyManage
 ?>
                 <p>Não pode desativar esta propriedade, uma vez que já existem entidades com valores para essas propriedades.</p>
                 <p>Necessita de desativar estas propriedades nessas entidades antes de desativar esta propriedade.</p>
-                <p>Para fazê-lo deve dirigir-se à página <a href = "/pesquisa-dinâmica?estado=execucao&ent=<?php echo $prop["ent_type_id"]?>">Pesquisa dinâmica</a></p>
+                <p>Para fazê-lo deve dirigir-se à página <a href = "/pesquisa-dinâmica/?estado=execucao&ent=<?php echo $prop["ent_type_id"]?>">Pesquisa dinâmica</a></p>
 <?php
             }
             else {
