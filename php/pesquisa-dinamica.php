@@ -2276,13 +2276,13 @@ class entityHist{
                                     {
                                         echo 
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
-                                        if($oneTimePrint2 == false)
-                                        {
+                                        /*if($oneTimePrint2 == false)
+                                        {*/
 ?>
-                                            <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo /*"SELECT name FROM property WHERE id=".$readHV['entity_id']*/$propName['name']?></td>
+                                            <td><?php echo $propName['name']?></td>
 <?php
                                             $oneTimePrint2 = true;
-                                        }
+                                        //}
 ?>
                                         <td><?php echo $readHV['value']?></td>
 <?php
