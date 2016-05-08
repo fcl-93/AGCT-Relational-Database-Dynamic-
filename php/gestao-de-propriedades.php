@@ -687,16 +687,16 @@ class PropertyManage
         else if ($_REQUEST['tipoValor'] != $getProp["value_type"]) {
             return true;
         }
-        else if (!empty($getProp["entidadePertence"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) {
             return true;
         }
-        else if (!empty($getProp["relacaoPertence"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"]) {
+        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) {
             return true;
         }
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
             return true;
         }
-       else  if (!empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
+       else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) {
             return true;
         }
         else if ($_REQUEST['ordem'] != $getProp["form_field_order"]) {
@@ -708,7 +708,7 @@ class PropertyManage
         else if ($_REQUEST['obrigatorio'] != $getProp["mandatory"]) {
             return true;
         }
-        else if (!empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
+        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) {
             return true;
         }
         else {
