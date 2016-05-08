@@ -164,17 +164,31 @@ class RelationManage
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "desativar"){
             if (!$this->verificaInst ($_REQUEST['rel_id'])) {
-                $this->gereHist->atualizaHistorico($this->db);
-                $queryUpdate .= "'inactive'";
-                $estado = "desativada";
-                $avanca = true;
+                if ($this->gereHist->atualizaHistorico($this->db) == false) {
+?>
+                    <p>Não foi possível desativar a propriedade pretendida.</p>
+<?php 
+                    goBack();
+                }
+                else {
+                    $queryUpdate .= "'inactive'";
+                    $estado = "desativada";
+                    $avanca = true;
+                }
             }
         }
         else {
-            $this->gereHist->atualizaHistorico($this->db);
-            $queryUpdate .= "'active'";
-            $estado = "ativada";
-            $avanca = true;
+            if ($this->gereHist->atualizaHistorico($this->db) == false) {
+?>
+                <p>Não foi possível ativar a propriedade pretendida.</p>
+<?php 
+                goBack();
+            }
+            else {
+                $queryUpdate .= "'active'";
+                $estado = "ativada";
+                $avanca = true;
+            }
         }
         if ($avanca) {
             $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['rel_id'];
