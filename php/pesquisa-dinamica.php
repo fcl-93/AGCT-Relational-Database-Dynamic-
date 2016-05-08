@@ -2256,6 +2256,7 @@ class entityHist{
                         {
                             $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
+                                echo "SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC";
                                 $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC");
 ?>
                                 <tr>
@@ -2290,7 +2291,7 @@ class entityHist{
                                     $oneTimePrint2 = false;
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
-                                        //echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
+                                        echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['property_id'])->fetch_assoc();
 ?>
                                             <td><?php echo $propName['name']?></td>
