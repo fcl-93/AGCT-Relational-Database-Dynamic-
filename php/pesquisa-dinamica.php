@@ -2352,13 +2352,13 @@ class entityHist{
         $getHisEnt = $bd->runQuery("SELECT * FROM hist_entity WHERE id =".$id);
         $readHistEnt = $getHisEnt->fetch_assoc();
         //Get values from the hist_value table 
-        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on=".$readHistEnt['updated_on']); 
+        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on='".$readHistEnt['inactive_on']."'"); 
          
         //get the actual entity
         $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$readHistEnt['entity_id']);
         $readActENt = $getActEnt->fetch_assoc();
         //get the actual entity values 
-        $getActVal = $bd->runQuery("SELECT * FROM values WHERE entity_id=".$readActENt['id']);
+        $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']);
        
         
         //backup the current values
@@ -2368,8 +2368,9 @@ class entityHist{
         $errorFound = false;
         
         $updated_on = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$getActEnt['entity_id'].",".$getActEnt['entity_name'].",".$getActEnt['state'].",'".$getActEnt['updated_on']."','".$updated_on."')"))
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
         {
+                echo "#NO BACKUP DA ENTITY";
                 $errorFound = true;
         }
         else
@@ -2377,8 +2378,9 @@ class entityHist{
             while( $readActVal = $getActVal->fetch_assoc())
             {
             
-                if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getActVal['entity_id'].",".$getActVal['property_id'].",'".$getActVal['value']."','".$getActVal['producer']."',NULL,".$readActVal['id'].",'".$getActVal['updated_on']."','".$updated_on."','".$getActVal['state']."')")){
-                    $error = true;
+                if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readActVal['entity_id'].",".$readActVal['property_id'].",'".$readActVal['value']."','".$readActVal['producer']."',NULL,".$readActVal['id'].",'".$readActVal['updated_on']."','".$updated_on."','".$readActVal['state']."')")){
+                     echo "#NO BACKUP DOS VALUES";
+                    $errorFound = true;
                     break;
                 }
             }
@@ -2388,29 +2390,31 @@ class entityHist{
         //changes the current valuees and entities to the ones that come from the history
         if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='".$readHistEnt['state']."',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
         {
-            $error = true;
+             echo "#NO UPDATE DA ENTITY";
+            $errorFound = true;
         }
         else 
         {
             while($moveToMain = $getOldAttr->fetch_assoc())
             {
-                if("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id'])
+                if(!$bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
-                    $error = true;
+                    echo "#NO UPDATE DOS VALUES";
+                    $errorFound = true;
+                    break;
                 }
             }
         }
         
         
         //Updates if there is no error
-        if($error)
+        if($errorFound)
         {
 ?>                    
                 <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
-                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
-                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
+                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>           
 <?php
-            $this->bd->getMysqli()->rollback();
+            $bd->getMysqli()->rollback();
         }
         else
         {
@@ -2418,7 +2422,7 @@ class entityHist{
                 <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
                 <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
 <?php
-            $this->bd->getMysqli()->commit();
+            $bd->getMysqli()->commit();
         }
         
         
