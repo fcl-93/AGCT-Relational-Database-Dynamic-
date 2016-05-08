@@ -2380,7 +2380,7 @@ class entityHist{
             
                 if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readActVal['entity_id'].",".$readActVal['property_id'].",'".$readActVal['value']."','".$readActVal['producer']."',NULL,".$readActVal['id'].",'".$readActVal['updated_on']."','".$updated_on."','".$readActVal['state']."')")){
                      echo "#NO BACKUP DOS VALUES";
-                    $error = true;
+                    $errorFound = true;
                     break;
                 }
             }
@@ -2391,7 +2391,7 @@ class entityHist{
         if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='".$readHistEnt['state']."',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
         {
              echo "#NO UPDATE DA ENTITY";
-            $error = true;
+            $errorFound = true;
         }
         else 
         {
@@ -2400,7 +2400,7 @@ class entityHist{
                 if(!$bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
                     echo "#NO UPDATE DOS VALUES";
-                    $error = true;
+                    $errorFound = true;
                     break;
                 }
             }
@@ -2408,7 +2408,7 @@ class entityHist{
         
         
         //Updates if there is no error
-        if($error)
+        if($errorFound)
         {
 ?>                    
                 <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
