@@ -75,11 +75,11 @@ class RelationManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico($this->bd);
+             $this->gereHist->estadoHistorico($this->db);
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar($this->bd);
+             $this->gereHist->estadoVoltar($this->db);
         }
         elseif($_REQUEST['estado'] =='update')
         {
