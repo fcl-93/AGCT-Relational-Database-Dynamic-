@@ -2405,11 +2405,19 @@ class entityHist{
         //Updates if there is no error
         if($error)
         {
-             
+?>                    
+                <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
+                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
+<?php
             $this->bd->getMysqli()->rollback();
         }
         else
         {
+?>
+                <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
+<?php
             $this->bd->getMysqli()->commit();
         }
         
