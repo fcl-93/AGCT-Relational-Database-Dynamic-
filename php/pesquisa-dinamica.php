@@ -1615,12 +1615,12 @@ class Search{
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
 ?>
-                            <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_name;?></a>
+                            <?php echo $entity_name;?>
 <?php
                         }
                         else {
 ?>
-                            <a href="?estado=apresentacao&id=<?php echo $entity_id;?>"><?php echo $entity_id;?></a>
+                           <?php echo $entity_id;?>
 <?php
                         }
                     }
@@ -1643,6 +1643,7 @@ class Search{
                     }
                     
 ?>
+                         <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Editar Propriedades]</a>
                         <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
