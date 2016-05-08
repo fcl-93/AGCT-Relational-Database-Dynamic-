@@ -2299,9 +2299,20 @@ class entityHist{
 <?php
                                    
                                    if($oneTimePrint2 == false){
+                                       if($readHistory['state'] == 'inactive')
+                                       {
+?> 
+                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Inativo"?></td>
+<?php
+                                       }
+                                       else 
+                                       {
 ?>
-                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['state']?></td>
-                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Ativo"?></td>
+<?php
+                                       }
+?>
+                                          <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                 </tr>
                                      <?php
                                      $oneTimePrint2 = true;
