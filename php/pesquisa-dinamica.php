@@ -1678,7 +1678,11 @@ class Search{
         }
         else {
 ?>
-            <h3>Entidade <?php echo $idEnt;?> - Propriedades</h3>
+            <h3>Entidade <?php echo $idEnt;?> - Inserção de Propriedades</h3>
+<?php
+            $this->printEntAttrAdder();
+?>
+            <h3>Entidade <?php echo $idEnt;?> - Alteração de Propriedades</h3>
 <?php            
         }
         $ent_type = $ent["ent_type_id"];
@@ -1809,6 +1813,13 @@ class Search{
     
     }
     
+    /**
+     * Prints a table with all the attributes that you cana dd to a entity.
+     */
+    private function printEntAttrAdder()
+    {
+        
+    }
     /**
      * This method will handle the activation and the the desativation of the
      * entities.
