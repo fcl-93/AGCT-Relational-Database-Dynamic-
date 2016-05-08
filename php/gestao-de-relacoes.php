@@ -163,7 +163,7 @@ class RelationManage
         $avanca = false;
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "desativar"){
-            if (!verificaInst ($idRel)) {
+            if (!$this->verificaInst ($idRel)) {
                 $this->gereHist->atualizaHistorico($this->db);
                 $queryUpdate .= "'inactive'";
                 $estado = "desativada";
