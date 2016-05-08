@@ -1125,7 +1125,7 @@ class PropHist{
                 $attr .= "`".$atributo."`,";
                 $val .= "'".$valor."',"; 
             }
-            if ($atributo == "ent_type_id" && is_null($valor)) {
+            if ($atributo == "ent_type_id" && !is_null($valor)) {
                $isEntity = true; 
             }
         }
@@ -1138,7 +1138,7 @@ class PropHist{
                 $db->getMysqli()->rollback();
                 return false;
             }
-            else if ($isEntity && $this->createNewRel($atributos["rel_type_id"], $db) == false) {
+            else if (!$isEntity && $this->createNewRel($atributos["rel_type_id"], $db) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
@@ -1243,7 +1243,7 @@ class PropHist{
                 $valor .= "'".$val."', "; 
             }
         }
-        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, ent_type_id) "
+        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idRel.")";
         $updateEntHist =$db->runQuery($updateEntHist);
         if (!$updateEntHist) {
