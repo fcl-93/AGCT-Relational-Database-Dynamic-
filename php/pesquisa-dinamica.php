@@ -2408,7 +2408,7 @@ class entityHist{
         
         //check if there is more properties on the history table or more properties on the normal table
         echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."'";
-        $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."');
+        $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."'");
 
         /*if()
         {
