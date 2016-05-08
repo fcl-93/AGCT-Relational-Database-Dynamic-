@@ -1337,11 +1337,11 @@ class RelHist{
                 $numProp = $props->num_rows;
                      
 ?>
-                <tr rowspan="<?php echo $numProp;?>">
-                    <td><?php echo $hist["active_on"];?></td>
-                    <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
-                    <td>
+                <tr>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["active_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["inactive_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td rowspan="<?php echo $numProp;?>">
 <?php
                     $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
                     if($_readEnt1['entity_name'] != '')
@@ -1354,7 +1354,7 @@ class RelHist{
                     }
 ?>
                     </td>
-                    <td>
+                    <td rowspan="<?php echo $numProp;?>">
 <?php
                     $_readEnt2 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity2_id'])->fetch_assoc();
                     if($_readEnt2['entity_name'] != '')
@@ -1374,7 +1374,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
-                            $value = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["id"]);
+                            $value = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
                             if (isset($value->fetch_assoc()["value"])) {
                                 echo $value->fetch_assoc()["value"];
                             }
