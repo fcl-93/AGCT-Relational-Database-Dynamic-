@@ -2279,7 +2279,7 @@ class entityHist{
                                         if($oneTimePrint2 == false)
                                         {
 ?>
-                                            <td rowspan="<?php echo $readHV->num_rows?>"><?php echo "SELECT name FROM property WHERE id=".$readHV['entity_id']//$propName['name']?></td>
+                                            <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo /*"SELECT name FROM property WHERE id=".$readHV['entity_id']*/$propName['name']?></td>
 <?php
                                             $oneTimePrint2 = true;
                                         }
