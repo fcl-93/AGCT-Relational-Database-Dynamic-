@@ -1375,7 +1375,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
-                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = ".$hist["inactive_on"]." AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
                             $queryValue = $queryValue->fetch_assoc();
                             if (isset($value["value"])) {
                                 echo $value["value"];
@@ -1409,7 +1409,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
-                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = ".$hist["inactive_on"]." AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
                             $queryValue = $queryValue->fetch_assoc();
                             if (isset($value["value"])) {
                                 echo $value["value"];
