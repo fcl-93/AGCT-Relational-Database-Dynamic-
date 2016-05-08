@@ -231,7 +231,6 @@ class RelationManage
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="histAll" value="true">
-            <input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
             <input type="submit" value="Apresentar propriedades">
         </form>
             <table id="sortedTable" class="table">
@@ -541,51 +540,128 @@ class RelHist{
             </thead>
             <tbody>
 <?php
-        if (empty($_REQUEST["data"])) {
-            $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
-        }
-        else {
-            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
-            }
-            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
-            }
-            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            if (empty($_REQUEST["data"])) {
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                }
+                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                }
+                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                }
+                else {
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                }
             }
-        }
-        $queryHistorico = $db->runQuery($queryHistorico);
-        if ($queryHistorico->num_rows == 0) {
-?>
-            <tr>
-                <td colspan="11">Não existe registo referente ao tipo de relação selecionado no histórico</td>
-                <td><?php goBack(); ?></td>
-            </tr>
-<?php
-        }
-        else {
-            while ($hist = $queryHistorico->fetch_assoc()) {
+            $queryHistorico = $db->runQuery($queryHistorico);
+            if ($queryHistorico->num_rows == 0) {
 ?>
                 <tr>
-                    <td><?php echo $hist["active_on"];?></td>
-                    <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
-                    <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
-                    <td><?php echo $hist["state"];?></td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    <td colspan="11">Não existe registo referente ao tipo de relação selecionado no histórico</td>
+                    <td><?php goBack(); ?></td>
                 </tr>
 <?php
             }
-        }
+            else {
+                while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
+                    <tr>
+                        <td><?php echo $hist["active_on"];?></td>
+                        <td><?php echo $hist["inactive_on"];?></td>
+                        <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
+                        <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
+                        <td><?php echo $hist["state"];?></td>
+                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    </tr>
+<?php
+                }
+            }
+?>
+                <tbody>
+            </table>
+<?php
+        }
+    }
+    
+    /**
+     * This method creates a table with a view of all the rel_types in the selected day
+     * @param type $db (object form the class Db_Op)
+     */
+    private function apresentaHistTodas ($db) {
+?>
+        <table id="sortedTable" class="table">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Entidade 1</span></th>
+                    <th><span>Entidade 2</span></th>
+                    <th><span>Estado</span></th>
+                    <th><span>Ação</span></th>
+                </tr>
+            </thead>
             <tbody>
+<?php
+                $selRel = "SELECT * FROM rel_type";
+                $selRel = $db->runQuery($selRel);
+                while ($rel = $selRel->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $rel["id"]; ?></td>
+<?php
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$rel["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                    $queryHistorico = $db->runQuery($queryHistorico);
+                    if ($queryHistorico->num_rows == 0) {
+?>
+                        <td><?php echo $db->getEntityName($rel["ent_type1_id"]); ?></td>
+                        <td><?php echo $db->getEntityName($rel["ent_type2_id"]); ?></td>
+                        <td>
+<?php
+                            if ($rel["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                        </td>
+                        <td>-</td>
+<?php
+                    }
+                    else {
+                        $relHist = $queryHistorico->fetch_assoc();
+?>
+                        <td><?php echo $db->getEntityName($relHist["ent_type1_id"]); ?></td>
+                        <td><?php echo $db->getEntityName($relHist["ent_type2_id"]); ?></td>
+                        <td>
+<?php
+                            if ($relHist["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                        </td>
+                        <td><a href ="?estado=voltar&hist=<?php echo $relHist["id"];?>&rel_id_id=<?php echo $relHist["rel_type_id"];?>">Voltar para esta versão</a></td>
+<?php
+                    }
+                    
+?>
+                </tr>
+<?php
+                }
+?>
+            </tbody>
         </table>
 <?php
-    }
     }
 }
 //instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
