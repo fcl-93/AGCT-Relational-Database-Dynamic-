@@ -1386,6 +1386,9 @@ class RelHist{
                         </tr>
 <?php
                     }
+?>
+                    <td>
+<?php
                     if ($hist["state"] === "active")
                     {
                         echo 'Ativo';
