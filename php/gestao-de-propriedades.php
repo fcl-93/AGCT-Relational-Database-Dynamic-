@@ -594,7 +594,7 @@ class PropertyManage
 	}
 
     }
-    
+
     /**
      * This method does the PHP-side validation of the form
      * @return boolean (true if all the data is in correct format)
@@ -668,7 +668,7 @@ class PropertyManage
             goBack();
             return false;
         }
-        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges() && !$this->validaEdicoes()) {
           return false;
         }
 	return true;
@@ -716,6 +716,39 @@ class PropertyManage
             <p>Não efetuou qualquer alteração aos valores já existentes.</p><br>
 <?php
             goBack();
+            return false;
+        }
+    }
+    
+    /**
+     * This metho checks if there are already any entities or relations with values for the property the user want to update.
+     * We do this verification only to some fields wich are the ones we think could generate major inconsistencies
+     * @return boolean (true if there are already some entities/relations with values for the property the user want to update)
+     */
+    private function validaEdicoes () {
+        $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
+        $getProp = $this->db->runQuery($getProp)->fetch_assoc();
+        $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
+        $numValues = $this->db->runQuery($getValues)->num_rows;
+        if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) && $numValues > 0) {
+            return true;
+        }
+        else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"] && $numValues > 0) {
+            return true;
+        }
+        else  if (((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) && $numValues > 0) {
+            return true;
+        }
+        else {
             return false;
         }
     }
