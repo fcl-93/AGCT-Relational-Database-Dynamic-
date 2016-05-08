@@ -2407,8 +2407,7 @@ class entityHist{
         {
 ?>                    
                 <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
-                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
-                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
+                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>           
 <?php
             $this->bd->getMysqli()->rollback();
         }
