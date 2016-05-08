@@ -1627,7 +1627,10 @@ class Search{
 ?>
                 </td>
                 <td>
+                     <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[[Inserir/Editar Propriedades da Entidade]]</a>
+                        
 <?php
+
                     $readState = $this->bd->runQuery("SELECT state FROM entity WHERE id=".$entity_id)->fetch_assoc();
                     if($readState['state'] == "active")
                     {
@@ -1643,7 +1646,7 @@ class Search{
                     }
                     
 ?>
-                         <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Editar Propriedades]</a>
+                        
                         <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
             </tr>	
