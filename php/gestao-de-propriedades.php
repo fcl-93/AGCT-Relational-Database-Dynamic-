@@ -104,7 +104,11 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar($this->db);
+            if(!$this->validaEdicoes())
+            {
+                $this->gereHist->estadoVoltar($this->db);
+            }
+             
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -1474,7 +1478,17 @@ class PropHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    <td><a href ="?estado=voltar
+                           &hist=<?php echo $hist["id"];?>
+                           &prop_id=<?php echo $_REQUEST["id"];
+                           if (isset($hist["ent_type_id"])) echo "&entidadePertence=".$hist["ent_type_id"];
+                           if (isset($hist["rel_type_id"])) echo "&relacaoPertence=".$hist["rel_type_id"];?>
+                           &tipoCampo=<?php echo $hist["form_field_type"];
+                           if (isset($hist["unit_type"])) echo "&tipoUnidade=".$hist["unit_type"];
+                           if (isset($hist["fk_ent_type_id"])) echo "&entidadeReferenciada=".$hist["fk_ent_type_id"];?>">
+                            Voltar para esta versão
+                        </a>
+                    </td>
                 </tr>
 <?php
             }
