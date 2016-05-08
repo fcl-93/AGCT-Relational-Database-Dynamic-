@@ -1825,7 +1825,7 @@ class Search{
         
 ?>
         <html>
-            <table>
+            <table class='table'>
                 <thead>
                     <th>Id</td>
                     <th>Nome propriedade</td>
