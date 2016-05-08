@@ -1371,7 +1371,7 @@ class RelHist{
                     while ($prop = $props->fetch_assoc()) {
 ?>
                         <tr>
-                            <td><?php echo $props["name"];?></td>
+                            <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
                             $value = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["id"]);
