@@ -1265,7 +1265,7 @@ class RelHist{
      * After that he presents a table with all the versions presented in the history
      * @param type $db (object form the class Db_Op)
      */
-    public function estadoHistorico ($bd) {
+    public function showHist ($bd) {
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($bd);
         }
