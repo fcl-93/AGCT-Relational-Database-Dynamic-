@@ -1824,16 +1824,7 @@ class Search{
     private function printEntAttrAdder($id){
         
 ?>
-        <html>
-            <table class='table'>
-                <thead>
-                    <th>Id</td>
-                    <th>Nome propriedade</td>
-                    <th>Tipo</th>
-                    <th>Seleção</th>
-                    <th>Novo valor</th>
-                </thead>
-                <tbody>
+        
 <?php
                     echo "SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND  p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")";
                     $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
@@ -1847,6 +1838,18 @@ class Search{
                     }
                     else
                     {
+?>
+                        <html>
+                            <table class='table'>
+                                <thead>
+                                    <th>Id</td>
+                                    <th>Nome propriedade</td>
+                                    <th>Tipo</th>
+                                    <th>Seleção</th>
+                                    <th>Novo valor</th>
+                                </thead>
+                                <tbody>
+<?php
                         $conta = 0;
                         while($printProps = $getAvaiablePropsToAdd->fetch_assoc()){
 ?>                        
@@ -1854,7 +1857,7 @@ class Search{
                                 <td><?php echo $printProps['id']?></td>
                                 <td><?php echo $printProps['name']?></td>
                                 <td><?php echo $printProps['value_type']?></td>
-                                <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
+                                <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $printProps['id']?>"></td>
                                 <td>
 <?php
                                         if($printProps['value_type'] == 'bool')
@@ -1895,13 +1898,14 @@ class Search{
                         }
                         $_SESSION['entPropPrinted'] = $conta;
 ?>
+                </tbody>
+            </table>
+        </html>
                         <input type="submit" value="Adicionar Novas Propriedades">
 <?php                        
                     }
 ?>
-                </tbody>
-            </table>
-        </html>
+                
 <?php
     }
     /**
