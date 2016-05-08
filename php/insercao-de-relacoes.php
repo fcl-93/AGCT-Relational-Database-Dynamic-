@@ -1370,7 +1370,7 @@ class RelHist{
 <?php
                     while ($prop = $props->fetch_assoc()) {
 ?>
-                        <tr>
+                        <td>
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
@@ -1383,7 +1383,7 @@ class RelHist{
                             }
 ?>
                             <td>
-                        </tr>
+                        </td>
 <?php
                     }
 ?>
