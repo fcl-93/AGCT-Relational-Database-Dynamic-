@@ -669,9 +669,13 @@ class PropertyManage
             return false;
         }
         echo "passei aqui";
-        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges() && $this->validaEdicoes()) {
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
             echo "passei aqui2";
           return false;
+        }
+        if ($_REQUEST["estado"] == "update" && $this->validaEdicoes()) {
+             echo "passei aqui6";
+             return false;
         }
         echo "passei aqui3";
 	return true;
