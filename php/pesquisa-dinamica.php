@@ -2227,7 +2227,6 @@ class entityHist{
                             <tr>
                                 <th>Data de Ativação</th>
                                 <th>Data de Desativação</th>
-                                <th>Id</th>
                                 <th>Nome</th>
                                 <th>Propriedade</th>
                                 <th>Valor</th>
@@ -2249,31 +2248,53 @@ class entityHist{
                         }
                         else
                         {
-                            
+                            $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
+                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
 ?>
                                 <tr>
-                                    <td><?php echo $readHistory['active_on']?></td>
-                                    <td><?php echo $readHistory['inactive_on']?></td>
-                                    <td><?php echo $readHistory['id']?></td>
-                                    <td><?php echo $readHistory['entity_name']?></td>
-<?php                               echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
-                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['inactive_on']?></td>
+                                    
+                                    
+<?php
+                                    
+                                    if($oneTimePrint == false){
+?>
+                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
+<?php
+                                    $oneTimePrint = true;
+                                    }
+?>
+                                    
+                                    
+<?php                               //echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
+                                    //$readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    $oneTimePrint2 = false;
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
-                                        $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
+                                        //echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
+                                        $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['property_id'])->fetch_assoc();
 ?>
-                                    <td rowspan="<?php echo $readHV->num_rows?>"><?php echo $propName['name']?></td>
+                                            <td><?php echo $propName['name']?></td>
+
                                         <td><?php echo $readHV['value']?></td>
 <?php
-                                    }
                                    
+                                   if($oneTimePrint2 == false){
 ?>
-                                    <td><?php echo $readHistory['state']?></td>
-                                    <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
-                                        
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['state']?></td>
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                 </tr>
+                                     <?php
+                                     $oneTimePrint2 = true;
+                                   }
+                                     $oneTimePrint = false;
+                                    }
+                                     ?>   
+                                
 <?php                                
+                                    
                             }
                         }
                         
