@@ -673,7 +673,7 @@ class PropertyManage
         }
         if ($_REQUEST["estado"] == "update" && $this->validaEdicoes()) {
 ?>
-            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com vlorres atribuídos para essa propriedade.</p>
+            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
 <?php
             goBack();
             return false;
@@ -737,7 +737,6 @@ class PropertyManage
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
         $numValues = $this->db->runQuery($getValues)->num_rows;
-        echo $numValues." ".$_REQUEST['tipoValor']." ".$getProp["value_type"];
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
             return true;
         }
