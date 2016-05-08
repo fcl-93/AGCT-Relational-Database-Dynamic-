@@ -2352,7 +2352,7 @@ class entityHist{
         $getHisEnt = $bd->runQuery("SELECT * FROM hist_entity WHERE id =".$id);
         $readHistEnt = $getHisEnt->fetch_assoc();
         //Get values from the hist_value table 
-        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on=".$readHistEnt['inactive_on']); 
+        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on='".$readHistEnt['inactive_on']."'"); 
          
         //get the actual entity
         $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$readHistEnt['entity_id']);
