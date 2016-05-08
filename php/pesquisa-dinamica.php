@@ -1843,6 +1843,7 @@ class Search{
                     else
                     {
 ?>
+                    <form>
                         <html>
                             <table class='table'>
                                 <thead>
@@ -1908,6 +1909,7 @@ class Search{
                         <input type="hidden" name="estado" value="novasPropriedadesAdd" >
                         <input type="hidden" name="iddaEnt" value="<?php echo $id ?>" >
                         <input type="submit" value="Adicionar Novas Propriedades">
+                    </form>
 <?php                        
                     }
     }
