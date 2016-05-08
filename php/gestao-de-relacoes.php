@@ -226,6 +226,14 @@ class RelationManage
      */
     private function createTable() {
 ?>
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
             <table id="sortedTable" class="table">
             <thead>
                 <tr>
@@ -504,17 +512,22 @@ class RelHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoHistorico ($db) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($_REQUEST["tipo"], $db);
+        }
+        else {
         //meto um datepicker
 ?>
-        <form>
-            <p>Introduza uma data: <input type="text" id="datepicker"></p>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
-<?php
-        //apresento histórico
-        $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
-        $queryHistorico = $db->runQuery($queryHistorico);
-?>
         <table class="table">
             <thead>
                 <tr>
@@ -528,6 +541,24 @@ class RelHist{
             </thead>
             <tbody>
 <?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $db->runQuery($queryHistorico);
         if ($queryHistorico->num_rows == 0) {
 ?>
             <tr>
@@ -554,6 +585,7 @@ class RelHist{
             <tbody>
         </table>
 <?php
+    }
     }
 }
 //instantiate a new object from the class RelationManage that is responsible to do all the necessary scripts in this page
