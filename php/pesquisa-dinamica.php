@@ -2274,7 +2274,7 @@ class entityHist{
                                     $oneTimePrint2 = false;
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
-                                        echo 
+                                        echo "SELECT name FROM property WHERE id=".$readHV['entity_id'];
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
                                         /*if($oneTimePrint2 == false)
                                         {*/
