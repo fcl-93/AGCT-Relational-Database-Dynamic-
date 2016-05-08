@@ -2368,7 +2368,7 @@ class entityHist{
         $errorFound = false;
         
         $updated_on = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['entity_id'].",'".$readActENt['entity_name']."',".$readActENt['state'].",'".$readActENt['updated_on']."','".$updated_on."')"))
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['entity_id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
         {
                 $errorFound = true;
         }
