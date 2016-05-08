@@ -568,14 +568,14 @@ class PropertyManage
             }
             else
             {
-                if (!empty($_REQUEST["entidadePertence"]) && $this->gereHist->createNewEnt($_REQUEST["entidadePertence"], $db)) {
+                if (!empty($_REQUEST["entidadePertence"]) && $this->gereHist->createNewEnt($_REQUEST["entidadePertence"], $this->db)) {
                     $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
                 }
-                else if (!empty($_REQUEST["relacaoPertence"]) && $this->gereHist->createNewRel($_REQUEST["relacaoPertence"], $db)) {
+                else if (!empty($_REQUEST["relacaoPertence"]) && $this->gereHist->createNewRel($_REQUEST["relacaoPertence"], $this->db)) {
                     $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
