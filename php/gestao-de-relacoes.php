@@ -184,6 +184,26 @@ class RelationManage
     }
     
     /**
+     * This method verifies if there is any instance of the rel_type selected
+     * @param type $idRel (id of the rel_type we want ti check)
+     * @return boolean
+     */
+    private function verificaInst ($idRel) {
+        $queryCheck = "SELECT * FROM relation WHERE state = 'active' AND rel_type_id = ".$idRel;
+        $queryCheck = $this->db->runQuery($queryCheck);
+        if ($queryCheck->num_rows == 0) {
+?>
+            <p>Não pode desativar este tipo de relação sem antes desativar todas as instâncias do mesmo.</p>
+            <p>Para fazê-lo deve dirigir-se à página <a href = "/insercao-de-relacoes">Inserção de Relações</a></p>
+<?php
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    
+    /**
      * This method checks if there are 2 or more entities, if so the user can continue the process of add a new realtion
      * @return boolean (true if there are entities otherwise it will return false)
      */
