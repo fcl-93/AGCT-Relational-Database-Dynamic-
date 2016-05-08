@@ -2397,10 +2397,11 @@ class entityHist{
         {
             while($moveToMain = $getOldAttr->fetch_assoc())
             {
-                if($bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
+                if(!$bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
                     echo "#NO UPDATE DOS VALUES";
                     $error = true;
+                    break;
                 }
             }
         }
