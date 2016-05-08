@@ -1957,6 +1957,11 @@ class Search{
                             $error = true;
                             break;
                         }
+                        if($error == false){
+                            if(!$this->bd->runQuery("UPDATE `entity` SET`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))){
+                                $error = true;
+                            }
+                        }
                         $added = true;   
                     }
                     
@@ -2184,7 +2189,7 @@ class entityHist{
     public function addEntToHist($id,$bd,$inactiveTime){
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
-        $inactive = date("Y-m-d H:i:s",time());
+        //$inactive = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
                 return false;
         }
