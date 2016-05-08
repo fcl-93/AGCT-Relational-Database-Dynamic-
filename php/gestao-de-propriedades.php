@@ -108,6 +108,12 @@ class PropertyManage
             {
                 $this->gereHist->estadoVoltar($this->db);
             }
+            else {
+?>
+                <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+                goBack();
+            }
              
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
