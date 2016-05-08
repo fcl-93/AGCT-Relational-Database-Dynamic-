@@ -138,6 +138,20 @@ class Db_Op
         $nome = $this->runQuery($queryEnt)->fetch_assoc()["name"];
         return $nome;
     }
+    
+    /**
+     * This method is responsible to automaticly create the name of the relations by joining the names of the two entities that are associated
+     * @param string $queryNome1 (The query that gets the name of the first entity)
+     * @param string  $queryNome2 (The query that gets the name of the second entity)
+     * @return string the name of the relation
+     */
+    public function criaNomeRel($queryNome1, $queryNome2)
+    {
+        $nome1 = $this->runQuery($queryNome1)->fetch_assoc()["name"];
+        $nome2 = $this->runQuery($queryNome2)->fetch_assoc()["name"];
+        $nome = $nome1."-".$nome2;
+        return $nome;
+    }
    
 }
 

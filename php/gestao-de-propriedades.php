@@ -228,7 +228,7 @@ class PropertyManage
                         {
                             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                            $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                            $nome = $this->db->criaNomeRel($queryNome1,$queryNome2);
                             $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                         }
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
@@ -392,7 +392,7 @@ class PropertyManage
                                 {
                                     $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
                                     $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                    $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                                    $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
                                 }
                                 ?>
                                 <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
@@ -470,20 +470,6 @@ class PropertyManage
             <?php
             }
     }
-    
-    /**
-     * This method is responsible to automaticly create the name of the relations by joining the names of the two entities that are associated
-     * @param string $queryNome1 (The query that gets the name of the first entity)
-     * @param string  $queryNome2 (The query that gets the name of the second entity)
-     * @return string the name of the relation
-     */
-    private function criaNomeRel($queryNome1, $queryNome2)
-    {
-        $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
-        $nome2 = $this->db->runQuery($queryNome2)->fetch_assoc()["name"];
-        $nome = $nome1."-".$nome2;
-        return $nome;
-    }
 
     /**
      * This method inserts the new property in the database
@@ -506,7 +492,7 @@ class PropertyManage
         {
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
+            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
@@ -793,7 +779,7 @@ class PropertyManage
             $ent2 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type2_id"];
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent2;
-            $nomeRelEnt = $this->criaNomeRel($queryNome1, $queryNome2);
+            $nomeRelEnt = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
         else
         {
@@ -883,7 +869,7 @@ class PropertyManage
                             {
                                 $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
                                 $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                                $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
                             }
                             if($guardaEntRel["name"] === $nomeRelEnt)
                             {
@@ -1035,7 +1021,7 @@ class PropertyManage
         {
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
+            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
@@ -1461,7 +1447,7 @@ class PropHist{
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                        $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                        $nome = $db->criaNomeRel($queryNome1,$queryNome2);
                         $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                     }
                     $resultSeleciona = $db->runQuery($selecionaProp);
