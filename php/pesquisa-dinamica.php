@@ -2302,13 +2302,13 @@ class entityHist{
                                        if($readHistory['state'] == 'inactive')
                                        {
 ?> 
-                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo Inativo?></td>
+                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Inativo"?></td>
 <?php
                                        }
                                        else 
                                        {
 ?>
-                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo Ativo?></td>
+                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Ativo"?></td>
 <?php
                                        }
 ?>
