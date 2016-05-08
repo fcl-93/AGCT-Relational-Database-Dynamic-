@@ -2290,12 +2290,12 @@ class entityHist{
                                    
 ?>
                                     <td><?php echo $readHistory['state']?></td>
-                                    <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                    <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td></tr>
                                      <?php
                                      
                                         }
                                      ?>   
-                                </tr>
+                                
 <?php                                
                                     
                             }
