@@ -736,7 +736,7 @@ class PropertyManage
         else {
             $queryUpdate = "UPDATE property SET state=";
             if ($_REQUEST["estado"] === "desativar") {
-                if (!$this->verificaInst ($_REQUEST['prop_id'])) {
+                if (!$this->verificaValue ($_REQUEST['prop_id'])) {
                     if ($this->gereHist->atualizaHistorico($this->db) == false) {
 ?>
                         <p>Não foi possível desativar a propriedade pretendida.</p>
