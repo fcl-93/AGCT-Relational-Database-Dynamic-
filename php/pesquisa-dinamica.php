@@ -2227,7 +2227,6 @@ class entityHist{
                             <tr>
                                 <th>Data de Ativação</th>
                                 <th>Data de Desativação</th>
-                                <th>Id</th>
                                 <th>Nome</th>
                                 <th>Propriedade</th>
                                 <th>Valor</th>
@@ -2256,7 +2255,6 @@ class entityHist{
                                 <tr>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['inactive_on']?></td>
-                                    <td><?php echo $readHistory['id']?></td>
                                     
                                     
 <?php
