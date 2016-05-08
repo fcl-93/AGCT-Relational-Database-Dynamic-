@@ -2249,24 +2249,43 @@ class entityHist{
                         }
                         else
                         {
-                            
+                            $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
 ?>
                                 <tr>
                                     <td><?php echo $readHistory['active_on']?></td>
                                     <td><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
-                                    <td><?php echo $readHistory['entity_name']?></td>
-<?php                               echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
+                                    
+                                    
+<?php
                                     $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    if($oneTimePrint == false){
+?>
+                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
+<?php
+                                    $oneTimePrint = true;
+                                    }
+?>
+                                    
+                                    
+<?php                               //echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
+                                    //$readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    $oneTimePrint2 = false;
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['entity_id'])->fetch_assoc();
+                                        if($oneTimePrint2 == false)
+                                        {
 ?>
-                                    <td rowspan="<?php echo $readHV->num_rows?>"><?php echo $propName['name']?></td>
+                                            <td rowspan="<?php echo $readHV->num_rows?>"><?php echo $propName['name']?></td>
+<?php
+                                            $oneTimePrint2 = true;
+                                        }
+?>
                                         <td><?php echo $readHV['value']?></td>
 <?php
-                                    }
+                                   
                                    
 ?>
                                     <td><?php echo $readHistory['state']?></td>
@@ -2274,6 +2293,7 @@ class entityHist{
                                         
                                 </tr>
 <?php                                
+                                    }
                             }
                         }
                         
