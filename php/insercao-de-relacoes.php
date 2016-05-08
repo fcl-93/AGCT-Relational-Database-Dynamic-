@@ -1365,12 +1365,13 @@ class RelHist{
                     {
                         echo $hist['entity2_id'];
                     }
+                    $primeiraVez = true;
 ?>
                     </td>
 <?php
                     while ($prop = $props->fetch_assoc()) {
-?>
-                        <td>
+                        if ($primeiraVez) {
+?>                       
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
@@ -1383,24 +1384,46 @@ class RelHist{
                             }
 ?>
                             <td>
-                        </td>
+                            <td rowspan="<?php echo $numProp;?>">
 <?php
+                            if ($hist["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                            </td>
+                            <td rowspan="<?php echo $numProp;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
+                        </tr>
+                       
+<?php
+                            $primeiraVez = false;
+                        }
+                        else {
+?>
+                        <tr>
+                            <td><?php echo $prop["name"];?></td>
+                            <td>
+<?php
+                            $value = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            if (isset($value->fetch_assoc()["value"])) {
+                                echo $value->fetch_assoc()["value"];
+                            }
+                            else {
+                                echo "-";
+                            }
+?>
+                            <td>
+                        </tr>
+<?php
+                        }
+
                     }
 ?>
-                    <td rowspan="<?php echo $numProp;?>">
-<?php
-                    if ($hist["state"] === "active")
-                    {
-                        echo 'Ativo';
-                    }
-                    else
-                    {
-                        echo 'Inativo';
-                    }
-?>
-                    </td>
-                    <td rowspan="<?php echo $numProp;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
-                </tr>
+                    
 <?php
             }
         }
