@@ -2251,15 +2251,16 @@ class entityHist{
                         {
                             $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
+                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
 ?>
                                 <tr>
-                                    <td><?php echo $readHistory['active_on']?></td>
-                                    <td><?php echo $readHistory['inactive_on']?></td>
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['inactive_on']?></td>
                                     <td><?php echo $readHistory['id']?></td>
                                     
                                     
 <?php
-                                    $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                    
                                     if($oneTimePrint == false){
 ?>
                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
