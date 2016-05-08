@@ -2283,13 +2283,13 @@ class entityHist{
                                    
                                    
 ?>
-                                    <td><?php echo $readHistory['state']?></td>
-                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td></tr>
                                      <?php
                                      $oneTimePrint = false;
-                                        }
+                                    }
                                      ?>   
-                                
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['state']?></td>
+                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                </tr>                                
 <?php                                
                                     
                             }
