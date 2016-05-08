@@ -68,6 +68,10 @@ class Search{
                 {
                     $this->gereInsts->changeVersion($this->bd->userInputVal($_REQUEST['histId']),$this->bd);
                 }
+                else if($_REQUEST['estado'] == 'novasPropriedadesAdd')
+                {
+                    $this->addAttrEnt();
+                }
                 
                 
             }
@@ -1901,6 +1905,7 @@ class Search{
                 </tbody>
             </table>
         </html> 
+                        <input type="hidden" name="estado" value="novasPropriedadesAdd" >
                         <input type="hidden" name="iddaEnt" value="<?php echo $id ?>" >
                         <input type="submit" value="Adicionar Novas Propriedades">
 <?php                        
