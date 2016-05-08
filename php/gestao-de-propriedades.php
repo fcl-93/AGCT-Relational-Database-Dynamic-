@@ -104,7 +104,17 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar($this->db);
+            if(!$this->validaEdicoes())
+            {
+                $this->gereHist->estadoVoltar($this->db);
+            }
+            else {
+?>
+                <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+                goBack();
+            }
+             
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -668,12 +678,16 @@ class PropertyManage
             goBack();
             return false;
         }
-        echo "passei aqui";
-        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges() && $this->validaEdicoes()) {
-            echo "passei aqui2";
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
           return false;
         }
-        echo "passei aqui3";
+        if ($_REQUEST["estado"] == "update" && $this->validaEdicoes()) {
+?>
+            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+            goBack();
+            return false;
+        }
 	return true;
     }
     
@@ -682,7 +696,6 @@ class PropertyManage
      * @return boolean  
      */
     private function checkforChanges () {
-        echo "passei aqui5";
         $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         if ($_REQUEST['nome'] != $getProp["name"]) {
@@ -730,12 +743,10 @@ class PropertyManage
      * @return boolean (true if there are already some entities/relations with values for the property the user want to update)
      */
     private function validaEdicoes () {
-        echo "passei aqui4";
         $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
         $numValues = $this->db->runQuery($getValues)->num_rows;
-        echo $numValues." ".$_REQUEST['tipoValor']." ".$getProp["value_type"];
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
             return true;
         }
@@ -1473,7 +1484,10 @@ class PropHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>&tipoValor=<?php echo $hist["value_type"];?><?php if (isset($hist["ent_type_id"])) echo "&entidadePertence=".$hist["ent_type_id"];if (isset($hist["rel_type_id"])) echo "&relacaoPertence=".$hist["rel_type_id"];?>&tipoCampo=<?php echo $hist["form_field_type"];if (isset($hist["unit_type"])) echo "&tipoUnidade=".$hist["unit_type"];if (isset($hist["fk_ent_type_id"])) echo "&entidadeReferenciada=".$hist["fk_ent_type_id"];?>">
+                            Voltar para esta versão
+                        </a>
+                    </td>
                 </tr>
 <?php
             }
