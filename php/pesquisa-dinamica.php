@@ -1725,7 +1725,7 @@ class Search{
                 }
                 else
                 {
-                    echo $value;
+                    echo $valor;
                 }
                 ;?></td>
                 <td>
