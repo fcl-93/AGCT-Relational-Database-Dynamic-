@@ -1171,6 +1171,7 @@ class PropHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
+        echo $updateHist;
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
             $db->getMysqli()->rollback();
@@ -1255,6 +1256,7 @@ class PropHist{
         }
         else {
             $updateRel = "UPDATE rel_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
+            echo $updateRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
                 echo "#6";
