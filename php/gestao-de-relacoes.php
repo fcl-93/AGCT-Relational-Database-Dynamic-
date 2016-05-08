@@ -160,27 +160,54 @@ class RelationManage
         $nomes = $getNomes->fetch_assoc();
         $idNome1 = $nomes["ent_type1_id"];
         $idNome2 = $nomes["ent_type2_id"];
-        $this->gereHist->atualizaHistorico($this->db);
+        $avanca = false;
         $queryUpdate = "UPDATE rel_type SET state=";
-        if ($_REQUEST["estado"] === "ativar")
-        {
+        if ($_REQUEST["estado"] === "desativar"){
+            if (!verificaInst ($idRel)) {
+                $this->gereHist->atualizaHistorico($this->db);
+                $queryUpdate .= "'inactive'";
+                $estado = "desativada";
+                $avanca = true;
+            }
+        }
+        else {
+            $this->gereHist->atualizaHistorico($this->db);
             $queryUpdate .= "'active'";
             $estado = "ativada";
+            $avanca = true;
         }
-        else
-        {
-            $queryUpdate .= "'inactive'";
-            $estado = "desativada";
-        }
-        $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['rel_id'];
-        $this->db->runQuery($queryUpdate);
+        if ($avanca) {
+            $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['rel_id'];
+            $this->db->runQuery($queryUpdate);
 ?>
-        <html>
-            <p>A relação <?php echo $this->db->getEntityName($idNome1)."-".$this->db->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
-            <br>
-            <p>Clique em <a href="/gestao-de-relacoes"/>Continuar</a> para avançar</p>
-        </html>
+            <html>
+                <p>A relação <?php echo $this->db->getEntityName($idNome1)."-".$this->db->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
+                <br>
+                <p>Clique em <a href="/gestao-de-relacoes"/>Continuar</a> para avançar</p>
+            </html>
 <?php 
+        }
+       
+    }
+    
+    /**
+     * This method verifies if there is any instance of the rel_type selected
+     * @param type $idRel (id of the rel_type we want ti check)
+     * @return boolean (true if already exists)
+     */
+    private function verificaInst ($idRel) {
+        $queryCheck = "SELECT * FROM relation WHERE state = 'active' AND rel_type_id = ".$idRel;
+        $queryCheck = $this->db->runQuery($queryCheck);
+        if ($queryCheck->num_rows > 0) {
+?>
+            <p>Não pode desativar este tipo de relação sem antes desativar todas as instâncias do mesmo.</p>
+            <p>Para fazê-lo deve dirigir-se à página <a href = "/insercao-de-relacoes">Inserção de Relações</a></p>
+<?php
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
