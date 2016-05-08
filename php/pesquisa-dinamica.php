@@ -1627,7 +1627,7 @@ class Search{
 ?>
                 </td>
                 <td>
-                     <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[[Inserir/Editar Propriedades da Entidade]]</a>
+                     <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Propriedades da Entidade]</a>
                         
 <?php
 
@@ -1668,7 +1668,7 @@ class Search{
      * of properties for the entity selected in the previous state
      */
     public function estadoApresentacao() {
-        $idEnt = $_REQUEST["id"];
+        $idEnt = $this->bd->userInputVal($_REQUEST["id"]);
         $queryEnt = "SELECT * FROM entity WHERE id = ".$idEnt;
         $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
         if (!empty ($ent["entity_name"])) {
@@ -1680,7 +1680,7 @@ class Search{
 ?>
             <h3>Entidade <?php echo $idEnt;?> - Inserção de Propriedades</h3>
 <?php
-            $this->printEntAttrAdder();
+            $this->printEntAttrAdder($idEnt);
 ?>
             <h3>Entidade <?php echo $idEnt;?> - Alteração de Propriedades</h3>
 <?php            
@@ -1815,10 +1815,89 @@ class Search{
     
     /**
      * Prints a table with all the attributes that you cana dd to a entity.
+     * @param type $id -> id from the entity in which we want to add values
      */
-    private function printEntAttrAdder()
-    {
+    private function printEntAttrAdder($id){
         
+?>
+        <html>
+            <table>
+                <thead>
+                    <th>Id</td>
+                    <th>Nome propriedade</td>
+                    <th>Tipo</th>
+                    <th>Seleção</th>
+                    <th>Novo valor</th>
+                </thead>
+                <tbody>
+<?php
+                    $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
+                    if($getAvaiablePropsToAdd->num_rows == 0)
+                    {
+?>
+                          <html>
+                            <p>Não existem propriedades que possam ser adicionadas.</p>
+                        </html>
+<?php
+                    }
+                    else
+                    {
+                        $conta = 0;
+                        while($printProps = $getAvaiablePropsToAdd->fetch_assoc()){
+?>                        
+                            <tr>
+                                <td><?php echo $printProps['id']?></td>
+                                <td><?php echo $printProps['name']?></td>
+                                <td><?php echo $printProps['value_type']?></td>
+                                <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_CanBeAdded['id']?>"></td>
+                                <td>
+<?php
+                                        if($printProps['value_type'] == 'bool')
+                                        {
+?>
+                                            <input type="radio" name="<?php echo 'radio'.$conta ?>" value="true">True
+                                            <input type="radio" name="<?php echo 'radio'.$conta ?>" value="false">False
+<?php
+                                        }
+                                        else if($printProps['value_type'] == 'enum')
+                                        {   
+                                                $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$printProps['id']);
+?>
+                                                <select name="<?php echo 'select'.$conta ?>">
+<?php
+                                                while($read_EnumValue = $res_EnumValue->fetch_assoc())
+                                                {
+?>
+                                                    <option  value="<?php echo $read_EnumValue['value']; ?>"><?php echo $read_EnumValue['value']; ?></option>
+<?php
+                                                }
+?>
+                                                </select>
+<?php
+                                            }
+                                            else
+                                            {
+?>
+                                                <input type="text" name="<?php echo 'textbox'.$conta ?>">
+                                            
+<?php
+                                            }
+?>
+                                </td>
+                            </tr>
+<?php
+                            $conta++;
+                        }
+                        $_SESSION['entPropPrinted'] = $conta;
+?>
+                        <input type="submit" value="Adicionar Novas Propriedades">
+                        
+                    }
+?>
+                </tbody>
+            </table>
+        </html>
+<?php
     }
     /**
      * This method will handle the activation and the the desativation of the
