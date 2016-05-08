@@ -1874,14 +1874,14 @@ class Search{
 ?>
                                                 </select>
 <?php
-                                            }
-                                            else
-                                            {
+                                        }
+                                        else
+                                        {
 ?>
                                                 <input type="text" name="<?php echo 'textbox'.$conta ?>">
                                             
 <?php
-                                            }
+                                       }
 ?>
                                 </td>
                             </tr>
@@ -1891,7 +1891,7 @@ class Search{
                         $_SESSION['entPropPrinted'] = $conta;
 ?>
                         <input type="submit" value="Adicionar Novas Propriedades">
-                        
+<?php                        
                     }
 ?>
                 </tbody>
