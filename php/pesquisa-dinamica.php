@@ -2256,7 +2256,7 @@ class entityHist{
                         {
                             $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
-                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
+                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC");
 ?>
                                 <tr>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
