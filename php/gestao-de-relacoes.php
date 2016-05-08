@@ -512,7 +512,7 @@ class RelHist{
      */
     public function estadoHistorico ($db) {
         if (isset($_REQUEST["histAll"])) {
-            $this->apresentaHistTodas($_REQUEST["tipo"], $db);
+            $this->apresentaHistTodas($db);
         }
         else {
         //meto um datepicker
