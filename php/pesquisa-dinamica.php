@@ -2312,6 +2312,7 @@ class entityHist{
 <?php
                                        }
 ?>
+                                          <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                 </tr>
                                      <?php
                                      $oneTimePrint2 = true;
