@@ -1960,6 +1960,7 @@ class Search{
                         if($error == false){
                             if(!$this->bd->runQuery("UPDATE `entity` SET`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))){
                                 $error = true;
+                                break;
                             }
                         }
                         $added = true;   
