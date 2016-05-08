@@ -75,11 +75,11 @@ class RelationManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico();
+             $this->gereHist->estadoHistorico($this->bd);
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar();
+             $this->gereHist->estadoVoltar($this->bd);
         }
         elseif($_REQUEST['estado'] =='update')
         {
@@ -442,38 +442,37 @@ class RelationManage
 }
 
 class RelHist{
-    
-    private $db;            // Object from DB_Op that contains the access to the database
-    
+  
     /**
      * Constructor method
      */
     public function __construct(){
-        $this->db = new Db_Op();
     }
     
     /**
      * This method is responsible for insert into the history a copy of the property
      * before being updated
+     * @param type $db (object form the class Db_Op)
      */
-    public function atualizaHistorico () {
+    public function atualizaHistorico ($db) {
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
                 . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
-        $updateHist =$this->db->runQuery($updateHist);
+        $updateHist =$db->runQuery($updateHist);
     }
     
     /**
      * This method controls the excution flow when the state is Voltar
      * Basicly he does all the necessary queries to reverse a relation type to an old version
      * saved in the history
+     * @param type $db (object form the class Db_Op)
      */
-    public function estadoVoltar () {
-        $this->atualizaHistorico();
+    public function estadoVoltar ($db) {
+        $this->atualizaHistorico($db);
         $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$_REQUEST['hist'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE rel_type SET ";
         foreach ($atributos as $atributo => $valor) {
@@ -482,7 +481,7 @@ class RelHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel_id'];
-        $updateHist =$this->db->runQuery($updateHist);
+        $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
 ?>
             <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
@@ -502,8 +501,9 @@ class RelHist{
      * He starts by presenting a datepicker with options to do a kind of filter of 
      * all the history of the selected relation type.
      * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
      */
-    public function estadoHistorico () {
+    public function estadoHistorico ($db) {
         //meto um datepicker
 ?>
         <form>
@@ -513,7 +513,7 @@ class RelHist{
 <?php
         //apresento histórico
         $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
-        $queryHistorico = $this->db->runQuery($queryHistorico);
+        $queryHistorico = $db->runQuery($queryHistorico);
 ?>
         <table class="table">
             <thead>
@@ -542,8 +542,8 @@ class RelHist{
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
-                    <td><?php echo $this->db->getEntityName($hist["ent_type1_id"]);?></td>
-                    <td><?php echo $this->db->getEntityName($hist["ent_type2_id"]);?></td>
+                    <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
+                    <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
                     <td><?php echo $hist["state"];?></td>
                     <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
                 </tr>
