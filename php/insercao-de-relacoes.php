@@ -1375,15 +1375,16 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td>
 <?php
-                            $value = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
-                            if (isset($value->fetch_assoc()["value"])) {
-                                echo $value->fetch_assoc()["value"];
+                            $queryValue = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $queryValue = $queryValue->fetch_assoc();
+                            if (isset($value["value"])) {
+                                echo $value["value"];
                             }
                             else {
                                 echo "-";
                             }
 ?>
-                            <td>
+                            </td>
                             <td rowspan="<?php echo $numProp;?>">
 <?php
                             if ($hist["state"] === "active")
