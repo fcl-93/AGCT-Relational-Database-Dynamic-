@@ -1131,6 +1131,7 @@ class PropHist{
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
+        echo $updateHist;
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
             if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db) == false) {
@@ -1170,9 +1171,10 @@ class PropHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
+        echo $updateHist;
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            $db->getMysqli()->rollback();
+            $db->getMysqli()->commit();
 ?>
             <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
@@ -1243,18 +1245,20 @@ class PropHist{
                 $valor .= "'".$val."', "; 
             }
         }
-        $updateEntHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
+        $updateRelHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idRel.")";
-        $updateEntHist =$db->runQuery($updateEntHist);
-        if (!$updateEntHist) {
+        echo $updateRelHist;
+        $updateRelHist =$db->runQuery($updateRelHist);
+        if (!$updateRelHist) {
             echo "#5";
             $db->getMysqli()->rollback();
             return false;
         }
         else {
-            $updateEnt = "UPDATE rel_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
-            $updateEnt =$db->runQuery($updateEnt);
-            if (!$updateEnt) {
+            $updateRel = "UPDATE rel_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
+            echo $updateRel;
+            $updateRel =$db->runQuery($updateRel);
+            if (!$updateRel) {
                 echo "#6";
                 $db->getMysqli()->rollback();
                 return false;
