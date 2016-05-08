@@ -668,7 +668,7 @@ class PropertyManage
             goBack();
             return false;
         }
-        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges() && !$this->validaEdicoes()) {
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges() && $this->validaEdicoes()) {
           return false;
         }
 	return true;
@@ -730,6 +730,7 @@ class PropertyManage
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
         $numValues = $this->db->runQuery($getValues)->num_rows;
+        echo $numValues." ".$_REQUEST['tipoValor']." ".$getProp["value_type"];
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
             return true;
         }
