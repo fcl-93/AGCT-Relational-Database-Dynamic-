@@ -1953,7 +1953,7 @@ class Search{
                         }
                         
                         if(!$erro){
-                            if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active',$updated_on)"))
+                            if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active','".$updated_on."')"))
                             {
 ?>
                                 <html>
