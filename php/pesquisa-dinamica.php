@@ -1957,6 +1957,12 @@ class Search{
                             $error = true;
                             break;
                         }
+                        if($error == false){
+                            if(!$this->bd->runQuery("UPDATE `entity` SET`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))){
+                                $error = true;
+                                break;
+                            }
+                        }
                         $added = true;   
                     }
                     
@@ -2184,7 +2190,7 @@ class entityHist{
     public function addEntToHist($id,$bd,$inactiveTime){
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
-        $inactive = date("Y-m-d H:i:s",time());
+        //$inactive = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
                 return false;
         }
@@ -2241,7 +2247,7 @@ class entityHist{
                         {
 ?>
                             <tr>
-                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack(); ?></td>
                             </tr>
 <?php
@@ -2260,8 +2266,19 @@ class entityHist{
 <?php
                                     
                                     if($oneTimePrint == false){
+                                        if($readHistory['entity_name'] == '')
+                                        {
+?>
+                                            <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['id']?></td>
+<?php
+                                        }
+                                        else
+                                        {
 ?>
                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
+<?php
+                                        }
+?>
 <?php
                                     $oneTimePrint = true;
                                     }
