@@ -2358,7 +2358,7 @@ class entityHist{
         $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$readHistEnt['entity_id']);
         $readActENt = $getActEnt->fetch_assoc();
         //get the actual entity values 
-        $getActVal = $bd->runQuery("SELECT * FROM values WHERE entity_id=".$readActENt['id']);
+        $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']);
        
         
         //backup the current values
