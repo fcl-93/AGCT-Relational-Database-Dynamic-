@@ -186,7 +186,6 @@ class RelationManage
                 <p>Clique em <a href="/gestao-de-relacoes"/>Continuar</a> para avançar</p>
             </html>
 <?php 
-            }
         }
        
     }
