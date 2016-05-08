@@ -1942,7 +1942,7 @@ class Search{
                     }
                     $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
                     
-                    if(addEntToHist($id,$this->bd,$updated_on))
+                    if($this->gereInsts->addEntToHist($id,$this->bd,$updated_on))
                     {
                         $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
                         $erro = false;
