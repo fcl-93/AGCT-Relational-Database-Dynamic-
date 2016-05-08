@@ -668,16 +668,16 @@ class PropertyManage
             goBack();
             return false;
         }
-        echo "passei aqui";
         if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
-            echo "passei aqui2";
           return false;
         }
         if ($_REQUEST["estado"] == "update" && $this->validaEdicoes()) {
-             echo "passei aqui6";
-             return false;
+?>
+            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com vlorres atribuídos para essa propriedade.</p>
+<?php
+            goBack();
+            return false;
         }
-        echo "passei aqui3";
 	return true;
     }
     
@@ -686,7 +686,6 @@ class PropertyManage
      * @return boolean  
      */
     private function checkforChanges () {
-        echo "passei aqui5";
         $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         if ($_REQUEST['nome'] != $getProp["name"]) {
@@ -734,7 +733,6 @@ class PropertyManage
      * @return boolean (true if there are already some entities/relations with values for the property the user want to update)
      */
     private function validaEdicoes () {
-        echo "passei aqui4";
         $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
