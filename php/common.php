@@ -147,8 +147,8 @@ class Db_Op
      */
     public function criaNomeRel($queryNome1, $queryNome2)
     {
-        $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
-        $nome2 = $this->db->runQuery($queryNome2)->fetch_assoc()["name"];
+        $nome1 = $this->runQuery($queryNome1)->fetch_assoc()["name"];
+        $nome2 = $this->runQuery($queryNome2)->fetch_assoc()["name"];
         $nome = $nome1."-".$nome2;
         return $nome;
     }
