@@ -2260,8 +2260,19 @@ class entityHist{
 <?php
                                     
                                     if($oneTimePrint == false){
+                                        if($readHistory['entity_name'] == '')
+                                        {
+?>
+                                            <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['id']?></td>
+<?php
+                                        }
+                                        else
+                                        {
 ?>
                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
+<?php
+                                        }
+?>
 <?php
                                     $oneTimePrint = true;
                                     }
