@@ -2247,7 +2247,7 @@ class entityHist{
                         {
 ?>
                             <tr>
-                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack(); ?></td>
                             </tr>
 <?php
