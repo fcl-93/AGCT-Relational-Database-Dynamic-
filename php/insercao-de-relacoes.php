@@ -1387,7 +1387,7 @@ class RelHist{
 <?php
                     }
 ?>
-                    <td>
+                    <td rowspan="<?php echo $numProp;?>">
 <?php
                     if ($hist["state"] === "active")
                     {
@@ -1399,7 +1399,7 @@ class RelHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
+                    <td rowspan="<?php echo $numProp;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
                 </tr>
 <?php
             }
