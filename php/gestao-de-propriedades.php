@@ -1272,7 +1272,7 @@ class PropHist{
      * After that he presents a table with all the versions presented in the history
      */
     public function estadoHistorico ($db) {
-        if ($_REQUEST["histAll"]) {
+        if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
         else {
