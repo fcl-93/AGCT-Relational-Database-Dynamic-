@@ -65,7 +65,9 @@ class Search{
                     $this->gereInsts->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
                 }
                 else if($_REQUEST['estado']=='versionBack')
-                {}
+                {
+                    $this->gereInsts->changeVersion($this->bd->userInputVal($_REQUEST['histId']),$this->bd);
+                }
                 
                 
             }
@@ -2224,7 +2226,11 @@ class entityHist{
         return true;
     }
     
-    
+    /**
+     * Presents the table history to the selected entity
+     * @param type $id -> id from the selected entity
+     * @param type $bd
+     */
      public function tableHist($id,$bd)
      {
 ?>
@@ -2256,7 +2262,7 @@ class entityHist{
                         {
                             $oneTimePrint = false;
                             while($readHistory = $presetOld->fetch_assoc()){
-                                echo "SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC";
+                                //echo "SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC";
                                 $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC");
 ?>
                                 <tr>
@@ -2291,7 +2297,7 @@ class entityHist{
                                     $oneTimePrint2 = false;
                                     while($readHV = $readHistValues->fetch_assoc())
                                     {
-                                        echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
+                                        //echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
                                         $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['property_id'])->fetch_assoc();
 ?>
                                             <td><?php echo $propName['name']?></td>
@@ -2333,6 +2339,81 @@ class entityHist{
                         </tbody>
                     </table>
 <?php
+     }
+     
+     /**
+      * Procedes to the version change move a group of values from 
+      * hist_entity and hist_value to the value and entity tables.
+      * @param type $id -> id from the entity we want to reactivate
+      * @param type $bd
+      */
+     public function changeVersion($id,$bd){
+         //Get the entity we want to reactivate
+        $getHisEnt = $bd->runQuery("SELECT * FROM hist_entity WHERE id =".$id);
+        $readHistEnt = $getHisEnt->fetch_assoc();
+        //Get values from the hist_value table 
+        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on=".$readHistEnt['updated_on']); 
+         
+        //get the actual entity
+        $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$readHistEnt['entity_id']);
+        $readActENt = $getActEnt->fetch_assoc();
+        //get the actual entity values 
+        $getActVal = $bd->runQuery("SELECT * FROM values WHERE entity_id=".$readActENt['id']);
+       
+        
+        //backup the current values
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+        
+        $errorFound = false;
+        
+        $updated_on = date("Y-m-d H:i:s",time());
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$getActEnt['entity_id'].",".$getActEnt['entity_name'].",".$getActEnt['state'].",'".$getActEnt['updated_on']."','".$updated_on."')"))
+        {
+                $errorFound = true;
+        }
+        else
+        {
+            while( $readActVal = $getActVal->fetch_assoc())
+            {
+            
+                if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$getActVal['entity_id'].",".$getActVal['property_id'].",'".$getActVal['value']."','".$getActVal['producer']."',NULL,".$readActVal['id'].",'".$getActVal['updated_on']."','".$updated_on."','".$getActVal['state']."')")){
+                    $error = true;
+                    break;
+                }
+            }
+        }
+        
+        
+        //changes the current valuees and entities to the ones that come from the history
+        if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='".$readHistEnt['state']."',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
+        {
+            $error = true;
+        }
+        else 
+        {
+            while($moveToMain = $getOldAttr->fetch_assoc())
+            {
+                if("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id'])
+                {
+                    $error = true;
+                }
+            }
+        }
+        
+        
+        //Updates if there is no error
+        if($error)
+        {
+             
+            $this->bd->getMysqli()->rollback();
+        }
+        else
+        {
+            $this->bd->getMysqli()->commit();
+        }
+        
+        
      }
 }
 
