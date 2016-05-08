@@ -1673,7 +1673,11 @@ class Search{
         $ent = $this->bd->runQuery($queryEnt)->fetch_assoc();
         if (!empty ($ent["entity_name"])) {
 ?>
-            <h3>Entidade <?php echo $ent["entity_name"];?> - Propriedades</h3>
+            <h3>Entidade <?php echo $ent["entity_name"];?> - Inserção de Propriedades</h3>
+<?php
+            $this->printEntAttrAdder($idEnt);
+?>
+            <h3>Entidade <?php echo $ent["entity_name"];?> - Alteração de Propriedades</h3>
 <?php
         }
         else {
@@ -1821,7 +1825,7 @@ class Search{
         
 ?>
         <html>
-            <table>
+            <table class='table'>
                 <thead>
                     <th>Id</td>
                     <th>Nome propriedade</td>
