@@ -1174,7 +1174,7 @@ class PropHist{
         echo $updateHist;
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            $db->getMysqli()->rollback();
+            $db->getMysqli()->commit();
 ?>
             <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
