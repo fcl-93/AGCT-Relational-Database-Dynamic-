@@ -68,6 +68,10 @@ class Search{
                 {
                     $this->gereInsts->changeVersion($this->bd->userInputVal($_REQUEST['histId']),$this->bd);
                 }
+                else if($_REQUEST['estado'] == 'novasPropriedadesAdd')
+                {
+                    $this->addAttrEnt();
+                }
                 
                 
             }
@@ -1826,7 +1830,7 @@ class Search{
 ?>
         
 <?php
-                    echo "SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND  p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")";
+                    //echo "SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND  p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")";
                     $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
                     if($getAvaiablePropsToAdd->num_rows == 0)
                     {
@@ -1839,6 +1843,7 @@ class Search{
                     else
                     {
 ?>
+                    <form>
                         <html>
                             <table class='table'>
                                 <thead>
@@ -1900,14 +1905,106 @@ class Search{
 ?>
                 </tbody>
             </table>
-        </html>
+        </html> 
+                        <input type="hidden" name="estado" value="novasPropriedadesAdd" >
+                        <input type="hidden" name="iddaEnt" value="<?php echo $id ?>" >
                         <input type="submit" value="Adicionar Novas Propriedades">
+                    </form>
 <?php                        
                     }
-?>
-                
-<?php
     }
+    
+       /**
+        *This method will insert new properties in the entity choosed by the user
+        */
+        private function addAttrEnt()
+        { 
+            
+        $this->bd->getMysqli()->autocommit(false);
+	$this->bd->getMysqli()->begin_transaction();
+            $updated_on = date("Y-m-d H:i:s",time());
+            for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
+            {
+                
+                if(isset($_REQUEST['check'.$i]))
+                {
+                    if(isset($_REQUEST['radio'.$i]))
+                    {
+                        $newValue = $_REQUEST['radio'.$i];
+                    }
+                    else if(isset($_REQUEST['select'.$i]))
+                    {
+                        $newValue = $_REQUEST['select'.$i];
+                    }
+                    else if(isset($_REQUEST['textbox'.$i]))
+                    {
+                        $newValue =$_REQUEST['textbox'.$i];
+                    }
+                    $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
+                    
+                    if($this->gereInsts->addEntToHist($id,$this->bd,$updated_on))
+                    {
+                        $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
+                        $erro = false;
+                        while($readVal = $getCurrentVals->fetch_assoc()){
+                            if(!$this->gereInsts->addHistValues($readVal['id'],$this->bd,$updated_on)){
+                                $erro = true;
+                            }
+                        }
+                        
+                        if(!$erro){
+                            if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active','".$updated_on."')"))
+                            {
+?>
+                                <html>
+                                    <p>As propriedades foram adicionadas à entidade.</p>
+                                    <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+                                </html>
+<?php
+                            $this->bd->getMysqli()->commit();
+                            }
+                            else
+                            {
+?>
+                                <html>
+                                    <p>Erro ao adicionar as propriedades selecionadas à entidade.</p>
+                                    <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+                                </html>
+<?php
+                            $this->bd->getMysqli()->rollback();
+                            }
+                        }
+                        else{
+?>
+                            <html>
+                                <p>Erro ao criar uma cópia dos valores autuais da entidade na tabela hist_value.</p>
+                                <p><?php goBack(); ?></p>
+                            </html>
+<?php
+                             $this->bd->getMysqli()->rollback();
+                        }
+                    }
+                    else
+                    {
+?>
+                            <html>
+                                <p>Erro ao criar uma cópia da entidade na tabela hist_entity.</p>
+                                <p><?php goBack(); ?></p>
+                            </html>
+<?php  
+                        $this->bd->getMysqli()->rollback();
+                    }
+                    
+
+                    
+                }
+            }
+        }
+        
+        
+    
+    
+    
     /**
      * This method will handle the activation and the the desativation of the
      * entities.
@@ -2301,6 +2398,13 @@ class entityHist{
         return true;
     }
     
+    /**
+     * 
+     * @param type $id ->Receives the id of the entity that i want to add to the history
+     * @param type $bd
+     * @param type $inactiveTime -> time of add
+     * @return boolean
+     */
     public function addEntToHist($id,$bd,$inactiveTime){
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
