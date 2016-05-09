@@ -1807,7 +1807,7 @@ class Search{
                     if($value['state'] == 'active')
                     {
 ?>
-                        <input type="radio" name="state<?php echo $x?>" value="active" checked="checked"> Ativo
+                    <input type="radio" name="state<?php echo $x?>" value="active" checked="checked"> Ativo </br>
                         <input type="radio" name="state<?php echo $x?>" value="inactive"> Inativo
 <?php
                     }
