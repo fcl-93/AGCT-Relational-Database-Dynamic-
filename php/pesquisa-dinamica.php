@@ -2002,7 +2002,7 @@ class Search{
         }
         else
         {
-            
+          $this->bd->getMysqli()->rollback();  
         }
         }
         
