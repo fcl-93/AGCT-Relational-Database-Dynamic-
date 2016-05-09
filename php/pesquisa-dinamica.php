@@ -1821,12 +1821,15 @@ class Search{
 ?>
                    
                 </td>
-                <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
+                <td>
+                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
+                    <input type="hidden" name="valId" value="<?php echo value['id']?>"><br>
+                </td>                
             </tr>
 <?php
             }
 ?>
-            <input type="hidden" name="valId" value="<?php echo value['id']?>"><br>
+
 <?php
             $x++;
         }
@@ -2286,20 +2289,23 @@ class Search{
             {
                  if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
                 {
-                     if($mode == 1){
+                    if($mode == 1){
                         $getValState = $this->bd->runQuery("SELECT state FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['valId']))->fetch_assoc();
                          if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state']) )
                          {
-                            return true; 
+                             
                          }                   
-                     }
-?>
+                    }
+                    else {
+     ?>
                         <html>
                             <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                             <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                         </html>
-<?php
+<?php   
                     return false;
+                    }                
+                    
                 }
                 else
                 {
