@@ -2303,7 +2303,7 @@ class Search{
                     return false;
                     }                
                     
- }
+                }
                 else
                 {
                     if(isset($_REQUEST['select'.$x]))
