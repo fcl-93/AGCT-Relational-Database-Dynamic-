@@ -2291,9 +2291,7 @@ class Search{
                          if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state']) )
                          {
                             return true; 
-                         }
-                    
-<?php                                
+                         }                   
                      }
 ?>
                         <html>
