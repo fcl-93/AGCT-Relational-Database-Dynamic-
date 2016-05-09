@@ -2279,7 +2279,7 @@ class Search{
                     {}
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        if($mode = 1){
+                        if($mode == 1){
                             $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                             $getPropId = $res_getPropId->fetch_assoc();
 
