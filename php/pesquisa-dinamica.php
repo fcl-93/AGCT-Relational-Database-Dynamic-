@@ -2290,7 +2290,7 @@ class Search{
                 {
                     if($mode == 1){
                         $getValState = $this->bd->runQuery("SELECT state FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))->fetch_assoc();
-                         if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state']) )
+                         if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state'.$x]) )
                          {
                              
                          }                   
