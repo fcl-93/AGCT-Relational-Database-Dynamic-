@@ -1279,7 +1279,7 @@ class RelHist{
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
-            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
+            <input type="hidden" name="rel" value="<?php echo $_REQUEST["rel"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
 
@@ -1310,7 +1310,7 @@ class RelHist{
                 $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
             }
             else {
                 $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
