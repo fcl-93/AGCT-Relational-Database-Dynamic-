@@ -1821,12 +1821,14 @@ class Search{
 ?>
                    
                 </td>
-                <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
+                <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
+                            <input type="hidden" name="valId" value="<?php echo value['id']?>"><br>
+                </td>                
             </tr>
 <?php
             }
 ?>
-            <input type="hidden" name="valId" value="<?php echo value['id']?>"><br>
+
 <?php
             $x++;
         }
