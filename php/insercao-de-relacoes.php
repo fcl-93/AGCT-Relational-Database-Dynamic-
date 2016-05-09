@@ -1460,10 +1460,10 @@ class RelHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel'];
-        echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
             if ($this->updateValue($bd)) {
+                echo "#1 ";
                 $bd->getMysqli()->commit();
     ?>
                 <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
@@ -1472,6 +1472,7 @@ class RelHist{
         
             }
             else {
+                echo "#2 ";
 ?>
                 <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
@@ -1480,6 +1481,7 @@ class RelHist{
             }
         }
         else {
+            echo "#3 ";
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
@@ -1502,6 +1504,7 @@ class RelHist{
                         . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
                 $insertHist = $bd->runQuery($insertHist);
                 if (!$insertHist) {
+                    echo "#4 ";
                     return false;
                 }
             }
@@ -1517,9 +1520,11 @@ class RelHist{
                         . "WHERE id = ".$histValues["value_id"];
                 $updateValue = $bd->runQuery($updateValue);
                 if ($updateValue) {
+                    echo "#5 ";
                     return true;
                 }
                 else {
+                    echo "#6 ";
                     return false;
                 }
             }
