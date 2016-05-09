@@ -1921,7 +1921,7 @@ class Search{
             
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
-        if($this->ssValidationUp($_SESSION['entPropPrinted'])){
+        if($this->ssValidationUp($_SESSION['entPropPrinted'],2)){
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
@@ -2104,7 +2104,7 @@ class Search{
      * Updates the values for the selected entity
      */
     public function updatEntVal(){
-        if($this->ssValidationUp($_SESSION['updateValue'])){
+        if($this->ssValidationUp($_SESSION['updateValue'],1)){
             
             $this->bd->getMysqli()->autocommit(false);
             $this->bd->getMysqli()->begin_transaction();
@@ -2252,7 +2252,7 @@ class Search{
      * Ensures that all data that will be inserted in the database is what was supossed.
      * @return boolean -> true = all ok, false = something wrong happened
      */
-    public function ssValidationUp($max)
+    public function ssValidationUp($max, $mode)
     {
         $count = 0;
         for($x = 0; $x <= $max; $x++)
@@ -2277,12 +2277,18 @@ class Search{
                     {}
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                        $getPropId = $res_getPropId->fetch_assoc();
-                                    
-                        $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
-                        $getValue_Type = $res_getValue_Type->fetch_assoc();
-                                   
+                        if($mode = 1){
+                            $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $getPropId = $res_getPropId->fetch_assoc();
+
+                            $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
+                            $getValue_Type = $res_getValue_Type->fetch_assoc();
+                        }
+                        else
+                        {
+                            $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $getValue_Type = $res_getValue_Type->fetch_assoc();
+                        }
                         if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$x]))== false)
                         {
 ?>
