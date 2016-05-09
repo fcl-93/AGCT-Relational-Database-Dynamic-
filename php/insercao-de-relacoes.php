@@ -1279,7 +1279,7 @@ class RelHist{
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
-            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["rel"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
 
