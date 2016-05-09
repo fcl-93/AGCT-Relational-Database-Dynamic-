@@ -1463,7 +1463,7 @@ class RelHist{
         echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->updateValue()) {
+            if ($this->updateValue($bd)) {
                 $bd->getMysqli()->commit();
     ?>
                 <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
@@ -1488,7 +1488,7 @@ class RelHist{
         }
     }
     
-    private function updateValue () {
+    private function updateValue ($bd) {
         $queryRelHis = $bd->runQuery("SELECT * FROM hist_relation WHERE id = ".$_REQUEST["hist"]);
         $relHist = $queryRelHis->fetch_assoc();
         $queryRelHis = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel"]);
