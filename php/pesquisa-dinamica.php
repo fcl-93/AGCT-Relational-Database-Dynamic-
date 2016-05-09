@@ -2288,6 +2288,7 @@ class Search{
                         }
                         else
                         {
+                            echo "SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]);
                             $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
                             $getValue_Type = $res_getValue_Type->fetch_assoc();
                         }
