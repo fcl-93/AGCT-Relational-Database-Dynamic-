@@ -1473,7 +1473,7 @@ class RelHist{
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
-            $db->getMysqli()->rollback();
+            $bd->getMysqli()->rollback();
             goBack();
         }
     }
