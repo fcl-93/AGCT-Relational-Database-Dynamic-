@@ -1823,7 +1823,6 @@ class Search{
                 </td>
                 <td>
                     <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
-                    <input type="hidden" name="valId" value="<?php echo value['id']?>"><br>
                 </td>                
             </tr>
 <?php
@@ -2014,7 +2013,7 @@ class Search{
                     {
 ?>
                             <html>
-                                <p>Erro ao criar uma cópia da entidade na tabela hist_entity.</p>
+                                <p>Erro ao criar heckuma cópia da entidade na tabela hist_entity.</p>
                                 <p><?php goBack(); ?></p>
                             </html>
 <?php  
@@ -2290,7 +2289,7 @@ class Search{
                  if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
                 {
                     if($mode == 1){
-                        $getValState = $this->bd->runQuery("SELECT state FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['valId']))->fetch_assoc();
+                        $getValState = $this->bd->runQuery("SELECT state FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))->fetch_assoc();
                          if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state']) )
                          {
                              
