@@ -1814,7 +1814,7 @@ class Search{
                     else
                     {
 ?>
-                        <input type="radio" name="state<?php echo $x?>" value="active"> Ativo
+                        <input type="radio" name="state<?php echo $x?>" value="active"> Ativo </br>
                         <input type="radio" name="state<?php echo $x?>" value="inactive" checked="checked"> Inativo
 <?php
                     }
@@ -2140,7 +2140,7 @@ class Search{
                      if(isset($_REQUEST['select'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
@@ -2156,7 +2156,7 @@ class Search{
                     else if(isset($_REQUEST['radio'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
@@ -2171,7 +2171,7 @@ class Search{
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
