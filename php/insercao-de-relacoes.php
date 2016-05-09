@@ -1450,7 +1450,7 @@ class RelHist{
      */
     public function estadoVoltar ($bd) {
         $this->atualizaHistorico($bd);
-        $selectAtributos = "SELECT * FROM hist_relation WHERE id = ".$_REQUEST['rel'];
+        $selectAtributos = "SELECT * FROM hist_relation WHERE id = ".$_REQUEST['hist'];
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE relation SET ";
