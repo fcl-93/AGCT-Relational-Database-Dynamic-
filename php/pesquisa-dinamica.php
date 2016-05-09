@@ -1705,6 +1705,7 @@ class Search{
                 <th>Propriedade</th>
                 <th>Valor Atual</th>
                 <th>Novo Valor</th>
+                <th>Estado</th>
                 <th>Selecionar</th>
             </thead>
             <tbody>
@@ -1800,6 +1801,25 @@ class Search{
 <?php  
                     }
 ?>
+                </td>
+                <td>
+<?php
+                    if($value['state'] == 'active')
+                    {
+?>
+                         <input type="radio" name="state" value="active" checked="checked"> Ativo<br>
+                        <input type="radio" name="state" value="inactive"> Inativo<br>
+<?php
+                    }
+                    else
+                    {
+?>
+                        <input type="radio" name="state" value="active"> Ativo<br>
+                        <input type="radio" name="state" value="inactive" checked="checked"> Inativo<br>
+<?php
+                    }
+?>
+                   
                 </td>
                 <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
             </tr>
