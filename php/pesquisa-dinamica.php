@@ -1705,6 +1705,7 @@ class Search{
                 <th>Propriedade</th>
                 <th>Valor Atual</th>
                 <th>Novo Valor</th>
+                <th>Estado</th>
                 <th>Selecionar</th>
             </thead>
             <tbody>
@@ -1800,6 +1801,25 @@ class Search{
 <?php  
                     }
 ?>
+                </td>
+                <td>
+<?php
+                    if($value['state'] == 'active')
+                    {
+?>
+                    <input type="radio" name="state<?php echo $x?>" value="active" checked="checked"> Ativo </br>
+                        <input type="radio" name="state<?php echo $x?>" value="inactive"> Inativo
+<?php
+                    }
+                    else
+                    {
+?>
+                        <input type="radio" name="state<?php echo $x?>" value="active"> Ativo </br>
+                        <input type="radio" name="state<?php echo $x?>" value="inactive" checked="checked"> Inativo
+<?php
+                    }
+?>
+                   
                 </td>
                 <td><input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>"></td>                
             </tr>
@@ -1917,11 +1937,11 @@ class Search{
        /**
         *This method will insert new properties in the entity choosed by the user
         */
-        private function addAttrEnt()
-        { 
+        private function addAttrEnt(){ 
             
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
+        if($this->ssValidationUp($_SESSION['entPropPrinted'],2)){
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
@@ -1999,6 +2019,11 @@ class Search{
                     
                 }
             }
+        }
+        else
+        {
+          $this->bd->getMysqli()->rollback();  
+        }
         }
         
         
@@ -2099,7 +2124,7 @@ class Search{
      * Updates the values for the selected entity
      */
     public function updatEntVal(){
-        if($this->ssValidationUp()){
+        if($this->ssValidationUp($_SESSION['updateValue'],1)){
             
             $this->bd->getMysqli()->autocommit(false);
             $this->bd->getMysqli()->begin_transaction();
@@ -2115,7 +2140,7 @@ class Search{
                      if(isset($_REQUEST['select'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['select'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
@@ -2131,7 +2156,7 @@ class Search{
                     else if(isset($_REQUEST['radio'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['radio'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
@@ -2146,7 +2171,7 @@ class Search{
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
                         if($this->gereInsts->addHistValues($this->bd->userInputVal($_REQUEST['check'.$x]),$this->bd,$updated_on)){
-                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
+                            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$this->bd->userInputVal($_REQUEST['textbox'.$x])."',`producer`='".wp_get_current_user()->user_login."',`updated_on`='".$updated_on."',`state`='".$_REQUEST['state'.$x]."' WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]).""))
                             {
                                 $error = true;
                                 break;
@@ -2246,11 +2271,13 @@ class Search{
     /**
      * Ensures that all data that will be inserted in the database is what was supossed.
      * @return boolean -> true = all ok, false = something wrong happened
+     * mode 1 = check the values that the value to update atributes oof one entity
+     * mode 2 = check the values that come from the inserts
      */
-    public function ssValidationUp()
+    public function ssValidationUp($max, $mode)
     {
         $count = 0;
-        for($x = 0; $x <= $_SESSION['updateValue']; $x++)
+        for($x = 0; $x <= $max; $x++)
         {           
             if(isset($_REQUEST['check'.$x]))
             {
@@ -2272,12 +2299,19 @@ class Search{
                     {}
                     else if(isset($_REQUEST['textbox'.$x]))
                     {
-                        $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
-                        $getPropId = $res_getPropId->fetch_assoc();
-                                    
-                        $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
-                        $getValue_Type = $res_getValue_Type->fetch_assoc();
-                                   
+                        if($mode == 1){
+                            $res_getPropId = $this->bd->runQuery("SELECT property_id FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $getPropId = $res_getPropId->fetch_assoc();
+
+                            $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$getPropId['property_id']);
+                            $getValue_Type = $res_getValue_Type->fetch_assoc();
+                        }
+                        else
+                        {
+                            echo "SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]);
+                            $res_getValue_Type = $this->bd->runQuery("SELECT value_type FROM property WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]));
+                            $getValue_Type = $res_getValue_Type->fetch_assoc();
+                        }
                         if($this->typeValidation($getValue_Type['value_type'], $this->bd->userInputVal($_REQUEST['textbox'.$x]))== false)
                         {
 ?>
