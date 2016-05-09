@@ -1917,11 +1917,11 @@ class Search{
        /**
         *This method will insert new properties in the entity choosed by the user
         */
-        private function addAttrEnt()
-        { 
+        private function addAttrEnt(){ 
             
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
+        if($this->ssValidationUp($_SESSION['entPropPrinted'])){
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
@@ -1999,6 +1999,11 @@ class Search{
                     
                 }
             }
+        }
+        else
+        {
+            
+        }
         }
         
         
@@ -2099,7 +2104,7 @@ class Search{
      * Updates the values for the selected entity
      */
     public function updatEntVal(){
-        if($this->ssValidationUp()){
+        if($this->ssValidationUp($_SESSION['updateValue'])){
             
             $this->bd->getMysqli()->autocommit(false);
             $this->bd->getMysqli()->begin_transaction();
@@ -2247,10 +2252,10 @@ class Search{
      * Ensures that all data that will be inserted in the database is what was supossed.
      * @return boolean -> true = all ok, false = something wrong happened
      */
-    public function ssValidationUp()
+    public function ssValidationUp($max)
     {
         $count = 0;
-        for($x = 0; $x <= $_SESSION['updateValue']; $x++)
+        for($x = 0; $x <= $max; $x++)
         {           
             if(isset($_REQUEST['check'.$x]))
             {
