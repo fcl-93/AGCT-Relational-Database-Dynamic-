@@ -1215,6 +1215,7 @@ class InsereRelacoes
 class RelHist{
     
     public function __construct(){}
+    
     /**
      * This method will make a backup from all the change that are made in the relations
      * @param type $id -> id form the selected relation
@@ -1265,9 +1266,9 @@ class RelHist{
     /**
      * This method is responsible for the execution flow when the state is Histórico.
      * He starts by presenting a datepicker with options to do a kind of filter of 
-     * all the history of the selected property.
+     * all the history of the selected relation.
      * After that he presents a table with all the versions presented in the history
-     * @param type $db (object form the class Db_Op)
+     * @param type $bd (object form the class Db_Op)
      */
     public function showHist ($bd) {
         if (isset($_REQUEST["histAll"])) {
@@ -1443,9 +1444,9 @@ class RelHist{
     
     /**
      * This method controls the excution flow when the state is Voltar
-     * Basicly he does all the necessary queries to reverse a property to an old version
+     * Basicly he does all the necessary queries to reverse a relation to an old version
      * saved in the history
-     * @param type $db (object form the class Db_Op)
+     * @param type $bd (object form the class Db_Op)
      */
     public function estadoVoltar ($bd) {
         $this->atualizaHistorico($bd);
@@ -1477,5 +1478,38 @@ class RelHist{
         }
     }
     
+     /**
+     * This method is responsible for insert into the history a copy of the relation
+     * before being updated
+     * @param type $bd (object form the class Db_Op)
+     */
+    public function atualizaHistorico ($bd) {
+        $bd->getMysqli()->autocommit(false);
+        $bd->getMysqli()->begin_transaction();
+        $selectAtributos = "SELECT * FROM relation WHERE id = ".$_REQUEST['rel'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $attr = $val = "";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo == "updated_on") {
+                $atributo = "active_on";
+            }
+            if ($atributo != "id" && !is_null($valor)) {
+                $attr .= "`".$atributo."`,";
+                $val .= "'".$valor."',"; 
+            }
+        }
+        $updateHist = "INSERT INTO `hist_relation`(".$attr." inactive_on, relation_id) "
+                . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel"].")";
+        echo $updateHist;
+        $updateHist =$bd->runQuery($updateHist);
+        if ($updateHist) {
+            return true;
+        }
+        else {
+            $bd->getMysqli()->rollback();
+            return false;
+        }
+    }
 }
 ?>
