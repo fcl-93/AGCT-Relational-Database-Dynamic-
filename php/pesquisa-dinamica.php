@@ -2251,6 +2251,8 @@ class Search{
     /**
      * Ensures that all data that will be inserted in the database is what was supossed.
      * @return boolean -> true = all ok, false = something wrong happened
+     * mode 1 = check the values that the value to update atributes oof one entity
+     * mode 2 = check the values that come from the inserts
      */
     public function ssValidationUp($max, $mode)
     {
