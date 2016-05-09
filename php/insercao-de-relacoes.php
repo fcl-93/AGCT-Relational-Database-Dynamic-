@@ -66,6 +66,10 @@ class InsereRelacoes
                                 {
                                     $this->gereInsRel->showHist($this->bd);
                                 }
+                                 else if($_REQUEST['estado'] == 'voltar')
+                                {
+                                    $this->gereInsRel->estadoVoltar($this->bd);
+                                }
 			}
 			else
 			{
@@ -1304,16 +1308,16 @@ class RelHist{
         }
         else {
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC LIMIT 1";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
             }
         }
         $queryHistorico = $bd->runQuery($queryHistorico);
@@ -1435,6 +1439,42 @@ class RelHist{
 <?php
         
     }
+    }
+    
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoVoltar ($bd) {
+        $this->atualizaHistorico($bd);
+        $selectAtributos = "SELECT * FROM hist_relation WHERE id = ".$_REQUEST['rel'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "UPDATE relation SET ";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "relation_id" && !is_null($valor)) {
+                $updateHist .= $atributo." = '".$valor."',"; 
+            }
+        }
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel'];
+        echo $updateHist;
+        $updateHist =$bd->runQuery($updateHist);
+        if ($updateHist) {
+            $bd->getMysqli()->commit();
+?>
+            <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+            <p>Clique em <a href="/insercao-de-relacoes/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else {
+?>
+            <p>Não foi possível reverter a propriedade para a versão selecionada</p>
+<?php
+            $db->getMysqli()->rollback();
+            goBack();
+        }
     }
     
 }
