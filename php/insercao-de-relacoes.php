@@ -62,6 +62,10 @@ class InsereRelacoes
                                 {
                                     $this->activate();
                                 }
+                                else if($_REQUEST['estado'] == 'historico')
+                                {
+                                    $this->gereInsRel->showHist($this->bd);
+                                }
 			}
 			else
 			{
@@ -197,6 +201,7 @@ class InsereRelacoes
                                                         <td>
                                                             <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                             <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
+                                                            <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
 							</td>
 <?php
                                                 } 
@@ -207,6 +212,7 @@ class InsereRelacoes
                                                     <td>
                                                         <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                         <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
+                                                        <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
                                                    </td>
 <?php   
                                                 }
@@ -1252,7 +1258,184 @@ class RelHist{
         return false;    
     }
     
-    
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected property.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function showHist ($bd) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($bd);
+        }
+        else {
+        //meto um datepicker        
+?>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
+            <input type="submit" value="Apresentar histórico">
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Tipo de Relação</th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Propriedade</th>
+                    <th>Valor</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $bd->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="8">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
+                $res_EntPart = $bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$hist['rel_type_id']);
+                $read_EntPart = $res_EntPart->fetch_assoc();
+                $res_name1 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
+                $read_name1 = $res_name1->fetch_assoc(); 
+                $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
+                $read_name2 = $res_name2->fetch_assoc();
+                $props = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$hist["rel_type_id"]);
+                $numProp = $props->num_rows;
+                     
+?>
+                <tr>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["active_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["inactive_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td rowspan="<?php echo $numProp;?>">
+<?php
+                    $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
+                    if($_readEnt1['entity_name'] != '')
+                    {
+                        echo $_readEnt1['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity1_id'];
+                    }
+?>
+                    </td>
+                    <td rowspan="<?php echo $numProp;?>">
+<?php
+                    $_readEnt2 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity2_id'])->fetch_assoc();
+                    if($_readEnt2['entity_name'] != '')
+                    {
+                        echo $_readEnt2['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity2_id'];
+                    }
+                    $primeiraVez = true;
+?>
+                    </td>
+<?php
+                    while ($prop = $props->fetch_assoc()) {
+                        if ($primeiraVez) {
+?>                       
+                            <td><?php echo $prop["name"];?></td>
+                            <td>
+<?php
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $value = $queryValue->fetch_assoc();
+                            if (isset($value["value"])) {
+                                echo $value["value"];
+                            }
+                            else {
+                                echo "-";
+                            }
+?>
+                            </td>
+                            <td rowspan="<?php echo $numProp;?>">
+<?php
+                            if ($hist["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                            </td>
+                            <td rowspan="<?php echo $numProp;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
+                        </tr>
+                       
+<?php
+                            $primeiraVez = false;
+                        }
+                        else {
+?>
+                        <tr>
+                            <td><?php echo $prop["name"];?></td>
+                            <td>
+<?php
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $value = $queryValue->fetch_assoc();
+                            if (isset($value["value"])) {
+                                echo $value["value"];
+                            }
+                            else {
+                                echo "-";
+                            }
+?>
+                            </td>
+                        </tr>
+<?php
+                        }
+
+                    }
+?>
+                    
+<?php
+            }
+        }
+?>
+            <tbody>
+        </table>
+<?php
+        
+    }
+    }
     
 }
 ?>
