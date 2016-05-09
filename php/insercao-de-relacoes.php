@@ -1519,18 +1519,14 @@ class RelHist{
                         . "`state`= '".$histValues["state"]."',"
                         . "WHERE id = ".$histValues["value_id"];
                 $updateValue = $bd->runQuery($updateValue);
-                if ($updateValue) {
-                    echo "#5 ";
-                    return true;
-                }
-                else {
+                if (!$updateValue) {
                     echo "#6 ";
                     return false;
                 }
             }
-            
         }
-        
+        echo "#5 ";
+        return true;
     }
     
      /**
