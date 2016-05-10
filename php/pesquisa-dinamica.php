@@ -1756,7 +1756,6 @@ class Search{
                 </td>
                 <td>
                     <?php echo $value["state"]?>
-                    <input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
                 <td>
 <?php
@@ -1852,7 +1851,7 @@ class Search{
 <?php
             }
 ?>
-
+<input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
 <?php
             $x++;
         }
