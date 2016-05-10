@@ -749,7 +749,7 @@ class InsereRelacoes
                     if($this->bd->runQuery("UPDATE value SET updated_on = ".date("Y-m-d H:i:s",time())." AND state = 'active' WHERE id=".$idVal)) {
 ?>
                         <html>
-                           <p>O valor da propriedade foi ativado.</p>
+                           <p>O valor dapropriedade foi ativado.</p>
                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                         </html>
 <?php
