@@ -1534,6 +1534,8 @@ class RelHist{
             $queryValue = $bd->runQuery($queryValue);
             while ($values = $queryValue->fetch_assoc()) {
                 print_r($values);
+                $bd->getMysqli()->commit();
+                return false;
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
