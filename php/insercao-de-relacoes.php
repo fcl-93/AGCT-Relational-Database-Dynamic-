@@ -1275,7 +1275,7 @@ class RelHist{
                         }
                     }
                 }
-                if($bd->runQuery("UPDATE relation updated_on SET = '".$inactive."' WHERE id = ".$id))
+                if($bd->runQuery("UPDATE relation SET updated_on = '".$inactive."' WHERE id = ".$id))
                 {
                     return true;
                 }
