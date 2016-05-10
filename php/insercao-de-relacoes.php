@@ -1520,6 +1520,7 @@ class RelHist{
         $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$relType;
         echo $queryPropRel."<br>";
         $queryPropRel = $bd->runQuery($queryPropRel);
+        $dataUpdate = date("Y-m-d H:i:s",time());
         while ($prop = $queryPropRel->fetch_assoc()) {
             $queryHistValue ="SELECT * FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
             echo $queryHistValue."<br>";
@@ -1539,22 +1540,46 @@ class RelHist{
                     return false;
                 }
             }
-            while ($histValues = $queryHistValue->fetch_assoc()){
-                $updateValue = "UPDATE `value` SET "
-                        . "`property_id`= ".$histValues["property_id"].","
-                        . "`value`= '".$histValues["value"]."',"
-                        . "`producer`= '".$histValues["producer"]."',"
-                        . "`relation_id`= ".$histValues["relation_id"].","
-                        . "`updated_on`= '".date("Y-m-d H:i:s",time())."',"
-                        . "`state`= '".$histValues["state"]."'"
-                        . "WHERE id = ".$histValues["value_id"];
-                echo $updateValue."<br>";
+            if ($queryHistValue->num_rows == 0) {
+                $updateValue = "UPDATE `value` SET state = 'inactive', updated_on = '".$dataUpdate."' WHERE relation_id = ".$_REQUEST["rel"];
                 $updateValue = $bd->runQuery($updateValue);
                 if (!$updateValue) {
-                    echo "#6 ";
+                    echo "#7 ";
                     return false;
                 }
             }
+            else {
+                while ($histValues = $queryHistValue->fetch_assoc()){
+                    $updateValue = "UPDATE `value` SET "
+                            . "`property_id`= ".$histValues["property_id"].","
+                            . "`value`= '".$histValues["value"]."',"
+                            . "`producer`= '".$histValues["producer"]."',"
+                            . "`relation_id`= ".$histValues["relation_id"].","
+                            . "`updated_on`= '".$dataUpdate."',"
+                            . "`state`= '".$histValues["state"]."'"
+                            . "WHERE id = ".$histValues["value_id"];
+                    echo $updateValue."<br>";
+                    $updateValue = $bd->runQuery($updateValue);
+                    if (!$updateValue) {
+                        echo "#6 ";
+                        return false;
+                    }
+                }
+            }
+        }
+        $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate." AND relation_id = ".$_REQUEST["rel"];
+        $selValOutdated = $bd->runQuery($selValOutdated);
+        while ($valOutadet = $selValOutdated->fetch_assoc()) {
+            $updateValue = "UPDATE `value` SET "
+                            . "`updated_on`= '".$dataUpdate."',"
+                            . "`state`= 'inactive'"
+                            . "WHERE id = ".$histValues["value_id"];
+                    echo $updateValue."<br>";
+                    $updateValue = $bd->runQuery($updateValue);
+                    if (!$updateValue) {
+                        echo "#6 ";
+                        return false;
+                    }
         }
         echo "#5 ";
         return true;
