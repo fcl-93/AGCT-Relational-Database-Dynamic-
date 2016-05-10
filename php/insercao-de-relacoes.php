@@ -468,6 +468,25 @@ class InsereRelacoes
                                     }
 ?>                                    
                                 </td>
+<?php
+                                if($read_GetPropRel['state'] == 'active')
+                                {
+?>       
+                                        <td>Ativo </td>
+                                        <td>
+                                            <a href="insercao-de-relacoes?estado=desativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                        </td>
+<?php
+                                } 
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+                                    <td>
+                                        <a href="insercao-de-relacoes?estado=ativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
+                                   </td>
+<?php   
+                                }
                             </tr>
 <?php   
                                 $conta++;
