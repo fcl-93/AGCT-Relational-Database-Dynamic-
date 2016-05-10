@@ -1524,7 +1524,7 @@ class RelHist{
                         . "`producer`= '".$histValues["producer"]."',"
                         . "`relation_id`= ".$histValues["relation_id"].","
                         . "`updated_on`= '".date("Y-m-d H:i:s",time())."',"
-                        . "`state`= '".$histValues["state"]."',"
+                        . "`state`= '".$histValues["state"]."'"
                         . "WHERE id = ".$histValues["value_id"];
                 echo $updateValue."<br>";
                 $updateValue = $bd->runQuery($updateValue);
