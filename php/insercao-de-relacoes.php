@@ -1552,6 +1552,8 @@ class RelHist{
                     echo "#7 ";
                     return false;
                 }
+                $bd->getMysqli()->rollback();
+                return false;
             }
             else {
                 while ($histValues = $queryHistValue->fetch_assoc()){
