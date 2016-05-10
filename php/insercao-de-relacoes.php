@@ -792,6 +792,7 @@ class InsereRelacoes
             if( $this->gereInsRel->addHist($idRel,$this->bd)) {
                 if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
                     if($this->bd->runQuery("UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."' AND state = 'inactive' WHERE id=".$idVal)) {
+                        echo $this->bd->getMySqli()->affected_rows;
                         $this->bd->getMysqli()->commit();
 ?>
                         $this->bd->getMysqli()->commit();<html>
