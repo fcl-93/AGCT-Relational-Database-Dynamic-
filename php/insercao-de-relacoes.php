@@ -416,9 +416,9 @@ class InsereRelacoes
                                 <td>Nome propriedade</td>
                                 <td>Tipo</td>
                                 <td>Valor Atual </td>
+                                <td>Estado</td>
                                 <td>Seleção</td>
                                 <td>Novo valor</td>
-                                <td>Estado</td>
                                 <td>Ação</td>
                             </tr>
                         </thead>
@@ -435,6 +435,20 @@ class InsereRelacoes
                                 <td><?php echo $read_PropValues['name']?></td>
                                 <td><?php echo $read_PropValues['value_type']?></td>
                                 <td><?php echo $read_GetPropRel['value'] ?></td>
+<?php
+                                if($read_GetPropRel['state'] == 'active')
+                                {
+?>       
+                                    <td>Ativo </td>
+<?php
+                                }
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+<?php
+                                }
+?>
                                 <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropRel['id']?>"></td>
                                 <td>
 <?php
@@ -474,16 +488,14 @@ class InsereRelacoes
                                 if($read_GetPropRel['state'] == 'active')
                                 {
 ?>       
-                                        <td>Ativo </td>
-                                        <td>
-                                            <a href="insercao-de-relacoes?estado=desativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
-                                        </td>
+                                    <td>
+                                        <a href="insercao-de-relacoes?estado=desativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                    </td>
 <?php
                                 } 
                                 else
                                 {
 ?>
-                                    <td>Inativo</td>
                                     <td>
                                         <a href="insercao-de-relacoes?estado=ativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
                                    </td>
