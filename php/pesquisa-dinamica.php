@@ -2817,6 +2817,7 @@ class entityHist{
         if($getActVal->num_rows == 0)
         {
             while($disableVal = $getActVal->fetch_assoc()){
+                echo $disableVal['id'];
                 if(!$this->bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
                 {
                     $errorFound = true;
