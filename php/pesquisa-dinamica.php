@@ -72,6 +72,14 @@ class Search{
                 {
                     $this->addAttrEnt();
                 }
+                else if($_REQUEST['estado'] == 'desativarVal')
+                {
+                    $this->desativarVal();
+                }
+                else if($_REQUEST['estado'] == 'ativarVal')
+                {
+                    $this->ativarVal();
+                }
                 
                 
             }
@@ -1810,13 +1818,13 @@ class Search{
                     if($value['state'] == 'active')
                     {
 ?>
-                        <input type="radio" name="state<?php echo $x?>" value="inactive"> Inativo
+                        <a href="pesquisa-dinamica?estado=desativarVal&valOfEnt=<?php echo $value['id'];?>">[Desativar]</a>
 <?php
                     }
                     else
                     {
 ?>
-                        <input type="radio" name="state<?php echo $x?>" value="active"> Ativo </br>
+                        <a href="pesquisa-dinamica?estado=ativarVal&valOfEnt=<?php echo $value['id'];?>">[Ativar]</a>
                         
 <?php
                     }
@@ -1939,10 +1947,10 @@ class Search{
                     }
     }
     
-       /**
-        *This method will insert new properties in the entity choosed by the user
-        */
-        private function addAttrEnt(){ 
+    /**
+     *This method will insert new properties in the entity choosed by the user
+     */
+    private function addAttrEnt(){ 
             
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
@@ -2030,10 +2038,6 @@ class Search{
           $this->bd->getMysqli()->rollback();  
         }
         }
-        
-        
-    
-    
     
     /**
      * This method will handle the activation and the the desativation of the
@@ -2406,6 +2410,66 @@ class Search{
         }
         return $tipoCorreto;
     }    
+    
+    
+    /**
+     * Disables the values from on entity
+     */
+    public function desativarVal(){
+        
+        $this->bd->getMysqli()->autocommit(false);
+	$this->bd->getMysqli()->begin_transaction();
+        
+        $valToDisable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
+        $updated_on = date("Y-m-d H:i:s",time());
+        $error = false;
+        
+        //makes the backup
+        $valueDis = $this->bd->runQuery("SELECT * FROM value WHERE id=".$valToDisable)->fetch_assoc();
+        if(addEntToHist($valueDis['entity_id'],$this->bd,$updated_on)){ //-----> backups the entity
+            $getvals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id = ".$valueDis['entity_id']);
+            while($valsToHist = $getvals->fetch_assoc())
+            {
+                if(!addHistValues($valsToHist['id'],$this->bd,$updated_on))
+                {
+                  $error = true;
+                  break; 
+                }
+            }
+        }
+        
+        //changes the version
+        if(!$this->bd->runQuery("UPDATE `value` SET `state`=inactive,`updated_on`=".$updated_on." WHERE id=".$valToDisable))
+        {
+            $error = true;
+        }
+        
+        if($error == false)
+        {
+?>
+            
+                <p>O valor selecionada foi desativado.</p>
+                <p>Clique em <a href="pesquisa-dinamica/?estado=apresentacao&id=<?php echo$valueDis['entity_id'] ?>"/>Continuar</a> para avançar</p>
+<?php            
+            $this->bd->getMysqli()->commit();
+        }
+        else
+        {
+?>
+                <p>O valor selecionado não pôde ser desativado.</p>
+                <p>Clique em <?php goBack()?> para voltar à página anterior</p>
+<?php            
+            $this->bd->getMysqli()->rollback();
+        }
+        
+    }
+    /**
+     * Activates the values from one entity
+     */
+    public function ativarVal(){
+        $valToEnable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
+        $updated_on = date("Y-m-d H:i:s",time());
+    }
 }
     
 
