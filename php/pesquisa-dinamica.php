@@ -1755,7 +1755,15 @@ class Search{
                 ?>
                 </td>
                 <td>
-                    <?php echo $value["state"]?>
+                    <?php if($value["state"] == 'active')
+                    {
+                        echo "Ativo";
+                    }
+                    else
+                    {
+                        echo "Inativo";
+                    }
+                    ?>
                 </td>
                   <td>
                     <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
