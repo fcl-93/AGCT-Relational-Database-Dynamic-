@@ -1471,7 +1471,8 @@ class RelHist{
      * @param type $bd (object form the class Db_Op)
      */
     public function estadoVoltar ($bd) {
-        $this->atualizaHistorico($bd);
+        $dataUpdate = date("Y-m-d H:i:s",time());
+        $this->atualizaHistorico($bd,$dataUpdate);
         $selectAtributos = "SELECT * FROM hist_relation WHERE id = ".$_REQUEST['hist'];
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
@@ -1481,10 +1482,10 @@ class RelHist{
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
         }
-        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel'];
+        $updateHist .= " updated_on = '".$dataUpdate."' WHERE id = ".$_REQUEST['rel'];
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
-            if ($this->updateValue($bd)) {
+            if ($this->updateValue($bd,$dataUpdate)) {
                 echo "#1 ";
                 $bd->getMysqli()->commit();
     ?>
@@ -1512,7 +1513,7 @@ class RelHist{
         }
     }
     
-    private function updateValue ($bd) {
+    private function updateValue ($bd,$dataUpdate) {
         $queryRelHis = $bd->runQuery("SELECT * FROM hist_relation WHERE id = ".$_REQUEST["hist"]);
         $relHist = $queryRelHis->fetch_assoc();
         $querySelRel = "SELECT rel_type_id FROM relation WHERE id = ".$_REQUEST["rel"];
@@ -1520,7 +1521,6 @@ class RelHist{
         $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$relType;
         echo $queryPropRel."<br>";
         $queryPropRel = $bd->runQuery($queryPropRel);
-        $dataUpdate = date("Y-m-d H:i:s",time());
         while ($prop = $queryPropRel->fetch_assoc()) {
             $queryHistValue ="SELECT * FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
             echo $queryHistValue."<br>";
@@ -1532,7 +1532,7 @@ class RelHist{
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
-                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
+                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".$dataUpdate."','".$values["state"]."')";
                 echo $insertHist."<br>";
                 $insertHist = $bd->runQuery($insertHist);
                 if (!$insertHist) {
@@ -1590,7 +1590,7 @@ class RelHist{
      * before being updated
      * @param type $bd (object form the class Db_Op)
      */
-    public function atualizaHistorico ($bd) {
+    public function atualizaHistorico ($bd, $dataUpdate) {
         $bd->getMysqli()->autocommit(false);
         $bd->getMysqli()->begin_transaction();
         $selectAtributos = "SELECT * FROM relation WHERE id = ".$_REQUEST['rel'];
@@ -1607,7 +1607,7 @@ class RelHist{
             }
         }
         $updateHist = "INSERT INTO `hist_relation`(".$attr." inactive_on, relation_id) "
-                . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel"].")";
+                . "VALUES (".$val."'".$dataUpdate."',".$_REQUEST["rel"].")";
         echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
