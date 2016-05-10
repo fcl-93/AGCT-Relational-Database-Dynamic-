@@ -1712,8 +1712,9 @@ class Search{
             <thead>
                 <th>Propriedade</th>
                 <th>Valor Atual</th>
-                <th>Novo Valor</th>
+                <th>Estado</th>
                 <th>Selecionar</th>
+                <th>Novo Valor</th> 
                 <th>Ação</th>
             </thead>
             <tbody>
@@ -1753,18 +1754,23 @@ class Search{
                 }
                 ;?></td>
                 <td>
+                    <input type="checkbox" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
+                </td>
+                <td>
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
-                    if($getValType['value_type'] == 'bool')
+                    if(value["state"] == 'active')
                     {
-                                        
+                        if($getValType['value_type'] == 'bool')
+                        {
+
 ?>
-                        <input type="radio" name="<?php echo 'radio'.$x?>" value="true">True
-                        <input type="radio" name="<?php echo 'radio'.$x?>" value="false">False
+                            <input type="radio" name="<?php echo 'radio'.$x?>" value="true">True
+                            <input type="radio" name="<?php echo 'radio'.$x?>" value="false">False
 <?php
-                    }
-                    else if($getValType['value_type'] == 'enum')
-                    {   
+                        }
+                        else if($getValType['value_type'] == 'enum')
+                        {   
                         $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$value['property_id']);
 ?>
                         <select name="<?php echo 'select'.$x ?>">
@@ -1777,12 +1783,12 @@ class Search{
                             }
 ?>
                         </select>
-<?php               }
-                    else if($getValType['value_type'] == 'ent_ref')
-                    {
-                        $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$getValType['fk_ent_type_id']);
+<?php                   }
+                        else if($getValType['value_type'] == 'ent_ref')
+                        {
+                            $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$getValType['fk_ent_type_id']);
 ?>                      
-                        <select name="<?php echo 'select'.$x ?>">
+                            <select name="<?php echo 'select'.$x ?>">
 <?php
                             while($readEntToRef = $getEntToRef->fetch_assoc()){
                                if($readEntToRef['entity_name'] == "")
@@ -1801,13 +1807,13 @@ class Search{
 ?>
                         </select>
 <?php
-                    }
-                    else
-                    {
+                        }
+                        else
+                        {
 ?>
                             <input type="text" name="<?php echo 'textbox'.$x ?>">
 <?php  
-                    }
+                        }
 ?>
                 </td>
                 <td>
@@ -1815,6 +1821,14 @@ class Search{
                 </td>  
                 <td>
 <?php
+                    }
+                    else
+                    {
+?>
+                      <td> - </td>
+                      <td> - </td>
+<?php
+                    }
                     if($value['state'] == 'active')
                     {
 ?>
