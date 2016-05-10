@@ -2799,7 +2799,7 @@ class entityHist{
             //print_r($getOldAttr);
             while($moveToMain = $getOldAttr->fetch_assoc())
             {
-                echo $moveToMain['id'];
+                //echo $moveToMain['id'];
                 if(!$bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
                     echo "#NO UPDATE DOS VALUES";
@@ -2815,13 +2815,13 @@ class entityHist{
         /*echo "SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'";
         $getOldVal = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'");
         */
-        echo $getActVal->num_rows;
+        //echo $getActVal->num_rows;
         if($getActVal->num_rows > 0)
         {
             while($disableVal = $getActVal->fetch_assoc()){
-                echo $disableVal['id'];
-                echo entrou;
-                if(!$this->bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
+                //echo $disableVal['id'];
+                //echo entrou;
+                if(!$bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
                 {
                     $errorFound = true;
                     break;
