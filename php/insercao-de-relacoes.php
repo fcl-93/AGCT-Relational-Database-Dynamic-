@@ -1534,8 +1534,6 @@ class RelHist{
             $queryValue = $bd->runQuery($queryValue);
             while ($values = $queryValue->fetch_assoc()) {
                 print_r($values);
-                $bd->getMysqli()->commit();
-                return false;
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
@@ -1546,35 +1544,23 @@ class RelHist{
                     echo "#4 ";
                     return false;
                 }
-                $bd->getMysqli()->rollback();
-                return false;
             }
-            if ($queryHistValue->num_rows == 0) {
-                $updateValue = "UPDATE `value` SET state = 'inactive', updated_on = '".$dataUpdate."' WHERE relation_id = ".$_REQUEST["rel"];
+            while ($histValues = $queryHistValue->fetch_assoc()){
+                $updateValue = "UPDATE `value` SET "
+                        . "`property_id`= ".$histValues["property_id"].","
+                        . "`value`= '".$histValues["value"]."',"
+                        . "`producer`= '".$histValues["producer"]."',"
+                        . "`relation_id`= ".$histValues["relation_id"].","
+                        . "`updated_on`= '".$dataUpdate."',"
+                        . "`state`= '".$histValues["state"]."'"
+                        . "WHERE id = ".$histValues["value_id"];
+                echo $updateValue."<br>";
                 $updateValue = $bd->runQuery($updateValue);
                 if (!$updateValue) {
-                    echo "#7 ";
+                    echo "#6 ";
                     return false;
                 }
-            }
-            else {
-                while ($histValues = $queryHistValue->fetch_assoc()){
-                    $updateValue = "UPDATE `value` SET "
-                            . "`property_id`= ".$histValues["property_id"].","
-                            . "`value`= '".$histValues["value"]."',"
-                            . "`producer`= '".$histValues["producer"]."',"
-                            . "`relation_id`= ".$histValues["relation_id"].","
-                            . "`updated_on`= '".$dataUpdate."',"
-                            . "`state`= '".$histValues["state"]."'"
-                            . "WHERE id = ".$histValues["value_id"];
-                    echo $updateValue."<br>";
-                    $updateValue = $bd->runQuery($updateValue);
-                    if (!$updateValue) {
-                        echo "#6 ";
-                        return false;
-                    }
-                }
-            }
+            }  
         }
         $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate."' AND relation_id = ".$_REQUEST["rel"];
         $selValOutdated = $bd->runQuery($selValOutdated);
