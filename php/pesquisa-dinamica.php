@@ -2439,7 +2439,7 @@ class Search{
         }
         
         //changes the version
-        if(!$this->bd->runQuery("UPDATE `value` SET `state`=inactive,`updated_on`=".$updated_on." WHERE id=".$valToDisable))
+        if(!$this->bd->runQuery("UPDATE `value` SET `state`=inactive,`updated_on`='".$updated_on."' WHERE id=".$valToDisable))
         {
             $error = true;
         }
