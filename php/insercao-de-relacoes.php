@@ -1568,7 +1568,7 @@ class RelHist{
             $updateValue = "UPDATE `value` SET "
                             . "`updated_on`= '".$dataUpdate."',"
                             . "`state`= 'inactive'"
-                            . "WHERE id = ".$histValues["value_id"];
+                            . "WHERE id = ".$valOutadet["id"];
                     echo $updateValue."<br>";
                     $updateValue = $bd->runQuery($updateValue);
                     if (!$updateValue) {
