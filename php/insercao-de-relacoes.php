@@ -418,6 +418,8 @@ class InsereRelacoes
                                 <td>Valor Atual </td>
                                 <td>Seleção</td>
                                 <td>Novo valor</td>
+                                <td>Estado</td>
+                                <td>Ação</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -468,6 +470,26 @@ class InsereRelacoes
                                     }
 ?>                                    
                                 </td>
+<?php
+                                if($read_GetPropRel['state'] == 'active')
+                                {
+?>       
+                                        <td>Ativo </td>
+                                        <td>
+                                            <a href="insercao-de-relacoes?estado=desativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                        </td>
+<?php
+                                } 
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+                                    <td>
+                                        <a href="insercao-de-relacoes?estado=ativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
+                                   </td>
+<?php   
+                                }
+?>
                             </tr>
 <?php   
                                 $conta++;
@@ -1460,22 +1482,82 @@ class RelHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel'];
-        echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
-            $bd->getMysqli()->commit();
-?>
-            <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
-            <p>Clique em <a href="/insercao-de-relacoes/">Continuar</a> para avançar.</p>
+            if ($this->updateValue($bd)) {
+                echo "#1 ";
+                $bd->getMysqli()->commit();
+    ?>
+                <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/insercao-de-relacoes/">Continuar</a> para avançar.</p>
 <?php
+        
+            }
+            else {
+                echo "#2 ";
+?>
+                <p>Não foi possível reverter a propriedade para a versão selecionada</p>
+<?php
+                $bd->getMysqli()->rollback();
+                goBack();
+            }
         }
         else {
+            echo "#3 ";
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
             $bd->getMysqli()->rollback();
             goBack();
         }
+    }
+    
+    private function updateValue ($bd) {
+        $queryRelHis = $bd->runQuery("SELECT * FROM hist_relation WHERE id = ".$_REQUEST["hist"]);
+        $relHist = $queryRelHis->fetch_assoc();
+        $querySelRel = "SELECT rel_type_id FROM relation WHERE id = ".$_REQUEST["rel"];
+        $relType = $bd->runQuery($querySelRel)->fetch_assoc()["rel_type_id"];
+        $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$relType;
+        echo $queryPropRel."<br>";
+        $queryPropRel = $bd->runQuery($queryPropRel);
+        while ($prop = $queryPropRel->fetch_assoc()) {
+            $queryHistValue ="SELECT * FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $queryHistValue."<br>";
+            $queryHistValue = $bd->runQuery($queryHistValue);
+            $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $queryValue."<br>";
+            $queryValue = $bd->runQuery($queryValue);
+            while ($values = $queryValue->fetch_assoc()) {
+                $insertHist = "INSERT INTO `hist_value`"
+                        . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
+                        . "VALUES "
+                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
+                echo $insertHist."<br>";
+                $insertHist = $bd->runQuery($insertHist);
+                if (!$insertHist) {
+                    echo "#4 ";
+                    return false;
+                }
+            }
+            while ($histValues = $queryHistValue->fetch_assoc()){
+                $updateValue = "UPDATE `value` SET "
+                        . "`property_id`= ".$histValues["property_id"].","
+                        . "`value`= '".$histValues["value"]."',"
+                        . "`producer`= '".$histValues["producer"]."',"
+                        . "`relation_id`= ".$histValues["relation_id"].","
+                        . "`updated_on`= '".date("Y-m-d H:i:s",time())."',"
+                        . "`state`= '".$histValues["state"]."'"
+                        . "WHERE id = ".$histValues["value_id"];
+                echo $updateValue."<br>";
+                $updateValue = $bd->runQuery($updateValue);
+                if (!$updateValue) {
+                    echo "#6 ";
+                    return false;
+                }
+            }
+        }
+        echo "#5 ";
+        return true;
     }
     
      /**
