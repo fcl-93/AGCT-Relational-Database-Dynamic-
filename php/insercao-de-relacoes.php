@@ -28,67 +28,75 @@ class InsereRelacoes
 	 * and will handle all the Requests states
 	 */
 	public function checkUser(){
-		$capability = 'insert_relation';
-	
-		if ( is_user_logged_in() )
-		{
-			if(current_user_can($capability))
-			{
-				if(empty($_REQUEST["estado"]))
-				{
-                                    $this->tablePrint();
-				}
-				else if($_REQUEST['estado'] == 'editar')
-				{
-                                    $this->editRlationProps();
-				}
-				else if($_REQUEST['estado'] == 'associar')
-				{
-                                    $this->associar();
-				}
-                                else if($_REQUEST['estado'] == 'introducao')
-                                {
-                                    $this->secondEntSel();
-                                }
-				else if($_REQUEST['estado'] == 'inserir')
-				{
-                                    $this->insertState();
-				}
-				else if($_REQUEST['estado'] == 'desativar')
-				{
-                                    $this->desactivate();
-				}
-                                else if($_REQUEST['estado'] == 'ativar')
-                                {
-                                    $this->activate();
-                                }
-                                else if($_REQUEST['estado'] == 'historico')
-                                {
-                                    $this->gereInsRel->showHist($this->bd);
-                                }
-                                 else if($_REQUEST['estado'] == 'voltar')
-                                {
-                                    $this->gereInsRel->estadoVoltar($this->bd);
-                                }
-			}
-			else
-			{
+            $capability = 'insert_relation';
+
+            if ( is_user_logged_in() )
+            {
+                if(current_user_can($capability))
+                {
+                    if(empty($_REQUEST["estado"]))
+                    {
+                        $this->tablePrint();
+                    }
+                    else if($_REQUEST['estado'] == 'editar')
+                    {
+                        $this->editRlationProps();
+                    }
+                    else if($_REQUEST['estado'] == 'associar')
+                    {
+                        $this->associar();
+                    }
+                    else if($_REQUEST['estado'] == 'introducao')
+                    {
+                        $this->secondEntSel();
+                    }
+                    else if($_REQUEST['estado'] == 'inserir')
+                    {
+                        $this->insertState();
+                    }
+                    else if($_REQUEST['estado'] == 'desativar')
+                    {
+                        $this->desactivate();
+                    }
+                    else if($_REQUEST['estado'] == 'ativar')
+                    {
+                        $this->activate();
+                    }
+                    else if($_REQUEST['estado'] == 'historico')
+                    {
+                        $this->gereInsRel->showHist($this->bd);
+                    }
+                     else if($_REQUEST['estado'] == 'voltar')
+                    {
+                        $this->gereInsRel->estadoVoltar($this->bd);
+                    }
+                    else if($_REQUEST['estado'] == 'ativarVal')
+                    {
+                        $this->activateVal();
+                    }
+                    else if($_REQUEST['estado'] == 'desativarVal')
+                    {
+                        $this->desactivateVal();
+                    }
+                }
+                else
+                {
 ?>
-				<html>
-					<p>Não tem autorização para a aceder a esta página.</p>
-				</html>
+                    <html>
+                            <p>Não tem autorização para a aceder a esta página.</p>
+                    </html>
 <?php 
-			}
-		}
-		else 
-		{
+                }
+            }
+            else 
+            {
 ?>
-			<html>
-				<p>O utilizador não tem sessão iniciada.</p>
-                                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
-			</html>
+                <html>
+                        <p>O utilizador não tem sessão iniciada.</p>
+                         <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
+                </html>
 <?php			
-		}
+            }
 	}
 	
 	/**
@@ -489,7 +497,7 @@ class InsereRelacoes
                                 {
 ?>       
                                     <td>
-                                        <a href="insercao-de-relacoes?estado=desativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                        <a href="insercao-de-relacoes?estado=desativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
                                     </td>
 <?php
                                 } 
@@ -497,7 +505,7 @@ class InsereRelacoes
                                 {
 ?>
                                     <td>
-                                        <a href="insercao-de-relacoes?estado=ativarVal&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
+                                        <a href="insercao-de-relacoes?estado=ativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
                                    </td>
 <?php   
                                 }
@@ -732,7 +740,97 @@ class InsereRelacoes
             }
             
         }
+        
+        private function activateVal () {
+            $idVal = $this->bd->userInputVal($_REQUEST['val']);
+            $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd)) {
+                if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
+                    if($this->bd->runQuery("UPDATE value SET state='active' WHERE id=".$idVal)) {
+?>
+                        <html>
+                           <p>O valor da propriedade foi ativado.</p>
+                           <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                        $this->bd->getMysqli()->commit();
+                    }
+                    else {
+?>
+                    <html>
+                        <p>A ativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                     $this->bd->getMysqli()->rollback();
+                    }
+                }
+                else {
+?>
+                    <html>
+                        <p>A ativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                    $this->bd->getMysqli()->rollback();  
+                }
+            }
+            else {
+?>
+                <html>
+                    <p>A ativação do valor da propriedade falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
+                </html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
 	
+        private function desactivateVal () {
+            $idVal = $this->bd->userInputVal($_REQUEST['val']);
+            $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd)) {
+                if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
+                    if($this->bd->runQuery("UPDATE value SET state='inactive' WHERE id=".$idVal)) {
+?>
+                        <html>
+                           <p>O valor da propriedade foi desativado.</p>
+                           <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                        $this->bd->getMysqli()->commit();
+                    }
+                    else {
+?>
+                    <html>
+                        <p>A desativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                     $this->bd->getMysqli()->rollback();
+                    }
+                }
+                else {
+?>
+                    <html>
+                        <p>A desativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                    $this->bd->getMysqli()->rollback();  
+                }
+            }
+            else {
+?>
+                <html>
+                    <p>A desativação do valor da propriedade falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
+                </html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
+        
 	/**
 	 * This method will activate the relation the user selected.
 	 */
@@ -1624,6 +1722,20 @@ class RelHist{
             $bd->getMysqli()->rollback();
             return false;
         }
+    }
+    
+    public function addValHist($idVal,$bd) {
+        $selVal = $bd->runQuery("SELECT * FROM  value WHERE id = ".$idVal);
+        while ($val = $selVal->fetch_assoc()) {
+            $insertHist = "INSERT INTO `hist_value`"
+                    . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`)"
+                    . " VALUES "
+                    . "(".$val["property_id"].",'".$val["value"]."','".$val["producer"]."',".$val["relation_id"].",".$idVal.",".date("Y-m-d H:i:s",time()).",".$val["state"].")";
+            if (!$insertHist) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 ?>
