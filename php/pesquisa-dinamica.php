@@ -1755,7 +1755,8 @@ class Search{
                 ?>
                 </td>
                 <td>
-                    <input type="text" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
+                    <?php echo $value["state"]?>
+                    <input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
                 <td>
 <?php
