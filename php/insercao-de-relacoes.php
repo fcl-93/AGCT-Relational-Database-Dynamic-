@@ -1509,7 +1509,7 @@ class RelHist{
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
-                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
+                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
                 echo $insertHist."<br>";
                 $insertHist = $bd->runQuery($insertHist);
                 if (!$insertHist) {
