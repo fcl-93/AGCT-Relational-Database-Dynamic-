@@ -1525,6 +1525,7 @@ class RelHist{
         echo $queryPropRel."<br>";
         $queryPropRel = $bd->runQuery($queryPropRel);
         while ($prop = $queryPropRel->fetch_assoc()) {
+            print_r($prop);
             $queryHistValue ="SELECT * FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
             echo $queryHistValue."<br>";
             $queryHistValue = $bd->runQuery($queryHistValue);
@@ -1532,6 +1533,7 @@ class RelHist{
             echo $queryValue."<br>";
             $queryValue = $bd->runQuery($queryValue);
             while ($values = $queryValue->fetch_assoc()) {
+                print_r($values);
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
