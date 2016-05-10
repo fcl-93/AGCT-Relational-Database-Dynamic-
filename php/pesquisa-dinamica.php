@@ -2244,7 +2244,7 @@ class Search{
                     
                 }
             }   
-            //Backups the value that haven«t been changed
+            //Backups the value that haven't been changed
             $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on = '".$updated_on."'AND entity_id = ".$id.") AND entity_id = ".$id);
             while($readVals = $saveRemainValue->fetch_assoc())
             {
@@ -2808,7 +2808,7 @@ class entityHist{
         }
         
         //check if there is more properties on the history table or more properties on the normal table
-        echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."'";
+        echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'";
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'");
 
         if($getActVal->num_rows == 0)
