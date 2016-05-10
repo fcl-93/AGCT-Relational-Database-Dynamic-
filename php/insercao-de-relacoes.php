@@ -1544,6 +1544,8 @@ class RelHist{
                     echo "#4 ";
                     return false;
                 }
+                $bd->getMysqli()->rollback();
+                return false;
             }
             if ($queryHistValue->num_rows == 0) {
                 $updateValue = "UPDATE `value` SET state = 'inactive', updated_on = '".$dataUpdate."' WHERE relation_id = ".$_REQUEST["rel"];
@@ -1552,8 +1554,6 @@ class RelHist{
                     echo "#7 ";
                     return false;
                 }
-                $bd->getMysqli()->rollback();
-                return false;
             }
             else {
                 while ($histValues = $queryHistValue->fetch_assoc()){
@@ -1572,8 +1572,6 @@ class RelHist{
                         return false;
                     }
                 }
-                $bd->getMysqli()->rollback();
-                return false;
             }
         }
         $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate."' AND relation_id = ".$_REQUEST["rel"];
