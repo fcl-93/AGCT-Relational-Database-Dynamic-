@@ -1572,6 +1572,8 @@ class RelHist{
                         return false;
                     }
                 }
+                $bd->getMysqli()->rollback();
+                return false;
             }
         }
         $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate."' AND relation_id = ".$_REQUEST["rel"];
