@@ -1755,13 +1755,28 @@ class Search{
                 ?>
                 </td>
                 <td>
-                    <?php echo $value["state"]?>
+                    <?php if($value["state"] == 'active')
+                    {
+                        echo "Ativo";
+                    }
+                    else
+                    {
+                        echo "Inativo";
+                    }
+                    ?>
                 </td>
-                <td>
+                  
+               
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
                     if($value["state"] == 'active')
                     {
+?>
+                        <td>
+                            <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
+                        </td>  
+                        <td>
+<?php
                         if($getValType['value_type'] == 'bool')
                         {
 
@@ -1817,10 +1832,8 @@ class Search{
                         }
 ?>
                 </td>
-                <td>
-                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
-                </td>  
-                <td>
+              
+                
 <?php
                     }
                     else
@@ -1830,6 +1843,9 @@ class Search{
                       <td> - </td>
 <?php
                     }
+?>
+                    <td>
+<?php
                     if($value['state'] == 'active')
                     {
 ?>
