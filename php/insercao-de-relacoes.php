@@ -1502,6 +1502,7 @@ class RelHist{
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
                         . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$values["id"].",'".$values["updated_on"]."','".date("Y-m-d H:i:s",time())."','".$values["state"]."')";
+                echo $insertHist."<br>";
                 $insertHist = $bd->runQuery($insertHist);
                 if (!$insertHist) {
                     echo "#4 ";
@@ -1518,6 +1519,7 @@ class RelHist{
                         . "`updated_on`= '".date("Y-m-d H:i:s",time())."',"
                         . "`state`= '".$histValues["state"]."',"
                         . "WHERE id = ".$histValues["value_id"];
+                echo $updateValue."<br>";
                 $updateValue = $bd->runQuery($updateValue);
                 if (!$updateValue) {
                     echo "#6 ";
