@@ -879,6 +879,7 @@ class InsereRelacoes
              $idRel = $this->bd->userInputVal($_REQUEST['rel']);
             if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
+                ECHO date("Y-m-d H:i:s",time());
                 if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."' AND state = 'inactive' WHERE id=".$idRel))
                 {
 ?>
