@@ -1491,7 +1491,7 @@ class RelHist{
     }
     
     private function updateValue ($bd) {
-        $querySelRel = "SELECT rel_type_id FROM relation WHERE id = "..$_REQUEST["rel"];
+        $querySelRel = "SELECT rel_type_id FROM relation WHERE id = ".$_REQUEST["rel"];
         $relType = $bd->runQuery($querySelRel)->fetch_assoc()[0];
         $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$relType;
         echo $queryPropRel."<br>";
