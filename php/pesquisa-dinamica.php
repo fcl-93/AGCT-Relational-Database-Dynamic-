@@ -1705,8 +1705,8 @@ class Search{
                 <th>Propriedade</th>
                 <th>Valor Atual</th>
                 <th>Novo Valor</th>
-                <th>Estado</th>
                 <th>Selecionar</th>
+                <th>Ação</th>
             </thead>
             <tbody>
 <?php
@@ -1803,11 +1803,13 @@ class Search{
 ?>
                 </td>
                 <td>
+                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
+                </td>  
+                <td>
 <?php
                     if($value['state'] == 'active')
                     {
 ?>
-                    <input type="radio" name="state<?php echo $x?>" value="active" checked="checked"> Ativo </br>
                         <input type="radio" name="state<?php echo $x?>" value="inactive"> Inativo
 <?php
                     }
@@ -1815,15 +1817,13 @@ class Search{
                     {
 ?>
                         <input type="radio" name="state<?php echo $x?>" value="active"> Ativo </br>
-                        <input type="radio" name="state<?php echo $x?>" value="inactive" checked="checked"> Inativo
+                        
 <?php
                     }
 ?>
                    
                 </td>
-                <td>
-                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
-                </td>                
+              
             </tr>
 <?php
             }
@@ -2286,25 +2286,15 @@ class Search{
         {           
             if(isset($_REQUEST['check'.$x]))
             {
-                 if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
+                if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
                 {
-                    if($mode == 1){
-                        $getValState = $this->bd->runQuery("SELECT state FROM value WHERE id=".$this->bd->userInputVal($_REQUEST['check'.$x]))->fetch_assoc();
-                         if($getValState['state'] != $this->bd->userInputVal($_REQUEST['state'.$x]) )
-                         {
-                             
-                         }                   
-                    }
-                    else {
-     ?>
+?>
                         <html>
                             <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                             <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                         </html>
 <?php   
                     return false;
-                    }                
-                    
                 }
                 else
                 {
@@ -2339,7 +2329,7 @@ class Search{
                                         return false;
                         }
                     }
-            }
+                }
                             $count++;
             }
         }
