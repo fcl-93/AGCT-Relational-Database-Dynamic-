@@ -1519,7 +1519,6 @@ class RelHist{
             }
             while ($histValues = $queryHistValue->fetch_assoc()){
                 $updateValue = "UPDATE `value` SET "
-                        . "`entity_id`= ".$histValues["entity_id"].","
                         . "`property_id`= ".$histValues["property_id"].","
                         . "`value`= '".$histValues["value"]."',"
                         . "`producer`= '".$histValues["producer"]."',"
