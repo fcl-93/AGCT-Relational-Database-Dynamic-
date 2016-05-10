@@ -2469,6 +2469,51 @@ class Search{
     public function ativarVal(){
         $valToEnable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
         $updated_on = date("Y-m-d H:i:s",time());
+                
+        $this->bd->getMysqli()->autocommit(false);
+	$this->bd->getMysqli()->begin_transaction();
+        
+        $valToDisable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
+        $updated_on = date("Y-m-d H:i:s",time());
+        $error = false;
+        
+        //makes the backup
+        $valueDis = $this->bd->runQuery("SELECT * FROM value WHERE id=".$valToDisable)->fetch_assoc();
+        if($this->gereInsts->addEntToHist($valueDis['entity_id'],$this->bd,$updated_on)){ //-----> backups the entity
+            $getvals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id = ".$valueDis['entity_id']);
+            while($valsToHist = $getvals->fetch_assoc())
+            {
+                if(!$this->gereInsts->addHistValues($valsToHist['id'],$this->bd,$updated_on))
+                {
+                  $error = true;
+                  break; 
+                }
+            }
+        }
+        
+        //changes the version
+        if(!$this->bd->runQuery("UPDATE `value` SET `state`='active',`updated_on`='".$updated_on."' WHERE id=".$valToDisable))
+        {
+            $error = true;
+        }
+        
+        if($error == false)
+        {
+?>
+            
+                <p>O valor selecionada foi ativado.</p>
+                <p>Clique em <a href="pesquisa-dinamica/?estado=apresentacao&id=<?php echo$valueDis['entity_id'] ?>"/>Continuar</a> para avançar</p>
+<?php            
+            $this->bd->getMysqli()->commit();
+        }
+        else
+        {
+?>
+                <p>O valor selecionado não pôde ser ativada.</p>
+                <p>Clique em <?php goBack()?> para voltar à página anterior</p>
+<?php            
+            $this->bd->getMysqli()->rollback();
+        }
     }
 }
     
