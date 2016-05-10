@@ -1757,6 +1757,9 @@ class Search{
                 <td>
                     <?php echo $value["state"]?>
                 </td>
+                  <td>
+                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
+                </td>  
                 <td>
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
@@ -1817,9 +1820,7 @@ class Search{
                         }
 ?>
                 </td>
-                <td>
-                    <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
-                </td>  
+              
                 <td>
 <?php
                     }
