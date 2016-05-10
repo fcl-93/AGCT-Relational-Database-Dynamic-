@@ -1491,12 +1491,17 @@ class RelHist{
     }
     
     private function updateValue ($bd) {
-        $queryRelHis = $bd->runQuery("SELECT * FROM hist_relation WHERE id = ".$_REQUEST["hist"]);
         $relHist = $queryRelHis->fetch_assoc();
-        $queryRelHis = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel"]);
+        $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel"];
+        echo $queryPropRel."<br>";
+        $queryPropRel = $bd->runQuery($queryPropRel);
         while ($prop = $queryRelHis->fetch_assoc()) {
-            $queryHistValue = $bd->runQuery("SELECT * value FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
-            $queryValue = $bd->runQuery("SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+            $queryHistValue ="SELECT * value FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $insertHist."<br>";
+            $queryHistValue = $bd->runQuery($queryHistValue);
+            $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $insertHist."<br>";
+            $queryValue = $bd->runQuery($queryValue);
             while ($values = $queryValue->fetch_assoc()) {
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
