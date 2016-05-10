@@ -418,6 +418,8 @@ class InsereRelacoes
                                 <td>Valor Atual </td>
                                 <td>Seleção</td>
                                 <td>Novo valor</td>
+                                <td>Estado</td>
+                                <td>Ação</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -487,6 +489,7 @@ class InsereRelacoes
                                    </td>
 <?php   
                                 }
+?>
                             </tr>
 <?php   
                                 $conta++;
