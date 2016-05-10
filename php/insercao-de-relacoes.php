@@ -1491,11 +1491,10 @@ class RelHist{
     }
     
     private function updateValue ($bd) {
-        $relHist = $queryRelHis->fetch_assoc();
         $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel"];
         echo $queryPropRel."<br>";
         $queryPropRel = $bd->runQuery($queryPropRel);
-        while ($prop = $queryRelHis->fetch_assoc()) {
+        while ($prop = $queryPropRel->fetch_assoc()) {
             $queryHistValue ="SELECT * value FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
             echo $queryHistValue."<br>";
             $queryHistValue = $bd->runQuery($queryHistValue);
