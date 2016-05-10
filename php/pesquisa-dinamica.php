@@ -2427,6 +2427,9 @@ class Search{
         //makes the backup
         $valueDis = $this->bd->runQuery("SELECT * FROM value WHERE id=".$valToDisable)->fetch_assoc();
         if($this->gereInsts->addEntToHist($valueDis['entity_id'],$this->bd,$updated_on)){ //-----> backups the entity
+            
+            $this->bd->runQuery("UPDATE `entity` SET `updated_on`='".$updated_on."' WHERE id=".$valueDis['entity_id']);
+            
             $getvals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id = ".$valueDis['entity_id']);
             while($valsToHist = $getvals->fetch_assoc())
             {
