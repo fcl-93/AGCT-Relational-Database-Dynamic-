@@ -2780,14 +2780,16 @@ class entityHist{
         echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."'";
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'");
 
-        /*if()
+        if($getActVal->num_rows == 0)
         {
-            
+            while($disableVal = $getActVal->fetch_assoc()){
+                if(!$this->bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
+                {
+                    $errorFound = true;
+                    break;
+                }
+            }
         }
-        else
-        {
-            
-        }*/
         
         //Updates if there is no error
         if($errorFound)
