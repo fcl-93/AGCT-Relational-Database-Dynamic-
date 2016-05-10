@@ -1752,9 +1752,10 @@ class Search{
                 {
                     echo $valor;
                 }
-                ;?></td>
+                ?>
+                </td>
                 <td>
-                    <input type="checkbox" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
+                    <input type="text" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
                 <td>
 <?php
