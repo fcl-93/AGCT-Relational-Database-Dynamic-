@@ -1860,14 +1860,14 @@ class Search{
 <?php
                     }
 ?>
-                   
+                   <input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
               
             </tr>
 <?php
             }
 ?>
-<input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
+
 <?php
             $x++;
         }
