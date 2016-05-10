@@ -746,7 +746,6 @@ class InsereRelacoes
             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
             if( $this->gereInsRel->addHist($idRel,$this->bd)) {
                 if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
-                    ECHO "UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."' AND state = 'active' WHERE id=".$idVal;
                     if($this->bd->runQuery("UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."' AND state = 'active' WHERE id=".$idVal)) {
 ?>
                         <html>
@@ -793,13 +792,14 @@ class InsereRelacoes
             if( $this->gereInsRel->addHist($idRel,$this->bd)) {
                 if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
                     if($this->bd->runQuery("UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."' AND state = 'inactive' WHERE id=".$idVal)) {
+                        $this->bd->getMysqli()->commit();
 ?>
-                        <html>
+                        $this->bd->getMysqli()->commit();<html>
                            <p>O valor da propriedade foi desativado.</p>
                            <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
                         </html>
 <?php
-                        $this->bd->getMysqli()->commit();
+                        
                     }
                     else {
 ?>
