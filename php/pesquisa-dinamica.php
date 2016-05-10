@@ -1759,7 +1759,7 @@ class Search{
                 <td>
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
-                    if(value["state"] == 'active')
+                    if($value["state"] == 'active')
                     {
                         if($getValType['value_type'] == 'bool')
                         {
