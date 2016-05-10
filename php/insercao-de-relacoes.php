@@ -1567,7 +1567,7 @@ class RelHist{
                 }
             }
         }
-        $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate." AND relation_id = ".$_REQUEST["rel"];
+        $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate."' AND relation_id = ".$_REQUEST["rel"];
         $selValOutdated = $bd->runQuery($selValOutdated);
         while ($valOutadet = $selValOutdated->fetch_assoc()) {
             $updateValue = "UPDATE `value` SET "
@@ -1577,7 +1577,7 @@ class RelHist{
                     echo $updateValue."<br>";
                     $updateValue = $bd->runQuery($updateValue);
                     if (!$updateValue) {
-                        echo "#6 ";
+                        echo "#8 ";
                         return false;
                     }
         }
