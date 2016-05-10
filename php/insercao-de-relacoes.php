@@ -1257,28 +1257,31 @@ class RelHist{
                     . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".$inactive."')"))
             {
                 
-              $resSVal = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
-              while($readSVal = $resSVal->fetch_assoc())
-              {
-                  if($readSVal['entity_id']=='')
-                  {
-                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,NULL,".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
-                      {
-                        return false;
-                      }
-                  }
-                  else
-                  {
-                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
-                      {
-                        return false;
-                      }
-                  }
-                  
-                 
-              }
-                
-               return true;
+                $resSVal = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
+                while($readSVal = $resSVal->fetch_assoc())
+                {
+                    if($readSVal['entity_id']=='')
+                    {
+                        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,NULL,".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                if($bd->runQuery("UPDATE relation updated_on SET = '".$inactive."' WHERE id = ".$id))
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
            
         }
