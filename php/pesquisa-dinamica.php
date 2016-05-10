@@ -2810,7 +2810,8 @@ class entityHist{
         //check if there is more properties on the history table or more properties on the normal table
         echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'";
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'");
-
+        echo "SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'";
+        $getOldVal = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'");
         if($getActVal->num_rows == 0)
         {
             while($disableVal = $getActVal->fetch_assoc()){
