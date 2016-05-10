@@ -1833,7 +1833,7 @@ class Search{
 ?>
                 </td>
               
-                <td>
+                
 <?php
                     }
                     else
@@ -1843,6 +1843,9 @@ class Search{
                       <td> - </td>
 <?php
                     }
+?>
+                    <td>
+<?php
                     if($value['state'] == 'active')
                     {
 ?>
