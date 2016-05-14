@@ -804,7 +804,9 @@ class HistDeForms{
                                                
                                                 while($getPropId = $getPropHist ->fetch_assoc())
                                                {
+                                                    print_r($getPropId);
                                                         $getPropName = $bd->runQuery("SELECT * FROM property WHERE id=".$getPropId['property_id'] )->fetch_assoc();
+                                                        print_r($getPropName);
 ?>
                                                     <td><?php echo $getPropName['name']?></td>
                                                     <td><?php echo $getPropName['form_field_name']?></td>
@@ -814,9 +816,9 @@ class HistDeForms{
                                                     <td><?php echo $getPropId['mandatory_form']?></td>
                                                     <td><?php echo $getPropId['field_order']?></td>
                                                     <td> <td rowspan="<?php echo $getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td></td>
-                                          
+                                            </tr>
 <?php                                   
-                                                }  ?></tr><?php
+                                                }
                                 }
                                 
                             }                   
