@@ -173,28 +173,36 @@ class Unidade
          * This method will disable unit-types that enabled.
          */
         private function desactivate(){
-            if (!$this->checkForProp() && $this->gereHist->atualizaHistorico()) {
-                if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
-                {
+            if (!$this->checkForProp()) {
+                if($this->gereHist->atualizaHistorico()) {
+                    if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
+                    {
 ?>
-                    <html>
-                        <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi desativada</p>
-                        <p>Clique em <a href="/gestao-de-unidades"/>Continuar</a> para avançar</p>
-                    </html>
+                        <html>
+                            <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi desativada</p>
+                            <p>Clique em <a href="/gestao-de-unidades"/>Continuar</a> para avançar</p>
+                        </html>
 <?php
+                    }
+                    else {
+?>
+                        <p>Não foi possível desativar a unidade pretendida.</p>
+<?php
+                        goBack();
+                    }
                 }
                 else {
 ?>
-                    <p>Não foi possível ativar a unidade pretendida.</p>
+                    <p>Não foi possível desativar a unidade pretendida.</p>
 <?php
-                    goBack();
+                    goBack();              
                 }
             }
             else {
 ?>
-                <p>Não foi possível ativar a unidade pretendida.</p>
-<?php
-                goBack();              
+                <p>Não é possível desativar a unidade pretendida, uma vez que já existem propriedades com essa unidade associada.</p>
+                <p>Para desativar ou editar essa propriedades clique em <a href="/gestao-de-propriedades">Gestão de propriedades</a> ou clique em <?php goBack();?> para voltar à página anterior.</p>
+<?php  
             }
         }
         /**
