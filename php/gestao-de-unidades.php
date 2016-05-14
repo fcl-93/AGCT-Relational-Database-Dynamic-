@@ -55,6 +55,10 @@ class Unidade
                                 {
                                     $this->gereHist->showHist($this->bd);
                                 }
+                                else if($_REQUEST['estado'] == 'voltar')
+                                {
+                                    $this->gereHist->estadoVoltar($this->bd);
+                                }
 			}
 			else
 			{
