@@ -21,7 +21,7 @@ class Unidade
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
-                $gereHist= new UnidadeHist();
+                $this->gereHist= new UnidadeHist();
 		$this->checkUser();
 	}
 	
