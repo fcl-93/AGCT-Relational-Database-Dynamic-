@@ -795,6 +795,7 @@ class HistDeForms{
 ?>
                                         <tr> 
 <?php
+                                            echo "SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id;
                                             $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id);
 ?>    
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
@@ -804,9 +805,8 @@ class HistDeForms{
                                                
                                                 while($getPropId = $getPropHist ->fetch_assoc())
                                                {
-                                                    print_r($getPropId);
+                                                    echo"SELECT * FROM property WHERE id=".$getPropId['property_id'] ;
                                                         $getPropName = $bd->runQuery("SELECT * FROM property WHERE id=".$getPropId['property_id'] )->fetch_assoc();
-                                                        print_r($getPropName);
 ?>
                                                     <td><?php echo $getPropName['name']?></td>
                                                     <td><?php echo $getPropName['form_field_name']?></td>
