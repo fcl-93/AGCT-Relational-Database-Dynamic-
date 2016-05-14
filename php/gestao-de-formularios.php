@@ -765,13 +765,18 @@ class HistDeForms{
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <td>Nome do Formulário</td>
-                                    <td>Entidade</td>
-                                    <td>Propriedade</td>
-                                    <td>Ordem do campo no formulário</td>
-                                    <td>Obrigatório no forumulário customizado</td>
-                                    <td>Estado</td>
-                                    <td>Ação</td>
+                                    <th>Data de Ativação</th>
+                                    <th>Data de Desativação</th>
+                                    <th>Nome do Formulário</th>
+                                    <th>Propriedade</th>
+                                    <th>Nome do campo no formulário</th>
+                                    <th>Tamanho do campo no formulário</th>
+                                    <th>Ordem do campo no formulário</th>
+                                    <th>Obrigatório no forumulário customizado</th>
+                                    
+                                    
+                                    
+                                    <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -779,30 +784,42 @@ class HistDeForms{
                             if($goToCFN->num_rows == 0){
 ?>                                
                                 <tr>
-                                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
                                     <td><?php goBack()?></td>
                                 </tr>
 <?php 
                             }
                             else
                             {
-                                //get hist custom form
-                                $getNameOldFOrm = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
-                                while($readOldName = $getNameOldFOrm->fetch_assoc()){
-                                    $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE property_id=".$readOldName['custom_form_id']." AND inactive_on='".$readOldName['inactive_on']."'");
-                                    //$res_getProp = $this->bd->runQuery("SELECT p.* FROM property AS p, ent_type AS e WHERE  p.ent_type_id = e.id AND  e.id'".."' ORDER BY p.name ASC");
+                                while($readFNhist = $goToCFN->fetch_assoc()){
+?>
+                                        <tr> 
+<?php
+                                            $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id);
+?>    
+                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
+                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
+                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
+<?php
+                                               
+                                                while($getPropId = $getPropHist ->fetch_assoc())
+                                               {
+                                                        $getPropName = $bd->runQuery("SELECT * FROM property WHERE id=".$getPropId['property_id'] )->fetch_assoc();
+?>
+                                                    <td><?php echo $getPropName['name']?></td>
+                                                    <td><?php echo $getPropName['form_field_name']?></td>
+                                                    <td><?php echo $getPropName['form_field_size']?></td>
+
+                                                    <td><?php echo $getPropId['field_order']?></td>
+                                                    <td><?php echo $getPropId['mandatory_form']?></td>
+                                                    <td><?php echo $getPropId['field_order']?></td>
+                                                    <td> <td rowspan="<?php echo $getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td></td>
+                                            </tr>
+<?php                                   
+                                                }
                                 }
                                 
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                            }
-                        
+                            }                   
                             
 ?>
                             </tbody>
