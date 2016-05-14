@@ -374,7 +374,7 @@ class Entidade
 
             $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$id);
             $read_EntTypeD = $res_EntTypeD->fetch_assoc();
-            if ($this->checkForInst($id)) {
+            if (!$this->checkForInst($id)) {
                 if($this->gereHist->addHist($id,$this->bd))
                 {
                     $this->bd->runQuery("UPDATE ent_type SET state='inactive', updated_on='".date("Y-m-d H:i:s",time())."' WHERE id =".$id);
