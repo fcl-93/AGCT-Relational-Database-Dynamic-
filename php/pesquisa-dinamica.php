@@ -2244,7 +2244,7 @@ class Search{
                     
                 }
             }   
-            //Backups the value that haven«t been changed
+            //Backups the value that haven't been changed
             $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on = '".$updated_on."'AND entity_id = ".$id.") AND entity_id = ".$id);
             while($readVals = $saveRemainValue->fetch_assoc())
             {
@@ -2796,8 +2796,10 @@ class entityHist{
         }
         else 
         {
+            //print_r($getOldAttr);
             while($moveToMain = $getOldAttr->fetch_assoc())
             {
+                //echo $moveToMain['id'];
                 if(!$bd->runQuery("UPDATE `value` SET `entity_id`=".$moveToMain['entity_id'].",`property_id`=".$moveToMain['property_id'].",`value`='".$moveToMain['value']."',`producer`='".$moveToMain['producer']."',`relation_id`=NULL,`state`='".$moveToMain['state']."',`updated_on`='".$updated_on."' WHERE id = ".$moveToMain['value_id']))
                 {
                     echo "#NO UPDATE DOS VALUES";
@@ -2808,13 +2810,18 @@ class entityHist{
         }
         
         //check if there is more properties on the history table or more properties on the normal table
-        echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND inactive_on != '".$updated_on."'";
+        echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'";
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'");
-
-        if($getActVal->num_rows == 0)
+        /*echo "SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'";
+        $getOldVal = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$readActENt['id']."AND updated_on != '".$updated_on."'");
+        */
+        //echo $getActVal->num_rows;
+        if($getActVal->num_rows > 0)
         {
             while($disableVal = $getActVal->fetch_assoc()){
-                if(!$this->bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
+                //echo $disableVal['id'];
+                //echo entrou;
+                if(!$bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$disableVal['id']))
                 {
                     $errorFound = true;
                     break;
