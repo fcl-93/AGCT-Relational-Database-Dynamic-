@@ -273,7 +273,7 @@ class UnidadeHist
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
-            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["unit_id"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
 
@@ -290,20 +290,20 @@ class UnidadeHist
             <tbody>
 <?php
         if (empty($_REQUEST["data"])) {
-            $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+            $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["unit_id"]." ORDER BY inactive_on DESC";
         }
         else {
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["unit_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["unit_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["unit_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["unit_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $db->runQuery($queryHistorico);
@@ -334,7 +334,7 @@ class UnidadeHist
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&hist_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&hist_id=<?php echo $_REQUEST["unit_id"];?>">Voltar para esta versão
                         </a>
                     </td>
                 </tr>
