@@ -14,12 +14,14 @@ require_once("custom/php/common.php");
 class Unidade
 {
 	private $bd;
+        private $gereHist;
 	
 	/**
 	 * Contructor
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
+                $gereHist= new UnidadeHist();
 		$this->checkUser();
 	}
 	
@@ -48,6 +50,10 @@ class Unidade
                                 else if($_REQUEST['estado'] == 'activar')
                                 {
                                     $this->activate();
+                                }
+                                else if($_REQUEST['estado'] == 'historico')
+                                {
+                                    $this->gereHist->showHist($this->bd);
                                 }
 			}
 			else
@@ -126,7 +132,7 @@ class Unidade
 <?php
                                                             }
 ?>
-
+                                                        <td><a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">Histórico</a></td>
 						</tr>
 <?php 						
 					}
@@ -143,7 +149,7 @@ class Unidade
          * This method will disable unit-types that enabled.
          */
         private function desactivate(){
-            $this->atualizaHistorico();
+            $this->gereHist->atualizaHistorico();
             if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
             {
 ?>
@@ -158,8 +164,8 @@ class Unidade
          * This method will activate unit-types that are disabled
          */
         private function activate(){
-            $this->atualizaHistorico();
-            if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'active' WHERE id=".$_REQUEST['unit_id']))
+            $this->gereHist->atualizaHistorico();
+            if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."' state = 'active' WHERE id=".$_REQUEST['unit_id']))
             {
 ?>
                         <html>
@@ -168,17 +174,7 @@ class Unidade
                         </html>
 <?php
             }
-        }
-        
-        private function atualizaHistorico () {
-            $selectAtributos = "SELECT * FROM prop_unit_type WHERE id = ".$_REQUEST['unit_id'];
-            $selectAtributos = $this->bd->runQuery($selectAtributos);
-            $atributos = $selectAtributos->fetch_assoc();
-            $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`,`inactive_on`, `prop_unit_type_id`) "
-                    . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
-            $updateHist = $this->bd->runQuery($updateHist);
-        }
-        
+        }        
         
 	/**
 	 * This method will print the form that will be used to insert a new unit type.
@@ -243,5 +239,122 @@ class Unidade
 		
 	}
 	
+}
+
+class UnidadeHist
+{
+    public function _construct() {
+        
+    }
+    
+      /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected unit type.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    private function showHist ($db) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($db);
+        }
+        else {
+        //meto um datepicker        
+?>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
+            <input type="submit" value="Apresentar histórico">
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Unidade</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_prop_unit_type WHERE prop_unit_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="11">Não existe registo referente à unidade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["name"];?></td>
+                    <td>
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&hist_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão
+                        </a>
+                    </td>
+                </tr>
+<?php
+            }
+        }
+?>
+            <tbody>
+        </table>
+<?php
+        
+    }
+    }
+    
+    
+    /**
+     * This method will update the history of the unit type.
+     */
+    private function atualizaHistorico ($bd) {
+        $selectAtributos = "SELECT * FROM prop_unit_type WHERE id = ".$_REQUEST['unit_id'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`,`inactive_on`, `prop_unit_type_id`) "
+                . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
+        $updateHist = $bd->runQuery($updateHist);
+    }
 }
 ?>
