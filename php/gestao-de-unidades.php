@@ -21,7 +21,7 @@ class Unidade
 	 */
 	public function __construct(){
 		$this->bd = new Db_Op();
-                $gereHist= new UnidadeHist();
+                $this->gereHist= new UnidadeHist();
 		$this->checkUser();
 	}
 	
@@ -119,20 +119,25 @@ class Unidade
                                                             {
 ?>
                                                                 <td>Ativo</td>
-                                                                <td><a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a></td>
+                                                                <td>
+                                                                    <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
+                                                                    <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico}</a>
+                                                                </td>
 <?php
                                                             }
                                                             else if($read_Units['state'] =='inactive')
                                                             {
 ?>
                                                                 <td>Inativo</td>
-                                                                <td><a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a></td>
+                                                                <td>
+                                                                    <a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a>
+                                                                    <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
+                                                                </td>
 
                                                                 
 <?php
                                                             }
 ?>
-                                                        <td><a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">Histórico</a></td>
 						</tr>
 <?php 						
 					}
@@ -254,7 +259,7 @@ class UnidadeHist
      * After that he presents a table with all the versions presented in the history
      * @param type $db (object form the class Db_Op)
      */
-    private function showHist ($db) {
+    public function showHist ($db) {
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($db);
         }
