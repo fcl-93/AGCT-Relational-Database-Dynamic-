@@ -252,7 +252,43 @@ class UnidadeHist
         
     }
     
-      /**
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoVoltar ($db) {
+        $this->atualizaHistorico($db);
+        $selectAtributos = "SELECT * FROM hist_prop_unit_type WHERE id = ".$_REQUEST['hist'];
+        $selectAtributos = $db->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "UPDATE prop_unit_type SET ";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_unit_type_id" && !is_null($valor)) {
+                $updateHist .= $atributo." = '".$valor."',"; 
+            }
+        }
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['unit_id'];
+        echo $updateHist;
+        $updateHist =$db->runQuery($updateHist);
+        if ($updateHist) {
+            $db->getMysqli()->commit();
+?>
+            <p>Atualizou a unidade com sucesso para uma versão anterior.</p>
+            <p>Clique em <a href="/gestao-de-unidades/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else {
+?>
+            <p>Não foi possível reverter a unidade para a versão selecionada</p>
+<?php
+            $db->getMysqli()->rollback();
+            goBack();
+        }
+    }
+    
+    /**
      * This method is responsible for the execution flow when the state is Histórico.
      * He starts by presenting a datepicker with options to do a kind of filter of 
      * all the history of the selected unit type.
@@ -334,7 +370,7 @@ class UnidadeHist
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&hist_id=<?php echo $_REQUEST["unit_id"];?>">Voltar para esta versão
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&unit_id=<?php echo $_REQUEST["unit_id"];?>">Voltar para esta versão
                         </a>
                     </td>
                 </tr>
