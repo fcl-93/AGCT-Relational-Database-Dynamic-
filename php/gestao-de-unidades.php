@@ -174,7 +174,7 @@ class Unidade
          */
         private function desactivate(){
             if (!$this->checkForProp()) {
-                if($this->gereHist->atualizaHistorico()) {
+                if($this->gereHist->atualizaHistorico($this->bd)) {
                     if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
                     {
 ?>
@@ -209,7 +209,7 @@ class Unidade
          * This method will activate unit-types that are disabled
          */
         private function activate(){
-            if ($this->gereHist->atualizaHistorico()) {
+            if ($this->gereHist->atualizaHistorico($this->bd)) {
                 if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."' state = 'active' WHERE id=".$_REQUEST['unit_id']))
                 {
 ?>
