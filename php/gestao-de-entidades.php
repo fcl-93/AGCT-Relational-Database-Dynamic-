@@ -370,11 +370,11 @@ class Entidade
 	 */
 	public function disableEnt()
 	{
-                $id = $this->bd->userInputVal($_REQUEST['ent_id']);
-                
-		$res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$id);
-		$read_EntTypeD = $res_EntTypeD->fetch_assoc();
-                
+            $id = $this->bd->userInputVal($_REQUEST['ent_id']);
+
+            $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = ".$id);
+            $read_EntTypeD = $res_EntTypeD->fetch_assoc();
+            if ($this->checkForInst($id)) {
                 if($this->gereHist->addHist($id,$this->bd))
                 {
                     $this->bd->runQuery("UPDATE ent_type SET state='inactive', updated_on='".date("Y-m-d H:i:s",time())."' WHERE id =".$id);
@@ -387,18 +387,38 @@ class Entidade
                 else
                 {
 ?>
-                        <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
+                    <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
 <?php
-                        goBack();
-                        
-                        $this->bd->getMysqli()->rollback();                        
-                }
-                
-                
+                    goBack();
+
+                    $this->bd->getMysqli()->rollback();                        
+                }                    
+            }
+            else {
 ?>
-			
-<?php 		
+                    <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada uma vez que já existem instâncias dessa entidade criadas.</p>
+                    <p>Clique em <a href="/pesquisa-dinamica?estado=execucao&ent=<?php echo $id;?>">Pesquisa Dinâmica</a> para poder desátivá-las ou clique em <?php goBack();?> para regrssar à página anteriror.
+<?php
+
+            }
+ 		
 	}
+        
+        /**
+         * This method will check if there are any instances of the entity_type already created.
+         * @param int $id (the id of the entity type we want to check)
+         * @return boolean (true if there are already any isntance)
+         */
+        private function checkForInst ($id) {
+            $checkEnt = "SELECT * FROM entity WHERE ent_type_id = ".$id;
+            $checkEnt = $this->bd->runQuery($checkEnt);
+            if ($checkEnt->num_rows > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
 	
 	/**
 	 * This method will enable the entity when we click in then activate button 
