@@ -798,9 +798,9 @@ class HistDeForms{
                                             echo "SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND inactive_on".$readFNhist['inactive_on'];
                                             $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND inactive_on='".$readFNhist['inactive_on']."'");
 ?>    
-                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
-                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
-                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
+                                                <td rowspan="<?php echo 1//$getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
+                                                <td rowspan="<?php echo 1//$getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
+                                                <td rowspan="<?php echo 1//$getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
 <?php
                                                
                                                 while($getPropId = $getPropHist ->fetch_assoc())
@@ -815,7 +815,7 @@ class HistDeForms{
                                                     <td><?php echo $getPropId['field_order']?></td>
                                                     <td><?php echo $getPropId['mandatory_form']?></td>
                                                     <td><?php echo $getPropId['field_order']?></td>
-                                                    <td> <td rowspan="<?php echo $getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td></td>
+                                                    <td> <td rowspan="<?php echo 1//$getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td></td>
                                           
 <?php                                   
                                                 }  ?></tr><?php
