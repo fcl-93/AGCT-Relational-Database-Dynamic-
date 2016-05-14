@@ -259,7 +259,7 @@ class UnidadeHist
      * After that he presents a table with all the versions presented in the history
      * @param type $db (object form the class Db_Op)
      */
-    private function showHist ($db) {
+    public function showHist ($db) {
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($db);
         }
