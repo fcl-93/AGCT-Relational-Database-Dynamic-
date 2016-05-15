@@ -732,7 +732,7 @@ class ValPerHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estad=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
                         </a>
                     </td>
                 </tr>
