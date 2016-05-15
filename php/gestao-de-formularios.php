@@ -857,7 +857,7 @@ class HistDeForms{
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
                                                         <?php
                                                         if($checkIfFIrst == true){
-                                                            echo "Voltar Atras"
+                                                            echo "Voltar Atras";
                                                             $checkIfFIrst =false;
                                                         }
                                                             ?>
