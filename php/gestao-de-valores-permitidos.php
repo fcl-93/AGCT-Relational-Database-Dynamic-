@@ -660,6 +660,7 @@ class ValPerHist{
                     }
                 }
                 $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['id'];
+                echo $updateHist;
                 $updateHist =$db->runQuery($updateHist);
                 if ($updateHist) {
 
