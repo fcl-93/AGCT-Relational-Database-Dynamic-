@@ -748,21 +748,21 @@ class HistDeForms{
                         //backups each instance of the properties
                         $backupFormProps = $bd->runQuery("SELECT * FROM property WHERE id=".$readCf_Prop['property_id'])->fetch_assoc();
                         if($backupFormProps['rel_type_id'] == ''){
-                                $rel_type_id = "";
+                                $rel_type_id = 'NULL';
                         }
                         else {
                                 $rel_type_id =$backupFormProps['rel_type_id'];
                         }
                         
                         if($backupFormProps['unit_type_id'] == ''){
-                            $unit_type_id = '';
+                            $unit_type_id = 'NULL';
                         }
                         else {
                             $unit_type_id = $backupFormProps['unit_type_id'];
                         }
                         if($backupFormProps['fk_ent_type_id'] == '')
                         {
-                                $fk_ent_type_id = '';
+                                $fk_ent_type_id = 'NULL';
                         }
                         else{
                                 $fk_ent_type_id = $backupFormProps['fk_ent_type_id'];
