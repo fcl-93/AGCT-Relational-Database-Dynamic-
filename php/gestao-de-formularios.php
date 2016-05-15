@@ -831,7 +831,7 @@ class HistDeForms{
                                                 <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['inactive_on']?></td>
                                                 <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['name']?></td>
 <?php
-                                               
+                                                $checkIfFIrst = true;
                                                 while($getPropId = $getPropHist ->fetch_assoc())
                                                {
                                                         $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
@@ -853,9 +853,14 @@ class HistDeForms{
                                                     }
 ?> 
                                         
-                                                    </td> <td rowspan="<?php echo 1//$spanSize ?>">
+                                                    </td> <td rowspan="<?php echo$spanSize ?>">
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
-                                                        //Voltar Atras
+                                                        <?php
+                                                        if($checkIfFIrst == true){
+                                                            echo "Voltar Atras"
+                                                            $checkIfFIrst =false;
+                                                        }
+                                                            ?>
                                                     </td> 
                                             </tr>                               
 <?php                                   
