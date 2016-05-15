@@ -789,7 +789,7 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
-        echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;
+        //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;
         $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
 ?>
                         <table class="table">
@@ -808,7 +808,7 @@ class HistDeForms{
                             </thead>
                             <tbody>
 <?php
-                             echo $goToCFN->num_rows;
+                           //  echo $goToCFN->num_rows;
                             if($goToCFN->num_rows == 0){
 ?>                                
                                 <tr>
@@ -845,12 +845,12 @@ class HistDeForms{
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
                                                         <?php goBack(); ?>
                                                     </td>
-                                       
+                                       </tr>
 <?php                                   
                                                 } 
                                 }
                                  ?>
-                                   </tr><?php
+                                   <?php
                             }                   
                             
 ?>
