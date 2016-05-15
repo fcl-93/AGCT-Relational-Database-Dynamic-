@@ -663,7 +663,7 @@ class ValPerHist{
                 $updateHist =$db->runQuery($updateHist);
                 if ($updateHist) {
 
-                    $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != ".$updateTime);
+                    $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
                     while ($propOut = $selPropOut->fetch_assoc()) {
                         $updateOut = $bd->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = inactive WHERE id = ".$propOut["id"]);
                         if (!$updateOut) {
