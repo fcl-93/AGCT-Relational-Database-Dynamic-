@@ -852,16 +852,19 @@ class HistDeForms{
                                                         echo "Não";
                                                     }
 ?> 
-                                        
+                                         <?php
+                                                        if($checkIfFIrst == true){
+                                                            ?>
                                                     </td> <td rowspan="<?php echo$spanSize ?>">
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
-                                                        <?php
-                                                        if($checkIfFIrst == true){
+                                                       <?php
                                                             echo "Voltar Atras";
                                                             $checkIfFIrst =false;
+                                                           ?> </td> 
+                                                            <?php
                                                         }
                                                             ?>
-                                                    </td> 
+                                                   
                                             </tr>                               
 <?php                                   
                                                 } 
