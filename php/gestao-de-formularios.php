@@ -839,7 +839,9 @@ class HistDeForms{
 
                                                     <td><?php echo $getPropId['field_order']?></td>
                                                     <td><?php echo $getPropId['mandatory_form']?></td>
-                                                    <td rowspan="<?php echo $getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td>
+                                                    <td rowspan="<?php echo $getPropHist->num_rows?>">
+                                                        <a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>
+                                                    </td>
                                        
 <?php                                   
                                                 } 
