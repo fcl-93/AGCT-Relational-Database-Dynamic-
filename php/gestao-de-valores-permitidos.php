@@ -643,29 +643,35 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
-        if ($this->atualizaHistorico($db)) {
-            $selectAtributos = "SELECT * FROM hist_prop_unit_type WHERE id = ".$_REQUEST['hist'];
-            $selectAtributos = $db->runQuery($selectAtributos);
-            $atributos = $selectAtributos->fetch_assoc();
-            $updateHist = "UPDATE prop_unit_type SET ";
+        if ($this->atualizaHistorico($_REQUEST["prop_id"],$db)) {
+            //get all the prop_allowed_values in the selected version
+            $updateTime = date("Y-m-d H:i:s",time());
+            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["rel"].")";
+            $selOld = $bd->runQuery($selOld);
+            $atributos = $selOld->fetch_assoc();
+            $updateHist = "UPDATE prop_allowed_value SET ";
             foreach ($atributos as $atributo => $valor) {
-                if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_unit_type_id" && !is_null($valor)) {
+                if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
                     $updateHist .= $atributo." = '".$valor."',"; 
                 }
             }
-            $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['unit_id'];
-            echo $updateHist;
+            $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$_REQUEST['unit_id'];
             $updateHist =$db->runQuery($updateHist);
             if ($updateHist) {
+                
+                $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != ".$updateTime);
+                while ($propOut = $selPropOut->fetch_assoc()) {
+                    $bd->runQuery("UPDATE prop_allowed_value SET updated_on = ".$updateTime.", state = inactive WHERE id = ".$propOut["id"]);
+                }
                 $db->getMysqli()->commit();
 ?>
-                <p>Atualizou a unidade com sucesso para uma versão anterior.</p>
+                <p>Atualizou os valores permitidos com sucesso para uma versão anterior.</p>
                 <p>Clique em <a href="/gestao-de-unidades/">Continuar</a> para avançar.</p>
 <?php
             }
             else {
 ?>
-                <p>Não foi possível reverter a unidade para a versão selecionada</p>
+                <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
 <?php
                 $db->getMysqli()->rollback();
                 goBack();
@@ -673,7 +679,7 @@ class ValPerHist{
         }
         else {
 ?>
-            <p>Não foi possível reverter a unidade para a versão selecionada</p>
+            <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
 <?php
             $db->getMysqli()->rollback();
             goBack();
@@ -747,7 +753,6 @@ class ValPerHist{
             $contaLinhas = 0;
             while ($hist = $queryHistorico->fetch_assoc()) {
                 $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
-                echo "row".$rowspan;
                 if ($contaLinhas > $rowspan) {
                     $contaLinhas = 0;
                 }
@@ -760,7 +765,6 @@ class ValPerHist{
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
 <?php
                 }
-                echo "entrei4";
 ?>
                     <td><?php echo $hist["value"];?></td>
                     <td>
