@@ -812,6 +812,7 @@ class HistDeForms{
                                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                                 <input type="submit" value="Apresentar histórico">
                         </form>
+                        
                         <table class="table">
                             <thead>
                                 <tr>
