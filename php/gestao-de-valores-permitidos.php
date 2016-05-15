@@ -793,7 +793,7 @@ class ValPerHist{
             
         $selAllVal = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id =".$idProp);
 
-        while ($oldVal = $selAllVal->fetch_assoc()) {
+        while ($read_oldEnum = $selAllVal->fetch_assoc()) {
            if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
             {
                 //the history was created
