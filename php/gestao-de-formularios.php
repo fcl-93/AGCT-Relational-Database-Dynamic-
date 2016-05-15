@@ -854,17 +854,17 @@ class HistDeForms{
 ?> 
                                          <?php
                                                         if($checkIfFIrst == true){
-                                                            ?>
-                                                    </td> <td rowspan="<?php echo$spanSize ?>">
-                                                        <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
-                                                       <?php
-                                                            echo "Voltar Atras";
-                                                            $checkIfFIrst =false;
-                                                           ?> </td> 
-                                                            <?php
+?>
+                                                        </td> <td rowspan="<?php echo$spanSize ?>">
+                                                        <a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>
+<?php
+                                                        $checkIfFIrst =false;
+?> 
+                                                    </td> 
+<?php
                                                         }
-                                                            ?>
-                                                   
+?>
+
                                             </tr>                               
 <?php                                   
                                                 } 
