@@ -749,7 +749,7 @@ class ValPerHist{
 ?>
                 <tr>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
-                    <td rowspan="<?php echo $rowspan;?>><?php echo $hist["inactive_on"];?></td>
+                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
                     <td><?php echo $hist["value"];?></td>
                     <td>
 <?php
@@ -763,7 +763,7 @@ class ValPerHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
+                    <td rowspan="<?php echo $rowspan;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
                         </a>
                     </td>
                 </tr>
