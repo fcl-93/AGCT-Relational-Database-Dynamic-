@@ -688,20 +688,20 @@ class ValPerHist{
             <tbody>
 <?php
         if (empty($_REQUEST["data"])) {
-            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
+            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
         }
         else {
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $db->runQuery($queryHistorico);
