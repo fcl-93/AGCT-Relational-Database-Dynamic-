@@ -746,19 +746,29 @@ class HistDeForms{
                         }
                         //backups each instance of the properties
                         $backupFormProps = $bd->runQuery("SELECT * FROM property WHERE id=".$readCf_Prop['property_id'])->fetch_assoc();
-                        if($backupFormProps['rel_type_id'] == '')
-                        {
-                            if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",NULL,'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."',".$backupFormProps['unit_type_id'].",".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$backupFormProps['fk_ent_type_id'].",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
-                                return false;
-                            }
+                        if($backupFormProps['rel_type_id'] == ''){
+                                $rel_type_id = "";
                         }
-                        else
-                        {
-                            if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$backupFormProps['rel_type_id'].",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."',".$backupFormProps['unit_type_id'].",".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$backupFormProps['fk_ent_type_id'].",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
-                                return false;
-                            }
+                        else {
+                                $rel_type_id =$backupFormProps['rel_type_id'];
                         }
                         
+                        if($backupFormProps['unit_type_id'] == ''){
+                            $unit_type_id = '';
+                        }
+                        else {
+                            $unit_type_id = $backupFormProps['unit_type_id'];
+                        }
+                        if($backupFormProps['fk_ent_type_id'] == '')
+                        {
+                                $fk_ent_type_id = '';
+                        }
+                        else{
+                                $fk_ent_type_id = $backupFormProps['fk_ent_type_id'];
+                        }
+                        if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$rel_type_id.",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."','".$unit_type_id."',".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$fk_ent_type_id.",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
+                                return false;
+                        s}
                 }
                
                 //updates the current form updated_on field 
