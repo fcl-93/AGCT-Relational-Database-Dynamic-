@@ -822,18 +822,18 @@ class HistDeForms{
                                         <tr> 
 <?php
                                             echo "SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND inactive_on".$readFNhist['inactive_on'];
-                                            $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND inactive_on='".$readFNhist['inactive_on']."'");
+                                            $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE inactive_on='".$readFNhist['inactive_on']."'");
 ?>    
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php print_r($getPropHist) //echo $readFNhist['name']?></td>
 <?php
-                                               echo "ENTROU AQUI 4";
+                                               
                                                 while($getPropId = $getPropHist ->fetch_assoc())
                                                {
                                                         $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
 ?>
-                                                    <td><?php echo $getPropName['name']?></td>
+                                                    <td><?php echo "ENTROU" //$getPropName['name']?></td>
                                                     <td><?php echo $getPropName['form_field_name']?></td>
                                                     <td><?php echo $getPropName['form_field_size']?></td>
 
