@@ -746,8 +746,9 @@ class ValPerHist{
         else {
             $contaLinhas = 0;
             while ($hist = $queryHistorico->fetch_assoc()) {
-                echo $contaLinhas;
+                echo "conta".$contaLinhas;
                 $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
+                echo "row".$rowspan;
                 if ($contaLinhas > $rowspan) {
                     $contaLinhas = 0;
                 }
