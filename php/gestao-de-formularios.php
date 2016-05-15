@@ -736,13 +736,21 @@ class HistDeForms{
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
            if($resCf_Prop->num_rows > 0)
            {
+             
                 while($readCf_Prop = $resCf_Prop->fetch_assoc())
                 {
-                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
-                    {
-                        return false;
-                    }
+                        //backups the custom form has properties  tuples
+                        if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
+                        {
+                            return false;
+                        }
+                        //backups each instance of the properties
+                        $backupFormProps = $bd->runQuery("SELECT * FROM property WHERE id=".$readCf_Prop['property_id'])->fetch_assoc();
+                        if($bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$backupFormProps['rel_type_id'].",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."',".$backupFormProps['unit_type_id'].",".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$backupFormProps['fk_ent_type_id'].",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
+                            return false;
+                        }
                 }
+               
                 //updates the current form updated_on field 
                 if(!$bd->runQuery("UPDATE `custom_form` SET `updated_on`='".$inactive."' WHERE id=".$id))
                 {
