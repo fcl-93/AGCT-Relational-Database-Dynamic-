@@ -563,11 +563,12 @@ class GereForms
 	  */
 	public function desactivate(){
             $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            $res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
+            $read_formName = $res_formName->fetch_assoc();
             if($this->gereFormHist->addHist($idForm, $this->bd))
             {
                 $this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$idForm);
-		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
-		$read_formName = $res_formName->fetch_assoc();
+		
 ?>
 		<html>
                     <p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
