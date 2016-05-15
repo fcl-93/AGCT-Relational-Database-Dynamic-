@@ -802,9 +802,6 @@ class HistDeForms{
                                     <th>Tamanho do campo no formulário</th>
                                     <th>Ordem do campo no formulário</th>
                                     <th>Obrigatório no forumulário customizado</th>
-                                    
-                                    
-                                    
                                     <th>Ação</th>
                                 </tr>
                             </thead>
@@ -843,7 +840,6 @@ class HistDeForms{
 
                                                     <td><?php echo $getPropId['field_order']?></td>
                                                     <td><?php echo $getPropId['mandatory_form']?></td>
-                                                    <td><?php echo $getPropId['field_order']?></td>
                                                     <td rowspan="<?php echo $getPropHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a></td>
                                           </tr>
 <?php                                   
