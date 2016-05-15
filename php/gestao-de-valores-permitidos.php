@@ -745,10 +745,11 @@ class ValPerHist{
         }
         else {
             while ($hist = $queryHistorico->fetch_assoc()) {
+                $rowspan = $bd->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = ".$hist["inactive_on"])->num_rows;
 ?>
                 <tr>
-                    <td><?php echo $hist["active_on"];?></td>
-                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
+                    <td rowspan="<?php echo $rowspan;?>><?php echo $hist["inactive_on"];?></td>
                     <td><?php echo $hist["value"];?></td>
                     <td>
 <?php
