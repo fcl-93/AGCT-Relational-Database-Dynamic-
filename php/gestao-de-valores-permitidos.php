@@ -643,39 +643,57 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
-        if ($this->atualizaHistorico($_REQUEST["prop_id"],$db)) {
+        if ($this->addHist($_REQUEST["prop_id"],$db)) {
             //get all the prop_allowed_values in the selected version
             $updateTime = date("Y-m-d H:i:s",time());
-            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["rel"].")";
-            $selOld = $bd->runQuery($selOld);
-            $atributos = $selOld->fetch_assoc();
-            $updateHist = "UPDATE prop_allowed_value SET ";
-            foreach ($atributos as $atributo => $valor) {
-                if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
-                    $updateHist .= $atributo." = '".$valor."',"; 
+            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"].")";
+            $selOld = $db->runQuery($selOld);
+            $erro = false;
+            while ($old = $selOld->fetch_assoc()) {
+                $selOldVal = "SELECT * FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"];
+                $selOldVal = $db->runQuery($selOldVal);
+                $atributos = $selOldVal->fetch_assoc();
+                $updateHist = "UPDATE prop_allowed_value SET ";
+                foreach ($atributos as $atributo => $valor) {
+                    if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
+                        $updateHist .= $atributo." = '".$valor."',"; 
+                    }
+                }
+                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['id'];
+                $updateHist =$db->runQuery($updateHist);
+                if ($updateHist) {
+
+                    $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
+                    while ($propOut = $selPropOut->fetch_assoc()) {
+                        $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = inactive WHERE id = ".$propOut["id"]);
+                        if (!$updateOut) {
+?>
+                            <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+                            $db->getMysqli()->rollback();
+                            goBack();
+                            $erro = true;
+                            break;
+                        }
+                    }
+                    if ($erro) {
+                        break;
+                    }
+                }
+                else {
+?>
+                    <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+                    $db->getMysqli()->rollback();
+                    goBack();
+                    break;
                 }
             }
-            $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$_REQUEST['unit_id'];
-            $updateHist =$db->runQuery($updateHist);
-            if ($updateHist) {
-                
-                $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != ".$updateTime);
-                while ($propOut = $selPropOut->fetch_assoc()) {
-                    $bd->runQuery("UPDATE prop_allowed_value SET updated_on = ".$updateTime.", state = inactive WHERE id = ".$propOut["id"]);
-                }
                 $db->getMysqli()->commit();
 ?>
                 <p>Atualizou os valores permitidos com sucesso para uma versão anterior.</p>
                 <p>Clique em <a href="/gestao-de-unidades/">Continuar</a> para avançar.</p>
 <?php
-            }
-            else {
-?>
-                <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
-<?php
-                $db->getMysqli()->rollback();
-                goBack();
-            }
         }
         else {
 ?>
