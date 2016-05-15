@@ -859,7 +859,7 @@ class HistDeForms{
                                                         </td> <td rowspan="<?php echo$spanSize ?>">
                                                             
                                                             
-                                                        <a href="href=?estado=versionBack&histId=">Voltar para esta versão</a>
+                                                        <a href="href=?estado=versionBack&histId="<?php echo $getPropHist['custom_form_id']?>>Voltar para esta versão</a>
 <?php
                                                         $checkIfFIrst =false;
 ?> 
