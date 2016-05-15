@@ -643,7 +643,7 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
-        if ($this->atualizaHistorico($_REQUEST["prop_id"],$db)) {
+        if ($this->addHist($_REQUEST["prop_id"],$db)) {
             //get all the prop_allowed_values in the selected version
             $updateTime = date("Y-m-d H:i:s",time());
             $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["rel"].")";
