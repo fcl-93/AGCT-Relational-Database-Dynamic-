@@ -47,10 +47,10 @@ class GereForms
 				{
 					$this->formEdit();
 				}
-                                else if($_REQUEST['estado'] == 'updateForm')
-                                {
-                                    $this->updateForm();
-                                }
+                                                                else if($_REQUEST['estado'] == 'updateForm')
+                                                                {
+                                                                                $this->updateForm();
+                                                                }
 				else if($_REQUEST['estado'] == 'ativar')
 				{
 					$this->activate();
@@ -59,10 +59,14 @@ class GereForms
 				{
 					$this->desactivate();
 				}
-                                else if($_REQUEST['estado'] == 'historico')
-                                {
-                                   $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
-                                }
+                                                                else if($_REQUEST['estado'] == 'historico')
+                                                                {
+                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
+                                                                }
+                                                                else if ($_REQUEST['estado'] == 'versionBack')
+                                                                {
+                                                                                $this->gereFormHist->changeVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);  
+                                                                }
 			}
 			else
 			{
@@ -859,7 +863,7 @@ class HistDeForms{
                                                         </td> <td rowspan="<?php echo$spanSize ?>">
                                                             
                                                             
-                                                        <a href="href=?estado=versionBack&histId="<?php echo $getPropId['custom_form_id']?>>Voltar para esta versão</a>
+                                                        <a href="href=?estado=versionBack&histId=<?php echo $getPropId['custom_form_id']?>">Voltar para esta versão</a>
 <?php
                                                         $checkIfFIrst =false;
 ?> 
@@ -882,6 +886,15 @@ class HistDeForms{
                             </tbody>
                         </table>
 <?php
+    }
+    
+    /**
+     * Thi method will make the change between the actual form and the form that bellongs to the history
+     * @param type $idFormHist
+     * @param type $bd
+     */
+    public function changeVersion($idFormHist,$bd){
+        
     }
 }
 ?>
