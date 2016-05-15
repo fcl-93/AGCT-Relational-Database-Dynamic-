@@ -920,17 +920,9 @@ class HistDeForms{
                 while( $readProps = $bbProps->fetch_assoc()){
                         //insert the old tuples in the main table 
                         if(!$bd->runQuery("INSERT INTO `custom_form_has_prop`(`property_id`, `custom_form_id`, `field_order`, `mandatory_form`, `updated_on`) VALUES (".$readProps['property_id'].",".$readProps['custom_form_id'].",".$readProps['field_order'].",".$readProps['mandatory_form'].",'".$inactive."')")){
-                        {
                             $error = true;
                             break;
                         }
-                        /*}
-                        if(!$bd->runQuery("UPDATE `custom_form_has_prop` SET `field_order`=".$readProps['field_order'].",`mandatory_form`=".$readProps['mandatory_form'].",`updated_on`='".$inactive."' WHERE property_id=".$readProps['property_id']." AND custom_form_id=".$readProps['custom_form_id'])){
-                            $error = true;
-                            break;
-                        }*/
-                    
-                    
                         if($theFirst == true){
                         //get the name form the history table
                         $getNamePars = $bd->runQuery("SELECT *  FROM hist_custom_form WHERE inactive_on = '".$formToBack['inactive_on']."'")->fetch_assoc();
