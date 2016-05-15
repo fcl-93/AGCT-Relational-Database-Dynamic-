@@ -851,12 +851,13 @@ class HistDeForms{
                                                     {
                                                         echo "Não";
                                                     }
-?>
+?> 
+                                        </tr>
                                                     </td> <td rowspan="<?php echo $spanSize ?>">
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
                                                         Voltar Atras
                                                     </td> 
-                                            </tr>                                
+                                                                           
 <?php                                   
                                                 } 
 ?>
