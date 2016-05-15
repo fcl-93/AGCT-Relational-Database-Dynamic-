@@ -912,7 +912,7 @@ class HistDeForms{
         else
         {
                 //delete all the tuples that bellong to a form 
-                $bd->runQuery("DELETE FROM custom_form_has_property WHERE custom_form_id = ".$formToBack['custom_form_id']);
+                $bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$formToBack['custom_form_id']);
                 $error = false;
                 //Brings back the tuples from the form that is in the history
                 $bbProps = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE inactive_on = '".$formToBack['inactive_on']."'");
