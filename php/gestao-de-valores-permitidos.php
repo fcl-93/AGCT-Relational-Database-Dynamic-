@@ -58,6 +58,15 @@ class ValoresPermitidos
 	 			{
 	 				$this->changeEnum();
 	 			}
+                                else if($_REQUEST['estado'] == 'historico')
+	 			{
+	 				$this->histVal->showHist($this->bd);
+	 			}
+                                else if($_REQUEST['estado'] == 'voltar')
+	 			{
+	 				$this->histVal->estadoVoltar($this->bd);
+	 			}
+                                
 			}
 			else 
 			{
@@ -112,103 +121,101 @@ class ValoresPermitidos
 						while($read_PropWEnum = $res_NProp->fetch_assoc())
 						{
 ?>
-							<tr>
+                                                    <tr>
 <?php 				
-								//Get all enum values for the property that in will start printing now
-								$res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
-								
-								//Get the entity name and id that is related to the property we are printing
-								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
-								$read_EntName = $res_Ent->fetch_assoc();
-								
-								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
-								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
-								
-								//Get all the enum values that we wil print this is only the number.
-								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
-                                                                $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND ent_type_id =".$read_EntName['id']);
+                                                        //Get all enum values for the property that in will start printing now
+                                                        $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
+
+                                                        //Get the entity name and id that is related to the property we are printing
+                                                        $res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
+                                                        $read_EntName = $res_Ent->fetch_assoc();
+
+                                                        //Get the number of properties with that belonh to the etity I'm printing and have enum tipe
+                                                        $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
+
+                                                        //Get all the enum values that we wil print this is only the number.
+                                                        $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+                                                        $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND ent_type_id =".$read_EntName['id']);
                                                         //verifies if the name i'm printing has ever been written
 							$conta = 0;
 							for($i = 0; $i < count($printedNames); $i++)
 							{
-								if($printedNames[$i] == $read_EntName['name'])
-								{
-									$conta++;
-								}
+                                                            if($printedNames[$i] == $read_EntName['name'])
+                                                            {
+                                                                    $conta++;
+                                                            }
 							}
 
 							if($conta == 0)
 							{
 ?>
-								<td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_EntName['name'];?></td>
+                                                            <td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_EntName['name'];?></td>
 <?php 	
-								$printedNames[] = $read_EntName['name'];
+                                                            $printedNames[] = $read_EntName['name'];
 							}
 							else
 							{
-								//echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
-
+                                                            //echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
 							}
 ?>
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
-							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a><a href="gestao-de-valores-permitidos?estado=historico&prop_id=<?php echo $read_PropWEnum['id'];?>">[Histórico]</a</td>
 
 <?php 							
 							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
 							if($res_Enum->num_rows == 0)
 							{
 ?>
-								<td colspan=4> Não há valores permitidos definidos </td>
+                                                            <td colspan=4> Não há valores permitidos definidos </td>
 <?php 
 							}
 							else
 							{
-								while($read_EnumValues = $res_Enum->fetch_assoc())
-								{			
+                                                            while($read_EnumValues = $res_Enum->fetch_assoc())
+                                                            {			
 ?>									
-										<td><?php  echo $read_EnumValues['id'];?></td>
-										<td><?php echo $read_EnumValues['value'];?></td>
-										<td>
+                                                                <td><?php  echo $read_EnumValues['id'];?></td>
+                                                                <td><?php echo $read_EnumValues['value'];?></td>
+                                                                <td>
 <?php 			
-										if($read_EnumValues['state'] == 'active')
-										{
+                                                                if($read_EnumValues['state'] == 'active')
+                                                                {
 ?>
-											Ativo
+                                                                    Ativo
 <?php 
-										}
-										else 
-										{
+                                                                }
+                                                                else 
+                                                                {
 ?>	
-											Inativo
+                                                                    Inativo
 <?php 											
-										}
-										
+                                                                }										
 ?>										
-										</td>
-										<td>
-										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
+                                                                </td>
+                                                                <td>
+                                                                <a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
 <?php 
-										if($read_EnumValues['state'] === 'active')
-										{
+                                                                if($read_EnumValues['state'] === 'active')
+                                                                {
 ?>
-											<a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+                                                                    <a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
 <?php 
-										}
-										else 
-										{
+                                                                }
+                                                                else 
+                                                                {
 ?>
-											<a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+                                                                    <a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
 <?php 
-										}
+                                                                }
 ?>										
-										</td>
-									</tr>		
+                                                                </td>
+                                                            </tr>		
 <?php 								
-								}
-							}
+                                                            }
+                                                        }
 ?>
-							</tr>
+                                                    </tr>
 <?php 
 						}
 ?>
@@ -600,6 +607,148 @@ class ValPerHist{
     public function __construct(){}
     
     /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoVoltar ($db) {
+        if ($this->atualizaHistorico($db)) {
+            $selectAtributos = "SELECT * FROM hist_prop_unit_type WHERE id = ".$_REQUEST['hist'];
+            $selectAtributos = $db->runQuery($selectAtributos);
+            $atributos = $selectAtributos->fetch_assoc();
+            $updateHist = "UPDATE prop_unit_type SET ";
+            foreach ($atributos as $atributo => $valor) {
+                if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_unit_type_id" && !is_null($valor)) {
+                    $updateHist .= $atributo." = '".$valor."',"; 
+                }
+            }
+            $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['unit_id'];
+            echo $updateHist;
+            $updateHist =$db->runQuery($updateHist);
+            if ($updateHist) {
+                $db->getMysqli()->commit();
+?>
+                <p>Atualizou a unidade com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/gestao-de-unidades/">Continuar</a> para avançar.</p>
+<?php
+            }
+            else {
+?>
+                <p>Não foi possível reverter a unidade para a versão selecionada</p>
+<?php
+                $db->getMysqli()->rollback();
+                goBack();
+            }
+        }
+        else {
+?>
+            <p>Não foi possível reverter a unidade para a versão selecionada</p>
+<?php
+            $db->getMysqli()->rollback();
+            goBack();
+        }
+    }
+    
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected unit type.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function showHist ($db) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($db);
+        }
+        else {
+        //meto um datepicker        
+?>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="prop_id" value="<?php echo $_REQUEST["prop_id"]; ?>">
+            <input type="submit" value="Apresentar histórico">
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Valores Permitidos</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE proeprty_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="11">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                <tr>
+                    <td><?php echo $hist["active_on"];?></td>
+                    <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["value"];?></td>
+                    <td>
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
+                        </a>
+                    </td>
+                </tr>
+<?php
+            }
+        }
+?>
+            <tbody>
+        </table>
+<?php
+        
+    }
+    }
+    
+    
+    /**
      * Will an item to the table hist_prop_allowed_value
      * to generate the historic with all modifications.
      *
@@ -608,6 +757,8 @@ class ValPerHist{
      * @return boolean 
      */
     public function addHist($id,$bd){
+        $bd->getMySqli()->autocommit(false);
+        $bd->getMySqli()->begin_transaction();
         //get the old enum
         $res_oldEnum = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$id);      
         
