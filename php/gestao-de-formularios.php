@@ -789,6 +789,7 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
+        echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;
         $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
 ?>
                         <table class="table">
@@ -826,7 +827,7 @@ class HistDeForms{
 ?>    
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
-                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php print_r($getPropHist) //echo $readFNhist['name']?></td>
+                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
 <?php
                                                
                                                 while($getPropId = $getPropHist ->fetch_assoc())
