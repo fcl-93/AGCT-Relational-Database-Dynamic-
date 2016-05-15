@@ -726,10 +726,15 @@ class HistDeForms{
     
     public function __construct() {
     }
-    
+    /**
+     * 
+     * @param type $id
+     * @param type $bd
+     * @return boolean
+     */
     public function addHist($id,$bd){
         $bd->getMysqli()->autocommit(false);
-	$bd->getMysqli()->begin_transaction();
+        $bd->getMysqli()->begin_transaction();
         
         //gets info from the form that we will be changing 
         $res_getEntTp = $bd->runQuery("SELECT * FROM custom_form WHERE id=".$id."");
@@ -781,11 +786,12 @@ class HistDeForms{
                 {
                     return false;
                 }
-                return true;
+                return $inactive;
            }
         }
         return false;   
     }
+    
     
     /**
      * This method will create a table where the history will be showned.
@@ -863,7 +869,7 @@ class HistDeForms{
                                                         </td> <td rowspan="<?php echo$spanSize ?>">
                                                             
                                                             
-                                                        <a href="href=?estado=versionBack&histId=<?php echo $getPropId['custom_form_id']?>">Voltar para esta versão</a>
+                                                        <a href="href=?estado=versionBack&histId=<?php echo $getPropId['id']?>">Voltar para esta versão</a>
 <?php
                                                         $checkIfFIrst =false;
 ?> 
@@ -890,10 +896,70 @@ class HistDeForms{
     
     /**
      * Thi method will make the change between the actual form and the form that bellongs to the history
-     * @param type $idFormHist
-     * @param type $bd
+     * @param type $idFormHist -> id from one of the properties of the form that is in the history table.
+     * @param type $bd --> database object to allow db operations
      */
     public function changeVersion($idFormHist,$bd){
+        //get the id from the form that needs to be changed 
+        $formToBack = $bd->runQuery("SELECT custom_form_id, inactive_on FROM hist_custom_form_has_property WHERE id=".$idFormHist);
+        
+        //Starts doing  abackup onn the actual form that is presented to the user
+        $inactive = $this->addHist($formToBack['custom_form_id'], $bd);
+        if($inactive== false)
+        {
+                        $error=true;
+        }
+        else
+        {
+                //delete all the tuples that bellong to a form 
+                $bd->runQuery("DELETE FROM custom_form_has_property WHERE custom_form_id = ".$formToBack['custom_form_id']);
+                $error = false;
+                //Brings back the tuples from the form that is in the history
+                $bbProps = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE inactive_on = '".$formToBack['inactive_on']."'");
+                $theFirst = true;
+                while( $readProps = $bbProps->fetch_assoc()){
+                        //insert the old tuples in the main table 
+                        if(!$bd->runQuery("INSERT INTO `custom_form_has_prop`(`property_id`, `custom_form_id`, `field_order`, `mandatory_form`, `updated_on`) VALUES (".$readProps['property_id'].",".$readProps['custom_form_id'].",".$readProps['field_order'].",".$readProps['mandatory_form'].",'".$inactive."')")){
+                        {
+                            $error = true;
+                            break;
+                        }
+                        /*}
+                        if(!$bd->runQuery("UPDATE `custom_form_has_prop` SET `field_order`=".$readProps['field_order'].",`mandatory_form`=".$readProps['mandatory_form'].",`updated_on`='".$inactive."' WHERE property_id=".$readProps['property_id']." AND custom_form_id=".$readProps['custom_form_id'])){
+                            $error = true;
+                            break;
+                        }*/
+                    
+                    
+                        if($theFirst == true){
+                        //get the name form the history table
+                        $getNamePars = $bd->runQuery("SELECT *  FROM hist_custom_form WHERE inactive_on = '".$formToBack['inactive_on']."'")->fetch_assoc();
+                        //updqte tghe current  name to the one that comes form the history
+                            if(!$bd->runQuery("UPDATE `custom_form` SET `name`='".$getNamePars['name']."',`state`='".$getNamePars['state']."',`updated_on`='".$inactive."' WHERE id=".$formToBack['custom_form_id'])){
+                                $error = true;
+                                break;
+                            }
+                            $theFirst = false;
+                        }
+                }
+                
+                if($error == true)
+                {
+?>
+                        <p>O formulário atual não pôde ser substituido pelo antigo.</p>
+                        <p>Clique em <?php goBack() ?> para voltar à página anterior</p>
+<?php
+                        $bd->getMysqli()->rollback();
+                }
+                else
+                {
+?>
+                        <p>A troca de formulários foi bem sucedida..</p>
+                        <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+<?php
+                        $bd->getMysqli()->commit();
+                }
+        }
         
     }
 }
