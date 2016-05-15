@@ -597,7 +597,7 @@ class ValoresPermitidos
 	public function desactivate(){
             
                 $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
                 $idProp = $selProp->fetch_assoc()["property_id"];
                 if($this->histVal->addHist($getEnum, $this->bd))
                 {
