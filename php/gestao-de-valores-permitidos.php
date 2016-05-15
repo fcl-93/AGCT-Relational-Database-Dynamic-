@@ -486,7 +486,7 @@ class ValoresPermitidos
 <?php 
             if($this->ssvalidation())
             {
-                if($this->histVal->addHist($getEnumId, $this->bd)){
+                if($this->histVal->addHist($_SESSION["property_id"], $this->bd)){
                     //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
                     $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
                     if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')")) {
@@ -531,7 +531,10 @@ class ValoresPermitidos
                 //History generation 
                 $getEnumId = $this->bd->userInputVal($_REQUEST['enum_id']);
 
-                if($this->histVal->addHist($getEnumId, $this->bd)){
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+                $idProp = $selProp->fetch_assoc()["property_id"];
+                
+                if($this->histVal->addHist($idProp, $this->bd)){
                     //insert the new value for the enum.
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$getEnumId);
                 //echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
@@ -562,7 +565,9 @@ class ValoresPermitidos
 	public function activate(){
             
             $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-            if($this->histVal->addHist($getEnum, $this->bd))
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+            $idProp = $selProp->fetch_assoc()["property_id"];
+            if($this->histVal->addHist($idProp, $this->bd))
             {
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$getEnum);
                 //gets the name of the enum that has been enabled 
@@ -592,6 +597,8 @@ class ValoresPermitidos
 	public function desactivate(){
             
                 $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+                $idProp = $selProp->fetch_assoc()["property_id"];
                 if($this->histVal->addHist($getEnum, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
@@ -779,29 +786,21 @@ class ValPerHist{
      * @param type $bd -> database object to allow me to use the database run querys.
      * @return boolean 
      */
-    public function addHist($id,$bd){
+    public function addHist($idProp,$bd){
         $bd->getMySqli()->autocommit(false);
         $bd->getMySqli()->begin_transaction();
         $updateTime = date("Y-m-d H:i:s",time());
-        //get the old enum
-        $res_oldEnum = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$id);      
-        
-        if($res_oldEnum->num_rows == 1)
-        {
-            $read_oldEnum = $res_oldEnum->fetch_assoc();
             
-            $selAllVal = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id =".$res_oldEnum["property_id"]);
-            
-            while ($oldVal = $selAllVal->fetch_assoc()) {
-               if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."')"))
-                {
-                    //the history was created
-                    return false;
-                } 
-            }
-            return true;
-        }//the history is not created due to an error in one of the queries or insertions.
-        return false;
+        $selAllVal = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id =".$idProp);
+
+        while ($oldVal = $selAllVal->fetch_assoc()) {
+           if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
+            {
+                //the history was created
+                return false;
+            } 
+        }
+        return true;
         
     }
 }
