@@ -799,8 +799,22 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
-        //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;
-        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
+        
+                                    if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<=".$_REQUEST['data']." ORDER BY inactive_on DESC");   
+                                    }
+                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on=>".$_REQUEST['data']." ORDER BY inactive_on DESC");
+                                    }
+                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+
+                                    }
+                                    else {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
+
+                                    }
+        //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;   
 ?>
                         <form method="GET">
                                 Verificar histórico:<br>
@@ -840,7 +854,7 @@ class HistDeForms{
                             }
                             else
                             {
-                                while($readFNhist = $goToCFN->fetch_assoc()){
+                                    while($readFNhist = $goToCFN->fetch_assoc()){
 ?>
                                         <tr> 
 <?php
