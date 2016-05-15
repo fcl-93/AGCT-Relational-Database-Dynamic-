@@ -650,7 +650,7 @@ class ValPerHist{
             $selOld = $db->runQuery($selOld);
             $erro = false;
             while ($old = $selOld->fetch_assoc()) {
-                $selOldVal = "SELECT * FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"];
+                $selOldVal = "SELECT * FROM hist_prop_allowed_value WHERE id = ".$old["id"];
                 $selOldVal = $db->runQuery($selOldVal);
                 $atributos = $selOldVal->fetch_assoc();
                 $updateHist = "UPDATE prop_allowed_value SET ";
@@ -694,7 +694,7 @@ class ValPerHist{
                 $db->getMysqli()->commit();
 ?>
                 <p>Atualizou os valores permitidos com sucesso para uma versão anterior.</p>
-                <p>Clique em <a href="/gestao-de-unidades/">Continuar</a> para avançar.</p>
+                <p>Clique em <a href="/gestao-de-valores-permitidos/">Continuar</a> para avançar.</p>
 <?php
             }
         }
