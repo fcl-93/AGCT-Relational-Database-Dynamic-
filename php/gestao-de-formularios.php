@@ -841,7 +841,9 @@ class HistDeForms{
                                                     <td><?php echo $getPropName['form_field_size']?></td>
 
                                                     <td><?php echo $getPropId['field_order']?></td>
-                                                    <td><?php if($getPropId['mandatory_form'] == 1)
+                                                    <td>
+<?php 
+                                                    if($getPropId['mandatory_form'] == 1)
                                                     {
                                                         echo "Sim";
                                                     }
@@ -849,8 +851,9 @@ class HistDeForms{
                                                     {
                                                         echo "Não";
                                                     }
-                                                    ?></td>  
-                                        </tr>                                
+?>
+                                                    </td>  
+                                            </tr>                                
 <?php                                   
                                                 } 
 ?>
