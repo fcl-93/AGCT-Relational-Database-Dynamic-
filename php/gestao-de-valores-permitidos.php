@@ -565,7 +565,7 @@ class ValoresPermitidos
 	public function activate(){
             
             $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
             $idProp = $selProp->fetch_assoc()["property_id"];
             if($this->histVal->addHist($idProp, $this->bd))
             {
@@ -599,7 +599,7 @@ class ValoresPermitidos
                 $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
                 $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
                 $idProp = $selProp->fetch_assoc()["property_id"];
-                if($this->histVal->addHist($getEnum, $this->bd))
+                if($this->histVal->addHist($idProp, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
                     //get the name to show to the users after the item is disabled
