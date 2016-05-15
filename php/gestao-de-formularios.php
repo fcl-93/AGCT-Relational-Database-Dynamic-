@@ -802,6 +802,17 @@ class HistDeForms{
         //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;
         $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);      
 ?>
+                        <form method="GET">
+                                Verificar histórico:<br>
+                                <input type="radio" name="controlDia" value="ate">até ao dia<br>
+                                <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+                                <input type="radio" name="controlDia" value="dia">no dia<br>
+                                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="hidden" name="estado" value="historico">
+                                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                <input type="submit" value="Apresentar histórico">
+                        </form>
+                        
                         <table class="table">
                             <thead>
                                 <tr>
