@@ -659,7 +659,7 @@ class ValPerHist{
                         $updateHist .= $atributo." = '".$valor."',"; 
                     }
                 }
-                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['id'];
+                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['prop_allowed_value_id'];
                 echo $updateHist."<br>";
                 $updateHist =$db->runQuery($updateHist);
                 if ($updateHist) {}
