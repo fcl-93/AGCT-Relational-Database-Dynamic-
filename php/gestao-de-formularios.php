@@ -901,7 +901,7 @@ class HistDeForms{
      */
     public function changeVersion($idFormHist,$bd){
         //get the id from the form that needs to be changed 
-        $formToBack = $bd->runQuery("SELECT custom_form_id, inactive_on FROM hist_custom_form_has_property WHERE id=".$idFormHist);
+        $formToBack = $bd->runQuery("SELECT custom_form_id, inactive_on FROM hist_custom_form_has_property WHERE id=".$idFormHist)->fetch_assoc();
         
         //Starts doing  abackup onn the actual form that is presented to the user
         $inactive = $this->addHist($formToBack['custom_form_id'], $bd);
