@@ -565,7 +565,7 @@ class ValoresPermitidos
 	public function activate(){
             
             $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
             $idProp = $selProp->fetch_assoc()["property_id"];
             if($this->histVal->addHist($idProp, $this->bd))
             {
@@ -597,9 +597,9 @@ class ValoresPermitidos
 	public function desactivate(){
             
                 $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
                 $idProp = $selProp->fetch_assoc()["property_id"];
-                if($this->histVal->addHist($getEnum, $this->bd))
+                if($this->histVal->addHist($idProp, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
                     //get the name to show to the users after the item is disabled
@@ -659,30 +659,23 @@ class ValPerHist{
                         $updateHist .= $atributo." = '".$valor."',"; 
                     }
                 }
-                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['id'];
-                echo $updateHist."<br>";
+                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['prop_allowed_value_id'];
                 $updateHist =$db->runQuery($updateHist);
-                if ($updateHist) {
-                    echo "SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'"."<br>";
-                    $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
-                    while ($propOut = $selPropOut->fetch_assoc()) {
-                        echo "UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = 'inactive' WHERE id = ".$propOut["id"]."<br>";
-                        $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = 'inactive' WHERE id = ".$propOut["id"]);
-                        if (!$updateOut) {
-?>
-                            <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
-<?php
-                            $db->getMysqli()->rollback();
-                            goBack();
-                            $erro = true;
-                            break;
-                        }
-                    }
-                    if ($erro) {
-                        break;
-                    }
-                }
+                if ($updateHist) {}
                 else {
+?>
+                    <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+                    $db->getMysqli()->rollback();
+                    goBack();
+                    $erro = true;
+                    break;
+                }
+            }
+            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
+            while ($propOut = $selPropOut->fetch_assoc()) {
+                $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = 'inactive' WHERE id = ".$propOut["id"]);
+                if (!$updateOut) {
 ?>
                     <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
 <?php
@@ -773,16 +766,16 @@ class ValPerHist{
 <?php
         }
         else {
-            $contaLinhas = 0;
+            $contaLinhas = 1;
             while ($hist = $queryHistorico->fetch_assoc()) {
                 $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
                 if ($contaLinhas > $rowspan) {
-                    $contaLinhas = 0;
+                    $contaLinhas = 1;
                 }
 ?>
                 <tr>
 <?php
-                if ($contaLinhas === 0) {
+                if ($contaLinhas === 1) {
 ?>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
@@ -803,7 +796,7 @@ class ValPerHist{
 ?>
                     </td>
 <?php
-                    if ($contaLinhas === 0) {
+                    if ($contaLinhas === 1) {
 ?>
                         <td rowspan="<?php echo $rowspan;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
                             </a>
