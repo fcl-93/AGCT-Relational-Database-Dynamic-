@@ -61,7 +61,7 @@ class GereForms
 				}
                                                                 else if($_REQUEST['estado'] == 'historico')
                                                                 {
-                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
+                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['id']), $this->bd);
                                                                 }
                                                                 else if ($_REQUEST['estado'] == 'versionBack')
                                                                 {
