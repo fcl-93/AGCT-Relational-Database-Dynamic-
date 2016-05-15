@@ -2659,7 +2659,19 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
-                        $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                                 if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
+                                }
+                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
+                                }
+                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+
+                                }
+                                else {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                                }
                         if($presetOld->num_rows == 0)
                         {
 ?>
