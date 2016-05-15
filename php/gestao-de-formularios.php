@@ -826,7 +826,7 @@ class HistDeForms{
 ?>    
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['active_on']?></td>
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
-                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
+                                                <td rowspan="<?php echo $getPropHist->num_rows?>"><?php print_r($getPropHist) //echo $readFNhist['name']?></td>
 <?php
                                                echo "ENTROU AQUI 4";
                                                 while($getPropId = $getPropHist ->fetch_assoc())
