@@ -853,9 +853,9 @@ class HistDeForms{
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
                                                         <?php goBack(); ?>
                                                     </td>
-                                       
+                                       </tr>
 <?php                                   
-                                                } ?></tr>
+                                                } ?>
                                    <?php
                                 }
                                  
