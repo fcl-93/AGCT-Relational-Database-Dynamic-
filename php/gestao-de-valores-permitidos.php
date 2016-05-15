@@ -750,17 +750,21 @@ class ValPerHist{
                 $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
                 echo "row".$rowspan;
                 if ($contaLinhas > $rowspan) {
+                    echo "entrei";
                     $contaLinhas = 0;
                 }
 ?>
                 <tr>
 <?php
+echo "entrei2";
                 if ($contaLinhas = 0) {
+                    echo "entrei3";
 ?>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
 <?php
                 }
+                echo "entrei4";
 ?>
                     <td><?php echo $hist["value"];?></td>
                     <td>
