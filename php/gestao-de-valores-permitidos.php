@@ -769,16 +769,16 @@ class ValPerHist{
 <?php
         }
         else {
-            $contaLinhas = 0;
+            $contaLinhas = 1;
             while ($hist = $queryHistorico->fetch_assoc()) {
                 $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
                 if ($contaLinhas > $rowspan) {
-                    $contaLinhas = 0;
+                    $contaLinhas = 1;
                 }
 ?>
                 <tr>
 <?php
-                if ($contaLinhas === 0) {
+                if ($contaLinhas === 1) {
 ?>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
@@ -799,7 +799,7 @@ class ValPerHist{
 ?>
                     </td>
 <?php
-                    if ($contaLinhas === 0) {
+                    if ($contaLinhas === 1) {
 ?>
                         <td rowspan="<?php echo $rowspan;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
                             </a>
