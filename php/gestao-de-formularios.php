@@ -828,9 +828,9 @@ class HistDeForms{
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['inactive_on']?></td>
                                                 <td rowspan="<?php echo $getPropHist->num_rows?>"><?php echo $readFNhist['name']?></td>
 <?php
-                                               
+                                               echo "ENTROU AQUI 4";
                                                 while($getPropId = $getPropHist ->fetch_assoc())
-                                               {echo "SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on'];
+                                               {
                                                         $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
 ?>
                                                     <td><?php echo $getPropName['name']?></td>
