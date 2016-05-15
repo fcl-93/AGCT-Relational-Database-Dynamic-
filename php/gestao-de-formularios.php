@@ -61,7 +61,7 @@ class GereForms
 				}
                                                                 else if($_REQUEST['estado'] == 'historico')
                                                                 {
-                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
+                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['id']), $this->bd);
                                                                 }
                                                                 else if ($_REQUEST['estado'] == 'versionBack')
                                                                 {
@@ -801,10 +801,10 @@ class HistDeForms{
     public function tableHist($id,$bd){
         
                                     if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<=".$_REQUEST['data']." ORDER BY inactive_on DESC");   
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
                                     }
                                     else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on=>".$_REQUEST['data']." ORDER BY inactive_on DESC");
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on=>'".$_REQUEST['data']."' ORDER BY inactive_on DESC");
                                     }
                                     else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
                                                 $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
