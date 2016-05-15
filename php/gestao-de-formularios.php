@@ -835,7 +835,7 @@ class HistDeForms{
                                                {
                                                         $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
 ?>
-                                                    <td><?php echo "ENTROU" //$getPropName['name']?></td>
+                                                    <td><?php echo $getPropName['name']?></td>
                                                     <td><?php echo $getPropName['form_field_name']?></td>
                                                     <td><?php echo $getPropName['form_field_size']?></td>
 
@@ -853,12 +853,12 @@ class HistDeForms{
                                                         <!--<a href="?estado=versionBack&histId=<?php //echo $getPropHist['custom_form_id']?>">Voltar para esta versão</a>-->
                                                         <?php goBack(); ?>
                                                     </td>
-                                       </tr>
+                                       
 <?php                                   
-                                                } 
-                                }
-                                 ?>
+                                                } ?></tr>
                                    <?php
+                                }
+                                 
                             }                   
                             
 ?>
