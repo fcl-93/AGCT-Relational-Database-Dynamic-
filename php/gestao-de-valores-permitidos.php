@@ -646,8 +646,8 @@ class ValPerHist{
         if ($this->addHist($_REQUEST["prop_id"],$db)) {
             //get all the prop_allowed_values in the selected version
             $updateTime = date("Y-m-d H:i:s",time());
-            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["rel"].")";
-            $selOld = $bd->runQuery($selOld);
+            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"].")";
+            $selOld = $db->runQuery($selOld);
             $atributos = $selOld->fetch_assoc();
             $updateHist = "UPDATE prop_allowed_value SET ";
             foreach ($atributos as $atributo => $valor) {
