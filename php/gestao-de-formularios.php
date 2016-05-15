@@ -823,7 +823,7 @@ class HistDeForms{
                                 <input type="radio" name="controlDia" value="dia">no dia<br>
                                 <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
                                 <input type="hidden" name="estado" value="historico">
-                                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                <input type="hidden" name="form_id" value="<?php echo $id; ?>">
                                 <input type="submit" value="Apresentar histórico">
                         </form>
                         
