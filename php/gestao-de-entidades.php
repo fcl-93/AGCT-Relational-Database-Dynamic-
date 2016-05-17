@@ -68,6 +68,15 @@ class Entidade {
      * This method will print the table that will show all the ent_types
      */
     public function tableToprint() {
+?>      
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
+<?php
         //Apresentar tabela
         $res_EntType = $this->bd->runQuery("SELECT * FROM ent_type");
         //verifica se há ou não entidades
