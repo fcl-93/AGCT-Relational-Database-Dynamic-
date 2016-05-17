@@ -218,7 +218,7 @@ class InsereRelacoes
 ?>                               
                                 </tbody>
                             </table>   
-                            <div id="pager" class="pager">
+                            <div id="pager" class="tablesorter-pager">
                               <form>
                                 <img src="/custom/images/first.png" class="first"/>
                                 <img src="/custom/images/prev.png" class="prev"/>
