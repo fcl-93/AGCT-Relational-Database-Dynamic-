@@ -12,7 +12,7 @@
 				c.totalPages = Math.ceil(c.totalRows / c.size);
 				c.pagerPositionSet = false;
 				moveToPage(table);
-				fixPosition(table);
+				//fixPosition(table);
 			}
 			
 			function fixPosition(table) {
@@ -99,7 +99,7 @@
 					}
 				}
 				
-				fixPosition(table,tableBody);
+				//fixPosition(table,tableBody);
 				
 				$(table).trigger("applyWidgets");
 				

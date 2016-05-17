@@ -28,59 +28,75 @@ class InsereRelacoes
 	 * and will handle all the Requests states
 	 */
 	public function checkUser(){
-		$capability = 'insert_relation';
-	
-		if ( is_user_logged_in() )
-		{
-			if(current_user_can($capability))
-			{
-				if(empty($_REQUEST["estado"]))
-				{
-                                    $this->tablePrint();
-				}
-				else if($_REQUEST['estado'] == 'editar')
-				{
-                                    $this->editRlationProps();
-				}
-				else if($_REQUEST['estado'] == 'associar')
-				{
-                                    $this->associar();
-				}
-                                else if($_REQUEST['estado'] == 'introducao')
-                                {
-                                    $this->secondEntSel();
-                                }
-				else if($_REQUEST['estado'] == 'inserir')
-				{
-                                    $this->insertState();
-				}
-				else if($_REQUEST['estado'] == 'desativar')
-				{
-                                    $this->desactivate();
-				}
-                                else if($_REQUEST['estado'] == 'ativar')
-                                {
-                                    $this->activate();
-                                }
-			}
-			else
-			{
+            $capability = 'insert_relation';
+
+            if ( is_user_logged_in() )
+            {
+                if(current_user_can($capability))
+                {
+                    if(empty($_REQUEST["estado"]))
+                    {
+                        $this->tablePrint();
+                    }
+                    else if($_REQUEST['estado'] == 'editar')
+                    {
+                        $this->editRlationProps();
+                    }
+                    else if($_REQUEST['estado'] == 'associar')
+                    {
+                        $this->associar();
+                    }
+                    else if($_REQUEST['estado'] == 'introducao')
+                    {
+                        $this->secondEntSel();
+                    }
+                    else if($_REQUEST['estado'] == 'inserir')
+                    {
+                        $this->insertState();
+                    }
+                    else if($_REQUEST['estado'] == 'desativar')
+                    {
+                        $this->desactivate();
+                    }
+                    else if($_REQUEST['estado'] == 'ativar')
+                    {
+                        $this->activate();
+                    }
+                    else if($_REQUEST['estado'] == 'historico')
+                    {
+                        $this->gereInsRel->showHist($this->bd);
+                    }
+                     else if($_REQUEST['estado'] == 'voltar')
+                    {
+                        $this->gereInsRel->estadoVoltar($this->bd);
+                    }
+                    else if($_REQUEST['estado'] == 'ativarVal')
+                    {
+                        $this->activateVal();
+                    }
+                    else if($_REQUEST['estado'] == 'desativarVal')
+                    {
+                        $this->desactivateVal();
+                    }
+                }
+                else
+                {
 ?>
-				<html>
-					<p>Não tem autorização para a aceder a esta página.</p>
-				</html>
+                    <html>
+                            <p>Não tem autorização para a aceder a esta página.</p>
+                    </html>
 <?php 
-			}
-		}
-		else 
-		{
+                }
+            }
+            else 
+            {
 ?>
-			<html>
-				<p>O utilizador não tem sessão iniciada.</p>
-                                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
-			</html>
+                <html>
+                        <p>O utilizador não tem sessão iniciada.</p>
+                         <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
+                </html>
 <?php			
-		}
+            }
 	}
 	
 	/**
@@ -197,6 +213,7 @@ class InsereRelacoes
                                                         <td>
                                                             <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                             <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
+                                                            <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
 							</td>
 <?php
                                                 } 
@@ -207,6 +224,7 @@ class InsereRelacoes
                                                     <td>
                                                         <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
                                                         <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
+                                                        <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
                                                    </td>
 <?php   
                                                 }
@@ -406,8 +424,10 @@ class InsereRelacoes
                                 <td>Nome propriedade</td>
                                 <td>Tipo</td>
                                 <td>Valor Atual </td>
+                                <td>Estado</td>
                                 <td>Seleção</td>
                                 <td>Novo valor</td>
+                                <td>Ação</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -423,6 +443,20 @@ class InsereRelacoes
                                 <td><?php echo $read_PropValues['name']?></td>
                                 <td><?php echo $read_PropValues['value_type']?></td>
                                 <td><?php echo $read_GetPropRel['value'] ?></td>
+<?php
+                                if($read_GetPropRel['state'] == 'active')
+                                {
+?>       
+                                    <td>Ativo </td>
+<?php
+                                }
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+<?php
+                                }
+?>
                                 <td><input type="checkbox" name="check<?php echo $conta; ?>" value="<?php echo $read_GetPropRel['id']?>"></td>
                                 <td>
 <?php
@@ -458,6 +492,24 @@ class InsereRelacoes
                                     }
 ?>                                    
                                 </td>
+<?php
+                                if($read_GetPropRel['state'] == 'active')
+                                {
+?>       
+                                    <td>
+                                        <a href="insercao-de-relacoes?estado=desativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                    </td>
+<?php
+                                } 
+                                else
+                                {
+?>
+                                    <td>
+                                        <a href="insercao-de-relacoes?estado=ativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
+                                   </td>
+<?php   
+                                }
+?>
                             </tr>
 <?php   
                                 $conta++;
@@ -688,7 +740,98 @@ class InsereRelacoes
             }
             
         }
+        
+        private function activateVal () {
+            $idVal = $this->bd->userInputVal($_REQUEST['val']);
+            $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd)) {
+                if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
+                    if($this->bd->runQuery("UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$idVal)) {
+?>
+                        <html>
+                           <p>O valor da propriedade foi ativado.</p>
+                           <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                        $this->bd->getMysqli()->commit();
+                    }
+                    else {
+?>
+                    <html>
+                        <p>A ativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                     $this->bd->getMysqli()->rollback();
+                    }
+                }
+                else {
+?>
+                    <html>
+                        <p>A ativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                    $this->bd->getMysqli()->rollback();  
+                }
+            }
+            else {
+?>
+                <html>
+                    <p>A ativação do valor da propriedade falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
+                </html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
 	
+        private function desactivateVal () {
+            $idVal = $this->bd->userInputVal($_REQUEST['val']);
+            $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            if( $this->gereInsRel->addHist($idRel,$this->bd)) {
+                if ($this->gereInsRel->addValHist($idVal,$this->bd)) {
+                    if($this->bd->runQuery("UPDATE value SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'inactive' WHERE id=".$idVal)) {
+                        $this->bd->getMysqli()->commit();
+?>
+                        $this->bd->getMysqli()->commit();<html>
+                           <p>O valor da propriedade foi desativado.</p>
+                           <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                        </html>
+<?php
+                        
+                    }
+                    else {
+?>
+                    <html>
+                        <p>A desativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                     $this->bd->getMysqli()->rollback();
+                    }
+                }
+                else {
+?>
+                    <html>
+                        <p>A desativação do valor da propriedade falhou.</p>
+                        <p>Clique em <?php goBack();?>.</p>
+                    </html>
+<?php
+                    $this->bd->getMysqli()->rollback();  
+                }
+            }
+            else {
+?>
+                <html>
+                    <p>A desativação do valor da propriedade falhou.</p>
+                    <p>Clique em <?php goBack();?>.</p>
+                </html>
+<?php   
+                $this->bd->getMysqli()->rollback();
+            }
+        }
+        
 	/**
 	 * This method will activate the relation the user selected.
 	 */
@@ -697,7 +840,7 @@ class InsereRelacoes
             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
             if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
-                if($this->bd->runQuery("UPDATE relation SET state='active' WHERE id=".$idRel))
+                if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$idRel))
                 {
 ?>
                    <html>
@@ -737,7 +880,7 @@ class InsereRelacoes
              $idRel = $this->bd->userInputVal($_REQUEST['rel']);
             if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
-                if($this->bd->runQuery("UPDATE relation SET state='inactive' WHERE id=".$idRel))
+                if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'inactive' WHERE id=".$idRel))
                 {
 ?>
                     <html>
@@ -1205,6 +1348,7 @@ class InsereRelacoes
 class RelHist{
     
     public function __construct(){}
+    
     /**
      * This method will make a backup from all the change that are made in the relations
      * @param type $id -> id form the selected relation
@@ -1224,35 +1368,375 @@ class RelHist{
                     . "VALUES (NULL,".$read_oldRel['rel_type_id'].",".$read_oldRel['entity1_id'].",".$read_oldRel['entity2_id'].",'".$read_oldRel['relation_name']."','".$read_oldRel['state']."',".$id.",'".$read_oldRel['updated_on']."','".$inactive."')"))
             {
                 
-              $resSVal = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
-              while($readSVal = $resSVal->fetch_assoc())
-              {
-                  if($readSVal['entity_id']=='')
-                  {
-                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,NULL,".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
-                      {
-                        return false;
-                      }
-                  }
-                  else
-                  {
-                      if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
-                      {
-                        return false;
-                      }
-                  }
-                  
-                 
-              }
-                
-               return true;
+                $resSVal = $bd->runQuery("SELECT * FROM value  WHERE relation_id=".$id);
+                while($readSVal = $resSVal->fetch_assoc())
+                {
+                    if($readSVal['entity_id']=='')
+                    {
+                        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,NULL,".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readSVal['entity_id'].",".$readSVal['property_id'].",'".$readSVal['value']."','".$readSVal['producer']."',".$id.",".$readSVal['id'].",'".$readSVal['updated_on']."','".$inactive."','".$readSVal['state']."')"))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                if($bd->runQuery("UPDATE relation SET updated_on = '".$inactive."' WHERE id = ".$id))
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
            
         }
         return false;    
     }
     
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected relation.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $bd (object form the class Db_Op)
+     */
+    public function showHist ($bd) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($bd);
+        }
+        else {
+        //meto um datepicker        
+?>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="rel" value="<?php echo $_REQUEST["rel"]; ?>">
+            <input type="submit" value="Apresentar histórico">
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Tipo de Relação</th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Propriedade</th>
+                    <th>Valor</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC LIMIT 1";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_relation WHERE relation_id = ".$_REQUEST["rel"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC, property_id ASC";
+            }
+        }
+        $queryHistorico = $bd->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="8">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
+                $res_EntPart = $bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$hist['rel_type_id']);
+                $read_EntPart = $res_EntPart->fetch_assoc();
+                $res_name1 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
+                $read_name1 = $res_name1->fetch_assoc(); 
+                $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
+                $read_name2 = $res_name2->fetch_assoc();
+                $props = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$hist["rel_type_id"]);
+                $numProp = $props->num_rows;
+                     
+?>
+                <tr>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["active_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $hist["inactive_on"];?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td rowspan="<?php echo $numProp;?>">
+<?php
+                    $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
+                    if($_readEnt1['entity_name'] != '')
+                    {
+                        echo $_readEnt1['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity1_id'];
+                    }
+?>
+                    </td>
+                    <td rowspan="<?php echo $numProp;?>">
+<?php
+                    $_readEnt2 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity2_id'])->fetch_assoc();
+                    if($_readEnt2['entity_name'] != '')
+                    {
+                        echo $_readEnt2['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity2_id'];
+                    }
+                    $primeiraVez = true;
+?>
+                    </td>
+<?php
+                    while ($prop = $props->fetch_assoc()) {
+                        if ($primeiraVez) {
+?>                       
+                            <td><?php echo $prop["name"];?></td>
+                            <td>
+<?php
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $value = $queryValue->fetch_assoc();
+                            if (isset($value["value"])) {
+                                echo $value["value"];
+                            }
+                            else {
+                                echo "-";
+                            }
+?>
+                            </td>
+                            <td rowspan="<?php echo $numProp;?>">
+<?php
+                            if ($hist["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                            </td>
+                            <td rowspan="<?php echo $numProp;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel=<?php echo $_REQUEST["rel"];?>">Voltar para esta versão</a></td>
+                        </tr>
+                       
+<?php
+                            $primeiraVez = false;
+                        }
+                        else {
+?>
+                        <tr>
+                            <td><?php echo $prop["name"];?></td>
+                            <td>
+<?php
+                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"]);
+                            $value = $queryValue->fetch_assoc();
+                            if (isset($value["value"])) {
+                                echo $value["value"];
+                            }
+                            else {
+                                echo "-";
+                            }
+?>
+                            </td>
+                        </tr>
+<?php
+                        }
+
+                    }
+?>
+                    
+<?php
+            }
+        }
+?>
+            <tbody>
+        </table>
+<?php
+        
+    }
+    }
     
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a relation to an old version
+     * saved in the history
+     * @param type $bd (object form the class Db_Op)
+     */
+    public function estadoVoltar ($bd) {
+        $dataUpdate = date("Y-m-d H:i:s",time());
+        $this->atualizaHistorico($bd,$dataUpdate);
+        $selectAtributos = "SELECT * FROM hist_relation WHERE id = ".$_REQUEST['hist'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $updateHist = "UPDATE relation SET ";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "relation_id" && !is_null($valor)) {
+                $updateHist .= $atributo." = '".$valor."',"; 
+            }
+        }
+        $updateHist .= " updated_on = '".$dataUpdate."' WHERE id = ".$_REQUEST['rel'];
+        $updateHist =$bd->runQuery($updateHist);
+        if ($updateHist) {
+            if ($this->updateValue($bd,$dataUpdate)) {
+                echo "#1 ";
+                $bd->getMysqli()->commit();
+    ?>
+                <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/insercao-de-relacoes/">Continuar</a> para avançar.</p>
+<?php
+        
+            }
+            else {
+                echo "#2 ";
+?>
+                <p>Não foi possível reverter a propriedade para a versão selecionada</p>
+<?php
+                $bd->getMysqli()->rollback();
+                goBack();
+            }
+        }
+        else {
+            echo "#3 ";
+?>
+            <p>Não foi possível reverter a propriedade para a versão selecionada</p>
+<?php
+            $bd->getMysqli()->rollback();
+            goBack();
+        }
+    }
     
+    private function updateValue ($bd,$dataUpdate) {
+        $queryRelHis = $bd->runQuery("SELECT * FROM hist_relation WHERE id = ".$_REQUEST["hist"]);
+        $relHist = $queryRelHis->fetch_assoc();
+        $querySelRel = "SELECT rel_type_id FROM relation WHERE id = ".$_REQUEST["rel"];
+        $relType = $bd->runQuery($querySelRel)->fetch_assoc()["rel_type_id"];
+        $queryPropRel = "SELECT * FROM property WHERE rel_type_id = ".$relType;
+        echo $queryPropRel."<br>";
+        $queryPropRel = $bd->runQuery($queryPropRel);
+        while ($prop = $queryPropRel->fetch_assoc()) {
+            print_r($prop);
+            $queryHistValue ="SELECT * FROM hist_value WHERE inactive_on = '".$relHist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $queryHistValue."<br>";
+            $queryHistValue = $bd->runQuery($queryHistValue);
+            $queryValue = "SELECT * FROM value WHERE property_id = ".$prop["id"]." AND relation_id = ".$_REQUEST["rel"];
+            echo $queryValue."<br>";
+            $queryValue = $bd->runQuery($queryValue);
+            while ($values = $queryValue->fetch_assoc()) {
+                print_r($values);
+                $insertHist = "INSERT INTO `hist_value`"
+                        . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
+                        . "VALUES "
+                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".$dataUpdate."','".$values["state"]."')";
+                echo $insertHist."<br>";
+                $insertHist = $bd->runQuery($insertHist);
+                if (!$insertHist) {
+                    echo "#4 ";
+                    return false;
+                }
+            }
+            while ($histValues = $queryHistValue->fetch_assoc()){
+                $updateValue = "UPDATE `value` SET "
+                        . "`property_id`= ".$histValues["property_id"].","
+                        . "`value`= '".$histValues["value"]."',"
+                        . "`producer`= '".$histValues["producer"]."',"
+                        . "`relation_id`= ".$histValues["relation_id"].","
+                        . "`updated_on`= '".$dataUpdate."',"
+                        . "`state`= '".$histValues["state"]."'"
+                        . "WHERE id = ".$histValues["value_id"];
+                echo $updateValue."<br>";
+                $updateValue = $bd->runQuery($updateValue);
+                if (!$updateValue) {
+                    echo "#6 ";
+                    return false;
+                }
+            }  
+        }
+        $selValOutdated = "SELECT * FROM value WHERE updated_on < '".$dataUpdate."' AND relation_id = ".$_REQUEST["rel"];
+        $selValOutdated = $bd->runQuery($selValOutdated);
+        while ($valOutadet = $selValOutdated->fetch_assoc()) {
+            $updateValue = "UPDATE `value` SET "
+                            . "`updated_on`= '".$dataUpdate."',"
+                            . "`state`= 'inactive'"
+                            . "WHERE id = ".$valOutadet["id"];
+                    echo $updateValue."<br>";
+                    $updateValue = $bd->runQuery($updateValue);
+                    if (!$updateValue) {
+                        echo "#8 ";
+                        return false;
+                    }
+        }
+        echo "#5 ";
+        return true;
+    }
+    
+     /**
+     * This method is responsible for insert into the history a copy of the relation
+     * before being updated
+     * @param type $bd (object form the class Db_Op)
+     */
+    public function atualizaHistorico ($bd, $dataUpdate) {
+        $bd->getMysqli()->autocommit(false);
+        $bd->getMysqli()->begin_transaction();
+        $selectAtributos = "SELECT * FROM relation WHERE id = ".$_REQUEST['rel'];
+        $selectAtributos = $bd->runQuery($selectAtributos);
+        $atributos = $selectAtributos->fetch_assoc();
+        $attr = $val = "";
+        foreach ($atributos as $atributo => $valor) {
+            if ($atributo == "updated_on") {
+                $atributo = "active_on";
+            }
+            if ($atributo != "id" && !is_null($valor)) {
+                $attr .= "`".$atributo."`,";
+                $val .= "'".$valor."',"; 
+            }
+        }
+        $updateHist = "INSERT INTO `hist_relation`(".$attr." inactive_on, relation_id) "
+                . "VALUES (".$val."'".$dataUpdate."',".$_REQUEST["rel"].")";
+        echo $updateHist;
+        $updateHist =$bd->runQuery($updateHist);
+        if ($updateHist) {
+            return true;
+        }
+        else {
+            $bd->getMysqli()->rollback();
+            return false;
+        }
+    }
+    
+    public function addValHist($idVal,$bd) {
+        $selVal = $bd->runQuery("SELECT * FROM  value WHERE id = ".$idVal);
+        while ($val = $selVal->fetch_assoc()) {
+            $insertHist = "INSERT INTO `hist_value`"
+                    . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`)"
+                    . " VALUES "
+                    . "(".$val["property_id"].",'".$val["value"]."','".$val["producer"]."',".$val["relation_id"].",".$idVal.",".date("Y-m-d H:i:s",time()).",".$val["state"].")";
+            if (!$insertHist) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 ?>

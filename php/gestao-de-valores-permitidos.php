@@ -58,6 +58,15 @@ class ValoresPermitidos
 	 			{
 	 				$this->changeEnum();
 	 			}
+                                else if($_REQUEST['estado'] == 'historico')
+	 			{
+	 				$this->histVal->showHist($this->bd);
+	 			}
+                                else if($_REQUEST['estado'] == 'voltar')
+	 			{
+	 				$this->histVal->estadoVoltar($this->bd);
+	 			}
+                                
 			}
 			else 
 			{
@@ -112,103 +121,101 @@ class ValoresPermitidos
 						while($read_PropWEnum = $res_NProp->fetch_assoc())
 						{
 ?>
-							<tr>
+                                                    <tr>
 <?php 				
-								//Get all enum values for the property that in will start printing now
-								$res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
-								
-								//Get the entity name and id that is related to the property we are printing
-								$res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
-								$read_EntName = $res_Ent->fetch_assoc();
-								
-								//Get the number of properties with that belonh to the etity I'm printing and have enum tipe
-								$res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
-								
-								//Get all the enum values that we wil print this is only the number.
-								$acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
-                                                                $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND ent_type_id =".$read_EntName['id']);
+                                                        //Get all enum values for the property that in will start printing now
+                                                        $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
+
+                                                        //Get the entity name and id that is related to the property we are printing
+                                                        $res_Ent = $this->bd->runQuery("SELECT id, name FROM ent_type WHERE id = ".$read_PropWEnum['ent_type_id']);
+                                                        $read_EntName = $res_Ent->fetch_assoc();
+
+                                                        //Get the number of properties with that belonh to the etity I'm printing and have enum tipe
+                                                        $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$read_PropWEnum['ent_type_id']." AND value_type = 'enum'");
+
+                                                        //Get all the enum values that we wil print this is only the number.
+                                                        $acerta = $this->bd->runQuery("SELECT * FROM prop_allowed_value as pav ,property as prop, ent_type as ent WHERE ent.id = ".$read_EntName['id']." AND  prop.ent_type_id = ".$read_EntName['id']." AND prop.value_type = 'enum' AND prop.id = pav.property_id");
+                                                        $acerta2 = $this->bd->runQuery("SELECT * FROM property WHERE property.id NOT IN (SELECT property_id FROM prop_allowed_value) AND property.value_type='enum' AND ent_type_id =".$read_EntName['id']);
                                                         //verifies if the name i'm printing has ever been written
 							$conta = 0;
 							for($i = 0; $i < count($printedNames); $i++)
 							{
-								if($printedNames[$i] == $read_EntName['name'])
-								{
-									$conta++;
-								}
+                                                            if($printedNames[$i] == $read_EntName['name'])
+                                                            {
+                                                                    $conta++;
+                                                            }
 							}
 
 							if($conta == 0)
 							{
 ?>
-								<td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_EntName['name'];?></td>
+                                                            <td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_EntName['name'];?></td>
 <?php 	
-								$printedNames[] = $read_EntName['name'];
+                                                            $printedNames[] = $read_EntName['name'];
 							}
 							else
 							{
-								//echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
-
+                                                            //echo '<td rowspan='.mysqli_num_rows($acerta).'>';	
 							}
 ?>
 							<td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
 							<!-- Nome da propriedade -->
-							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
+							<td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a><a href="gestao-de-valores-permitidos?estado=historico&prop_id=<?php echo $read_PropWEnum['id'];?>">[Histórico]</a</td>
 
 <?php 							
 							//$propAllowedArray = mysqli_fetch_assoc($propAllowed);
 							if($res_Enum->num_rows == 0)
 							{
 ?>
-								<td colspan=4> Não há valores permitidos definidos </td>
+                                                            <td colspan=4> Não há valores permitidos definidos </td>
 <?php 
 							}
 							else
 							{
-								while($read_EnumValues = $res_Enum->fetch_assoc())
-								{			
+                                                            while($read_EnumValues = $res_Enum->fetch_assoc())
+                                                            {			
 ?>									
-										<td><?php  echo $read_EnumValues['id'];?></td>
-										<td><?php echo $read_EnumValues['value'];?></td>
-										<td>
+                                                                <td><?php  echo $read_EnumValues['id'];?></td>
+                                                                <td><?php echo $read_EnumValues['value'];?></td>
+                                                                <td>
 <?php 			
-										if($read_EnumValues['state'] == 'active')
-										{
+                                                                if($read_EnumValues['state'] == 'active')
+                                                                {
 ?>
-											Ativo
+                                                                    Ativo
 <?php 
-										}
-										else 
-										{
+                                                                }
+                                                                else 
+                                                                {
 ?>	
-											Inativo
+                                                                    Inativo
 <?php 											
-										}
-										
+                                                                }										
 ?>										
-										</td>
-										<td>
-										<a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
+                                                                </td>
+                                                                <td>
+                                                                <a href="gestao-de-valores-permitidos?estado=editar&enum_id=<?php echo $read_EnumValues['id'];?>&prop_id=<?php echo $read_PropWEnum['id'];?>">[Editar]</a>  
 <?php 
-										if($read_EnumValues['state'] === 'active')
-										{
+                                                                if($read_EnumValues['state'] === 'active')
+                                                                {
 ?>
-											<a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
+                                                                    <a href="gestao-de-valores-permitidos?estado=desativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Desativar]</a>
 <?php 
-										}
-										else 
-										{
+                                                                }
+                                                                else 
+                                                                {
 ?>
-											<a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
+                                                                    <a href="gestao-de-valores-permitidos?estado=ativar&enum_id=<?php echo $read_EnumValues['id'];?>">[Ativar]</a>
 <?php 
-										}
+                                                                }
 ?>										
-										</td>
-									</tr>		
+                                                                </td>
+                                                            </tr>		
 <?php 								
-								}
-							}
+                                                            }
+                                                        }
 ?>
-							</tr>
+                                                    </tr>
 <?php 
 						}
 ?>
@@ -475,22 +482,40 @@ class ValoresPermitidos
 	public function insertState()
 	{
 ?>
-		<h3>Gestão de valores permitidos - inserção</h3>
+            <h3>Gestão de valores permitidos - inserção</h3>
 <?php 
-		if($this->ssvalidation())
-		{
-			//echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
-			$_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
-			$this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')");
+            if($this->ssvalidation())
+            {
+                if($this->histVal->addHist($_SESSION["property_id"], $this->bd)){
+                    //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
+                    $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
+                    if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')")) {
+                        $this->bd->getMysqli()->commit();
 ?>
-		<p>	Inseriu os dados de novo valor permitido com sucesso.</p>
-		<p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+                        <p>Inseriu os dados de novo valor permitido com sucesso.</p>
+                        <p>Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
-		}
-		else 
-		{
-			goBack();
-		}
+                    }
+                    else {
+                        $this->bd->getMysqli()->rollback();
+?>
+                        <p>Não foi possível inserir o novo valor permitido</p>
+<?php
+                        goBack();
+                    }
+                }
+                else {
+                    $this->bd->getMysqli()->rollback();
+?>
+                    <p>Não foi possível inserir o novo valor permitido</p>
+<?php
+                    goBack();
+                }
+            }
+            else 
+            {
+                goBack();
+            }
 	}
 	
 
@@ -500,35 +525,39 @@ class ValoresPermitidos
 	 * is it will submit.
 	 */
 	public function changeEnum(){
-		if($this->ssvalidation())
-		{               //new name
-				$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
-				//History generation 
-                                $getEnumId = $this->bd->userInputVal($_REQUEST['enum_id']);
-                                
-                                if($this->histVal->addHist($getEnumId, $this->bd)){
-                                    //insert the new value for the enum.
-                                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$getEnumId);
-				//echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
+            if($this->ssvalidation())
+            {               //new name
+                $sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);
+                //History generation 
+                $getEnumId = $this->bd->userInputVal($_REQUEST['enum_id']);
+
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
+                $idProp = $selProp->fetch_assoc()["property_id"];
+                
+                if($this->histVal->addHist($idProp, $this->bd)){
+                    //insert the new value for the enum.
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$getEnumId);
+                //echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
+                    $this->bd->getMysqli()->commit();
 ?>
-                                    <p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
-                                    <p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+                    <p>	Alterou o nome do valor enum selecionado para <?php echo $_REQUEST['valor'] ?>.</p>
+                    <p>	Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
-                                }
-                                else
-                                {
+                }
+                else
+                {
+                    $this->bd->getMysqli()->rollback();
 ?>
-                                
-                                    <p>O nome do valor enum selecionado não pode ser alterado para <?php echo $_REQUEST['valor'] ?>.</p>
-                                    <p>	Clique em <?php goBack(); ?></p>
+
+                    <p>O nome do valor enum selecionado não pode ser alterado para <?php echo $_REQUEST['valor'] ?>.</p>
+                    <p>	Clique em <?php goBack(); ?></p>
 <?php
-                                }
-                                
-		}
-		else
-		{
-			goBack();
-		}
+                }
+            }
+            else
+            {
+                goBack();
+            }
 	}
 	/**
 	 * This method will activate the enum.
@@ -536,12 +565,15 @@ class ValoresPermitidos
 	public function activate(){
             
             $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-            if($this->histVal->addHist($getEnum, $this->bd))
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
+            $idProp = $selProp->fetch_assoc()["property_id"];
+            if($this->histVal->addHist($idProp, $this->bd))
             {
 		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$getEnum);
                 //gets the name of the enum that has been enabled 
 		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
 		$read_enumName = $res_enumName->fetch_assoc();
+                $this->bd->getMysqli()->commit();
 ?>
 	<html>
 	 	<p>O valor <?php echo $read_enumName['value'] ?> foi ativado</p>
@@ -551,6 +583,7 @@ class ValoresPermitidos
             }
             else
             {
+                $this->bd->getMysqli()->rollback();
                 
 ?>
                     <p>O valor enum selecionado não pode ser ativado.</p>
@@ -564,12 +597,15 @@ class ValoresPermitidos
 	public function desactivate(){
             
                 $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-                if($this->histVal->addHist($getEnum, $this->bd))
+                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
+                $idProp = $selProp->fetch_assoc()["property_id"];
+                if($this->histVal->addHist($idProp, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
                     //get the name to show to the users after the item is disabled
                     $res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
                     $read_enumName = $res_enumName->fetch_assoc();
+                    $this->bd->getMysqli()->commit();
 ?>
 		<html>
 		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
@@ -579,6 +615,7 @@ class ValoresPermitidos
                 }
                 else
                 {
+                    $this->bd->getMysqli()->rollback();
 ?>
                     <p>O valor enum selecionado não pode ser desativado.</p>
                     <p>	Clique em <?php goBack(); ?></p>
@@ -600,28 +637,210 @@ class ValPerHist{
     public function __construct(){}
     
     /**
-     * Will an item to the table hist_prop_allowed_value
-     * to generate the historic with all modifications.
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoVoltar ($db) {
+        if ($this->addHist($_REQUEST["prop_id"],$db)) {
+            //get all the prop_allowed_values in the selected version
+            $updateTime = date("Y-m-d H:i:s",time());
+            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"].")";
+            $selOld = $db->runQuery($selOld);
+            $erro = false;
+            while ($old = $selOld->fetch_assoc()) {
+                $selOldVal = "SELECT * FROM hist_prop_allowed_value WHERE id = ".$old["id"];
+                $selOldVal = $db->runQuery($selOldVal);
+                $atributos = $selOldVal->fetch_assoc();
+                $updateHist = "UPDATE prop_allowed_value SET ";
+                foreach ($atributos as $atributo => $valor) {
+                    if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
+                        $updateHist .= $atributo." = '".$valor."',"; 
+                    }
+                }
+                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['prop_allowed_value_id'];
+                $updateHist =$db->runQuery($updateHist);
+                if ($updateHist) {}
+                else {
+?>
+                    <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+                    $db->getMysqli()->rollback();
+                    goBack();
+                    $erro = true;
+                    break;
+                }
+            }
+            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
+            while ($propOut = $selPropOut->fetch_assoc()) {
+                $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = 'inactive' WHERE id = ".$propOut["id"]);
+                if (!$updateOut) {
+?>
+                    <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+                    $db->getMysqli()->rollback();
+                    goBack();
+                    $erro = true;
+                    break;
+                }
+            }
+            if (!$erro) {
+                $db->getMysqli()->commit();
+?>
+                <p>Atualizou os valores permitidos com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/gestao-de-valores-permitidos/">Continuar</a> para avançar.</p>
+<?php
+            }
+        }
+        else {
+?>
+            <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
+<?php
+            $db->getMysqli()->rollback();
+            goBack();
+        }
+    }
+    
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected unit type.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function showHist ($db) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($db);
+        }
+        else {
+        //meto um datepicker        
+?>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="prop_id" value="<?php echo $_REQUEST["prop_id"]; ?>">
+            <input type="submit" value="Apresentar histórico">
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data de Ativação</th>
+                    <th>Data de Desativação</th>
+                    <th>Valores Permitidos</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="5">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            $contaLinhas = 1;
+            while ($hist = $queryHistorico->fetch_assoc()) {
+                $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
+                if ($contaLinhas > $rowspan) {
+                    $contaLinhas = 1;
+                }
+?>
+                <tr>
+<?php
+                if ($contaLinhas === 1) {
+?>
+                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
+                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
+<?php
+                }
+?>
+                    <td><?php echo $hist["value"];?></td>
+                    <td>
+<?php
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
+?>
+                    </td>
+<?php
+                    if ($contaLinhas === 1) {
+?>
+                        <td rowspan="<?php echo $rowspan;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
+                            </a>
+                        </td>
+<?php
+                    }
+?>
+                </tr>
+<?php
+                $contaLinhas++;
+            }
+        }
+?>
+            <tbody>
+        </table>
+<?php
+        
+    }
+    }
+    
+    
+    /**
+     * Will insert an item to the table hist_prop_allowed_value
+     * to generate the history with all modifications.
      *
      * @param type $id -> enum from the id that will be changed, this id comes sanitized.
      * @param type $bd -> database object to allow me to use the database run querys.
      * @return boolean 
      */
-    public function addHist($id,$bd){
-        //get the old enum
-        $res_oldEnum = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id=".$id);      
-        
-        if($res_oldEnum->num_rows == 1)
-        {
-            $read_oldEnum = $res_oldEnum->fetch_assoc();
-           
-            if($bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".date("Y-m-d H:i:s",time())."')"))
+    public function addHist($idProp,$bd){
+        $bd->getMySqli()->autocommit(false);
+        $bd->getMySqli()->begin_transaction();
+        $updateTime = date("Y-m-d H:i:s",time());
+            
+        $selAllVal = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id =".$idProp);
+
+        while ($read_oldEnum = $selAllVal->fetch_assoc()) {
+           if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
             {
                 //the history was created
-                return true;
-            }
-        }//the history is not created due to an error in one of the queries or insertions.
-        return false;
+                return false;
+            } 
+        }
+        return true;
         
     }
 }

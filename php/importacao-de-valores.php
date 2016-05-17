@@ -1,5 +1,6 @@
 <?php
 require_once("custom/php/common.php");
+//imports the required files of the PHPExcel library, necessary to generate and read Excel files
 require_once 'PHPExcel/Classes/PHPExcel.php';
 require_once 'PHPExcel/Classes/PHPExcel/Writer/Excel2007.php';
 require_once 'PHPExcel/Classes/PHPExcel/IOFactory.php';
@@ -680,7 +681,6 @@ class ImportValues{
         }
     }
     
-    
     /**
      * This method creates a new instance of the entity type that is envolve in the import
      * @param array $idEntidadeRel (the id of the entity_type or rel_type that we will create the instance)
@@ -922,7 +922,6 @@ class ImportValues{
         }
         return $tipoCorreto;
     }
-    
     
     /**
      * This method is used to validate the input of type bool

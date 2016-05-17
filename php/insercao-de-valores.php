@@ -358,9 +358,7 @@ class InsertValues{
             }
         }
         return $pertence;
-    }
-
-    
+    }    
 
     /**
      * This method is responsible to control the flow execution when state is "inserir"
@@ -427,66 +425,7 @@ class InsertValues{
             goBack();
         }
     }
-    
-    /*private function insertRelValues($idRel) {
-        $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`) VALUES (NULL,".$idRel.",".$idRel2.")";
-        $resInsertInst = $this->db->runQuery($queryInsertInst);
-        if(!$resInsertInst) {
-            $this->db->getMysqli()->rollback();
-?>
-            <p>Erro na criação da instância.</p>
-<?php				
-        }
-        else {
-            $idEntForm = $this->db->getMysqli()->insert_id;
-            $propriedadesEnt = $this->db->runQuery("SELECT * FROM `property` WHERE state = 'active' AND ent_type_id = ".$idEnt);
-            if(!$propriedadesEnt) {
-                $this->db->getMysqli()->rollback();
-?>
-                <p>Erro na selação da propriedade.</p>
-<?php
-            }
-            else {
 
-                $sucesso = false;
-                while($propriedades = $propriedadesEnt->fetch_assoc())
-                {
-                    $insertVal = $this->db->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntForm.",".$propriedades['id'].",'".$_REQUEST[$propriedades['form_field_name']]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')");
-
-                    if(!$insertVal)
-                    {								
-                        $this->db->getMysqli()->rollback();
-?>
-                        <p>Erro na atribuição do valor à propriedade.</p>
-<?php
-                        $sucesso = false;
-                    }
-                    else
-                    {
-                        $this->db->getMysqli()->commit();
-                        $sucesso = true;
-                    }								
-                }
-                if($sucesso == true)
-                {
-?>
-                    <p>Inseriu o(s) valor(es) com sucesso.</p></br>
-                    <p>Clique em <a href="/insercao-de-valores">Voltar</a> para voltar ao início da inserção de valores e poder escolher outro componente, em <a href="?estado=introducao&<?php echo $tipo;?>=<?php echo $_SESSION[$tipo."_id"];?>">Continuar a inserir valores nesta entidade</a> se quiser continuar a inserir valores ou em <a href="/insercao-de-relacoes?estado=associar&ent=<?php echo $_SESSION[$tipo."_id"];?>">Associar entidades</a>, caso deseje associar a entidade criada, com uma outra já previamente criada.</p>
-<?php
-                }
-
-                else
-                {
-?>
-                    <p>Lamentamos, mas ocorreu um erro.</p>
-<?php
-                    goBack();
-                }
-            }
-        }
-    
-    }
-    */
     
     /**
      * Method that inserts the new instance of the entity

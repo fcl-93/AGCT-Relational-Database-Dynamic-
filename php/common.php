@@ -51,7 +51,7 @@ $VAL_CLIENT_SIDE=1; // variable that controls the client side validations. If 1 
 class Db_Op
 {
     //DB_HOST,DB_USER,DB_PASSWORD,DB_NAME these are contants present in the wordpress
-    public $mysqli;
+    private $mysqli;
   
     //This method will make the database connection
     public function __construct()
@@ -127,6 +127,31 @@ class Db_Op
     			return array(); // Return an empty array to avoid possible errors/warnings if array is passed to foreach() without first being checked with !empty().
     		}
     	}
+        
+    /**
+     * Method that returns the entity name with the given ID
+     * @param int $id of the entity
+     * @return string the name od the entity
+     */
+    public function getEntityName($id) {
+        $queryEnt = "SELECT name FROM ent_type WHERE id = ".$id;
+        $nome = $this->runQuery($queryEnt)->fetch_assoc()["name"];
+        return $nome;
+    }
+    
+    /**
+     * This method is responsible to automaticly create the name of the relations by joining the names of the two entities that are associated
+     * @param string $queryNome1 (The query that gets the name of the first entity)
+     * @param string  $queryNome2 (The query that gets the name of the second entity)
+     * @return string the name of the relation
+     */
+    public function criaNomeRel($queryNome1, $queryNome2)
+    {
+        $nome1 = $this->runQuery($queryNome1)->fetch_assoc()["name"];
+        $nome2 = $this->runQuery($queryNome2)->fetch_assoc()["name"];
+        $nome = $nome1."-".$nome2;
+        return $nome;
+    }
    
 }
 

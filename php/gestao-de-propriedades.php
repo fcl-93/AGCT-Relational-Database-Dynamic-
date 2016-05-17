@@ -100,11 +100,21 @@ class PropertyManage
         }
         elseif($_REQUEST['estado'] =='historico')
         {
-             $this->gereHist->estadoHistorico();
+             $this->gereHist->estadoHistorico($this->db);
         }
         elseif($_REQUEST['estado'] =='voltar')
         {
-             $this->gereHist->estadoVoltar();
+            if(!$this->validaEdicoes())
+            {
+                $this->gereHist->estadoVoltar($this->db);
+            }
+            else {
+?>
+                <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+                goBack();
+            }
+             
         }
         elseif($_REQUEST['estado'] == 'ativar' || $_REQUEST['estado'] == 'desativar')
         {
@@ -166,7 +176,14 @@ class PropertyManage
     private function apresentaTabela($tipo)
     {
     ?>
-    <html>
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
         <table class="table">
             <thead>
                 <tr>
@@ -221,7 +238,7 @@ class PropertyManage
                         {
                             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                            $nome = $this->criaNomeRel($queryNome1,$queryNome2);
+                            $nome = $this->db->criaNomeRel($queryNome1,$queryNome2);
                             $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                         }
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
@@ -234,7 +251,7 @@ class PropertyManage
                         {
                 ?>
                             <td><?php echo $arraySelec["id"]; ?></td>
-                            <td><a href="?estado=historico&id=<?php echo $arraySelec["id"];?>"><?php echo $arraySelec["name"]; ?></a></td>
+                            <td><?php echo $arraySelec["name"]; ?></td>
                             <td><?php echo $arraySelec["value_type"]; ?></td>
                             <td><?php echo $arraySelec["form_field_name"]; ?></td>
                             <td><?php echo $arraySelec["form_field_type"]; ?></td>
@@ -274,6 +291,7 @@ class PropertyManage
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=desativar&prop_id=<?php echo $arraySelec['id'];?>">[Desativar]</a>
+                                    <a href="?estado=historico&id=<?php echo $arraySelec["id"];?>">[Histórico]</a>
                                 </td>
                 <?php
                             }
@@ -284,6 +302,7 @@ class PropertyManage
                                 <td>
                                     <a href="gestao-de-propriedade?estado=editar&prop_id=<?php echo $arraySelec['id'];?>">[Editar]</a>  
                                     <a href="gestao-de-propriedade?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
+                                    <a href="?estado=historico&id=<?php echo $arraySelec["id"];?>">[Histórico]</a>
                                 </td>
                 <?php
                             }
@@ -296,7 +315,6 @@ class PropertyManage
                 ?>
             </tbody>
         </table>
-    </html>
     <?php
     }
     
@@ -384,7 +402,7 @@ class PropertyManage
                                 {
                                     $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
                                     $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                    $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                                    $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
                                 }
                                 ?>
                                 <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
@@ -462,19 +480,6 @@ class PropertyManage
             <?php
             }
     }
-    /**
-     * This method is responsible to automaticly create the name of the relations by joining the names of the two entities that are associated
-     * @param string $queryNome1 (The query that gets the name of the first entity)
-     * @param string  $queryNome2 (The query that gets the name of the second entity)
-     * @return string the name of the relation
-     */
-    private function criaNomeRel($queryNome1, $queryNome2)
-    {
-        $nome1 = $this->db->runQuery($queryNome1)->fetch_assoc()["name"];
-        $nome2 = $this->db->runQuery($queryNome2)->fetch_assoc()["name"];
-        $nome = $nome1."-".$nome2;
-        return $nome;
-    }
 
     /**
      * This method inserts the new property in the database
@@ -497,7 +502,7 @@ class PropertyManage
         {
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
+            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
@@ -573,14 +578,33 @@ class PropertyManage
             }
             else
             {
-                $this->db->getMysqli()->commit();
-		echo 'Inseriu os dados de nova propriedade com sucesso.';
-		echo 'Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.';
+                if (!empty($_REQUEST["entidadePertence"]) && $this->gereHist->createNewEnt($_REQUEST["entidadePertence"], $this->db)) {
+                    $this->db->getMysqli()->commit();
+?>
+                    <p>Inseriu os dados de nova propriedade com sucesso.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+                }
+                else if (!empty($_REQUEST["relacaoPertence"]) && $this->gereHist->createNewRel($_REQUEST["relacaoPertence"], $this->db)) {
+                    $this->db->getMysqli()->commit();
+?>
+                    <p>Inseriu os dados de nova propriedade com sucesso.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+                }
+                else {
+                    $this->db->getMysqli()->rollback();
+?>
+                    <p>Não foi possível inserir uma nova propriedade.</p>
+<?php
+                    goBack();
+                }
+                
             }
 	}
 
     }
-    
+
     /**
      * This method does the PHP-side validation of the form
      * @return boolean (true if all the data is in correct format)
@@ -654,8 +678,15 @@ class PropertyManage
             goBack();
             return false;
         }
-        if ($_REQUEST["estado"] == "update") {
-          $this->checkforChanges();
+        if ($_REQUEST["estado"] == "update" && !$this->checkforChanges()) {
+          return false;
+        }
+        if ($_REQUEST["estado"] == "update" && $this->validaEdicoes()) {
+?>
+            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+            goBack();
+            return false;
         }
 	return true;
     }
@@ -673,13 +704,16 @@ class PropertyManage
         else if ($_REQUEST['tipoValor'] != $getProp["value_type"]) {
             return true;
         }
-        else if ($_REQUEST['entidadePertence'] != $getProp["ent_type_id"]) {
+        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) {
             return true;
         }
-        else if ($_REQUEST['formType'] != $getProp["form_field_type"]) {
+        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) {
             return true;
         }
-       else  if ($_REQUEST['tipoUnidade'] != $getProp["unit_type"]) {
+        else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"]) {
+            return true;
+        }
+       else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) {
             return true;
         }
         else if ($_REQUEST['ordem'] != $getProp["form_field_order"]) {
@@ -688,10 +722,47 @@ class PropertyManage
         else if ($_REQUEST['tamanho'] != $getProp["form_field_size"]) {
             return true;
         }
-        else if ($_REQUEST['mandatory'] != $getProp["mandatory"]) {
+        else if ($_REQUEST['obrigatorio'] != $getProp["mandatory"]) {
             return true;
         }
-        else if ($_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"]) {
+        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) {
+            return true;
+        }
+        else {
+?>
+            <p>Não efetuou qualquer alteração aos valores já existentes.</p><br>
+<?php
+            goBack();
+            return false;
+        }
+    }
+    
+    /**
+     * This metho checks if there are already any entities or relations with values for the property the user want to update.
+     * We do this verification only to some fields wich are the ones we think could generate major inconsistencies
+     * @return boolean (true if there are already some entities/relations with values for the property the user want to update)
+     */
+    private function validaEdicoes () {
+        $getProp = "SELECT * FROM property WHERE id = ".$_REQUEST["prop_id"];
+        $getProp = $this->db->runQuery($getProp)->fetch_assoc();
+        $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
+        $numValues = $this->db->runQuery($getValues)->num_rows;
+        if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) && $numValues > 0) {
+            return true;
+        }
+        else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"] && $numValues > 0) {
+            return true;
+        }
+        else  if (((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+            return true;
+        }
+        else if (((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) && $numValues > 0) {
             return true;
         }
         else {
@@ -703,31 +774,96 @@ class PropertyManage
      * This method controls the flow of the state ativar and desativar that is responsable 
      * to ativate and desactivate the select property on the table presented in states entity and relation
      */
-    private function estadoAtivarDesativar()
-    {
+    private function estadoAtivarDesativar() {
+        $avanca = false;
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
-        $this->gereHist->atualizaHistorico();
-        $queryUpdate = "UPDATE property SET state=";
-        if ($_REQUEST["estado"] === "ativar")
-        {
-            $queryUpdate .= "'active'";
-            $estado = "ativada";
-        }
-        else
-        {
-            $queryUpdate .= "'inactive'";
-            $estado = "desativada";
-        }
-        $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['prop_id'];
-        $this->db->runQuery($queryUpdate);
-        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
+        if ($this->gereHist->atualizaHistorico($this->db) == false) {
 ?>
-        <html>
-            <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
-            <br>
-            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
-        </html>
+            <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
 <?php 
+            goBack();
+        }
+        else {
+            $queryUpdate = "UPDATE property SET state=";
+            if ($_REQUEST["estado"] === "desativar") {
+                if (!$this->verificaValue ($_REQUEST['prop_id'])) {
+                    if ($this->gereHist->atualizaHistorico($this->db) == false) {
+?>
+                        <p>Não foi possível desativar a propriedade pretendida.</p>
+<?php 
+                        goBack();
+                    }
+                    else {
+                            $queryUpdate .= "'inactive'";
+                            $estado = "desativada";
+                            $avanca = true;
+                    }
+                }
+            }
+            else {
+                if ($this->gereHist->atualizaHistorico($this->db) == false) {
+?>
+                    <p>Não foi possível ativar a propriedade pretendida.</p>
+<?php 
+                    goBack();
+                }
+                else {
+                    $queryUpdate .= "'active'";
+                    $estado = "ativada";
+                    $avanca = true;
+                }
+            }
+            if ($avanca) {
+                $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['prop_id'];
+                $queryUpdate= $this->db->runQuery($queryUpdate);
+                if ($queryUpdate) {
+                    $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
+                    $this->db->getMysqli()->commit();
+?>
+                    <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
+                    <br>
+                    <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+<?php   
+                }
+                else {
+                    $this->db->getMysqli()->rollback;
+                }
+            }
+        }
+        
+    }
+    
+    /**
+     * This method verifies if there is any value for the selected property
+     * @param type $idProp (id of the property we want to check)
+     * @return boolean (true if already exists)
+     */
+    private function verificaValue ($idProp) {
+        $queryProp = "SELECT * FROM property WHERE id = ".$idProp;
+        $queryProp = $this->db->runQuery($queryProp);
+        $prop = $queryProp->fetch_assoc();
+        $queryCheck = "SELECT * FROM value WHERE state = 'active' AND property_id = ".$idProp;
+        $queryCheck = $this->db->runQuery($queryCheck);
+        if ($queryCheck->num_rows > 0) {
+            if (isset($prop["ent_type_id"])) {
+?>
+                <p>Não pode desativar esta propriedade, uma vez que já existem entidades com valores para essas propriedades.</p>
+                <p>Necessita de desativar estas propriedades nessas entidades antes de desativar esta propriedade.</p>
+                <p>Para fazê-lo deve dirigir-se à página <a href = "/pesquisa-dinamica?estado=execucao&ent=<?php echo $prop["ent_type_id"]?>">Pesquisa dinâmica</a></p>
+<?php
+            }
+            else {
+?>
+                <p>Não pode desativar esta propriedade, uma vez que já existem relações com valores para essas propriedades.</p>
+                <p>Necessita de desativar estas propriedades nessas relações antes de desativar esta propriedade.</p>
+                <p>Para fazê-lo deve dirigir-se à página <a href = "/insercao-de-relacoes">Inserção de Relações</a></p>
+<?php
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
@@ -746,7 +882,7 @@ class PropertyManage
             $ent2 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type2_id"];
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent2;
-            $nomeRelEnt = $this->criaNomeRel($queryNome1, $queryNome2);
+            $nomeRelEnt = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
         else
         {
@@ -836,7 +972,7 @@ class PropertyManage
                             {
                                 $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
                                 $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                $guardaEntRel["name"] = $this->criaNomeRel($queryNome1, $queryNome2);
+                                $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
                             }
                             if($guardaEntRel["name"] === $nomeRelEnt)
                             {
@@ -988,7 +1124,7 @@ class PropertyManage
         {
             $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
             $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->criaNomeRel($queryNome1, $queryNome2);
+            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
         }
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
@@ -1001,58 +1137,76 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        $this->gereHist->atualizaHistorico();
-        $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
-        if(!empty($_REQUEST["tamanho"]))
-	{
-            $queryUpdate .= ',form_field_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
-	}
-        $queryUpdate .= ',form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).',mandatory='.$_REQUEST["obrigatorio"].',state="active"';
-        
-        if (!empty($_REQUEST["entidadeReferenciada"]))
-        {
-            $queryUpdate .= ',fk_ent_type_id='.$_REQUEST["entidadeReferenciada"];
-        }
-        if (!empty($_REQUEST["entidadePertence"]))
-        {
-            $queryUpdate .= ',ent_type_id='.$_REQUEST["entidadePertence"];
-        }
-        else
-        {
-            $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence"];
-        }
-        $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
-	$update = $this->db->runQuery($queryUpdate);
-        if (!$update)
-        {
+        if ($this->gereHist->atualizaHistorico($this->db) == false) {
+            echo "beh";
+            var_dump($this->gereHist->atualizaHistorico($this->db));
+            echo "#1";
 ?>
-            <p>Ocorreu um erro.</p>
-<?php
+            <p>Não foi possível atualizar a propriedade pretendida.</p>
+<?php 
             goBack();
         }
-        else
-        {
+        else {
+            $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome"]).'\',value_type=\''.$_REQUEST["tipoValor"].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo"].'\',unit_type_id='.$_REQUEST["tipoUnidade"];
+            if(!empty($_REQUEST["tamanho"]))
+            {
+                $queryUpdate .= ',form_field_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho"]).'"';
+            }
+            $queryUpdate .= ',form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem"]).',mandatory='.$_REQUEST["obrigatorio"].',state="active"';
+
+            if (!empty($_REQUEST["entidadeReferenciada"]))
+            {
+                $queryUpdate .= ',fk_ent_type_id='.$_REQUEST["entidadeReferenciada"];
+            }
+            if (!empty($_REQUEST["entidadePertence"]))
+            {
+                $queryUpdate .= ',ent_type_id='.$_REQUEST["entidadePertence"];
+            }
+            else
+            {
+                $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence"];
+            }
+            $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
+            $update = $this->db->runQuery($queryUpdate);
+            if (!$update){
+                echo "#2";
 ?>
-            <p>Atualizou os dados de nova propriedade com sucesso.</p>
-            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+                <p>Não foi possível atualizar a propriedade pretendida.</p>
+<?php 
+            goBack();
+            }
+            else
+            {
+                $this->db->getMysqli()->commit();
+?>
+                <p>Atualizou os dados de nova propriedade com sucesso.</p>
+                <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
+            }
         }
     }
 }
 
 class PropHist{
-    
-    private $db;            // Object from DB_Op that contains the access to the database
-    
+    /**
+     * Constructor method
+     */
     public function __construct(){
-         $this->db = new Db_Op();
     }
     
-    public function atualizaHistorico () {
+    /**
+     * This method is responsible for insert into the history a copy of the property
+     * before being updated
+     * @param type $db (object form the class Db_Op)
+     */
+    public function atualizaHistorico ($db) {
+        $db->getMysqli()->autocommit(false);
+        $db->getMysqli()->begin_transaction();
         $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
+        $isEntity = false;
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
@@ -1061,16 +1215,45 @@ class PropHist{
                 $attr .= "`".$atributo."`,";
                 $val .= "'".$valor."',"; 
             }
+            if ($atributo == "ent_type_id" && !is_null($valor)) {
+               $isEntity = true; 
+            }
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
-        $updateHist =$this->db->runQuery($updateHist);
+        echo $updateHist;
+        $updateHist =$db->runQuery($updateHist);
+        if ($updateHist) {
+            if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db) == false) {
+                echo "#3";
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else if (!$isEntity && $this->createNewRel($atributos["rel_type_id"], $db) == false) {
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            echo "#4";
+            $db->getMysqli()->rollback();
+            return false;
+        }
     }
     
-    public function estadoVoltar () {
-        $this->atualizaHistorico();
+    /**
+     * This method controls the excution flow when the state is Voltar
+     * Basicly he does all the necessary queries to reverse a property to an old version
+     * saved in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoVoltar ($db) {
+        $this->atualizaHistorico($db);
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
-        $selectAtributos = $this->db->runQuery($selectAtributos);
+        $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE property SET ";
         foreach ($atributos as $atributo => $valor) {
@@ -1079,8 +1262,10 @@ class PropHist{
             }
         }
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['prop_id'];
-        $updateHist =$this->db->runQuery($updateHist);
+        echo $updateHist;
+        $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
+            $db->getMysqli()->commit();
 ?>
             <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
@@ -1090,27 +1275,126 @@ class PropHist{
 ?>
             <p>Não foi possível reverter a propriedade para a versão selecionada</p>
 <?php
+            $db->getMysqli()->rollback();
             goBack();
         }
     }
     
-    public function estadoHistorico () {
-        //meto um datepicker
+    /**
+     * Create a new version of ent_type because the properties of it changed
+     * @param type $idEnt (id of the ent_type we want to create a new version)
+     * @param type $db (object form the class Db_Op)
+     */
+    public function createNewEnt ($idEnt, $db) {
+        $getEnt = "SELECT * FROM ent_type WHERE id = ".$idEnt;
+        $getEnt =$db->runQuery($getEnt);
+        $getEnt = $getEnt->fetch_assoc();
+        $atributo = $valor = "";
+        foreach ($getEnt as $attr => $val) {
+            if ($attr == "updated_on") {
+                $attr = "active_on";
+            }
+            if ($attr != "id" && !is_null($val)) {
+                $atributo .= "".$attr.", ";
+                $valor .= "'".$val."', "; 
+            }
+        }
+        $updateEntHist = "INSERT INTO hist_ent_type (".$atributo."inactive_on, ent_type_id) "
+                . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
+        $updateEntHist =$db->runQuery($updateEntHist);
+        if (!$updateEntHist) {
+            echo "#5";
+            $db->getMysqli()->rollback();
+            return false;
+        }
+        else {
+            $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
+            $updateEnt =$db->runQuery($updateEnt);
+            if (!$updateEnt) {
+                echo "#6";
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+    
+    /**
+     * Create a new version of rel_type because the properties of it changed
+     * @param type $idRel (id of the rel_type we want to create a new version)
+     * @param type $db (object form the class Db_Op)
+     */
+    public function createNewRel ($idRel, $db) {
+        $getEnt = "SELECT * FROM rel_type WHERE id = ".$idRel;
+        $getEnt =$db->runQuery($getEnt);
+        $getEnt = $getEnt->fetch_assoc();
+        $atributo = $valor = "";
+        foreach ($getEnt as $attr => $val) {
+            if ($attr == "updated_on") {
+                $attr = "active_on";
+            }
+            if ($attr != "id" && !is_null($val)) {
+                $atributo .= "".$attr.", ";
+                $valor .= "'".$val."', "; 
+            }
+        }
+        $updateRelHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
+                . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idRel.")";
+        echo $updateRelHist;
+        $updateRelHist =$db->runQuery($updateRelHist);
+        if (!$updateRelHist) {
+            echo "#5";
+            $db->getMysqli()->rollback();
+            return false;
+        }
+        else {
+            $updateRel = "UPDATE rel_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
+            echo $updateRel;
+            $updateRel =$db->runQuery($updateRel);
+            if (!$updateRel) {
+                echo "#6";
+                $db->getMysqli()->rollback();
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+    
+    /**
+     * This method is responsible for the execution flow when the state is Histórico.
+     * He starts by presenting a datepicker with options to do a kind of filter of 
+     * all the history of the selected property.
+     * After that he presents a table with all the versions presented in the history
+     * @param type $db (object form the class Db_Op)
+     */
+    public function estadoHistorico ($db) {
+        if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($_REQUEST["tipo"], $db);
+        }
+        else {
+        //meto um datepicker        
 ?>
-        <form>
-            <p>Introduza uma data: <input type="text" id="datepicker"></p>
+        <form method="GET">
+            Verificar histórico:<br>
+            <input type="radio" name="controlDia" value="ate">até ao dia<br>
+            <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+            <input type="radio" name="controlDia" value="dia">no dia<br>
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
         </form>
-<?php
-        //apresento histórico
-        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
-        $queryHistorico = $this->db->runQuery($queryHistorico);
-?>
+
         <table class="table">
             <thead>
                 <tr>
                     <th>Data de Ativação</th>
                     <th>Data de Desativação</th>
+                    <th>Propriedade</th>
                     <th>Tipo de valor</th>
                     <th>Nome do campo no formulário</th>
                     <th>Tipo do campo no formulário</th>
@@ -1124,11 +1408,39 @@ class PropHist{
             </thead>
             <tbody>
 <?php
-        while ($hist = $queryHistorico->fetch_assoc()) {
+        if (empty($_REQUEST["data"])) {
+            $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+        }
+        else {
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+            else {
+                $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+            }
+        }
+        $queryHistorico = $db->runQuery($queryHistorico);
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="11">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td><?php goBack(); ?></td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
 ?>
                 <tr>
                     <td><?php echo $hist["active_on"];?></td>
                     <td><?php echo $hist["inactive_on"];?></td>
+                    <td><?php echo $hist["name"];?></td>
                     <td><?php echo $hist["value_type"];?></td>
                     <td><?php echo $hist["form_field_name"];?></td>
                     <td><?php echo $hist["form_field_type"];?></td>
@@ -1141,7 +1453,7 @@ class PropHist{
                         else
                         {
                             $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                            echo $this->db->runQuery($queryUn)->fetch_assoc()["name"];
+                            echo $db->runQuery($queryUn)->fetch_assoc()["name"];
                         }
 ?>
                     </td>
@@ -1157,7 +1469,7 @@ class PropHist{
                         {
                             echo " não";
                         }
- ?>
+?>
                     </td>
                     <td>
 
@@ -1172,12 +1484,203 @@ class PropHist{
                     }
 ?>
                     </td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["id"];?>&tipoValor=<?php echo $hist["value_type"];?><?php if (isset($hist["ent_type_id"])) echo "&entidadePertence=".$hist["ent_type_id"];if (isset($hist["rel_type_id"])) echo "&relacaoPertence=".$hist["rel_type_id"];?>&tipoCampo=<?php echo $hist["form_field_type"];if (isset($hist["unit_type"])) echo "&tipoUnidade=".$hist["unit_type"];if (isset($hist["fk_ent_type_id"])) echo "&entidadeReferenciada=".$hist["fk_ent_type_id"];?>">
+                            Voltar para esta versão
+                        </a>
+                    </td>
                 </tr>
 <?php
+            }
         }
 ?>
             <tbody>
+        </table>
+<?php
+        
+    }
+    }
+    
+    /**
+     * This method creates a table with a view of all the properties in the selected day
+     * @param type $tipo (indicates if we are working with relations or entities)
+     * @param type $db (object form the class Db_Op)
+     */
+    private function apresentaHistTodas ($tipo, $db) {
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                <?php
+                    if ($tipo === "entity")
+                    {
+                ?>
+                    <th>Entidade</th>
+                <?php
+                    }
+                    else
+                    {
+                ?>
+                    <th>Relação</th>
+                <?php
+                    }
+                ?>
+                    <th>ID</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de valor</th>
+                    <th>Nome do campo no formulário</th>
+                    <th>Tipo do campo no formulário</th>
+                    <th>Tipo de unidade</th>
+                    <th>Ordem do campo no formulário</th>
+                    <th>Tamanho do campo no formulário</th>
+                    <th>Obrigatório</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+                if ($tipo === "entity")
+                {
+                    $selecionaEntOrRel = "SELECT name, id FROM ent_type";
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
+                }
+                else
+                {
+                    $selecionaEntOrRel = "SELECT id FROM rel_type";
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
+                }
+                while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
+                {
+                    $idEntRel = $resEntRel["id"];
+                    if ($tipo === "entity")
+                    {
+                        $nome = $resEntRel["name"];
+                        $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEntRel;
+                    }
+                    else
+                    {
+                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                        $nome = $db->criaNomeRel($queryNome1,$queryNome2);
+                        $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
+                    }
+                    $resultSeleciona = $db->runQuery($selecionaProp);
+                    $numLinhas = $resultSeleciona->num_rows;
+?>
+                <tr>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+<?php
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
+?>
+                        <td><?php echo $arraySelec["id"]; ?></td>
+<?php
+                        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$arraySelec["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
+                        $queryHistorico = $db->runQuery($queryHistorico);
+                        if ($queryHistorico->num_rows == 0) {
+?>
+                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td><?php echo $arraySelec["value_type"]; ?></td>
+                        <td><?php echo $arraySelec["form_field_name"]; ?></td>
+                        <td><?php echo $arraySelec["form_field_type"]; ?></td>
+                        <td>
+<?php
+                        if (empty($arraySelec["unit_type_id"]))
+                        {
+                            echo "-";
+                        }
+                        else
+                        {
+                            $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$arraySelec["unit_type_id"];
+                            echo $db->runQuery($queryUn)->fetch_assoc()["name"];
+                        }
+?>
+                        </td>
+                        <td><?php echo $arraySelec["form_field_order"];?></td>
+                        <td><?php echo $arraySelec["form_field_size"]; ?></td>
+                        <td>
+<?php
+                        if ($arraySelec["mandatory"] == 1)
+                        {
+                            echo "sim";
+                        }
+                        else
+                        {
+                            echo " não";
+                        }
+ ?>
+                        </td>
+                        <td>
+<?php
+                        if ($arraySelec["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
+?>
+                        </td>
+                        <td>-</td>
+                    </tr>
+<?php
+                        }
+                        else {
+                            while ($hist = $queryHistorico->fetch_assoc()) {
+?>
+                                <td><?php echo $hist["name"];?></td>
+                                <td><?php echo $hist["value_type"];?></td>
+                                <td><?php echo $hist["form_field_name"];?></td>
+                                <td><?php echo $hist["form_field_type"];?></td>
+                                <td>
+<?php
+                                if (empty($hist["unit_type_id"]))
+                                {
+                                    echo "-";
+                                }
+                                else
+                                {
+                                    $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
+                                    echo $db->runQuery($queryUn)->fetch_assoc()["name"];
+                                }
+?>
+                                </td>
+                                <td><?php echo $hist["form_field_order"];?></td>
+                                <td><?php echo $hist["form_field_size"]; ?></td>
+                                <td>
+<?php
+                                if ($hist["mandatory"] == 1)
+                                {
+                                    echo "sim";
+                                }
+                                else
+                                {
+                                    echo " não";
+                                }
+?>
+                                </td>
+                                <td>
+<?php
+                                if ($hist["state"] === "active")
+                                {
+                                    echo 'Ativo';
+                                }
+                                else
+                                {
+                                    echo 'Inativo';
+                                }
+?>
+                                </td>
+                                <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $hist["property_id"];?>">Voltar para esta versão</a></td>
+                            </tr>
+<?php
+                            }
+                        }
+                }
+            }
+?>
+            </tbody>
         </table>
 <?php
     }

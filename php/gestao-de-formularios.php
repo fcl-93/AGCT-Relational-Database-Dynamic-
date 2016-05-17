@@ -47,10 +47,10 @@ class GereForms
 				{
 					$this->formEdit();
 				}
-                                else if($_REQUEST['estado'] == 'updateForm')
-                                {
-                                    $this->updateForm();
-                                }
+                                                                else if($_REQUEST['estado'] == 'updateForm')
+                                                                {
+                                                                                $this->updateForm();
+                                                                }
 				else if($_REQUEST['estado'] == 'ativar')
 				{
 					$this->activate();
@@ -59,6 +59,14 @@ class GereForms
 				{
 					$this->desactivate();
 				}
+                                                                else if($_REQUEST['estado'] == 'historico')
+                                                                {
+                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
+                                                                }
+                                                                else if ($_REQUEST['estado'] == 'versionBack')
+                                                                {
+                                                                                $this->gereFormHist->changeVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);  
+                                                                }
 			}
 			else
 			{
@@ -134,7 +142,9 @@ class GereForms
 								</td>
 								<td>
 									<a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
+                                                                       
 <?php 
+                                                                                       
 										if($readForm['state'] === 'active')
 										{
 ?>
@@ -147,7 +157,8 @@ class GereForms
 											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
 <?php 
 										}
-?>
+?> 
+                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
 								</td>
 							</tr>
 <?php 
@@ -556,11 +567,12 @@ class GereForms
 	  */
 	public function desactivate(){
             $idForm = $this->bd->userInputVal($_REQUEST['form_id']);
+            $res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
+            $read_formName = $res_formName->fetch_assoc();
             if($this->gereFormHist->addHist($idForm, $this->bd))
             {
                 $this->bd->runQuery("UPDATE `custom_form` SET state='inactive' WHERE id=".$idForm);
-		$res_formName = $this->bd->runQuery("SELECT name FROM custom_form WHERE id=".$idForm);
-		$read_formName = $res_formName->fetch_assoc();
+		
 ?>
 		<html>
                     <p>O formulário <?php echo $read_formName['name'] ?> foi desativado</p>
@@ -714,10 +726,15 @@ class HistDeForms{
     
     public function __construct() {
     }
-    
+    /**
+     * 
+     * @param type $id
+     * @param type $bd
+     * @return boolean
+     */
     public function addHist($id,$bd){
         $bd->getMysqli()->autocommit(false);
-	$bd->getMysqli()->begin_transaction();
+        $bd->getMysqli()->begin_transaction();
         
         //gets info from the form that we will be changing 
         $res_getEntTp = $bd->runQuery("SELECT * FROM custom_form WHERE id=".$id."");
@@ -729,25 +746,238 @@ class HistDeForms{
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
            if($resCf_Prop->num_rows > 0)
            {
+             
                 while($readCf_Prop = $resCf_Prop->fetch_assoc())
                 {
-                    if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
-                    {
-                        return false;
-                    }
+                        //backups the custom form has properties  tuples
+                        if(!$bd->runQuery("INSERT INTO `hist_custom_form_has_property`(`property_id`, `field_order`, `mandatory_form`, `active_on`, `inactive_on`, `id`, `custom_form_id`) VALUES (".$readCf_Prop['property_id'].",".$readCf_Prop['field_order'].",".$readCf_Prop['mandatory_form'].",'".$readCf_Prop['updated_on']."','".$inactive."',NULL,".$id.")"))
+                        {
+                            return false;
+                        }
+                        //backups each instance of the properties
+                        $backupFormProps = $bd->runQuery("SELECT * FROM property WHERE id=".$readCf_Prop['property_id'])->fetch_assoc();
+                        if($backupFormProps['rel_type_id'] == ''){
+                                $rel_type_id = 'NULL';
+                        }
+                        else {
+                                $rel_type_id =$backupFormProps['rel_type_id'];
+                        }
+                        
+                        if($backupFormProps['unit_type_id'] == ''){
+                            $unit_type_id = 'NULL';
+                        }
+                        else {
+                            $unit_type_id = $backupFormProps['unit_type_id'];
+                        }
+                        if($backupFormProps['fk_ent_type_id'] == '')
+                        {
+                                $fk_ent_type_id = 'NULL';
+                        }
+                        else{
+                                $fk_ent_type_id = $backupFormProps['fk_ent_type_id'];
+                        }
+                        if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$rel_type_id.",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."','".$unit_type_id."',".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$fk_ent_type_id.",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
+                                return false;
+                        }
                 }
+               
                 //updates the current form updated_on field 
                 if(!$bd->runQuery("UPDATE `custom_form` SET `updated_on`='".$inactive."' WHERE id=".$id))
                 {
                     return false;
                 }
-                return true;
+                return $inactive;
            }
         }
-        return false;
+        return false;   
+    }
+    
+    
+    /**
+     * This method will create a table where the history will be showned.
+     * @param type $id -> id form the selected form
+     * @param type $bd
+     */
+    public function tableHist($id,$bd){
         
+                                    if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
+                                    }
+                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
+                                    }
+                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+
+                                    }
+                                    else {
+                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
+
+                                    }
+        //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;   
+?>
+                        <form method="GET">
+                                Verificar histórico:<br>
+                                <input type="radio" name="controlDia" value="ate">até ao dia<br>
+                                <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+                                <input type="radio" name="controlDia" value="dia">no dia<br>
+                                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="hidden" name="estado" value="historico">
+                                <input type="hidden" name="form_id" value="<?php echo $id; ?>">
+                                <input type="submit" value="Apresentar histórico">
+                        </form>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Data de Ativação</th>
+                                    <th>Data de Desativação</th>
+                                    <th>Nome do Formulário</th>
+                                    <th>Propriedade</th>
+                                    <th>Nome do campo no formulário</th>
+                                    <th>Tamanho do campo no formulário</th>
+                                    <th>Ordem do campo no formulário</th>
+                                    <th>Obrigatório no forumulário customizado</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<?php
+                           //  echo $goToCFN->num_rows;
+                            if($goToCFN->num_rows == 0){
+?>                                
+                                <tr>
+                                    <td colspan="7">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td><?php goBack()?></td>
+                                </tr>
+<?php 
+                            }
+                            else
+                            {
+                                    while($readFNhist = $goToCFN->fetch_assoc()){
+?>
+                                        <tr> 
+<?php
+                                            //echo "SELECT * FROM hist_custom_form_has_property WHERE inactive_on='".$readFNhist['inactive_on']."'";
+                                            $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND  inactive_on='".$readFNhist['inactive_on']."'");
+                                            $spanSize = $getPropHist->num_rows;                                            
+?>              
+                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['active_on']?></td>
+                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['inactive_on']?></td>
+                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['name']?></td>
+<?php
+                                                $checkIfFIrst = true;
+                                                while($getPropId = $getPropHist ->fetch_assoc())
+                                               {
+                                                        $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
+?>
+                                                    <td><?php echo $getPropName['name']?></td>
+                                                    <td><?php echo $getPropName['form_field_name']?></td>
+                                                    <td><?php echo $getPropName['form_field_size']?></td>
+
+                                                    <td><?php echo $getPropId['field_order']?></td>
+                                                    <td>
+<?php 
+                                                    if($getPropId['mandatory_form'] == 1)
+                                                    {
+                                                        echo "Sim";
+                                                    }
+                                                    else
+                                                    {
+                                                        echo "Não";
+                                                    }
+?> 
+                                         <?php
+                                                        if($checkIfFIrst == true){
+                                                           // echo "href=\"?estado=versionBack&histId=<?php echo ."$getPropHist['custom_form_id']."?\>";
+?>
+                                                        </td> <td rowspan="<?php echo$spanSize ?>">
+                                                            
+                                                            
+                                                        <a href="?estado=versionBack&histId=<?php echo $getPropId['id']?>">Voltar para esta versão</a>
+<?php
+                                                        $checkIfFIrst =false;
+?> 
+                                                    </td> 
+<?php
+                                                        }
+?>
+
+                                            </tr>                               
+<?php                                   
+                                                } 
+?>
+                                   
+<?php
+                                                    }
+                                 
+                            }                   
+                            
+?>
+                            </tbody>
+                        </table>
+<?php
+    }
+    
+    /**
+     * Thi method will make the change between the actual form and the form that bellongs to the history
+     * @param type $idFormHist -> id from one of the properties of the form that is in the history table.
+     * @param type $bd --> database object to allow db operations
+     */
+    public function changeVersion($idFormHist,$bd){
+        //get the id from the form that needs to be changed 
+        $formToBack = $bd->runQuery("SELECT custom_form_id, inactive_on FROM hist_custom_form_has_property WHERE id=".$idFormHist)->fetch_assoc();
         
-              
+        //Starts doing  abackup onn the actual form that is presented to the user
+        $inactive = $this->addHist($formToBack['custom_form_id'], $bd);
+        if($inactive== false)
+        {
+                        $error=true;
+        }
+        else
+        {
+                //delete all the tuples that bellong to a form 
+                $bd->runQuery("DELETE FROM custom_form_has_prop WHERE custom_form_id = ".$formToBack['custom_form_id']);
+                $error = false;
+                //Brings back the tuples from the form that is in the history
+                $bbProps = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE inactive_on = '".$formToBack['inactive_on']."'");
+                $theFirst = true;
+                while( $readProps = $bbProps->fetch_assoc()){
+                        //insert the old tuples in the main table 
+                        if(!$bd->runQuery("INSERT INTO `custom_form_has_prop`(`property_id`, `custom_form_id`, `field_order`, `mandatory_form`, `updated_on`) VALUES (".$readProps['property_id'].",".$readProps['custom_form_id'].",".$readProps['field_order'].",".$readProps['mandatory_form'].",'".$inactive."')")){
+                            $error = true;
+                            break;
+                        }
+                        if($theFirst == true){
+                        //get the name form the history table
+                        $getNamePars = $bd->runQuery("SELECT *  FROM hist_custom_form WHERE inactive_on = '".$formToBack['inactive_on']."'")->fetch_assoc();
+                        //updqte tghe current  name to the one that comes form the history
+                            if(!$bd->runQuery("UPDATE `custom_form` SET `name`='".$getNamePars['name']."',`state`='".$getNamePars['state']."',`updated_on`='".$inactive."' WHERE id=".$formToBack['custom_form_id'])){
+                                $error = true;
+                                break;
+                            }
+                            $theFirst = false;
+                        }
+                }
+                
+                if($error == true)
+                {
+?>
+                        <p>O formulário atual não pôde ser substituido pelo antigo.</p>
+                        <p>Clique em <?php goBack() ?> para voltar à página anterior</p>
+<?php
+                        $bd->getMysqli()->rollback();
+                }
+                else
+                {
+?>
+                        <p>A troca de formulários foi bem sucedida..</p>
+                        <p>Clique em <a href="/gestao-de-formularios"/>Continuar</a> para avançar</p>
+<?php
+                        $bd->getMysqli()->commit();
+                }
+        }
+        
     }
 }
 ?>
