@@ -514,7 +514,7 @@ class EntHist {
         <?php
         echo "SELECT * FROM `hist_ent_type` as h, ent_type as e WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' AND h.id NOT IN (SELECT id FROM ent_type WHERE updated_on <".date("Y-m-d",(strtotime($data) + 86400)).") AND e.id NOT IN (SELECT ent_type_id FROM ent_type_id WHERE inactive_on <".date("Y-m-d",(strtotime($data) + 86400)).")";
         $resHe = $bd->runQuery("SELECT * FROM `hist_ent_type` as h, ent_type as e WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' AND h.id NOT IN (SELECT id FROM ent_type WHERE updated_on <'".date("Y-m-d",(strtotime($data) + 86400))."') AND e.id NOT IN (SELECT ent_type_id FROM hist_ent_type WHERE inactive_on <'".date("Y-m-d",(strtotime($data) + 86400))."')");
-        if ($resNo->num_rows < 1) {
+        if ($resHe->num_rows < 1) {
             ?>
                 <tr>
                     <td colspan="4">Não existe registo referente à entidade selecionada no histórico</td>
@@ -522,7 +522,7 @@ class EntHist {
                 </tr>
             <?php
         } else {
-            while ($readNo = $resNo->fetch_assoc()) {
+            while ($readHE = $resHe->fetch_assoc()) {
                 ?>
                     <tr>
                         
