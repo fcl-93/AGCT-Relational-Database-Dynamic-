@@ -1555,29 +1555,52 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]." 23:59:59' AND ent_type_id = ".$idEntRel;
+                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." group by property_id ORDER BY inactive_on DESC AND property_id NOT IN (SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."')";
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel. " AND id NOT IN (SELECT property_id from hist_property)";
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= ".$_REQUEST["data"]." 23:59:59' AND rel_type_id =".$idEntRel." AND id NOT IN (SELECT property_id from hist_property)";
                     }
-                    $resultSeleciona = $db->runQuery($selecionaProp);
-                    $numLinhas = $resultSeleciona->num_rows;
+                    $resultSelecionaProp = $db->runQuery($selecionaProp);
+                    $resultSelecionaHist = $db->runQuery($selecionaHist);
+                    $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
 ?>
                 <tr>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
 <?php
+                    $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
+                            `name` VARCHAR(128) NOT NULL DEFAULT '',
+                            `ent_type_id` INT UNSIGNED NULL,
+                            `rel_type_id` INT NULL,
+                            `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL COMMENT 'text, int, double, boolean, enum',
+                            `form_field_name` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'ascii string to be used as the name of the form field',
+                            `form_field_type` ENUM('text','textbox','radio','checkbox','selectbox') NOT NULL,
+                            `unit_type_id` INT UNSIGNED NULL,
+                            `form_field_order` INT UNSIGNED NOT NULL,
+                            `mandatory` INT NOT NULL,
+                            `state` ENUM('active','inactive') NOT NULL,
+                            `fk_ent_type_id` INT UNSIGNED NULL,
+                            `form_field_size` VARCHAR(64) NULL)";
+                    $creatTempTable = $db->runQuery($creatTempTable);
+                    
+                    while ($prop = $resultSelecionaProp->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".$prop['ent_type_id'].",".$prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".$prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".$prop['fk_ent_type_id'].",".$prop['form_field_size'].")");
+                    }
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",".$hist['name'].",".$hist['ent_type_id'].",".$hist['rel_type_id'].",".$hist['value_type'].",".$hist['form_field_name'].",".$hist['form_field_type'].",".$hist['unit_type_id'].",".$hist['form_field_order'].",".$hist['mandatory'].",".$hist['state'].",".$hist['fk_ent_type_id'].",".$hist['form_field_size'].")");
+                    }
+                    
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table");
+                    
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
 <?php
-                        $queryHistorico = "SELECT * FROM hist_property WHERE property_id = ".$arraySelec["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
-                        $queryHistorico = $db->runQuery($queryHistorico);
-                        if ($queryHistorico->num_rows == 0) {
 ?>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $arraySelec["value_type"]; ?></td>
@@ -1625,60 +1648,8 @@ class PropHist{
                         <td>-</td>
                     </tr>
 <?php
-                        }
-                        else {
-                            while ($hist = $queryHistorico->fetch_assoc()) {
-?>
-                                <td><?php echo $hist["name"];?></td>
-                                <td><?php echo $hist["value_type"];?></td>
-                                <td><?php echo $hist["form_field_name"];?></td>
-                                <td><?php echo $hist["form_field_type"];?></td>
-                                <td>
-<?php
-                                if (empty($hist["unit_type_id"]))
-                                {
-                                    echo "-";
-                                }
-                                else
-                                {
-                                    $queryUn = "SELECT name FROM prop_unit_type WHERE id =".$hist["unit_type_id"];
-                                    echo $db->runQuery($queryUn)->fetch_assoc()["name"];
-                                }
-?>
-                                </td>
-                                <td><?php echo $hist["form_field_order"];?></td>
-                                <td><?php echo $hist["form_field_size"]; ?></td>
-                                <td>
-<?php
-                                if ($hist["mandatory"] == 1)
-                                {
-                                    echo "sim";
-                                }
-                                else
-                                {
-                                    echo " não";
-                                }
-?>
-                                </td>
-                                <td>
-<?php
-                                if ($hist["state"] === "active")
-                                {
-                                    echo 'Ativo';
-                                }
-                                else
-                                {
-                                    echo 'Inativo';
-                                }
-?>
-                                </td>
-                                <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $hist["property_id"];?>">Voltar para esta versão</a></td>
-                            </tr>
-<?php
-                            }
-                        }
+                    }
                 }
-            }
 ?>
             </tbody>
         </table>
