@@ -1563,7 +1563,7 @@ class PropHist{
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= ".$_REQUEST["data"]." 23:59:59' AND rel_type_id =".$idEntRel." AND id NOT IN (SELECT property_id from hist_property)";
+                        $selecionaProp = "SELECT * FROM propperty WHERE updated_on <= ".$_REQUEST["data"]." 23:59:59' AND rel_type_id =".$idEntRel." AND id NOT IN (SELECT property_id from hist_property)";
                     }
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
