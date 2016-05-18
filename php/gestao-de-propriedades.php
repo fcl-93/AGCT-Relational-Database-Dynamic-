@@ -1588,10 +1588,10 @@ class PropHist{
                     $creatTempTable = $db->runQuery($creatTempTable);
                     
                     while ($prop = $resultSelecionaProp->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".$prop['ent_type_id'].",".$prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".$prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".$prop['fk_ent_type_id'].",".$prop['form_field_size'].")");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".empty($prop['ent_type_id']) ? "NULL" : $prop['ent_type_id'].",".empty($prop['rel_type_id']) ? "NULL" : $prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".empty($prop['unit_type_id']) ? "NULL" : $prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".empty($prop['fk_ent_type_id']) ? "NULL" : $prop['fk_ent_type_id'].",".$prop['form_field_size'].")");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",".$hist['name'].",".$hist['ent_type_id'].",".$hist['rel_type_id'].",".$hist['value_type'].",".$hist['form_field_name'].",".$hist['form_field_type'].",".$hist['unit_type_id'].",".$hist['form_field_order'].",".$hist['mandatory'].",".$hist['state'].",".$hist['fk_ent_type_id'].",".$hist['form_field_size'].")");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",".$hist['name'].",".empty($hist['ent_type_id']) ? "NULL" : $hist['ent_type_id'].",".empty($hist['rel_type_id']) ? "NULL" : $hist['rel_type_id'].",".$hist['value_type'].",".$hist['form_field_name'].",".$hist['form_field_type'].",".empty($hist['unit_type_id']) ? "NULL" : $hist['unit_type_id'].",".$hist['form_field_order'].",".$hist['mandatory'].",".$hist['state'].",".empty($hist['fk_ent_type_id']) ? "NULL" : $hist['fk_ent_type_id'].",".$hist['form_field_size'].")");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table");
