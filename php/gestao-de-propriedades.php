@@ -1556,7 +1556,9 @@ class PropHist{
                     {
                         $nome = $resEntRel["name"];
                         $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." AND property_id NOT IN (SELECT id FROM property WHERE updated_on <= '".$_REQUEST["data"]."') GROUP BY property_id ORDER BY inactive_on DESC";
+                        ECHO $selecionaHist;
                         $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel. " AND id NOT IN (SELECT property_id from hist_property)";
+                        ECHO $selecionaProp;
                     }
                     else
                     {
