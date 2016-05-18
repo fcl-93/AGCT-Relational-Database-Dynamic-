@@ -1555,7 +1555,7 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaProp = "SELECT * FROM property WHERE ent_type_id =".$idEntRel;
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= ".$_REQUEST["data"]." AND ent_type_id = ".$idEntRel;
                     }
                     else
                     {
