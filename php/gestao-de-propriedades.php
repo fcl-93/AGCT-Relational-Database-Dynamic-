@@ -1591,6 +1591,8 @@ class PropHist{
                     echo "#1";
                     while ($prop = $resultSelecionaProp->fetch_assoc()) {
                         echo "#2";
+                        echo "INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".empty($prop['ent_type_id']) ? "NULL" : $prop['ent_type_id'].",".empty($prop['rel_type_id']) ? "NULL" : $prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".empty($prop['unit_type_id']) ? "NULL" : $prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".empty($prop['fk_ent_type_id']) ? "NULL" : $prop['fk_ent_type_id'].",".$prop['form_field_size'].")";
+
                         $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".empty($prop['ent_type_id']) ? "NULL" : $prop['ent_type_id'].",".empty($prop['rel_type_id']) ? "NULL" : $prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".empty($prop['unit_type_id']) ? "NULL" : $prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".empty($prop['fk_ent_type_id']) ? "NULL" : $prop['fk_ent_type_id'].",".$prop['form_field_size'].")");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
