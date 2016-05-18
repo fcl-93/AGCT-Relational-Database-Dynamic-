@@ -787,31 +787,22 @@ class PropertyManage
             $queryUpdate = "UPDATE property SET state=";
             if ($_REQUEST["estado"] === "desativar") {
                 if (!$this->verificaValue ($_REQUEST['prop_id'])) {
-                    if ($this->gereHist->atualizaHistorico($this->db) == false) {
 ?>
-                        <p>Não foi possível desativar a propriedade pretendida.</p>
-<?php 
-                        goBack();
-                    }
-                    else {
-                            $queryUpdate .= "'inactive'";
-                            $estado = "desativada";
-                            $avanca = true;
-                    }
-                }
-            }
-            else {
-                if ($this->gereHist->atualizaHistorico($this->db) == false) {
-?>
-                    <p>Não foi possível ativar a propriedade pretendida.</p>
+                    <p>Não foi possível desativar a propriedade pretendida.</p>
 <?php 
                     goBack();
                 }
                 else {
-                    $queryUpdate .= "'active'";
-                    $estado = "ativada";
+                    $queryUpdate .= "'inactive'";
+                    $estado = "desativada";
                     $avanca = true;
                 }
+            }
+            else {
+                $queryUpdate .= "'active'";
+                $estado = "ativada";
+                $avanca = true;
+
             }
             if ($avanca) {
                 $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['prop_id'];
@@ -1557,7 +1548,7 @@ class PropHist{
                         $nome = $resEntRel["name"];
                         $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." AND property_id NOT IN (SELECT id FROM property WHERE updated_on <= '".$_REQUEST["data"]."') GROUP BY property_id ORDER BY inactive_on DESC";
                         ECHO $selecionaHist;
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel. " AND id NOT IN (SELECT property_id from hist_property)";
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel;
                         ECHO $selecionaProp;
                     }
                     else
