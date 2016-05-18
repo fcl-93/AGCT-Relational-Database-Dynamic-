@@ -77,7 +77,7 @@ class Entidade {
      * This method will print the table that will show all the ent_types
      */
     public function tableToprint() {
-    echo "Olá";
+    echo "Olá Olé";
 ?>      
         <form method="GET">
             Verificar propriedades existentes no dia : 
