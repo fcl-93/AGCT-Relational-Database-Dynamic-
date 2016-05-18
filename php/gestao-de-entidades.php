@@ -534,7 +534,6 @@ class EntHist {
                     </tr>
                 <?php
             }
-            $
         }
         ?>                                
         </tbody>
