@@ -44,7 +44,7 @@ class Entidade {
                     $this->insertEnt();
                 } else if ($_REQUEST['estado'] == 'historico') {
                     if(isset($_REQUEST["histAll"])){
-                        $this->gereHist->tablePresentHist($this->bd->userInputVal($_REQUEST['data']),$bd);
+                        $this->gereHist->tablePresentHist($this->bd->userInputVal($_REQUEST['data']),$this->bd);
                     }
                     else{
                         $this->gereHist->tableHist($this->bd->userInputVal($_REQUEST['ent_id']), $this->bd);
