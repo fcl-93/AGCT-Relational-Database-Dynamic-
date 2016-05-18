@@ -512,7 +512,7 @@ class EntHist {
         </thead>
         <tbody>
         <?php
-        $resHE = $this->bd->runQuery("SELECT * FROM `hist_ent_type` WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+        $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
         if ($resHE->num_rows < 1) {
             ?>
                 <tr>
