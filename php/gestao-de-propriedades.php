@@ -1649,6 +1649,7 @@ class PropHist{
                     </tr>
 <?php
                     }
+                    $dropTable = "DROP temp_table";
                 }
 ?>
             </tbody>
