@@ -1615,8 +1615,6 @@ class PropHist{
                         else {
                            $fk = $prop['fk_ent_type_id'];
                         }
-                        echo "INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['name']."',".$ent_type.",".$rel_type.",'".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."',".$prop['mandatory'].",'".$prop['state']."',".$fk.",'".$prop['form_field_size']."')";
-
                         $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['name']."',".$ent_type.",".$rel_type.",'".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."',".$prop['mandatory'].",'".$prop['state']."',".$fk.",'".$prop['form_field_size']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
@@ -1703,7 +1701,7 @@ class PropHist{
                     </tr>
 <?php
                     }
-                    $dropTable = "DROP temp_table";
+                    $db->runQuery("DROP temp_table");
                 }
 ?>
             </tbody>
