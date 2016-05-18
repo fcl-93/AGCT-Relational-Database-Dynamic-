@@ -1565,6 +1565,7 @@ class PropHist{
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
                         $selecionaProp = "SELECT * FROM property WHERE updated_on <= ".$_REQUEST["data"]." 23:59:59' AND rel_type_id =".$idEntRel." AND id NOT IN (SELECT property_id from hist_property)";
                     }
+                    echo "#5";
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
@@ -1572,6 +1573,7 @@ class PropHist{
                 <tr>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
 <?php
+                    echo "#4";
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `name` VARCHAR(128) NOT NULL DEFAULT '',
                             `ent_type_id` INT UNSIGNED NULL,
