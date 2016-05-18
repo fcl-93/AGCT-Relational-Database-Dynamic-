@@ -1639,7 +1639,7 @@ class PropHist{
                         else {
                            $unit = $hist['unit_type_id'];
                         }
-                        if (empty($hist['fk_ent_type_id'])) {
+                        if (empty($hist['fk_ent_tpe_id'])) {
                             $fk = "NULL";
                         }
                         else {
