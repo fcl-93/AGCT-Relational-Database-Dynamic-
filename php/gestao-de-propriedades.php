@@ -1639,7 +1639,7 @@ class PropHist{
                         $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",'".$hist['name']."',".$ent_type.",".$rel_type.",'".$hist['value_type']."','".$hist['form_field_name']."','".$hist['form_field_type']."',".$unit.",'".$hist['form_field_order']."',".$hist['mandatory'].",'".$hist['state']."',".$fk.",'".$hist['form_field_size']."')");
                     }
                     
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table");
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
