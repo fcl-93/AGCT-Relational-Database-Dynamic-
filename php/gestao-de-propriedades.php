@@ -1701,7 +1701,7 @@ class PropHist{
                     </tr>
 <?php
                     }
-                    $db->runQuery("DROP temp_table");
+                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
                 }
 ?>
             </tbody>
