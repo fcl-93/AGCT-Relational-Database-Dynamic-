@@ -1591,13 +1591,61 @@ class PropHist{
                     echo "#1";
                     while ($prop = $resultSelecionaProp->fetch_assoc()) {
                         echo "#2";
-                        echo "INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".empty($prop['ent_type_id']) ? "NULL" : $prop['ent_type_id'].",".empty($prop['rel_type_id']) ? "NULL" : $prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".empty($prop['unit_type_id']) ? "NULL" : $prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".empty($prop['fk_ent_type_id']) ? "NULL" : $prop['fk_ent_type_id'].",".$prop['form_field_size'].")";
+                        if (empty($prop['ent_type_id'])) {
+                            $ent_type = "NULL";
+                        }
+                        else {
+                           $ent_type = $prop['ent_type_id'];
+                        }
+                        if (empty($prop['rel_type_id'])) {
+                            $rel_type = "NULL";
+                        }
+                        else {
+                           $rel_type = $prop['rel_type_id'];
+                        }
+                        if (empty($prop['unit_type_id'])) {
+                            $unit = "NULL";
+                        }
+                        else {
+                           $unit = $prop['unit_type_id'];
+                        }
+                        if (empty($prop['fk_ent_type_id'])) {
+                            $fk = "NULL";
+                        }
+                        else {
+                           $fk = $prop['fk_ent_type_id'];
+                        }
+                        echo "INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".$ent_type.",".$rel_type.",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".$unit.",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".$fk.",".$prop['form_field_size'].")";
 
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".empty($prop['ent_type_id']) ? "NULL" : $prop['ent_type_id'].",".empty($prop['rel_type_id']) ? "NULL" : $prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".empty($prop['unit_type_id']) ? "NULL" : $prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".empty($prop['fk_ent_type_id']) ? "NULL" : $prop['fk_ent_type_id'].",".$prop['form_field_size'].")");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",".$prop['name'].",".$ent_type.",".$rel_type.",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".$unit.",".$prop['form_field_order'].",".$prop['mandatory'].",".$prop['state'].",".$fk.",".$prop['form_field_size'].")");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                         echo "#3";
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",".$hist['name'].",".empty($hist['ent_type_id']) ? "NULL" : $hist['ent_type_id'].",".empty($hist['rel_type_id']) ? "NULL" : $hist['rel_type_id'].",".$hist['value_type'].",".$hist['form_field_name'].",".$hist['form_field_type'].",".empty($hist['unit_type_id']) ? "NULL" : $hist['unit_type_id'].",".$hist['form_field_order'].",".$hist['mandatory'].",".$hist['state'].",".empty($hist['fk_ent_type_id']) ? "NULL" : $hist['fk_ent_type_id'].",".$hist['form_field_size'].")");
+                        if (empty($hist['ent_type_id'])) {
+                            $ent_type = "NULL";
+                        }
+                        else {
+                           $ent_type = $hist['ent_type_id'];
+                        }
+                        if (empty($hist['rel_type_id'])) {
+                            $rel_type = "NULL";
+                        }
+                        else {
+                           $rel_type = $hist['rel_type_id'];
+                        }
+                        if (empty($hist['unit_type_id'])) {
+                            $unit = "NULL";
+                        }
+                        else {
+                           $unit = $hist['unit_type_id'];
+                        }
+                        if (empty($hist['fk_ent_type_id'])) {
+                            $fk = "NULL";
+                        }
+                        else {
+                           $fk = $hist['fk_ent_type_id'];
+                        }
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",".$hist['name'].",".$ent_type.",".$rel_type.",".$hist['value_type'].",".$hist['form_field_name'].",".$hist['form_field_type'].",".$unit.",".$hist['form_field_order'].",".$hist['mandatory'].",".$hist['state'].",".$fk.",".$hist['form_field_size'].")");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table");
