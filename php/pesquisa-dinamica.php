@@ -2635,6 +2635,16 @@ class entityHist{
      public function tableHist($id,$bd)
      {
 ?>
+                <form method="GET">
+                                Verificar histórico:<br>
+                                <input type="radio" name="controlDia" value="ate">até ao dia<br>
+                                <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+                                <input type="radio" name="controlDia" value="dia">no dia<br>
+                                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="hidden" name="estado" value="historico">
+                                <input type="hidden" name="ent_id" value="<?php echo $id; ?>">
+                                <input type="submit" value="Apresentar histórico">
+                        </form>
                     <table class="table">
                         <thead>
                             <tr>
@@ -2649,7 +2659,19 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
-                        $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                                 if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
+                                }
+                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
+                                }
+                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+
+                                }
+                                else {
+                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                                }
                         if($presetOld->num_rows == 0)
                         {
 ?>

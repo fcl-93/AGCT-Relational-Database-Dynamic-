@@ -43,9 +43,18 @@ class Entidade {
                 } else if ($_REQUEST['estado'] == 'inserir') {
                     $this->insertEnt();
                 } else if ($_REQUEST['estado'] == 'historico') {
-                    $this->gereHist->tableHist($this->bd->userInputVal($_REQUEST['ent_id']), $this->bd);
+                    if(isset($_REQUEST["histAll"])){
+                        $this->gereHist->tablePresentHist($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                    }
+                    else{
+                        $this->gereHist->tableHist($this->bd->userInputVal($_REQUEST['ent_id']), $this->bd);
+                    }
                 } else if ($_REQUEST['estado'] == 'versionBack') {
                     $this->gereHist->returnPreviousVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);
+                }
+                else if($_REQUEST['estado'] == 'histAll')
+                {
+                    
                 }
             } else {
                 ?>
@@ -68,6 +77,16 @@ class Entidade {
      * This method will print the table that will show all the ent_types
      */
     public function tableToprint() {
+    //echo "Olá Olé";
+?>      
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
+<?php
         //Apresentar tabela
         $res_EntType = $this->bd->runQuery("SELECT * FROM ent_type");
         //verifica se há ou não entidades
@@ -130,12 +149,15 @@ class Entidade {
             </html>
                             <?php
                         }
-                    }
+}
 
-                    /**
-                     * This method will be responsable for the print of the form
-                     */
-                    public function form() {
+
+                    
+                    
+    /**
+      * This method will be responsable for the print of the form
+      */
+    public function form() {
                         ?>
         <html>
             <h3>Gestão de Componentes - Introdução</h3>
@@ -478,5 +500,44 @@ class EntHist {
         <?php
     }
 
+    public function tablePresentHist($data,$bd){
+                ?>
+        <table class="table">
+            <thead>
+            <th>Data de Ativação</th>
+            <th>Data de Desativação</th>
+            <th>Nome</th>
+            <th>Estado</th>
+            <th>Ação</th>
+        </thead>
+        <tbody>
+        <?php
+        echo "SELECT * FROM `hist_ent_type` WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
+        $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC  LIMIT 1");
+        if ($resHE->num_rows < 1) {
+            ?>
+                <tr>
+                    <td colspan="4">Não existe registo referente à entidade selecionada no histórico</td>
+                    <td><?php goBack(); ?></td>
+                </tr>
+            <?php
+        } else {
+            while ($readHE = $resHE->fetch_assoc()) {
+                ?>
+                    <tr>
+                        <td><?php echo $readHE['active_on'] ?></td>
+                        <td><?php echo $readHE['inactive_on'] ?></td>
+                        <td><?php echo $readHE['name'] ?></td>
+                        <td><?php echo $readHE['state'] ?></td>
+                        <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
+                    </tr>
+                <?php
+            }
+        }
+        ?>                                
+        </tbody>
+        </table>
+        <?php
+    }
 }
 ?>
