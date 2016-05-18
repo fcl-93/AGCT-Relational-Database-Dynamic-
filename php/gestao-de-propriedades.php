@@ -1555,7 +1555,7 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." group by property_id ORDER BY inactive_on DESC AND property_id NOT IN (SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."')";
+                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." AND property_id NOT IN (SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."') GROUP BY property_id ORDER BY inactive_on DESC";
                         $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel. " AND id NOT IN (SELECT property_id from hist_property)";
                     }
                     else
