@@ -1785,6 +1785,7 @@ class RelHist{
         $creatTempTable = $bd->runQuery($creatTempTable);
         
         $selecionaRel = "SELECT * FROM relation WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
+        echo $selecionaHist . "<br>";
         $runRel = $bd->runQuery($selecionaRel);
         while($readRel = $runRel->fetch_assoc())
         {
@@ -1792,6 +1793,7 @@ class RelHist{
         }
         
         $selecionaHist = "SELECT * FROM hist_relation WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY rel_type_id ORDER BY inactive_on DESC";
+        echo $selecionaHist . "<br>";
         $querHist = $bd->runQuery($selecionaHist);
         while($readRel = $querHist->fetch_assoc())
         {
