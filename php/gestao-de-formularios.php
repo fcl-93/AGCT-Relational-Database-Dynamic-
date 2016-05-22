@@ -1015,7 +1015,7 @@ class HistDeForms{
                 $querEntTp = $bd->runQuery($selecionaProp);
                 while($readEntTP = $querEntTp->fetch_assoc())
                 {
-                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id".$readEntTP['id'])->fetch_assoc();
+                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$readEntTP['id'])->fetch_assoc();
                     $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."',".$getProp['property_id'].",".$getProp['custom_form_id'].")");
                 }
             
