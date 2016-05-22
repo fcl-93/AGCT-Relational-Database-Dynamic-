@@ -217,7 +217,7 @@ class Unidade
          */
         private function activate(){
             if ($this->gereHist->atualizaHistorico($this->bd)) {
-                if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."' state = 'active' WHERE id=".$_REQUEST['unit_id']))
+                if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$_REQUEST['unit_id']))
                 {
 ?>
                     <html>
@@ -495,6 +495,7 @@ class UnidadeHist
                 // Queries that select the verion present in the history or in the main table in the given date
                 $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
                 $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                echo $selecionaUnit.$selecionaHist;
                 
                 $resultSelecionaUnit = $db->runQuery($selecionaUnit);
                 $resultSelecionaHist = $db->runQuery($selecionaHist);
