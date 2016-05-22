@@ -2941,7 +2941,7 @@ class entityHist{
                             <td>
 <?php
                             $getEntName = "SELECT * FROM entity WHERE id = ".$arraySelec['id'];
-                            if ($this->bd->runQuery($getEntName)->num_rows == 0) {
+                            if ($db->runQuery($getEntName)->num_rows == 0) {
                                 echo $instancias['id'];
                             }
                             else {
