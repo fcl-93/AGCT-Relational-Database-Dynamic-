@@ -2592,7 +2592,7 @@ class entityHist{
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
         $inactive = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactive."')")){
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactive."')")){
                 return false;
         }
         return true;
@@ -2609,7 +2609,7 @@ class entityHist{
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
         //$inactive = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
                 return false;
         }
         return true;
@@ -2681,17 +2681,17 @@ class entityHist{
                         $id = $bd->userInputVal($_REQUEST['ent_id']); 
                         $data = $bd->userInputVal($_REQUEST['data']);
                         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
                         }
                         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
                         }
                         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
 
                         }
                         else {
-                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
                         }
                         if($presetOld->num_rows == 0)
                         {
@@ -2813,7 +2813,7 @@ class entityHist{
         $errorFound = false;
         
         $updated_on = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['ent_type_id'].",".$readActENt['id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
         {
                 echo "#NO BACKUP DA ENTITY";
                 $errorFound = true;
