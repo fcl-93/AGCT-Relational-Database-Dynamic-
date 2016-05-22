@@ -64,7 +64,7 @@ class Search{
                 }
                 else if($_REQUEST['estado']=='historico')
                 {
-                    $this->gereInsts->tableHist($this->bd->userInputVal($_REQUEST['ent_id']),$this->bd);
+                    $this->gereInsts->tableHist($this->bd);
                 }
                 else if($_REQUEST['estado']=='versionBack')
                 {
@@ -2646,7 +2646,7 @@ class entityHist{
      * @param type $id -> id from the selected entity
      * @param Db_Op $bd
      */
-     public function tableHist($id,$bd)
+     public function tableHist($bd)
      {
          if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($db);
@@ -2677,6 +2677,7 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
+                        $id = $this->bd->userInputVal($_REQUEST['ent_id']); 
                         $data = $bd->userInputVal($_REQUEST['data']);
                         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
                                           $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
