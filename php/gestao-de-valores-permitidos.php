@@ -904,7 +904,7 @@ class ValPerHist{
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
                     $idEntRel = $resEntRel["id"];
-                    if ($tipo === "entity")
+                    if ($tipo === "ent")
                     {
                         $nome = $resEntRel["name"];
                         $selProp = "SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id = $idEntRel";
