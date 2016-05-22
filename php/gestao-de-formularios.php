@@ -59,14 +59,20 @@ class GereForms
 				{
 					$this->desactivate();
 				}
-                                                                else if($_REQUEST['estado'] == 'historico')
-                                                                {
-                                                                                $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);
-                                                                }
-                                                                else if ($_REQUEST['estado'] == 'versionBack')
-                                                                {
-                                                                                $this->gereFormHist->changeVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);  
-                                                                }
+                                else if($_REQUEST['estado'] == 'historico')
+                                {
+                                    if(isset($_REQUEST['histAll'])){
+                                        $this->gereFormHist->tableHistPrint($this->bd->userInputVal($_REQUEST['data']), $this->bd);
+                                    }
+                                    else{
+                                        $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);    
+                                    }
+                                    
+                                }
+                                else if ($_REQUEST['estado'] == 'versionBack')
+                                {
+                                    $this->gereFormHist->changeVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);  
+                                }
 			}
 			else
 			{
@@ -988,5 +994,104 @@ class HistDeForms{
         }
         
     }
+    
+    
+    /**
+     * This method will create a table in a day choosen by the user, and the user will be able to see how the table was in that day
+     * @param type $id -> id form the selected form
+     * @param type $bd
+     */
+    	public function tableHistPrint($data,$bd){
+                $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
+                `id` int(10) unsigned NOT NULL,
+                `name` varchar(128) NOT NULL,
+                `state` enum('active','inactive') NOT NULL,
+                `property_id` int(10) unsigned NOT NULL,
+                `custom_form_id` int(11) NOT NULL)";
+                
+                $creatTempTable = $bd->runQuery($creatTempTable);
+                
+                $selecionaProp = "SELECT * FROM custom_form WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
+                $querEntTp = $bd->runQuery($selecionaProp);
+                while($readEntTP = $querEntTp->fetch_assoc())
+                {
+                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id".$readEntTP['id'])->fetch_assoc();
+                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."',".$getProp['property_id'].",".$getProp['custom_form_id'].")");
+                }
+            
+                $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY custom_form_has_prop_property_id ORDER BY inactive_on DESC";
+                $querHist = $bd->runQuery($selecionaHist);
+                while($readHist = $querHist->fetch_assoc())
+                {
+                    $getProp = $bd->runQuery("SELECT * FROM hist_custom_form_has_prop WHERE hist_custom_form_id =".$readHist['id'])->fetch_assoc();
+                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."',".$getProp['custom_form_has_prop_property_id'].",".$getProp['hist_custom_form_id'].")");
+
+                }
+        
+        
+        
+        
+                $resForm = $bd->runQuery("SELECT * FROM temp_table GROUP BY property_id ORDER BY id ASC");
+		if($resForm->num_rows == 0)
+		{
+?>	
+			<html>
+				<p>Não existem formulários costumizados</p>
+			</html>
+<?php 
+                        $this->intForm();
+		}
+		else
+		{
+?>
+
+			<html>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nome do formulário customizado</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+<?php 
+						while($readForm = $resForm->fetch_assoc())
+						{
+?>
+							<tr>
+								<td><?php echo $readForm['id']; ?></td>
+								<td><?php echo $readForm['name']; ?></td>
+								<td>
+<?php
+									if($readForm['state'] === 'active')
+									{
+?>
+										Ativo
+<?php 
+									}
+									else
+									{
+?>
+										Inativo
+<?php                                                                   }
+?>
+								</td>
+
+							</tr>
+<?php 
+						}
+						
+?>
+					</tbody>
+				</table>
+			</html>
+<?php 
+			$this->intForm();
+		}
+	}
+    
+    
+    
 }
 ?>
