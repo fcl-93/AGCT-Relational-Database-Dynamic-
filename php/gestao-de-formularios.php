@@ -1087,7 +1087,7 @@ class HistDeForms{
 				</table>
 			</html>
 <?php 
-			$this->intForm();
+			  $bd->runQuery("DROP TEMPORARY TABLE temp_table");
 		}
 	}
     
