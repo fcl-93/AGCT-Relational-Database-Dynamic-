@@ -499,7 +499,7 @@ class UnidadeHist
 <?php
                 // Queries that select the verion present in the history or in the main table in the given date
                 $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
-                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
                 echo $selecionaUnit.$selecionaHist;
                 
                 $resultSelecionaUnit = $db->runQuery($selecionaUnit);
