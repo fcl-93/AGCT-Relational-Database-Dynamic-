@@ -1841,7 +1841,7 @@ class RelHist{
                     {
                         echo $hist['entity2_id'];
                     }
-                    $primeiraVez = true;
+
 ?>
                     </td>
 <?php
@@ -1862,14 +1862,8 @@ class RelHist{
                          </tr>
                        
 <?php
-   
-
                     }
-?>
-                    
-<?php
-            }
-        }
+        
 ?>
             <tbody>
         </table>
@@ -1877,4 +1871,4 @@ class RelHist{
         $bd->runQuery("DROP TEMPORARY TABLE temp_table");
     }
 }
-?>
+}
