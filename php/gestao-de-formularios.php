@@ -1035,11 +1035,19 @@ class HistDeForms{
 		if($resForm->num_rows == 0)
 		{
 ?>	
-			<html>
-				<p>Não existem formulários costumizados</p>
-			</html>
-<?php 
-                        $this->intForm();
+                                <table class="table">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nome do formulário customizado</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+                            <td rowspan="3">Não existem formulários costumizados</td>
+                            </tbody>
+                                </table>
+<?php
 		}
 		else
 		{
