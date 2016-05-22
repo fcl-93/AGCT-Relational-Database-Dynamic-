@@ -101,6 +101,7 @@ class ValoresPermitidos
                 <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
+                <input type="hidden" name="tipo" value="ent">
                 <input type="submit" value="Apresentar propriedades">
             </form>
 <?php
@@ -251,6 +252,7 @@ class ValoresPermitidos
                 <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
+                <input type="hidden" name="tipo" value="rel">
                 <input type="submit" value="Apresentar propriedades">
             </form>
 <?php
@@ -725,7 +727,7 @@ class ValPerHist{
      */
     public function showHist ($db) {
         if (isset($_REQUEST["histAll"])) {
-            $this->apresentaHistTodas($db);
+            $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
         else {
         //meto um datepicker        
@@ -774,7 +776,7 @@ class ValPerHist{
         if ($queryHistorico->num_rows == 0) {
 ?>
             <tr>
-                <td colspan="5">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td colspan="4">Não existe registo referente à propriedade selecionada no histórico</td>
                 <td><?php goBack(); ?></td>
             </tr>
 <?php
@@ -863,64 +865,95 @@ class ValPerHist{
      * @param type $tipo (indicates if we are working with relations or entities)
      * @param type $db (object form the class Db_Op)
      */
-    private function apresentaHistTodas ($db) {
+    private function apresentaHistTodas ($tipo, $db) {
 ?>
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Unidade</th>
+<?php
+                    if ($tipo == "ent") {
+?>
+                       <th>Entidade</th> 
+<?php                        
+                    }
+                    else {
+?>
+                       <th>Relação</th> 
+<?php
+                    }
+?>
+                    <th>Id</th>
+                    <th>Propriedade</th>
+                    <th>Id</th>
+                    <th>Valores permitidos</th>
                     <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
 <?php
-                // Queries that select the verion present in the history or in the main table in the given date
-                $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
-                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
-                echo $selecionaUnit.$selecionaHist;
-                
-                $resultSelecionaUnit = $db->runQuery($selecionaUnit);
-                $resultSelecionaHist = $db->runQuery($selecionaHist);
+                if ($tipo === "ent")
+                {
+                    $selecionaEntOrRel = "SELECT name, id FROM ent_type";
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
+                }
+                else
+                {
+                    $selecionaEntOrRel = "SELECT id FROM rel_type";
+                    $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
+                }
+                while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
+                {
+                    $idEntRel = $resEntRel["id"];
+                    if ($tipo === "entity")
+                    {
+                        $nome = $resEntRel["name"];
+                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on <'".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel;
+                    }
+                    else
+                    {
+                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
+                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
+                        $nome = $db->criaNomeRel($queryNome1,$queryNome2);
+                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel;
+                    }
+                    $resultSelecionaProp = $db->runQuery($selecionaProp);
+                    $resultSelecionaHist = $db->runQuery($selecionaHist);
+                    $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
 ?>
                 <tr>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $idEntRel; ?></td>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
 <?php
-                    // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
-                            `name` VARCHAR(128) NOT NULL DEFAULT '',
+                            `property_id` INT NOT NULL,
+                            `value` VARCHAR(128) NOT NULL,
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
-                    
-                    while ($unit = $resultSelecionaUnit->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
+                    while ($prop = $resultSelecionaProp->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['value']."','".$prop['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
+                        
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_allowed_value_id'].",'".$hist['value']."','".$hist['state']."')");
                     }
+                    
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
-                        <td><?php echo $arraySelec["name"]; ?></td>
-                        <td>
-<?php
-                        if ($arraySelec["state"] === "active")
-                        {
-                            echo 'Ativo';
-                        }
-                        else
-                        {
-                            echo 'Inativo';
-                        }
-?>
+                        <td><?php echo $arraySelec["value"]; ?></td>
+                        <td><?php echo $arraySelec["state"]; ?></td>
                         </td>
                     </tr>
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
-                
+                }
 ?>
             </tbody>
         </table>
