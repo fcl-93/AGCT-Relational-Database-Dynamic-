@@ -1912,7 +1912,7 @@ class RelHist{
             <tbody>
         </table>
 <?php
-        
+        $bd->runQuery("DROP TEMPORARY TABLE temp_table");
     }
 }
 ?>
