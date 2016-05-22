@@ -2678,8 +2678,10 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
-                        $id = $bd->userInputVal($_REQUEST['ent_id']); 
-                        $data = $bd->userInputVal($_REQUEST['data']);
+                        $id = $bd->userInputVal($_REQUEST['ent_id']);
+                        if (isset($_REQUEST['data'])) {
+                            $data = $bd->userInputVal($_REQUEST['data']);
+                        }
                         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
                             $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
                         }
