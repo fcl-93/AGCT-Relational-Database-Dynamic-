@@ -922,8 +922,9 @@ class ValPerHist{
                     }
                     while ($prop = $selProp->fetch_assoc()) {
                         $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
+                        echo $selecionaHist;
                         $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"];
-                    
+                    echo $selecionaHist;
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
