@@ -522,16 +522,16 @@ class EntHist {
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
         {
-            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."'";
-            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."'");
+            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')";
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')");
 
         }
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on <= '".$data."'";
          $querEntTp = $bd->runQuery($selecionaProp);
          while($readEntTP = $querEntTp->fetch_assoc())
          {
-             echo "INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."'";
-             $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."'");
+             echo "INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')";
+             $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')");
          }
         
         $resHe = $bd->runQuery("SELECT * FROM temp_table ");
