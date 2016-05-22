@@ -1816,8 +1816,8 @@ class RelHist{
                      
 ?>
                 <tr>
-                    <td rowspan="<?php echo $numProp;?>"><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
-                    <td rowspan="<?php echo $numProp;?>">
+                    <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td>
 <?php
                     $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
                     if($_readEnt1['entity_name'] != '')
@@ -1830,7 +1830,7 @@ class RelHist{
                     }
 ?>
                     </td>
-                    <td rowspan="<?php echo $numProp;?>">
+                    <td>
 <?php
                     $_readEnt2 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity2_id'])->fetch_assoc();
                     if($_readEnt2['entity_name'] != '')
@@ -1847,7 +1847,7 @@ class RelHist{
 <?php
 ?>                       
 
-                            <td rowspan="<?php echo $numProp;?>">
+                            <td>
 <?php
                             if ($hist["state"] === "active")
                             {
