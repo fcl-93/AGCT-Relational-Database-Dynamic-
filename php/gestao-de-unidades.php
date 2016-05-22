@@ -513,14 +513,14 @@ class UnidadeHist
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
                    
-                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
-                    }
+                    
                     while ($unit = $resultSelecionaUnit->fetch_assoc()) {
                         $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
                     }
-                    
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC GROUP BY id");
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
+                    }
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
