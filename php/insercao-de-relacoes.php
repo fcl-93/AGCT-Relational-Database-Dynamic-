@@ -104,7 +104,16 @@ class InsereRelacoes
 	 * will be associated to wich relation
 	 */
 	public function tablePrint()
-        {                                
+        {                        
+?>
+        <form method="GET">
+            Verificar propriedades existentes no dia : 
+            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+            <input type="hidden" name="estado" value="historico">
+            <input type="hidden" name="histAll" value="true">
+            <input type="submit" value="Apresentar propriedades">
+        </form>
+<?php
                                 $res_Rel = $this->bd->runQuery("SELECT * From relation");
                                  if($res_Rel->num_rows == 0)
                                  {
@@ -740,7 +749,9 @@ class InsereRelacoes
             }
             
         }
-        
+        /**
+         * When we change a state od 0one f the value backups the relation and saves the changes in the database
+         */
         private function activateVal () {
             $idVal = $this->bd->userInputVal($_REQUEST['val']);
             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
@@ -785,7 +796,9 @@ class InsereRelacoes
                 $this->bd->getMysqli()->rollback();
             }
         }
-	
+	/**
+         * When we change a state od 0one f the value backups the relation and saves the changes in the database
+         */
         private function desactivateVal () {
             $idVal = $this->bd->userInputVal($_REQUEST['val']);
             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
@@ -1725,6 +1738,12 @@ class RelHist{
         }
     }
     
+    /**
+     * this method adds all the values to the history of the relation when a change is made
+     * @param type $idVal
+     * @param type $bd
+     * @return boolean
+     */
     public function addValHist($idVal,$bd) {
         $selVal = $bd->runQuery("SELECT * FROM  value WHERE id = ".$idVal);
         while ($val = $selVal->fetch_assoc()) {
