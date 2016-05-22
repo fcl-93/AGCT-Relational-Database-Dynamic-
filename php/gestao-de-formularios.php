@@ -1015,11 +1015,11 @@ class HistDeForms{
                 $querEntTp = $bd->runQuery($selecionaProp);
                 while($readEntTP = $querEntTp->fetch_assoc())
                 {
-                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id".$readEntTP['id'])->fetch_assoc();
+                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$readEntTP['id'])->fetch_assoc();
                     $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."',".$getProp['property_id'].",".$getProp['custom_form_id'].")");
                 }
             
-                $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY custom_form_has_prop_property_id ORDER BY inactive_on DESC";
+                $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY id ORDER BY inactive_on DESC";
                 $querHist = $bd->runQuery($selecionaHist);
                 while($readHist = $querHist->fetch_assoc())
                 {
@@ -1035,11 +1035,19 @@ class HistDeForms{
 		if($resForm->num_rows == 0)
 		{
 ?>	
-			<html>
-				<p>Não existem formulários costumizados</p>
-			</html>
-<?php 
-                        $this->intForm();
+                                <table class="table">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nome do formulário customizado</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+                            <td rowspan="3">Não existem formulários costumizados</td>
+                            </tbody>
+                                </table>
+<?php
 		}
 		else
 		{
@@ -1087,7 +1095,7 @@ class HistDeForms{
 				</table>
 			</html>
 <?php 
-			$this->intForm();
+			  $bd->runQuery("DROP TEMPORARY TABLE temp_table");
 		}
 	}
     
