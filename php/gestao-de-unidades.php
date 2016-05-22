@@ -184,6 +184,7 @@ class Unidade
                 if($this->gereHist->atualizaHistorico($this->bd)) {
                     if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
                     {
+                        $this->bd->getMysqli()->commit();
 ?>
                         <html>
                             <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi desativada</p>
@@ -192,6 +193,7 @@ class Unidade
 <?php
                     }
                     else {
+                        $this->bd->getMysqli()->rollback();
 ?>
                         <p>Não foi possível desativar a unidade pretendida.</p>
 <?php
@@ -199,6 +201,7 @@ class Unidade
                     }
                 }
                 else {
+                    $this->bd->getMysqli()->rolback();
 ?>
                     <p>Não foi possível desativar a unidade pretendida.</p>
 <?php
@@ -219,6 +222,7 @@ class Unidade
             if ($this->gereHist->atualizaHistorico($this->bd)) {
                 if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$_REQUEST['unit_id']))
                 {
+                    $this->bd->getMysqli()->commit();
 ?>
                     <html>
                         <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi ativada.</p>
@@ -227,6 +231,7 @@ class Unidade
 <?php
                 }
                 else {
+                    $this->bd->getMysqli()->rollback();
 ?>
                     <p>Não foi possível ativar a unidade pretendida.</p>
 <?php
