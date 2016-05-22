@@ -1813,8 +1813,6 @@ class RelHist{
                 $read_name1 = $res_name1->fetch_assoc(); 
                 $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
                 $read_name2 = $res_name2->fetch_assoc();
-                $props = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$hist["rel_type_id"]);
-                $numProp = $props->num_rows;
                      
 ?>
                 <tr>
@@ -1847,8 +1845,6 @@ class RelHist{
 ?>
                     </td>
 <?php
-                    while ($prop = $props->fetch_assoc()) {
-                        if ($primeiraVez) {
 ?>                       
 
                             <td rowspan="<?php echo $numProp;?>">
@@ -1862,15 +1858,9 @@ class RelHist{
                                 echo 'Inativo';
                             }
 ?>
+                            </td>
                          </tr>
                        
-<?php
-                            $primeiraVez = false;
-                        }
-
-?>
-                            </td>
-                        </tr>
 <?php
    
 
