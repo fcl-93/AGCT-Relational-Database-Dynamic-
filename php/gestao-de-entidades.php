@@ -516,7 +516,8 @@ class EntHist {
         `id` int(10) unsigned NOT NULL,
         `name` varchar(128) NOT NULL,
         `state` enum('active','inactive') NOT NULL)";
-        
+        $creatTempTable = $bd->runQuery($creatTempTable);
+                
         $selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' > active_on AND '".$data."' < inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
