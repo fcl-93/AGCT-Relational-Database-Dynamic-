@@ -1547,18 +1547,16 @@ class PropHist{
                     {
                         $nome = $resEntRel["name"];
                         $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
-                        ECHO $selecionaHist;
                         $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel;
-                        ECHO $selecionaProp;
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= ".$_REQUEST["data"]." 23:59:59' AND rel_type_id =".$idEntRel." AND id NOT IN (SELECT property_id from hist_property)";
+                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND rel_type_id = ".$idEntRel;
                     }
-                    echo "#5";
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
@@ -1566,7 +1564,6 @@ class PropHist{
                 <tr>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
 <?php
-                    echo "#4";
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `name` VARCHAR(128) NOT NULL DEFAULT '',
                             `ent_type_id` INT UNSIGNED NULL,
@@ -1581,9 +1578,7 @@ class PropHist{
                             `fk_ent_type_id` INT UNSIGNED NULL,
                             `form_field_size` VARCHAR(64) NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
-                    echo "#1";
                     while ($prop = $resultSelecionaProp->fetch_assoc()) {
-                        echo "#2";
                         if (empty($prop['ent_type_id'])) {
                             $ent_type = "NULL";
                         }
