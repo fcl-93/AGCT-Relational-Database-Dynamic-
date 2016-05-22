@@ -1545,16 +1545,16 @@ class PropHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND ent_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND ent_type_id = ".$idEntRel;
+                        $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM property WHERE (updated_on <'".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel;
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaHist = "SELECT * FROM hist_property WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on <= '".$_REQUEST["data"]."' AND rel_type_id = ".$idEntRel;
+                        $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM property WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel;
                     }
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
@@ -1633,7 +1633,7 @@ class PropHist{
                         $db->runQuery("INSERT INTO temp_table VALUES (".$hist['property_id'].",'".$hist['name']."',".$ent_type.",".$rel_type.",'".$hist['value_type']."','".$hist['form_field_name']."','".$hist['form_field_type']."',".$unit.",'".$hist['form_field_order']."',".$hist['mandatory'].",'".$hist['state']."',".$fk.",'".$hist['form_field_size']."')");
                     }
                     
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {

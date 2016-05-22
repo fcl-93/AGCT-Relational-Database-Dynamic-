@@ -645,8 +645,8 @@ class RelHist{
             </thead>
             <tbody>
 <?php
-                $selecionaHist = "SELECT * FROM hist_rel_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY rel_type_id ORDER BY inactive_on DESC";
-                $selecionaRel = "SELECT * FROM rel_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                $selecionaHist = "SELECT * FROM hist_rel_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY rel_type_id ORDER BY inactive_on DESC";
+                $selecionaRel = "SELECT * FROM rel_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
                 
                 $resultSelecionaRel = $db->runQuery($selecionaRel);
                 $resultSelecionaHist = $db->runQuery($selecionaHist);
@@ -666,7 +666,7 @@ class RelHist{
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['id'].",".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
                     }
                     
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
