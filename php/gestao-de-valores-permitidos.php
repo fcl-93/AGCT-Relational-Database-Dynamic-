@@ -95,7 +95,14 @@ class ValoresPermitidos
 	{
 		// gets all properties with enum in value_type.
 ?>
-                        <h3>Gestão de valores permitidos - Entidades</h3>
+            <h3>Gestão de valores permitidos - Entidades</h3>
+            <form method="GET">
+                Verificar propriedades existentes no dia : 
+                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                <input type="hidden" name="estado" value="historico">
+                <input type="hidden" name="histAll" value="true">
+                <input type="submit" value="Apresentar propriedades">
+            </form>
 <?php
 		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id IS NULL ORDER BY `property`.`ent_type_id` ASC"); 
 		$num_Prop = $res_NProp->num_rows;
@@ -239,6 +246,13 @@ class ValoresPermitidos
         public function tablePrintRelation(){
 ?>
             <h3>Gestão de valores permitidos - Relações</h3>
+            <form method="GET">
+                Verificar propriedades existentes no dia : 
+                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                <input type="hidden" name="estado" value="historico">
+                <input type="hidden" name="histAll" value="true">
+                <input type="submit" value="Apresentar propriedades">
+            </form>
 <?php
             $res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id IS NULL ORDER BY `property`.`rel_type_id` ASC");
             $numberRltn = $res_NProp->num_rows;
@@ -306,6 +320,7 @@ class ValoresPermitidos
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
                             <!-- Nome da propriedade -->
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
+                            <td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a><a href="gestao-de-valores-permitidos?estado=historico&prop_id=<?php echo $read_PropWEnum['id'];?>">[Histórico]</a</td>
                                 
 <?php 							
 							
@@ -842,6 +857,75 @@ class ValPerHist{
         }
         return true;
         
+    }
+    
+    /**
+     * This method creates a table with a view of all the properties in the selected day
+     * @param type $tipo (indicates if we are working with relations or entities)
+     * @param type $db (object form the class Db_Op)
+     */
+    private function apresentaHistTodas ($db) {
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Unidade</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+                // Queries that select the verion present in the history or in the main table in the given date
+                $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
+                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
+                echo $selecionaUnit.$selecionaHist;
+                
+                $resultSelecionaUnit = $db->runQuery($selecionaUnit);
+                $resultSelecionaHist = $db->runQuery($selecionaHist);
+?>
+                <tr>
+<?php
+                    // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
+                    $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
+                            `name` VARCHAR(128) NOT NULL DEFAULT '',
+                            `state` ENUM('active','inactive') NOT NULL)";
+                    $creatTempTable = $db->runQuery($creatTempTable);
+                    
+                    while ($unit = $resultSelecionaUnit->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
+                    }
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
+                    }
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                    
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
+?>
+                        <td><?php echo $arraySelec["id"]; ?></td>
+                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td>
+<?php
+                        if ($arraySelec["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
+?>
+                        </td>
+                    </tr>
+<?php
+                    }
+                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                
+?>
+            </tbody>
+        </table>
+<?php
     }
 }
 
