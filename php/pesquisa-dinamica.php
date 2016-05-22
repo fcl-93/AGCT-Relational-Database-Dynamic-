@@ -11,6 +11,7 @@ class Search{
     private $guardaidDosSelecionados;   // array that saves the id of the properties selected for the search
     private $guardanomePropSelec;       // array that saves the names of the properties selected for the search
     private $guardaValorDaProp;         // array that value for the properties selected for the search
+    private $saveNames;                 // array that value for the properties selected for the search
     private $frase;                     // string with the setence that describes the search made
     
     /**
@@ -24,6 +25,7 @@ class Search{
         $this->guardaidDosSelecionados = array();
         $this->guardaValorDaProp = array();
         $this->guardanomePropSelec = array();
+        $this->saveNames = array();
         $this->checkUser();
     }
     
