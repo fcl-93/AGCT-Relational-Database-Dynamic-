@@ -520,7 +520,7 @@ class UnidadeHist
                         $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
                     }
                     
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC GROUP BY id");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
