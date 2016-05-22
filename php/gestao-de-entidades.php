@@ -518,17 +518,7 @@ class EntHist {
         `state` enum('active','inactive') NOT NULL)";
         $creatTempTable = $bd->runQuery($creatTempTable);
            
-$selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
-        //$selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' >= active_on AND '".$data."' <= inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
-//        $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
-//        echo      $selecionaHist;
-        $querHist = $bd->runQuery($selecionaHist);
-        while($readHist = $querHist->fetch_assoc())
-        {
-//            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')";
-            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')");
 
-        }
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
 //        echo  $selecionaProp;
         $querEntTp = $bd->runQuery($selecionaProp);
@@ -537,6 +527,18 @@ $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$_REQUEST["data"]."' > a
 //             echo "INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')";
              $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')");
          }
+         
+         $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
+        //$selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' >= active_on AND '".$data."' <= inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
+//        $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
+//        echo      $selecionaHist;
+        $querHist = $bd->runQuery($selecionaHist);
+        while($readHist = $querHist->fetch_assoc())
+        {
+//            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')";
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."')");
+
+        }
         $resHe = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
         if ($resHe->num_rows < 1) {
             ?>
