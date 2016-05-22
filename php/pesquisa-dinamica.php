@@ -2931,7 +2931,7 @@ class entityHist{
                         $db->runQuery("INSERT INTO temp_table VALUES (".$ent['id'].",'".$ent['ent_type_id']."','".$ent['entity_name']."','".$ent['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['name']."','".$hist['entity_name']."','".$hist['state']."')");
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['ent_type_id']."','".$hist['entity_name']."','".$hist['state']."')");
                     }
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
