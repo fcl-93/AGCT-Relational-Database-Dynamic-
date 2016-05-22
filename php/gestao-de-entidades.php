@@ -519,7 +519,7 @@ class EntHist {
         $creatTempTable = $bd->runQuery($creatTempTable);
            
         //$selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' >= active_on AND '".$data."' <= inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
-        $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR (active_on LIKE '".$data."%' OR inactive_on LIKE '".$data."%') AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
+        $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
         echo      $selecionaHist;
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
