@@ -944,21 +944,25 @@ class ValPerHist{
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
 ?>
                 <tr>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
-                    while($arraySelec = $resultSeleciona->fetch_assoc())
-                    {
+                    if ($resultSeleciona->num_rows > 0) {
 ?>
-                        <td><?php echo $arraySelec["id"]; ?></td>
-                        <td><?php echo $arraySelec["value"]; ?></td>
-                        <td><?php echo $arraySelec["state"]; ?></td>
-                        </td>
-                    </tr>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
-                    }
-                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                        while($arraySelec = $resultSeleciona->fetch_assoc())
+                        {
+?>
+                            <td><?php echo $arraySelec["id"]; ?></td>
+                            <td><?php echo $arraySelec["value"]; ?></td>
+                            <td><?php echo $arraySelec["state"]; ?></td>
+                            </td>
+                        </tr>
+<?php
+                        }
+                        $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                        }
                     }
                 }
 ?>
