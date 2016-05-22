@@ -517,8 +517,10 @@ class EntHist {
         `name` varchar(128) NOT NULL,
         `state` enum('active','inactive') NOT NULL)";
         $creatTempTable = $bd->runQuery($creatTempTable);
-                
+           
         $selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' > active_on AND '".$data."' < inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
+        
+        echo      $selecionaHist;
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
         {
@@ -527,7 +529,8 @@ class EntHist {
 
         }
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on <= '".$data."'";
-         $querEntTp = $bd->runQuery($selecionaProp);
+        echo  $selecionaProp;
+        $querEntTp = $bd->runQuery($selecionaProp);
          while($readEntTP = $querEntTp->fetch_assoc())
          {
              echo "INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')";
