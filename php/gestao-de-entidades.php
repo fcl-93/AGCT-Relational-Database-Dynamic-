@@ -504,36 +504,52 @@ class EntHist {
                 ?>
         <table class="table">
             <thead>
-            <th>Data de Ativação</th>
-            <th>Data de Desativação</th>
+            <th>Id</th>
             <th>Nome</th>
             <th>Estado</th>
-            <th>Ação</th>
+            
         </thead>
         <tbody>
         <?php
-        echo "SELECT * FROM `hist_ent_type` as h, ent_type as e WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' AND h.id NOT IN (SELECT id FROM ent_type WHERE updated_on <".date("Y-m-d",(strtotime($data) + 86400)).") AND e.id NOT IN (SELECT ent_type_id FROM ent_type_id WHERE inactive_on <".date("Y-m-d",(strtotime($data) + 86400)).")";
-        $resHe = $bd->runQuery("SELECT * FROM `hist_ent_type` as h, ent_type as e WHERE inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' AND h.id NOT IN (SELECT id FROM ent_type WHERE updated_on <'".date("Y-m-d",(strtotime($data) + 86400))."') AND e.id NOT IN (SELECT ent_type_id FROM hist_ent_type WHERE inactive_on <'".date("Y-m-d",(strtotime($data) + 86400))."')");
+        
+        $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
+        `id` int(10) unsigned NOT NULL,
+        `name` varchar(128) NOT NULL,
+        `state` enum('active','inactive') NOT NULL)";
+        $creatTempTable = $bd->runQuery($creatTempTable);
+                
+        $selecionaHist = "SELECT * FROM hist_ent_type WHERE '".$data."' > active_on AND '".$data."' < inactive_on GROUP BY ent_type_id ORDER BY inactive_on DESC";
+        $querHist = $bd->runQuery($selecionaHist);
+        while($readHist = $querHist->fetch_assoc())
+        {
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."'");
+
+        }
+        $selecionaProp = "SELECT * FROM ent_type WHERE updated_on <= '".$data."'";
+         $querEntTp = $bd->runQuery($selecionaProp);
+         while($readEntTP = $querEntTp->fetch_assoc())
+         {
+             $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."'");
+         }
+        
+        $resHe = $bd->runQuery("SELECT * FROM temp_table ");
         if ($resHe->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="4">Não existe registo referente à entidade selecionada no histórico</td>
-                    <td><?php goBack(); ?></td>
+                    <td colspan="3">Não existe registos referente à entidade selecionada no histórico</td>
                 </tr>
             <?php
         } else {
             while ($readHE = $resHe->fetch_assoc()) {
                 ?>
                     <tr>
-                        
-                        <td><?php echo $readHE['active_on'] ?></td>
-                        <td><?php echo $readHE['inactive_on'] ?></td>
+                        <td><?php echo $readHE['id'] ?></td>
                         <td><?php echo $readHE['name'] ?></td>
                         <td><?php echo $readHE['state'] ?></td>
-                        <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                     </tr>
                 <?php
             }
+            $bd->runQuery("DROP TEMPORARY TABLE temp_table");
         }
         ?>                                
         </tbody>
