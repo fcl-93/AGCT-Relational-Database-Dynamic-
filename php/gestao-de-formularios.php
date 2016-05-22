@@ -1005,9 +1005,7 @@ class HistDeForms{
                 $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
                 `id` int(10) unsigned NOT NULL,
                 `name` varchar(128) NOT NULL,
-                `state` enum('active','inactive') NOT NULL,
-                `property_id` int(10) unsigned NOT NULL,
-                `custom_form_id` int(11) NOT NULL)";
+                `state` enum('active','inactive') NOT NULL";
                 
                 $creatTempTable = $bd->runQuery($creatTempTable);
                 
@@ -1015,23 +1013,18 @@ class HistDeForms{
                 $querEntTp = $bd->runQuery($selecionaProp);
                 while($readEntTP = $querEntTp->fetch_assoc())
                 {
-                    $getProp = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$readEntTP['id'])->fetch_assoc();
-                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."',".$getProp['property_id'].",".$getProp['custom_form_id'].")");
+                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."')");
                 }
             
                 $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY id ORDER BY inactive_on DESC";
                 $querHist = $bd->runQuery($selecionaHist);
                 while($readHist = $querHist->fetch_assoc())
                 {
-                    $getProp = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE hist_custom_form_id =".$readHist['id'])->fetch_assoc();
-                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."',".$getProp['custom_form_has_prop_property_id'].",".$getProp['hist_custom_form_id'].")");
+                    $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['custom_form_id'].",'".$readHist['name']."','".$readHist['state']."')");
 
                 }
-        
-        
-        
-        
-                $resForm = $bd->runQuery("SELECT * FROM temp_table GROUP BY property_id ORDER BY id ASC");
+                
+                $resForm = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
 		if($resForm->num_rows == 0)
 		{
 ?>	
