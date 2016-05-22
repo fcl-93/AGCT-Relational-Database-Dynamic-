@@ -663,7 +663,7 @@ class RelHist{
                         $db->runQuery("INSERT INTO temp_table VALUES (".$rel['id'].",".$rel['ent_type1_id'].",".$rel['ent_type2_id'].",'".$rel['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['id'].",".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['rel_type_id'].",".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
