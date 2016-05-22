@@ -645,7 +645,7 @@ class RelHist{
             </thead>
             <tbody>
 <?php
-                $selecionaHist = "SELECT * FROM hist_rel_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP rel_type_id ORDER BY inactive_on DESC";
+                $selecionaHist = "SELECT * FROM hist_rel_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY rel_type_id ORDER BY inactive_on DESC";
                 $selecionaRel = "SELECT * FROM rel_type WHERE updated_on <= '".$_REQUEST["data"]."'";
                 
                 $resultSelecionaRel = $db->runQuery($selecionaRel);
