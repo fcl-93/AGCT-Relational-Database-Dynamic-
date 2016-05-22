@@ -249,7 +249,7 @@ class ValoresPermitidos
             <h3>Gestão de valores permitidos - Relações</h3>
             <form method="GET">
                 Verificar propriedades existentes no dia : 
-                <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                <input type="text" class="datepicker" id="datepickerRel" name="dataRel" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
                 <input type="hidden" name="tipo" value="rel">
@@ -755,21 +755,22 @@ class ValPerHist{
             </thead>
             <tbody>
 <?php
-        if (empty($_REQUEST["data"])) {
+        if (empty($_REQUEST['data'])) {
             $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
         }
         else {
+            $data = $db->userInputVal($_REQUEST['data']);
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$data."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $db->runQuery($queryHistorico);
@@ -893,11 +894,13 @@ class ValPerHist{
 <?php
                 if ($tipo === "ent")
                 {
+                    $data = $db->userInputVal($_REQUEST['data']);
                     $selecionaEntOrRel = "SELECT name, id FROM ent_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
                 else
                 {
+                    $data = $db->userInputVal($_REQUEST['dataRel']);
                     $selecionaEntOrRel = "SELECT id FROM rel_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
@@ -921,10 +924,10 @@ class ValPerHist{
                         
                     }
                     while ($prop = $selProp->fetch_assoc()) {
-                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE (('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%')) AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
                         echo $selecionaHist;
-                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"];
-                    echo $selecionaHist;
+                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$data."'OR updated_on LIKE '".$data."%') AND property_id = ".$prop["id"];
+                    echo $selecionaProp;
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
 
@@ -944,21 +947,25 @@ class ValPerHist{
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
 ?>
                 <tr>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
-                    while($arraySelec = $resultSeleciona->fetch_assoc())
-                    {
+                    if ($resultSeleciona->num_rows > 0) {
 ?>
-                        <td><?php echo $arraySelec["id"]; ?></td>
-                        <td><?php echo $arraySelec["value"]; ?></td>
-                        <td><?php echo $arraySelec["state"]; ?></td>
-                        </td>
-                    </tr>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
+                        <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
-                    }
-                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                        while($arraySelec = $resultSeleciona->fetch_assoc())
+                        {
+?>
+                            <td><?php echo $arraySelec["id"]; ?></td>
+                            <td><?php echo $arraySelec["value"]; ?></td>
+                            <td><?php echo $arraySelec["state"]; ?></td>
+                            </td>
+                        </tr>
+<?php
+                        }
+                        $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                        }
                     }
                 }
 ?>

@@ -481,7 +481,7 @@ class UnidadeHist
     }
     
     /**
-     * This method creates a table with a view of all the properties in the selected day
+     * This method creates a table with a view of all the unit types in the selected day
      * @param type $tipo (indicates if we are working with relations or entities)
      * @param type $db (object form the class Db_Op)
      */
