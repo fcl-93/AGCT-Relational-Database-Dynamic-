@@ -903,7 +903,6 @@ class ValPerHist{
                 }
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
-                    echo "#1";
                     $idEntRel = $resEntRel["id"];
                     if ($tipo === "ent")
                     {
@@ -941,11 +940,11 @@ class ValPerHist{
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
                     while ($prop = $resultSelecionaProp->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['value']."','".$prop['state']."')");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['property_id']."','".$prop['value']."','".$prop['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                         
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_allowed_value_id'].",'".$hist['value']."','".$hist['state']."')");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_allowed_value_id'].",'".$prop['property_id']."','".$hist['value']."','".$hist['state']."')");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
