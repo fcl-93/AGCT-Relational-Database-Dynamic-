@@ -86,72 +86,79 @@ class Unidade
 	 * previously in the database
 	 */
 	public function tablePrint(){
-		$res_Unit = $this->bd->runQuery("SELECT * FROM prop_unit_type ORDER BY name ASC");
-		$row_NumUnit = $res_Unit->num_rows;
-		if($row_NumUnit  == 0)
-		{
+            $res_Unit = $this->bd->runQuery("SELECT * FROM prop_unit_type ORDER BY name ASC");
+            $row_NumUnit = $res_Unit->num_rows;
+            if($row_NumUnit  == 0)
+            {
 ?>
-			<html>
-				<p>Não há tipos de unidades</p>
-			</html>
+                    <html>
+                            <p>Não há tipos de unidades</p>
+                    </html>
 <?php 
-			$this->insertFormPrint();	//call insertFormPrint method prints the form
-		}
-		else
-		{
+                    $this->insertFormPrint();	//call insertFormPrint method prints the form
+            }
+            else
+            {
 ?>
-			<html>
-                            <table id="sortedTable" class="table">
-					<thead>
-						<tr>
-							<th>Id</th>
-							<th>Unidade</th>
-                                                        <th>Estado</th>
-                                                        <th>Ação</th>
-						</tr>
-					</thead>
-					<tbody>
+                <html>
+                    <form method="GET">
+                        Verificar propriedades existentes no dia : 
+                        <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                        <input type="hidden" name="estado" value="historico">
+                        <input type="hidden" name="histAll" value="true">
+                        <input type="submit" value="Apresentar propriedades">
+                    </form>
+                        <table id="sortedTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Unidade</th>
+                                    <th>Estado</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 <?php 
-					while($read_Units = $res_Unit->fetch_assoc())
-					{
+                            while($read_Units = $res_Unit->fetch_assoc())
+                            {
 ?>
-						<tr>
-							<td><?php echo $read_Units['id']; ?></td>
-							<td><?php echo $read_Units['name']; ?></td>
+                                <tr>
+                                    <td><?php echo $read_Units['id']; ?></td>
+                                    <td><?php echo $read_Units['name']; ?></td>
 <?php
-                                                            if($read_Units['state']  == 'active')
-                                                            {
+                                    if($read_Units['state']  == 'active')
+                                    {
 ?>
-                                                                <td>Ativo</td>
-                                                                <td>
-                                                                    <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
-                                                                    <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico}</a>
-                                                                </td>
+                                        <td>Ativo</td>
+                                        <td>
+                                            <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
+                                            <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico}</a>
+                                        </td>
 <?php
-                                                            }
-                                                            else if($read_Units['state'] =='inactive')
-                                                            {
+                                    }
+                                    else if($read_Units['state'] =='inactive')
+                                    {
 ?>
-                                                                <td>Inativo</td>
-                                                                <td>
-                                                                    <a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a>
-                                                                    <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
-                                                                </td>
+                                        <td>Inativo</td>
+                                        <td>
+                                            <a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a>
+                                            <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
+                                        </td>
 
-                                                                
+
 <?php
-                                                            }
+                                    }
 ?>
-						</tr>
+                                </tr>
 <?php 						
-					}
+                            }
 ?>									
-					</tbody>
-				</table>
-			</html>
-		<?php 
-		$this->insertFormPrint(); //call insertFormPrint method prints the form
-		}
+                        </tbody>
+                    </table>
+                </html>
+            <?php 
+            $this->insertFormPrint(); //call insertFormPrint method prints the form
+            }
 	}
         
         /**
@@ -466,6 +473,80 @@ class UnidadeHist
         else {
             return false;
         }        
+    }
+    
+    /**
+     * This method creates a table with a view of all the properties in the selected day
+     * @param type $tipo (indicates if we are working with relations or entities)
+     * @param type $db (object form the class Db_Op)
+     */
+    private function apresentaHistTodas ($db) {
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Unidade</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+              
+                    
+                        $nome = $resEntRel["name"];
+                        $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
+                        $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"];
+                    
+                    
+                    $resultSelecionaUnit = $db->runQuery($selecionaUnit);
+                    $resultSelecionaHist = $db->runQuery($selecionaHist);
+?>
+                <tr>
+<?php
+                    $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
+                            `name` VARCHAR(128) NOT NULL DEFAULT '',
+                            `state` ENUM('active','inactive') NOT NULL)";
+                    $creatTempTable = $db->runQuery($creatTempTable);
+                    while ($unit = $resultSelecionaProp->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
+                    }
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
+                    }
+                    
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
+                    
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
+?>
+                        <td><?php echo $arraySelec["id"]; ?></td>
+<?php
+?>
+                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td>
+<?php
+                        if ($arraySelec["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
+?>
+                        </td>
+                        <td>-</td>
+                    </tr>
+<?php
+                    }
+                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                
+?>
+            </tbody>
+        </table>
+<?php
     }
 }
 ?>
