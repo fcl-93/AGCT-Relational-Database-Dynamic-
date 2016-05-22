@@ -921,34 +921,33 @@ class ValPerHist{
                         
                     }
                     while ($prop = $selProp->fetch_assoc()) {
-                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE (('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%')) AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
                         echo $selecionaHist;
                         $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"];
                     echo $selecionaHist;
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
-                    $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
-?>
-                <tr>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $idEntRel; ?></td>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
-<?php
+
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `property_id` INT NOT NULL,
                             `value` VARCHAR(128) NOT NULL,
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
-                    while ($prop = $resultSelecionaProp->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['property_id']."','".$prop['value']."','".$prop['state']."')");
+                    while ($val = $resultSelecionaProp->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$val['id'].",'".$val['property_id']."','".$val['value']."','".$val['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                         
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_allowed_value_id'].",'".$prop['property_id']."','".$hist['value']."','".$hist['state']."')");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_allowed_value_id'].",'".$hist['property_id']."','".$hist['value']."','".$hist['state']."')");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
-                    
+?>
+                <tr>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
+<?php
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
