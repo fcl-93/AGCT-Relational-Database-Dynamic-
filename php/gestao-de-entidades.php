@@ -522,6 +522,7 @@ class EntHist {
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
         {
+            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."'";
             $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."'");
 
         }
@@ -529,6 +530,7 @@ class EntHist {
          $querEntTp = $bd->runQuery($selecionaProp);
          while($readEntTP = $querEntTp->fetch_assoc())
          {
+             echo "INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."'";
              $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."'");
          }
         
