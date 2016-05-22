@@ -1525,7 +1525,6 @@ class PropHist{
                     <th>Tamanho do campo no formulário</th>
                     <th>Obrigatório</th>
                     <th>Estado</th>
-                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -1685,7 +1684,6 @@ class PropHist{
                         }
 ?>
                         </td>
-                        <td>-</td>
                     </tr>
 <?php
                     }
