@@ -1785,7 +1785,7 @@ class RelHist{
         $creatTempTable = $bd->runQuery($creatTempTable);
         
         $selecionaRel = "SELECT * FROM relation WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
-        echo $selecionaHist . "<br>";
+        echo $selecionaRel . "<br>";
         $runRel = $bd->runQuery($selecionaRel);
         while($readRel = $runRel->fetch_assoc())
         {
