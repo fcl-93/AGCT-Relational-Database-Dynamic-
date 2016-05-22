@@ -928,12 +928,7 @@ class ValPerHist{
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
-?>
-                <tr>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $idEntRel; ?></td>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $prop["name"]; ?></td>
-<?php
+
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `property_id` INT NOT NULL,
                             `value` VARCHAR(128) NOT NULL,
@@ -948,7 +943,12 @@ class ValPerHist{
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
-                    
+?>
+                <tr>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $idEntRel; ?></td>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
+<?php
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
