@@ -319,7 +319,6 @@ class ValoresPermitidos
 ?>
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><?php echo $read_PropWEnum['id'];?></td>
                             <!-- Nome da propriedade -->
-                            <td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a></td>
                             <td rowspan="<?php echo $res_Enum->num_rows;?>"><a href="gestao-de-valores-permitidos?estado=introducao&propriedade=<?php echo $read_PropWEnum['id'];?>">[<?php echo $read_PropWEnum['name'];?>]</a><a href="gestao-de-valores-permitidos?estado=historico&prop_id=<?php echo $read_PropWEnum['id'];?>">[Histórico]</a</td>
                                 
 <?php 							
