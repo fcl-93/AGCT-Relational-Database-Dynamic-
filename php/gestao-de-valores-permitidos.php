@@ -903,6 +903,7 @@ class ValPerHist{
                 }
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
+                    echo "#1";
                     $idEntRel = $resEntRel["id"];
                     if ($tipo === "ent")
                     {
