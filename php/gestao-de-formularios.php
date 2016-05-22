@@ -93,6 +93,9 @@ class GereForms
 	 * in this table the user will be able to desactivate a edit forms.
 	 */
 	public function tablePrint(){
+?>
+                        
+<?php
 		$resForm = $this->bd->runQuery("SELECT * FROM custom_form ORDER BY name ASC");
 		if($resForm->num_rows == 0)
 		{
