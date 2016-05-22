@@ -1102,7 +1102,7 @@ class Search{
             goBack();
         }
         else {
-            $this->apresentaResultado ($querydinamica);
+            $this->apresentaResultado ($querydinamica, $checkSelected);
         }
     }
     
@@ -1586,8 +1586,9 @@ class Search{
      * Then it presents a table with all the results, where the user can edit, 
      * view the history, or activate/desactivate
      * @param type $querydinamica
+     * @param type $selected (number of the selected filters)
      */
-    private function apresentaResultado ($querydinamica) {
+    private function apresentaResultado ($querydinamica, $selected) {
 ?>
         <p><?php echo $this->frase;?></p>
 <?php
@@ -1600,6 +1601,17 @@ class Search{
             goBack();
         }
         else {
+            if ($selected == 0) {
+?>
+                <form method="GET">
+                    Verificar propriedades existentes no dia : 
+                    <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                    <input type="hidden" name="estado" value="historico">
+                    <input type="hidden" name="histAll" value="true">
+                    <input type="submit" value="Apresentar propriedades">
+                </form>
+<?php
+            }          
 ?>
         <table class="table">
             <thead>
@@ -2634,6 +2646,10 @@ class entityHist{
      */
      public function tableHist($id,$bd)
      {
+         if (isset($_REQUEST["histAll"])) {
+            $this->apresentaHistTodas($db);
+        }
+        else {
 ?>
                 <form method="GET">
                                 Verificar histórico:<br>
@@ -2762,6 +2778,7 @@ class entityHist{
                         </tbody>
                     </table>
 <?php
+        }
      }
      
      /**
@@ -2871,6 +2888,85 @@ class entityHist{
         
         
      }
+     
+     /**
+     * This method creates a table with a view of all the entities in the selected day
+     * @param type $db (object form the class Db_Op)
+     */
+    private function apresentaHistTodas ($db) {
+?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Instância</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+                // Queries that select the verion present in the history or in the main table in the given date
+                $selecionaHist = "SELECT * FROM hist_entity WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY entity_id ORDER BY inactive_on DESC";
+                $selecionaEntity = "SELECT * FROM entity WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
+                echo $selecionaUnit.$selecionaHist;
+                
+                $resultSelecionaEntity = $db->runQuery($selecionaEntity);
+                $resultSelecionaHist = $db->runQuery($selecionaHist);
+?>
+                <tr>
+<?php
+                    // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
+                    $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
+                        `id` INT NOT NULL AUTO_INCREMENT,
+                        `ent_type_id` INT NOT NULL,
+                        `entity_name` VARCHAR(255) NULL,
+                        `state` ENUM('active', 'inactive') NOT NULL)";
+                    $creatTempTable = $db->runQuery($creatTempTable);
+                    
+                    while ($ent = $resultSelecionaEntity->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$ent['id'].",'".$ent['ent_type_id']."','".$ent['entity_name']."','".$ent['state']."')");
+                    }
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['name']."','".$hist['entity_name']."','".$hist['state']."')");
+                    }
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                    
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
+?>
+                        <tr>
+                            <td>
+<?php
+                            $getEntName = "SELECT * FROM entity WHERE id = ".$arraySelec['id'];
+                            if ($this->bd->runQuery($getEntName)->num_rows == 0) {
+                                echo $instancias['id'];
+                            }
+                            else {
+                                $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
+                                $entity_name = $entity['entity_name'];
+                                $entity_id = $entity['id'];
+                                if (!empty ($entity_name)) {
+?>
+                                <?php echo $entity_name;?>
+<?php
+                                }
+                                else {
+?>
+                                   <?php echo $entity_id;?>
+<?php
+                                }
+                            }
+?>
+                            </td>
+                        </tr>
+<?php
+                    }
+                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                
+?>
+            </tbody>
+        </table>
+<?php
+    }
+     
 }
 
 ?>
