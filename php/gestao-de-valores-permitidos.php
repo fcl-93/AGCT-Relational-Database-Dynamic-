@@ -907,17 +907,23 @@ class ValPerHist{
                     if ($tipo === "entity")
                     {
                         $nome = $resEntRel["name"];
-                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
-                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on <'".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND ent_type_id = ".$idEntRel;
+                        $selProp = "SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id = $idEntRel";
+                        $selProp = $db->runQuery($selProp);
+                        
                     }
                     else
                     {
                         $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
                         $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
                         $nome = $db->criaNomeRel($queryNome1,$queryNome2);
-                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
-                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel;
+                        $selProp = "SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id = $idEntRel";
+                        $selProp = $db->runQuery($selProp);
+                        
                     }
+                    while ($prop = $selProp->fetch_assoc()) {
+                        $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
+                        $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND property_id = ".$prop["id"];
+                    
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
@@ -953,6 +959,7 @@ class ValPerHist{
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                    }
                 }
 ?>
             </tbody>
