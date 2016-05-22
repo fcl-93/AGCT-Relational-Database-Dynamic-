@@ -2910,7 +2910,7 @@ class entityHist{
 <?php
                 $data = $db->userInputVal($_REQUEST['data']);
                 // Queries that select the verion present in the history or in the main table in the given date
-                $selecionaHist = "SELECT * FROM hist_entity WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND ent_type_id = ".$db->userInputVal($_REQUEST["ent_id"])." GROUP BY entity_id ORDER BY inactive_on DESC";
+                $selecionaHist = "SELECT * FROM hist_entity WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"])." GROUP BY entity_id ORDER BY inactive_on DESC";
                 $selecionaEntity = "SELECT * FROM entity WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%') AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"]);
                 echo $selecionaEntity.$selecionaHist;
                 
