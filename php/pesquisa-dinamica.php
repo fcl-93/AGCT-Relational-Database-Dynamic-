@@ -2642,7 +2642,7 @@ class entityHist{
     /**
      * Presents the table history to the selected entity
      * @param type $id -> id from the selected entity
-     * @param type $bd
+     * @param Db_Op $bd
      */
      public function tableHist($id,$bd)
      {
@@ -2675,19 +2675,20 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
-                                 if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
-                                }
-                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
-                                }
-                                else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+                        $data = $bd->userInputVal($_REQUEST['data']);
+                        if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
+                        }
+                        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+                        }
+                        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
 
-                                }
-                                else {
-                                                  $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
-                                }
+                        }
+                        else {
+                                          $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id);
+                        }
                         if($presetOld->num_rows == 0)
                         {
 ?>
@@ -2891,7 +2892,7 @@ class entityHist{
      
      /**
      * This method creates a table with a view of all the entities in the selected day
-     * @param type $db (object form the class Db_Op)
+     * @param Db_Op $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($db) {
 ?>
@@ -2903,9 +2904,10 @@ class entityHist{
             </thead>
             <tbody>
 <?php
+                $data = $db->userInputVal($_REQUEST['data']);
                 // Queries that select the verion present in the history or in the main table in the given date
-                $selecionaHist = "SELECT * FROM hist_entity WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY entity_id ORDER BY inactive_on DESC";
-                $selecionaEntity = "SELECT * FROM entity WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
+                $selecionaHist = "SELECT * FROM hist_entity WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY entity_id ORDER BY inactive_on DESC";
+                $selecionaEntity = "SELECT * FROM entity WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
                 echo $selecionaUnit.$selecionaHist;
                 
                 $resultSelecionaEntity = $db->runQuery($selecionaEntity);
