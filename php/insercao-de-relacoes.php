@@ -1783,7 +1783,7 @@ class RelHist{
         `entity1_id` int(11) NOT NULL,
         `entity2_id` int(11) NOT NULL,
         `relation_name` varchar(255) DEFAULT NULL,
-        `state` enum('active','inactive') NOT NULL";
+        `state` enum('active','inactive') NOT NULL)";
         $creatTempTable = $bd->runQuery($creatTempTable);
         
         $selecionaRel = "SELECT * FROM relation WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
@@ -1804,7 +1804,6 @@ class RelHist{
 ?>
             <tr>
                 <td colspan="8">Não existe registo referente à propriedade selecionada no histórico</td>
-                <td><?php goBack(); ?></td>
             </tr>
 <?php
         }
