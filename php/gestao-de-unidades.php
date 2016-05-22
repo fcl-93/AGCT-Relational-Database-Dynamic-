@@ -217,7 +217,7 @@ class Unidade
          */
         private function activate(){
             if ($this->gereHist->atualizaHistorico($this->bd)) {
-                if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."' state = 'active' WHERE id=".$_REQUEST['unit_id']))
+                if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$_REQUEST['unit_id']))
                 {
 ?>
                     <html>
