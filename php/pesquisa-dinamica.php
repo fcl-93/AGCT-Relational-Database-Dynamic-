@@ -2649,7 +2649,7 @@ class entityHist{
      public function tableHist($bd)
      {
          if (isset($_REQUEST["histAll"])) {
-            $this->apresentaHistTodas($db);
+            $this->apresentaHistTodas($bd);
         }
         else {
 ?>
