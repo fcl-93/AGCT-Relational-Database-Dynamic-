@@ -519,8 +519,6 @@ class UnidadeHist
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
-<?php
-?>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td>
 <?php

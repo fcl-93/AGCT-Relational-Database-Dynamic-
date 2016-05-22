@@ -672,9 +672,8 @@ class RelHist{
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
-<?php
-?>
-                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td><?php echo $db->getEntityName($arraySelec["ent_type1_id"]); ?></td>
+                        <td><?php echo $db->getEntityName($arraySelec["ent_type2_id"]); ?></td>
                         <td>
 <?php
                         if ($arraySelec["state"] === "active")
