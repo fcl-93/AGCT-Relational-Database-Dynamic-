@@ -1770,8 +1770,6 @@ class RelHist{
                     <th>Tipo de Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
-                    <th>Propriedade</th>
-                    <th>Valor</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -1852,19 +1850,7 @@ class RelHist{
                     while ($prop = $props->fetch_assoc()) {
                         if ($primeiraVez) {
 ?>                       
-                            <td><?php echo $prop["name"];?></td>
-                            <td>
-<?php
-                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$hist["id"]);
-                            $value = $queryValue->fetch_assoc();
-                            if (isset($value["value"])) {
-                                echo $value["value"];
-                            }
-                            else {
-                                echo "-";
-                            }
-?>
-                            </td>
+
                             <td rowspan="<?php echo $numProp;?>">
 <?php
                             if ($hist["state"] === "active")
@@ -1881,25 +1867,12 @@ class RelHist{
 <?php
                             $primeiraVez = false;
                         }
-                        else {
-?>
-                        <tr>
-                            <td><?php echo $prop["name"];?></td>
-                            <td>
-<?php
-                            $queryValue = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$hist["inactive_on"]."' AND property_id = ".$prop["id"]." AND relation_id = ".$hist["id"]);
-                            $value = $queryValue->fetch_assoc();
-                            if (isset($value["value"])) {
-                                echo $value["value"];
-                            }
-                            else {
-                                echo "-";
-                            }
+
 ?>
                             </td>
                         </tr>
 <?php
-                        }
+   
 
                     }
 ?>
