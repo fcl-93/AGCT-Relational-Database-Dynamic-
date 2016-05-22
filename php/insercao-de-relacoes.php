@@ -64,7 +64,13 @@ class InsereRelacoes
                     }
                     else if($_REQUEST['estado'] == 'historico')
                     {
-                        $this->gereInsRel->showHist($this->bd);
+                        if(isset($_REQUEST['histAll']))
+                        {
+                            $this->gereInsRel->tableState($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                        }
+                        else{
+                            $this->gereInsRel->showHist($this->bd);
+                        }
                     }
                      else if($_REQUEST['estado'] == 'voltar')
                     {
@@ -1419,12 +1425,7 @@ class RelHist{
      * After that he presents a table with all the versions presented in the history
      * @param type $bd (object form the class Db_Op)
      */
-    public function showHist ($bd) {
-        if (isset($_REQUEST["histAll"])) {
-            $this->apresentaHistTodas($bd);
-        }
-        else {
-        //meto um datepicker        
+    public function showHist ($bd) {      
 ?>
         <form method="GET">
             Verificar histórico:<br>
@@ -1588,7 +1589,6 @@ class RelHist{
         </table>
 <?php
         
-    }
     }
     
     /**
@@ -1757,5 +1757,118 @@ class RelHist{
         }
         return true;
     }
-}
+    
+
+
+   
+    
+   public function tableState ($data,$bd) {      
 ?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tipo de Relação</th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+        $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
+        `id` int(11) NOT NULL,
+        `rel_type_id` int(11) NOT NULL,
+        `entity1_id` int(11) NOT NULL,
+        `entity2_id` int(11) NOT NULL,
+        `relation_name` varchar(255) DEFAULT NULL,
+        `state` enum('active','inactive') NOT NULL)";
+        $creatTempTable = $bd->runQuery($creatTempTable);
+        
+        $selecionaRel = "SELECT * FROM relation WHERE updated_on < '".$data."' OR updated_on LIKE '".$data."%'";
+        $runRel = $bd->runQuery($selecionaRel);
+        while($readRel = $runRel->fetch_assoc())
+        {
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readRel['id'].",'".$readRel['rel_type_id']."','".$readRel['entity1_id']."','".$readRel['entity2_id']."','".$readRel['relation_name']."','".$readRel['state']."')");
+        }
+        
+        $selecionaHist = "SELECT * FROM hist_relation WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY rel_type_id ORDER BY inactive_on DESC";
+        $querHist = $bd->runQuery($selecionaHist);
+        while($readRel = $querHist->fetch_assoc())
+        {
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readRel['relation_id'].",'".$readRel['rel_type_id']."','".$readRel['entity1_id']."','".$readRel['entity2_id']."','".$readRel['relation_name']."','".$readRel['state']."')");
+        }
+        $queryHistorico = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+        if ($queryHistorico->num_rows == 0) {
+?>
+            <tr>
+                <td colspan="8">Não existe registo referente à propriedade selecionada no histórico</td>
+            </tr>
+<?php
+        }
+        else {
+            while ($hist = $queryHistorico->fetch_assoc()) {
+                $res_EntPart = $bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$hist['rel_type_id']);
+                $read_EntPart = $res_EntPart->fetch_assoc();
+                $res_name1 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
+                $read_name1 = $res_name1->fetch_assoc(); 
+                $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
+                $read_name2 = $res_name2->fetch_assoc();
+                     
+?>
+                <tr>
+                    <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td>
+<?php
+                    $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
+                    if($_readEnt1['entity_name'] != '')
+                    {
+                        echo $_readEnt1['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity1_id'];
+                    }
+?>
+                    </td>
+                    <td>
+<?php
+                    $_readEnt2 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity2_id'])->fetch_assoc();
+                    if($_readEnt2['entity_name'] != '')
+                    {
+                        echo $_readEnt2['entity_name'];
+                    }
+                    else
+                    {
+                        echo $hist['entity2_id'];
+                    }
+
+?>
+                    </td>
+<?php
+?>                       
+
+                            <td>
+<?php
+                            if ($hist["state"] === "active")
+                            {
+                                echo 'Ativo';
+                            }
+                            else
+                            {
+                                echo 'Inativo';
+                            }
+?>
+                            </td>
+                         </tr>
+                       
+<?php
+                    }
+        
+?>
+            <tbody>
+        </table>
+<?php
+        $bd->runQuery("DROP TEMPORARY TABLE temp_table");
+    }
+}
+}
