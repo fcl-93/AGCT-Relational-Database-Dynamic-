@@ -641,64 +641,57 @@ class RelHist{
                     <th><span>Entidade 1</span></th>
                     <th><span>Entidade 2</span></th>
                     <th><span>Estado</span></th>
-                    <th><span>Ação</span></th>
                 </tr>
             </thead>
             <tbody>
 <?php
-                $selRel = "SELECT * FROM rel_type";
-                $selRel = $db->runQuery($selRel);
-                while ($rel = $selRel->fetch_assoc()) {
+                $selecionaHist = "SELECT * FROM hist_rel_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP rel_type_id ORDER BY inactive_on DESC";
+                $selecionaRel = "SELECT * FROM rel_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                
+                $resultSelecionaRel = $db->runQuery($selecionaRel);
+                $resultSelecionaHist = $db->runQuery($selecionaHist);
 ?>
                 <tr>
-                    <td><?php echo $rel["id"]; ?></td>
 <?php
-                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$rel["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC LIMIT 1";
-                    $queryHistorico = $db->runQuery($queryHistorico);
-                    if ($queryHistorico->num_rows == 0) {
-?>
-                        <td><?php echo $db->getEntityName($rel["ent_type1_id"]); ?></td>
-                        <td><?php echo $db->getEntityName($rel["ent_type2_id"]); ?></td>
-                        <td>
-<?php
-                            if ($rel["state"] === "active")
-                            {
-                                echo 'Ativo';
-                            }
-                            else
-                            {
-                                echo 'Inativo';
-                            }
-?>
-                        </td>
-                        <td>-</td>
-<?php
+                    // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
+                    $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
+                            `ent_type1_id` INT UNSIGNED NOT NULL,
+                            `ent_type2_id` INT UNSIGNED NOT NULL,
+                            `state` ENUM('active','inactive') NOT NULL)";
+                    $creatTempTable = $db->runQuery($creatTempTable);
+                    while ($rel = $resultSelecionaRel->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$rel['id'].",".$rel['ent_type1_id'].",".$rel['ent_type2_id'].",'".$rel['state']."')");
                     }
-                    else {
-                        $relHist = $queryHistorico->fetch_assoc();
-?>
-                        <td><?php echo $db->getEntityName($relHist["ent_type1_id"]); ?></td>
-                        <td><?php echo $db->getEntityName($relHist["ent_type2_id"]); ?></td>
-                        <td>
-<?php
-                            if ($relHist["state"] === "active")
-                            {
-                                echo 'Ativo';
-                            }
-                            else
-                            {
-                                echo 'Inativo';
-                            }
-?>
-                        </td>
-                        <td><a href ="?estado=voltar&hist=<?php echo $relHist["id"];?>&rel_id_id=<?php echo $relHist["rel_type_id"];?>">Voltar para esta versão</a></td>
-<?php
+                    while ($hist = $resultSelecionaHist->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['id'].",".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
                     }
                     
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
+                    
+                    while($arraySelec = $resultSeleciona->fetch_assoc())
+                    {
 ?>
-                </tr>
+                        <td><?php echo $arraySelec["id"]; ?></td>
 <?php
-                }
+?>
+                        <td><?php echo $arraySelec["name"]; ?></td>
+                        <td>
+<?php
+                        if ($arraySelec["state"] === "active")
+                        {
+                            echo 'Ativo';
+                        }
+                        else
+                        {
+                            echo 'Inativo';
+                        }
+?>
+                        </td>
+                    </tr>
+<?php
+                    }
+                    $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                
 ?>
             </tbody>
         </table>

@@ -488,22 +488,20 @@ class UnidadeHist
                     <th>ID</th>
                     <th>Unidade</th>
                     <th>Estado</th>
-                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
 <?php
-              
-                    
-                        $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
-                        $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"]."'";
-                    
-                    
-                    $resultSelecionaUnit = $db->runQuery($selecionaUnit);
-                    $resultSelecionaHist = $db->runQuery($selecionaHist);
+                // Queries that select the verion present in the history or in the main table in the given date
+                $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
+                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                
+                $resultSelecionaUnit = $db->runQuery($selecionaUnit);
+                $resultSelecionaHist = $db->runQuery($selecionaHist);
 ?>
                 <tr>
 <?php
+                    // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `name` VARCHAR(128) NOT NULL DEFAULT '',
                             `state` ENUM('active','inactive') NOT NULL)";
@@ -536,7 +534,6 @@ class UnidadeHist
                         }
 ?>
                         </td>
-                        <td>-</td>
                     </tr>
 <?php
                     }
