@@ -526,7 +526,7 @@ $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$_REQUEST["data"]."' > a
         while($readHist = $querHist->fetch_assoc())
         {
 //            echo "INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')";
-            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['id'].",'".$readHist['name']."','".$readHist['state']."')");
+            $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."')");
 
         }
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
