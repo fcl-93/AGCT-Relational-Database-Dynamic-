@@ -927,7 +927,6 @@ class ValPerHist{
                     echo $selecionaHist;
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
-                    $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
 
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `property_id` INT NOT NULL,
@@ -935,7 +934,7 @@ class ValPerHist{
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
                     while ($val = $resultSelecionaProp->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$val['id'].",'".$val['property_id']."','".$prop['value']."','".$val['state']."')");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$val['id'].",'".$val['property_id']."','".$val['value']."','".$val['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                         
