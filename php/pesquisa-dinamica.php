@@ -2945,7 +2945,7 @@ class entityHist{
                                 echo $instancias['id'];
                             }
                             else {
-                                $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
+                                $entity = $db->runQuery($getEntName)->fetch_assoc();
                                 $entity_name = $entity['entity_name'];
                                 $entity_id = $entity['id'];
                                 if (!empty ($entity_name)) {
