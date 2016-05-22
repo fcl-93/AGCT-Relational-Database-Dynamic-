@@ -1044,8 +1044,10 @@ class HistDeForms{
 						</tr>
 					</thead>
 					<tbody>
-                            <td colpan="4">Não existem formulários costumizados</td>
-                            </tbody>
+                                            <tr>
+                            <td colpan="3">Não existem formulários costumizados</td>
+                                            </tr>
+                                        </tbody>
                                 </table>
 <?php
 		}
