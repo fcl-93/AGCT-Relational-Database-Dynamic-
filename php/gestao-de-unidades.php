@@ -103,7 +103,7 @@ class Unidade
                 <html>
                     <form method="GET">
                         Verificar propriedades existentes no dia : 
-                        <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                        <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                         <input type="hidden" name="estado" value="historico">
                         <input type="hidden" name="histAll" value="true">
                         <input type="submit" value="Apresentar propriedades">

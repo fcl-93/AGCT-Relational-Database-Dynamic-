@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 $(function() {
-    $( "#datepicker" ).datepicker({
+    $( ".datepicker" ).datepicker({
         dateFormat: "yy-mm-dd",
         maxDate: new Date()
     });
