@@ -945,7 +945,7 @@ class ValPerHist{
 ?>
                 <tr>
                     <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
-                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $idEntRel; ?></td>
+                    <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
                     <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
                     while($arraySelec = $resultSeleciona->fetch_assoc())
