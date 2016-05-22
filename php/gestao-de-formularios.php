@@ -1019,7 +1019,7 @@ class HistDeForms{
                     $bd->runQuery("INSERT INTO temp_table VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['state']."',".$getProp['property_id'].",".$getProp['custom_form_id'].")");
                 }
             
-                $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY custom_form_has_prop_property_id ORDER BY inactive_on DESC";
+                $selecionaHist = "SELECT * FROM hist_custom_form WHERE ('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%') GROUP BY id ORDER BY inactive_on DESC";
                 $querHist = $bd->runQuery($selecionaHist);
                 while($readHist = $querHist->fetch_assoc())
                 {
