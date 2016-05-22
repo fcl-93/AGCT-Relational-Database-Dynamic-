@@ -1005,7 +1005,7 @@ class HistDeForms{
                 $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
                 `id` int(10) unsigned NOT NULL,
                 `name` varchar(128) NOT NULL,
-                `state` enum('active','inactive') NOT NULL";
+                `state` enum('active','inactive') NOT NULL)";
                 
                 $creatTempTable = $bd->runQuery($creatTempTable);
                 
