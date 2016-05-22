@@ -184,6 +184,7 @@ class Unidade
                 if($this->gereHist->atualizaHistorico($this->bd)) {
                     if($this->bd->runQuery("UPDATE prop_unit_type SET state = 'inactive', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['unit_id']))
                     {
+                        $this->bd->getMysqli()->commit();
 ?>
                         <html>
                             <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi desativada</p>
@@ -192,6 +193,7 @@ class Unidade
 <?php
                     }
                     else {
+                        $this->bd->getMysqli()->rollback();
 ?>
                         <p>Não foi possível desativar a unidade pretendida.</p>
 <?php
@@ -199,6 +201,7 @@ class Unidade
                     }
                 }
                 else {
+                    $this->bd->getMysqli()->rolback();
 ?>
                     <p>Não foi possível desativar a unidade pretendida.</p>
 <?php
@@ -219,6 +222,7 @@ class Unidade
             if ($this->gereHist->atualizaHistorico($this->bd)) {
                 if($this->bd->runQuery("UPDATE prop_unit_type SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$_REQUEST['unit_id']))
                 {
+                    $this->bd->getMysqli()->commit();
 ?>
                     <html>
                         <p>A unidade <?php echo $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id=".$_REQUEST['unit_id'])->fetch_assoc()['name'];?> foi ativada.</p>
@@ -227,6 +231,7 @@ class Unidade
 <?php
                 }
                 else {
+                    $this->bd->getMysqli()->rollback();
 ?>
                     <p>Não foi possível ativar a unidade pretendida.</p>
 <?php
@@ -493,8 +498,8 @@ class UnidadeHist
             <tbody>
 <?php
                 // Queries that select the verion present in the history or in the main table in the given date
-                $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE '".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
-                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on <= '".$_REQUEST["data"]."'";
+                $selecionaHist = "SELECT * FROM hist_prop_unit_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY prop_unit_type_id ORDER BY inactive_on DESC";
+                $selecionaUnit = "SELECT * FROM prop_unit_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
                 echo $selecionaUnit.$selecionaHist;
                 
                 $resultSelecionaUnit = $db->runQuery($selecionaUnit);
@@ -507,14 +512,15 @@ class UnidadeHist
                             `name` VARCHAR(128) NOT NULL DEFAULT '',
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
+                   
+                    
                     while ($unit = $resultSelecionaUnit->fetch_assoc()) {
                         $db->runQuery("INSERT INTO temp_table VALUES (".$unit['id'].",'".$unit['name']."','".$unit['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['prop_unit_type_id'].",'".$hist['name']."','".$hist['state']."')");
                     }
-                    
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table ORDER BY id ASC");
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
