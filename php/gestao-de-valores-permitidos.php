@@ -98,7 +98,7 @@ class ValoresPermitidos
             <h3>Gestão de valores permitidos - Entidades</h3>
             <form method="GET">
                 Verificar propriedades existentes no dia : 
-                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
                 <input type="hidden" name="tipo" value="ent">
@@ -249,7 +249,7 @@ class ValoresPermitidos
             <h3>Gestão de valores permitidos - Relações</h3>
             <form method="GET">
                 Verificar propriedades existentes no dia : 
-                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
                 <input type="hidden" name="tipo" value="rel">
