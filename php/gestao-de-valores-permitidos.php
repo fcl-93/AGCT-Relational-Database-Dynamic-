@@ -932,7 +932,7 @@ class ValPerHist{
                 <tr>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $idEntRel; ?></td>
-                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
+                    <td rowspan="<?php echo $numLinhas; ?>"><?php echo $prop["name"]; ?></td>
 <?php
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
                             `property_id` INT NOT NULL,
