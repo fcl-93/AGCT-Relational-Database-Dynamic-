@@ -2920,7 +2920,7 @@ class entityHist{
 <?php
                     // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
-                        `id` INT NOT NULL AUTO_INCREMENT,
+                        `id` INT NOT NULL,
                         `ent_type_id` INT NOT NULL,
                         `entity_name` VARCHAR(255) NULL,
                         `state` ENUM('active', 'inactive') NOT NULL)";
