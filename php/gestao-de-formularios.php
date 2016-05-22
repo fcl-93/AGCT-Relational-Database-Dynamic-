@@ -1023,7 +1023,7 @@ class HistDeForms{
                 $querHist = $bd->runQuery($selecionaHist);
                 while($readHist = $querHist->fetch_assoc())
                 {
-                    $getProp = $bd->runQuery("SELECT * FROM hist_custom_form_has_prop WHERE hist_custom_form_id =".$readHist['id'])->fetch_assoc();
+                    $getProp = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE hist_custom_form_id =".$readHist['id'])->fetch_assoc();
                     $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."',".$getProp['custom_form_has_prop_property_id'].",".$getProp['hist_custom_form_id'].")");
 
                 }
