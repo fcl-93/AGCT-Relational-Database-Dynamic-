@@ -611,7 +611,7 @@ class ImportValues{
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
 	// Check if file already exists
-	if (file_exists($target_file)) {
+	if (!file_exists($target_file)) {
 ?>
 	    <p>Pedimos desculpa, mas o seu ficheiro não foi carregado!</p>
 <?php
