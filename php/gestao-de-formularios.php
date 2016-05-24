@@ -199,6 +199,7 @@ class GereForms
 ?>
                             </tr>
 <?php 
+                                $conta++;
                             }
                         }			
 ?>
