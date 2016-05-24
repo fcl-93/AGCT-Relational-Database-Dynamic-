@@ -419,7 +419,7 @@ class UnidadeHist
         if ($queryHistorico->num_rows == 0) {
 ?>
             <tr>
-                <td colspan="5">Não existe registo referente à unidade selecionada no histórico</td>
+                <td colspan="4">Não existe registo referente à unidade selecionada no histórico</td>
                 <td><?php goBack(); ?></td>
             </tr>
 <?php
