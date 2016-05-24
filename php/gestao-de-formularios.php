@@ -149,8 +149,8 @@ class GereForms
 <?php
                                 if ($conta == 0) {
 ?>
-                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
-                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
+                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $readForm['id']; ?></td>
+                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $readForm['name'] ?></td>
 <?php
                                 }
 ?>
