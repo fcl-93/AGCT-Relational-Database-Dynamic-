@@ -470,10 +470,10 @@ class InsertValues{
                         if (!empty($_REQUEST[$propriedades['form_field_name']])) {
                             if ($_REQUEST[$propriedades['form_field_name']] === "instPorCriar") {
                                 $querySelFK = "SELECT `fk_ent_type_id` FROM `property` WHERE ".$idEnt." = ent_type_id AND value_type = 'ent_ref'";
-                                echo $querySelFK;
+                                //echo $querySelFK;
                                 $fk = $this->db->runQuery($querySelFK)->fetch_assoc()["fk_ent_type_id"];
                                 $querySelUltRef = "SELECT * FROM entity WHERE ent_type_id = ".$fk." ORDER BY id DESC LIMIT 1";
-                                echo $querySelUltRef;
+                                //echo $querySelUltRef;
                                 $selUltRef = $this->db->runQuery($querySelUltRef);
                                 $ultRef = $selUltRef->fetch_assoc();
                                 $_REQUEST[$propriedades['form_field_name']] = $ultRef["id"];
