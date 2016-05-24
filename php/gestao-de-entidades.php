@@ -111,18 +111,25 @@ class Entidade {
                 $selProp = "SELECT * FROM property WHERE ent_type_id = ".$read_EntType['id']." AND state = 'active'";
                 $selProp = $this->bd->runQuery($selProp);
                 $numLinhas = $selProp->num_rows;
+                $conta = 0;
                 while ($prop = $selProp->fetch_assoc()) {
+                    if ($conta > $numLinhas) {
+                        $conta = 0;
+                    }
 ?>						
                 <tr>
+<?php
+                    if ($conta == 0) {
+?>
                     <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
                     <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
 <?php
-                
+                    }
 ?>
                     <td><?php echo $prop['name'] ?></td>
                     <td><?php echo $prop['value_type'] ?></td>
 <?php
-                    if ($read_EntType['state'] === 'active') {
+                    if ($conta == 0 && $read_EntType['state'] === 'active') {
 ?>								
                         <td rowspan="<?php echo $numLinhas;?>"> Ativo </td>
                         <td rowspan="<?php echo $numLinhas;?>">
