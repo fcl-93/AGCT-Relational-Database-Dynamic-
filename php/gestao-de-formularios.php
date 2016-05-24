@@ -200,8 +200,7 @@ class GereForms
                             </tr>
 <?php 
                             }
-                        }
-						
+                        }			
 ?>
                         </tbody>
                     </table>
