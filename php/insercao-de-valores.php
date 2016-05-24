@@ -435,7 +435,7 @@ class InsertValues{
     private function insertEntityValues($idEnt) {
         $tipo = $_SESSION["tipo"];
         if ($tipo === "ent") {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."','".date("Y-m-d H:i:s",time()).")";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst"]."','".date("Y-m-d H:i:s",time())."')";
         }
         else {
             $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEnt.", '".$_REQUEST["nomeInst_".$idEnt]."','".date("Y-m-d H:i:s",time())."')";
