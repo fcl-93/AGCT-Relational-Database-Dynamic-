@@ -103,7 +103,7 @@ class Unidade
                 <html>
                     <form method="GET">
                         Verificar propriedades existentes no dia : 
-                        <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                        <input type="text"  class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                         <input type="hidden" name="estado" value="historico">
                         <input type="hidden" name="histAll" value="true">
                         <input type="submit" value="Apresentar propriedades">
@@ -380,7 +380,7 @@ class UnidadeHist
             <input type="radio" name="controlDia" value="ate">até ao dia<br>
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
-            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="text"  class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="unit_id" value="<?php echo $_REQUEST["unit_id"]; ?>">
             <input type="submit" value="Apresentar histórico">
