@@ -606,11 +606,12 @@ class ImportValues{
      * @return boolean true if the file is OK, false otherwise
      */
     private function verificaFicheiro () {
+        print_r($_FILES["file"]);
         $target_file = $_FILES["file"]["name"];
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
 	// Check if file already exists
-	if (file_exists($target_file)) {
+	if (!file_exists($target_file)) {
 ?>
 	    <p>Pedimos desculpa, mas o seu ficheiro não foi carregado!</p>
 <?php
