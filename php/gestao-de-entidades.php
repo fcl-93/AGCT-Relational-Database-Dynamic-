@@ -108,7 +108,7 @@ class Entidade {
 <?php
             while ($read_EntType = $res_EntType->fetch_assoc()) { //print_r($read_EntType);
             //printa a restante tabela
-                $selProp = "SELECT * FROM property WHERE entity_id = ".$read_EntType['id']." AND state = 'active'";
+                $selProp = "SELECT * FROM property WHERE ent_type_id = ".$read_EntType['id']." AND state = 'active'";
                 $selProp = $this->bd->runQuery($selProp);
                 $numLinhas = $selProp->num_rows;
 ?>						
