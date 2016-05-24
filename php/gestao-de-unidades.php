@@ -132,7 +132,7 @@ class Unidade
                                         <td>Ativo</td>
                                         <td>
                                             <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
-                                            <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico}</a>
+                                            <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
                                         </td>
 <?php
                                     }
