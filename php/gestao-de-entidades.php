@@ -113,6 +113,7 @@ class Entidade {
                 $numLinhas = $selProp->num_rows;
                 $conta = 0;
                 while ($prop = $selProp->fetch_assoc()) {
+                    echo $conta;
                     if ($conta > $numLinhas) {
                         $conta = 0;
                     }
@@ -152,6 +153,7 @@ class Entidade {
                 </td>
             </tr>
 <?php
+                $conta++;
                 }
             }
 ?>
