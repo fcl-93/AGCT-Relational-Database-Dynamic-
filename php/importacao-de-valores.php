@@ -606,7 +606,6 @@ class ImportValues{
      * @return boolean true if the file is OK, false otherwise
      */
     private function verificaFicheiro () {
-        print_r($_FILES["file"]);
         $target_file = $_FILES["file"]["name"];
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
@@ -694,11 +693,11 @@ class ImportValues{
     private function insertRelation ($idEntidadeRel,$controlaNotProp, $entRel1, $entRel2, $valores) {
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         if (empty($valores)) {
-            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`,`entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].", ".$entRel1.", ".$entRel2.")";
+            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`,`entity1_id`, `entity2_id`, `updated_on`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].", ".$entRel1.", ".$entRel2.",'".date("Y-m-d H:i:s",time())."')";
         }
         else {
             
-            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`, `relation_name`, `entity1_id`, `entity2_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."', ".$entRel1.", ".$entRel2.")";
+            $queryInsertInst = "INSERT INTO `relation`(`id`, `rel_type_id`, `relation_name`, `entity1_id`, `entity2_id`, `updated_on`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."', ".$entRel1.", ".$entRel2.",'".date("Y-m-d H:i:s",time())."')";
             
         }
         $queryInsertInst = $this->db->runQuery($queryInsertInst);
@@ -720,10 +719,10 @@ class ImportValues{
     private function insertEntity ($idEntidadeRel,$controlaNotProp, $valores) {
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         if (empty($valores)) {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].")";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `updated_on`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].", ,'".date("Y-m-d H:i:s",time())."')";
         }
         else {
-            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."')";
+            $queryInsertInst = "INSERT INTO `entity`(`id`, `ent_type_id`, `entity_name`, `updated_on`) VALUES (NULL,".$idEntidadeRel[$controlaNotProp].",'".$valores."','".date("Y-m-d H:i:s",time())."')";
         }
         $queryInsertInst = $this->db->runQuery($queryInsertInst);
         if(!$queryInsertInst ) {
@@ -769,10 +768,10 @@ class ImportValues{
             
         }
         if (empty ($_REQUEST["rel"])) {
-            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
         else {
-            $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+            $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valoresPermitidosEnum[$i]."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
         $queryInsertValue = $this->db->runQuery($queryInsertValue);
         if(!$queryInsertValue)
@@ -814,10 +813,10 @@ class ImportValues{
             }
         }
         if (empty($_REQUEST["rel"])) {
-            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+            $queryInsertValue = "INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
         else {
-            $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `date`, `time`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d")."','".date("H:i:s")."','".wp_get_current_user()->user_login."')";
+            $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
         echo $queryInsertValue;
         $queryInsertValue = $this->db->runQuery($queryInsertValue);
