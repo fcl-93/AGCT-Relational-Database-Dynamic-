@@ -516,7 +516,7 @@ class InsertValues{
            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_SESSION[$tipo."_id"]." AND state = 'active' ORDER BY form_field_order ASC";
        }
        else {
-           $queryProp = "SELECT * FROM property AS prop, custom_form_has_prop AS cfhp "
+           $queryProp = "SELECT prop*,cfhp.mandatory AS mand_form FROM property AS prop, custom_form_has_prop AS cfhp "
                    . "WHERE cfhp.custom_form_id = ".$_SESSION[$tipo."_id"]." AND prop.id = cfhp.property_id AND prop.state = 'active' ORDER BY cfhp.field_order ASC";
        }
        $execQueryProp = $this->db->runQuery($queryProp);
@@ -533,7 +533,7 @@ class InsertValues{
                }           
            }
            else {
-               if ($arrayProp["cfhp.mandatory"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
+               if ($arrayProp["mand_form"] == 1  && empty($_REQUEST[$arrayProp["form_field_name"]])){
 ?>
                     <p>O campo <?php echo $arrayProp["name"];?> é de preenchimento obrigatório!</p>
 <?php
