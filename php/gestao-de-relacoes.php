@@ -509,6 +509,11 @@ class RelHist{
         $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
                 . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
         $updateHist =$db->runQuery($updateHist);
+        if(!$updateHist)
+        {
+            return false;
+        }
+        return true;
     }
     
     /**
