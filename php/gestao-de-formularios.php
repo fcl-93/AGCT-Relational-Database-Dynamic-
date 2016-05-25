@@ -112,80 +112,102 @@ class GereForms
 		if($resForm->num_rows == 0)
 		{
 ?>	
-			<html>
-				<p>Não existem formulários costumizados</p>
-			</html>
+                    <html>
+                        <p>Não existem formulários costumizados</p>
+                    </html>
 <?php 
-                        $this->intForm();
+                    $this->intForm();
 		}
 		else
 		{
 ?>
-
-			<html>
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Id</th>
-							<th>Nome do formulário customizado</th>
-							<th>Estado</th>
-							<th>Ação</th>
-						</tr>
-					</thead>
-					<tbody>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome do formulário customizado</th>
+                                <th>Estado</th>
+                                <th>Propriedade</span></th>
+                                <th>Tipo de Valor</span></th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 <?php 
-						while($readForm = $resForm->fetch_assoc())
-						{
-?>
-							<tr>
-								<td><?php echo $readForm['id']; ?></td>
-								<td><?php echo $readForm['name']; ?></td>
-								<td>
+                        while($readForm = $resForm->fetch_assoc())
+                        {
+                            $selProp = "SELECT * FROM custom_form_has_prop AS cfhp, property AS p WHERE p.id = cfhp.property_id AND cfhp.custom_form_id = ".$readForm['id']." AND p.state = 'active'";
+                            $selProp = $this->bd->runQuery($selProp);
+                            $numLinhas = $selProp->num_rows;
+                            $conta = 0;
+                            while ($prop = $selProp->fetch_assoc()) {
+                                if ($conta > $numLinhas) {
+                                    $conta = 0;
+                                }
+?>						
+                                <tr>
 <?php
-									if($readForm['state'] === 'active')
-									{
+                                if ($conta == 0) {
 ?>
-										Ativo
+                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $readForm['id']; ?></td>
+                                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $readForm['name'] ?></td>
+<?php
+                                }
+?>
+                                    <td><?php echo $prop['name'] ?></td>
+                                    <td><?php echo $prop['value_type'] ?></td>                
+                                    
+<?php
+                                if ($conta == 0) {
+?>
+                                    <td rowspan="<?php echo $numLinhas;?>">
+<?php
+                                    if($readForm['state'] === 'active')
+                                    {
+?>
+                                        Ativo
 <?php 
-									}
-									else
-									{
+                                    }
+                                    else
+                                    {
 ?>
-										Inativo
-<?php 								}
+                                        Inativo
+<?php 		
+                                    }
+?>                           
+                                </td>
+                                <td rowspan="<?php echo $numLinhas;?>">
+                                    <a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
+<?php
+                                    if($readForm['state'] === 'active')
+                                    {
 ?>
-								</td>
-								<td>
-									<a href="gestao-de-formularios?estado=editar_form&form_id=<?php echo $readForm['id']; ?>">[Editar]</a>
-                                                                       
+                                        <a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
 <?php 
-                                                                                       
-										if($readForm['state'] === 'active')
-										{
+                                    }
+                                    else 
+                                    {
 ?>
-											<a href="gestao-de-formularios?estado=desativar&form_id=<?php echo $readForm['id'];?>">[Desativar]</a>
+                                        <a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
 <?php 
-										}
-										else 
-										{
-?>
-											<a href="gestao-de-formularios?estado=ativar&form_id=<?php echo $readForm['id'];?>">[Ativar]</a>
-<?php 
-										}
+                                    }
 ?> 
-                                                                                        <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
-								</td>
-							</tr>
-<?php 
-						}
-						
+                                    <a href="gestao-de-formularios?estado=historico&form_id=<?php echo $readForm['id'];?>" >[Histórico]</a>
+                                </td>
+<?php
+                                }
 ?>
-					</tbody>
-				</table>
-			</html>
+                            </tr>
 <?php 
-			$this->intForm();
-		}
+                                $conta++;
+                            }
+                        }			
+?>
+                        </tbody>
+                    </table>
+<?php 
+                $this->intForm();
+            }
 	}
 	/**
 	 * Prints the form composed by a table to create customized forms.
