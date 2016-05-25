@@ -1630,29 +1630,44 @@ class Search{
             while($instancias =$instEnt->fetch_assoc()) {
 ?>
             <tr>
-                <td>
 <?php
                     $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
+                    $getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']."ORDER BY property_id ASC";
+                    $getValues = $this->bd->runQuery($getValues);
                     if ($this->bd->runQuery($getEntName)->num_rows == 0) {
-                        echo $instancias['id'];
+?>
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
+<?php
+                            echo $instancias['id'];
+?>     
+                        </td>
+<?php
                     }
                     else {
                         $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
-?>
-                            <?php echo $entity_name;?>
+?> 
+                        <td rowspan="<?php echo $getValues->num_rows;?>"> 
+<?php
+                            echo $entity_name;
+?>   
+                        </td>
 <?php
                         }
                         else {
+?>                        
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
+<?php
+                           echo $entity_id;
 ?>
-                           <?php echo $entity_id;?>
+                        </td>
 <?php
                         }
                     }
-?>
-                </td>
+        while($readVals = $getValues->fetch_assoc()){  
+?>          
                 <td>
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Propriedades da Entidade]</a>
                         
@@ -1680,6 +1695,7 @@ class Search{
 <?php
                 array_push($arrayInstId,$instancias['id']);
                 array_push($arrayInstComp,$entity_name); 
+                }
             }
 ?>
             </tbody>
