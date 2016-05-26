@@ -1668,15 +1668,23 @@ class Search{
                            echo $entity_id;
 ?>
                         </td>
-                        
-                        <td rowspan="<?php echo $getValues->num_rows;?>">
-<?php
-                        echo $instancias['state'];
-?>
-                        </td>
 <?php
                         }
                     }
+?>
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
+<?php 
+                           if($instancias['state'] == 'active')
+                           {
+                               echo 'Ativo';
+                           }
+                           else
+                           {
+                               echo 'Inativo';
+                           }
+?>
+                        </td>
+<?php
         $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
@@ -2969,7 +2977,7 @@ class entityHist{
         <table class="table">
             <thead>
                 <tr>
-                     <th>Instância</th>
+                    <th>Instância</th>
                     <th>Estado da Instância</th>
                     <th>Propriedade</th>
                     <th>Valor</th>
@@ -3033,6 +3041,16 @@ class entityHist{
                             }
 ?>
                             </td>
+                            <td><?php
+                                if($entity['state'] == "active")
+                                {
+                                    echo "Ativo";
+                                }
+                                else
+                                {
+                                    echo "Inativo";
+                                }
+                            ?></td>
                         </tr>
 <?php
                     }
