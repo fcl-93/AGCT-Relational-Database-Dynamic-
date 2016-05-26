@@ -1674,7 +1674,14 @@ class Search{
 ?>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php 
-                            echo $instancias['state'];
+                           if($instancias['state'] == 'active')
+                           {
+                               echo 'Ativo';
+                           }
+                           else
+                           {
+                               echo 'Inativo';
+                           }
 ?>
                         </td>
 <?php
