@@ -1620,9 +1620,10 @@ class Search{
             <thead>
                 <tr>
                     <th>Instância</th>
+                    <th>Estado da Instância</th>
                     <th>Propriedade</th>
                     <th>Valor</th>
-                    <th>Estado</th>
+                    <th>Estado do Valor</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -1665,6 +1666,12 @@ class Search{
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                            echo $entity_id;
+?>
+                        </td>
+                        
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
+<?php
+                        echo $instancias['state'];
 ?>
                         </td>
 <?php
@@ -2963,6 +2970,11 @@ class entityHist{
             <thead>
                 <tr>
                     <th>Instância</th>
+                    <th>Propriedade</th>
+                    <th>Valor</th>
+                    <th>Estado do Valor</th>
+                    <th>Ação</th>
+                    
                 </tr>
             </thead>
             <tbody>
