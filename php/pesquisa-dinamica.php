@@ -1669,7 +1669,7 @@ class Search{
                     }
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
-                        <td> <?php echo $readVals['name']?></td>
+                        <td> <?php echo $readVals['value']?></td>
                 <td>
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Valores das Propriedades da Instância da Entidade]</a>
                         
