@@ -1693,7 +1693,14 @@ class Search{
                                 
                         ?></td>
                         <td><?php //print the val state
-                            echo $readVals['ValueState'];
+                            if($readVals['ValueState'] == 'active')
+                            {
+                                echo "Ativo";
+                            }
+                            else
+                            {
+                                echo "Inativo";
+                            }
                         ?></td>
 <?php
                     if($first == true){    
