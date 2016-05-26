@@ -1687,7 +1687,7 @@ class Search{
                                 
                         ?></td>
                         <td><?php //print the val state
-                            //$getStateVal = 
+                            echo $readVals['ValueState'];
                         ?></td>
 <?php
                     if($first == true){    
