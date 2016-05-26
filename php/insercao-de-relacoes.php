@@ -1096,10 +1096,12 @@ class InsereRelacoes
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
                     {
+                        $ent1 = $this->bd->runQuery("SELECT name FROM entity WHERE id = ".$this->bd->userInputVal(REQUEST['firstEnt']))->fetch_assoc()['name'];
+                        $ent2 = $this->bd->runQuery("SELECT name FROM entity WHERE id = ".$this->bd->userInputVal($_REQUEST['secondEnt'.$i]))->fetch_assoc()['name'];
                         
 ?>
                         <html>
-                            <p>Associou com sucesso a entidade <?php echo $this->bd->getEntityName($_REQUEST['firstEnt']); ?>, a entidade <?php echo $this->bd->getEntityName($_REQUEST['secondEnt'.$i]); ?>.</p>
+                            <p>Associou com sucesso a entidade <?php echo $ent1; ?>, a entidade <?php echo $ent2;?>.</p>
                             <p>Clique em <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $this->bd->getMysqli()->insert_id; ?>"/>Inserir Propriedades</a> para preencher informações relativas a relação que acabou de criar.</p>
                         </html>
  <?php
