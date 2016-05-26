@@ -1623,6 +1623,7 @@ class Search{
                     <th>Property</th>
                     <th>Value</th>
                     <th>Estado</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -1635,7 +1636,7 @@ class Search{
 <?php
                     $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
                     //$getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
-                    $getValues = "SELECT * FROM property, value WHERE value.property_id = property.id AND value.entity_id =".$instancias['id'];
+                    $getValues = "SELECT p.*, v.* FROM property as p, value as v WHERE v.property_id = p.id AND v.entity_id =".$instancias['id'];
                     $getValues = $this->bd->runQuery($getValues);
                     if ($this->bd->runQuery($getEntName)->num_rows == 0) {
 ?>
@@ -1672,8 +1673,22 @@ class Search{
         $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
-                        <td><?php echo $readVals['name']?></td>
-                        <td> <?php echo $readVals['value']?></td>
+                        <td><?php echo $readVals['p.name']?></td>
+                        <td> <?php 
+                            //$getValState = "SELECT state FROM value WHERE"
+                            if($readVals['v.value'] == "")
+                            {
+                                echo "Sem Valor Atribuído";
+                            }
+                            else
+                            {
+                                echo $readVals['v.value'];
+                            }
+                                
+                        ?></td>
+                        <td><?php //print the val state
+                            //$getStateVal = 
+                        ?></td>
 <?php
                     if($first == true){    
 ?>
