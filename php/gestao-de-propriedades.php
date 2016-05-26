@@ -484,18 +484,16 @@ class PropertyManage
         if(!empty($_REQUEST["entidadePertence"]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
-            $entRelResult = $this->db->runQuery($entRelQuery);
-            $entRelArray = $entRelResult->fetch_assoc();
-            // contrução do form_field_name
-            // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
-            $entRel = $entRelArray["name"];
         }
         else
         {
-            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
-            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id= ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
+            $entRelQuery = "SELECT name FROM rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"];
         }
+        $entRelResult = $this->db->runQuery($entRelQuery);
+        $entRelArray = $entRelResult->fetch_assoc();
+        // contrução do form_field_name
+        // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+        $entRel = $entRelArray["name"];
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
@@ -861,11 +859,7 @@ class PropertyManage
             $tipo = "relation";
             $rel_type_id = $prop["rel_type_id"];
             $queryRel = "SELECT * FROM rel_type WHERE id = ".$rel_type_id;
-            $ent1 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type1_id"];
-            $ent2 = $this->db->runQuery($queryRel)->fetch_assoc()["ent_type2_id"];
-            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent1;
-            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$rel_type_id." AND ent.id = ".$ent2;
-            $nomeRelEnt = $this->db->criaNomeRel($queryNome1, $queryNome2);
+            $nomeRelEnt = $this->db->runQuery($queryRel)->fetch_assoc()["name"];
         }
         else
         {
@@ -1091,18 +1085,16 @@ class PropertyManage
                 if(!empty($_REQUEST["entidadePertence"]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
-            $entRelResult = $this->db->runQuery($entRelQuery);
-            $entRelArray = $entRelResult->fetch_assoc();
-            // contrução do form_field_name
-            // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
-            $entRel = $entRelArray["name"];
         }
         else
         {
-            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type1_id";
-            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"]." AND ent.id = rel.ent_type2_id";
-            $entRel = $this->db->criaNomeRel($queryNome1, $queryNome2);
+            $entRelQuery = "SELECT name FROM rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"];
         }
+        $entRelResult = $this->db->runQuery($entRelQuery);
+        $entRelArray = $entRelResult->fetch_assoc();
+        // contrução do form_field_name
+        // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
+        $entRel = $entRelArray["name"];
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
@@ -1536,9 +1528,7 @@ class PropHist{
                     }
                     else
                     {
-                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                        $nome = $db->criaNomeRel($queryNome1,$queryNome2);
+                        $nome = $resEntRel["name"];
                         $selecionaHist = "SELECT * FROM hist_property WHERE (('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%')) AND rel_type_id = ".$idEntRel." GROUP BY property_id ORDER BY inactive_on DESC";
                         $selecionaProp = "SELECT * FROM property WHERE (updated_on < '".$_REQUEST["data"]."'OR updated_on LIKE '".$_REQUEST["data"]."%') AND rel_type_id = ".$idEntRel;
                     }
