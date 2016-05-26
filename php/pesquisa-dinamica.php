@@ -1620,8 +1620,8 @@ class Search{
             <thead>
                 <tr>
                     <th>Instância</th>
-                    <th>Property</th>
-                    <th>Value</th>
+                    <th>Propriedade</th>
+                    <th>Valor</th>
                     <th>Estado</th>
                     <th>Ação</th>
                 </tr>
