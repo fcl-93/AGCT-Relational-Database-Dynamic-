@@ -147,10 +147,12 @@ class InsereRelacoes
                                     <tbody>
 <?php
                                     while($readRelations = $res_Rel->fetch_assoc()){
+                                         $read_RelName = $this->bd->runQuery("SELECT name FROM rel_type WHERE id=".$readRelations['rel_type_id']);
+                                         $read_RelName = $read_RelName->fetch_assoc();
 ?>                                         
                                         <tr>
                                              <td><?php echo $readRelations['id'];?></td>
-                                             <td><?php echo $readRelations['name'] ?></td>
+                                             <td><?php echo $read_RelName['name'] ?></td>
                                              <td data-showHidden="true">
 <?php 
                                                 $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity1_id'])->fetch_assoc();
