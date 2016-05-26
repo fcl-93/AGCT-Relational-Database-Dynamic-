@@ -264,7 +264,7 @@ class GereForms
 						$res_GetProps = $this->bd->runQuery("SELECT p.*FROM property AS p, ent_type AS e WHERE p.ent_type_id = e.id AND e.name LIKE '".$readEnt['name']."' ORDER BY p.name ASC");
 ?>						
 						<tr>
-							<td rowspan="<?php echo $res_GetProps->num_rows ?>" style="vertical-align: top;">'<?php echo $readEnt["name"]?>'</td>		
+							<td rowspan="<?php echo $res_GetProps->num_rows ?>" style="vertical-align: top;"><?php echo $readEnt["name"]?></td>		
 <?php 							
 							
 							while($readGetProps = $res_GetProps->fetch_assoc())

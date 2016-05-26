@@ -137,7 +137,7 @@ class ImportValues{
             while($arraRelm= $executaRelation->fetch_assoc())
             {
 ?>
-                        <li><a href="?estado=introducao&rel=<?php echo $arraRelm['id'];?>">[<?php echo $this->getRelName($arraRelm["ent_type1_id"], $arraRelm["ent_type2_id"]);?>]</a>
+                        <li><a href="?estado=introducao&rel=<?php echo $arraRelm['id'];?>">[<?php echo $arraRelm['name']; ?>]</a>
 <?php
             }
 ?>   
@@ -333,7 +333,7 @@ class ImportValues{
                 else if (isset($_REQUEST["rel"])) {
                     $getRelacao = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel"];
                     $relacao = $this->db->runQuery($getRelacao)->fetch_assoc();
-                    $arrayEntidadesRel[$relacao["id"]] = $this->getRelName($relacao["ent_type1_id"],$relacao["ent_type2_id"]);
+                    $arrayEntidadesRel[$relacao["id"]] = $relacao["name"];
                     $valor = "Entidade 1";
 ?>
                     <th><?php echo $valor; ?></th>
