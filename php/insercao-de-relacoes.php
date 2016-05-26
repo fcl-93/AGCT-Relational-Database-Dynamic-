@@ -1096,7 +1096,7 @@ class InsereRelacoes
                 if(isset($_REQUEST['secondEnt'.$i])){
                     if($this->bd->runQuery("INSERT INTO `relation`(`id`, `rel_type_id`, `entity1_id`, `entity2_id`, `relation_name`, `state`) VALUES (NULL,".$_REQUEST['rel_type'].",".$_REQUEST['firstEnt'].",".$_REQUEST['secondEnt'.$i].",'".$rel_name."','active')"))
                     {
-                        $ent1 = $this->bd->runQuery("SELECT name FROM entity WHERE id = ".$this->bd->userInputVal(REQUEST['firstEnt']))->fetch_assoc()['name'];
+                        $ent1 = $this->bd->runQuery("SELECT name FROM entity WHERE id = ".$this->bd->userInputVal($_REQUEST['firstEnt']))->fetch_assoc()['name'];
                         $ent2 = $this->bd->runQuery("SELECT name FROM entity WHERE id = ".$this->bd->userInputVal($_REQUEST['secondEnt'.$i]))->fetch_assoc()['name'];
                         
 ?>
