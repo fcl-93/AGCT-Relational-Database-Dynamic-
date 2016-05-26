@@ -3012,8 +3012,42 @@ class entityHist{
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['ent_type_id']."','".$hist['entity_name']."','".$hist['state']."')");
                     }
-                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                   
                     
+                    $createTempProp = "CREATE TABLE temp_hist_property (
+                        `id` INT UNSIGNED NOT NULL ,
+                        `name` VARCHAR(128) NOT NULL,
+                        `ent_type_id` INT NULL,
+                        `rel_type_id` INT NULL,
+                        `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL ,
+                        `form_field_name` VARCHAR(64) NOT NULL DEFAULT,
+                        `form_field_type` ENUM('text','textbox','radio','checkbox','selectbox') NOT NULL,
+                        `unit_type_id` INT NULL,
+                        `form_field_order` INT UNSIGNED NOT NULL ,
+                        `mandatory` INT NOT NULL  ,
+                        `state` ENUM('active','inactive') NOT NULL,
+                        `fk_ent_type_id` INT NULL,
+                        `form_field_size` VARCHAR(64) NULL,
+                        `property_id` INT UNSIGNED NOT NULL,
+                        `active_on` TIMESTAMP NOT NULL,
+                        `inactive_on` TIMESTAMP NOT NULL)";
+                    $createTempProp = $db->runQuery($createTempProp);
+                    
+                    $createTempVal =" CREATE TABLE temp_hist_value (
+                        `id` INT UNSIGNED NOT NULL,
+                        `entity_id` INT NULL,
+                        `property_id` INT UNSIGNED NOT NULL,
+                        `value` VARCHAR(8192) NOT NULL,
+                        `producer` VARCHAR(64) NULL,
+                        `relation_id` INT NULL,
+                        `value_id` INT UNSIGNED NOT NULL,
+                        `active_on` TIMESTAMP NOT NULL,
+                        `inactive_on` TIMESTAMP NOT NULL,
+                        `state` VARCHAR(45) NOT NULL";
+                    $createTempVal = $db->runQuery($createTempVal );
+                    
+                    
+                    $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
@@ -3055,7 +3089,8 @@ class entityHist{
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
-                
+                    $db->runQuery("DROP TEMPORARY TABLE temp_hist_property");
+                    $db->runQuery("DROP TEMPORARY TABLE temp_hist_value");
 ?>
             </tbody>
         </table>
