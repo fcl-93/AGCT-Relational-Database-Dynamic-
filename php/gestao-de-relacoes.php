@@ -646,7 +646,7 @@ class RelHist{
             if ($queryHistorico->num_rows == 0) {
 ?>
                 <tr>
-                    <td colspan="11">Não existe registo referente ao tipo de relação selecionado no histórico</td>
+                    <td colspan="6">Não existe registo referente ao tipo de relação selecionado no histórico</td>
                     <td><?php goBack(); ?></td>
                 </tr>
 <?php
