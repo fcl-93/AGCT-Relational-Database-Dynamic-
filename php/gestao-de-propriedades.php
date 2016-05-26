@@ -236,9 +236,7 @@ class PropertyManage
                         }
                         else
                         {
-                            $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                            $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                            $nome = $this->db->criaNomeRel($queryNome1,$queryNome2);
+                            $nome = $resEntRel["name"];
                             $selecionaProp = "SELECT * FROM property WHERE rel_type_id =".$idEntRel;
                         }
                         $resultSeleciona = $this->db->runQuery($selecionaProp);
@@ -393,18 +391,12 @@ class PropertyManage
                                 <select id="relacaoPertence" name="relacaoPertence">
                                     <option></option>
 <?php
-                                $selecionaEntRel = "SELECT id FROM rel_type";
+                                $selecionaEntRel = "SELECT name, id FROM rel_type";
                             }
                             $result = $this->db->runQuery($selecionaEntRel);
                             while($guardaEntRel= $result->fetch_assoc())
                             {
-                               if ($tipo === "relation")
-                                {
-                                    $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                                    $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                    $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
-                                }
-                                ?>
+?>
                                 <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
 <?php
                             }
@@ -959,12 +951,6 @@ class PropertyManage
                         $result = $this->db->runQuery($selecionaEntRel);
                         while($guardaEntRel= $result->fetch_assoc())
                         {
-                            if ($tipo === "relation")
-                            {
-                                $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                                $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$guardaEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                                $guardaEntRel["name"] = $this->db->criaNomeRel($queryNome1, $queryNome2);
-                            }
                             if($guardaEntRel["name"] === $nomeRelEnt)
                             {
 ?>
