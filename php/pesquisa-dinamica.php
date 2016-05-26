@@ -1668,15 +1668,15 @@ class Search{
                            echo $entity_id;
 ?>
                         </td>
-                        
-                        <td rowspan="<?php echo $getValues->num_rows;?>">
-<?php
-                        echo $instancias['state'];
-?>
-                        </td>
 <?php
                         }
                     }
+?>
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
+<?php 
+                            echo $instancias['state'];
+?>
+                        </td>
         $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
