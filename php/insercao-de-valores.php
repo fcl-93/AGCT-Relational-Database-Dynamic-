@@ -622,7 +622,13 @@ class InsertValues{
                 if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
-                else{
+                else if ($_REQUEST[$arrayProp['form_field_name']] == "instPorCriar") {
+                    $valor = "Nome da Instância referenciada que também está a ser criada";
+                }
+                else if ($arrayProp['form_field_name'] == "ent_type_id"){
+                    $valor = $this->db->getEntityName($_REQUEST[$arrayProp['form_field_name']]);
+                }
+                else {
                     $valor = $_REQUEST[$arrayProp['form_field_name']];
                 }
                 
@@ -639,9 +645,15 @@ class InsertValues{
             }
             if ($tipo === "ent")
             {
+                if (empty ($_REQUEST["nomeInst"])) {
+                    $valor = "Não introduziu nenhum nome";
+                }
+                else {
+                    $valor = $_REQUEST["nomeInst"];
+                }
 ?>
-                        <li>Nome para instância da entidade: <?php echo $_REQUEST["nomeInst"];?></li>
-                        <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
+                <li>Nome para instância da entidade: <?php echo $valor;?></li>
+                <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
 <?php
             }
             else {
