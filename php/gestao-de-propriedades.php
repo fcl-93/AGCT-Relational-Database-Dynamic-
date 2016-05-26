@@ -223,7 +223,7 @@ class PropertyManage
                     }
                     else
                     {
-                        $selecionaEntOrRel = "SELECT id FROM rel_type";
+                        $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                         $resultSelEntOrRel = $this->db->runQuery($selecionaEntOrRel);
                     }
                     while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
@@ -940,7 +940,7 @@ class PropertyManage
                             <select id="relacaoPertence" name="relacaoPertence">
                                 <option></option>
 <?php
-                            $selecionaEntRel = "SELECT id FROM rel_type";
+                            $selecionaEntRel = "SELECT name, id FROM rel_type";
                         }
                         $result = $this->db->runQuery($selecionaEntRel);
                         while($guardaEntRel= $result->fetch_assoc())
@@ -1514,7 +1514,7 @@ class PropHist{
                 }
                 else
                 {
-                    $selecionaEntOrRel = "SELECT id FROM rel_type";
+                    $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
