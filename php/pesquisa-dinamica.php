@@ -1620,6 +1620,7 @@ class Search{
             <thead>
                 <tr>
                     <th>Instância</th>
+                    <th>Property</th>
                     <th>Value</th>
                     <th>Estado</th>
                 </tr>
@@ -1634,6 +1635,7 @@ class Search{
 <?php
                     $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
                     $getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
+                    //$getValue = "SELECT * FROM property, value WHERE value.property_id = property.id AND value.entity_id =".$instancias['id'];
                     $getValues = $this->bd->runQuery($getValues);
                     if ($this->bd->runQuery($getEntName)->num_rows == 0) {
 ?>
@@ -1670,6 +1672,7 @@ class Search{
         $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
+                        <td><?php echo $readVals['name']?></td>
                         <td> <?php echo $readVals['value']?></td>
 <?php
                     if($first == true){    
