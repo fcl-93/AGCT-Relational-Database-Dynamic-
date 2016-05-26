@@ -115,8 +115,8 @@ class RelationManage
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
         if (empty($nome)) {
-            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
-            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+            $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
         } 
         else {
@@ -151,8 +151,8 @@ class RelationManage
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
         if (empty($nome)) {
-            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
-            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+            $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
         } 
         else {
