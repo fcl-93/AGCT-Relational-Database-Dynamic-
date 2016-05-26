@@ -147,17 +147,10 @@ class InsereRelacoes
                                     <tbody>
 <?php
                                     while($readRelations = $res_Rel->fetch_assoc()){
-                                         $res_EntPart = $this->bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$readRelations['rel_type_id']);
-                                         $read_EntPart = $res_EntPart->fetch_assoc();
-                                        
-                                         $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
-                                         $read_name1 = $res_name1->fetch_assoc(); 
-                                         $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
-                                         $read_name2 = $res_name2->fetch_assoc();
 ?>                                         
                                         <tr>
                                              <td><?php echo $readRelations['id'];?></td>
-                                             <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                                             <td><?php echo $readRelations['name'] ?></td>
                                              <td data-showHidden="true">
 <?php 
                                                 $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity1_id'])->fetch_assoc();
@@ -607,15 +600,11 @@ class InsereRelacoes
 <?php
                         while($read_RelTypes = $res_RelTypes->fetch_assoc())
                         {
-                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type1_id']);
-                            $read_name1 = $res_name1->fetch_assoc(); 
-                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelTypes['ent_type2_id']);
-                            $read_name2 = $res_name2->fetch_assoc(); 
 ?>
                         <tr>
                             <td><?php echo $read_RelTypes['id']?></td>
                             <td>
-                                <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $read_name1['name'];?> - <?php echo $read_name2['name'];?>]</a>
+                                <a href="insercao-de-relacoes?estado=introducao&ent=<?php echo $_REQUEST['ent']; ?>&rel_type=<?php echo $read_RelTypes['id'];?>">[<?php echo $read_RelTypes['name'];?>]</a>
                             </td>
                         </tr>
 <?php
@@ -1482,12 +1471,8 @@ class RelHist{
         }
         else {
             while ($hist = $queryHistorico->fetch_assoc()) {
-                $res_EntPart = $bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$hist['rel_type_id']);
-                $read_EntPart = $res_EntPart->fetch_assoc();
-                $res_name1 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
-                $read_name1 = $res_name1->fetch_assoc(); 
-                $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
-                $read_name2 = $res_name2->fetch_assoc();
+                $res_RelName = $bd->runQuery("SELECT name FROM rel_type WHERE id=".$hist['rel_type_id']);
+                $res_RelName = $res_RelName->fetch_assoc();
                 $props = $bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$hist["rel_type_id"]);
                 $numProp = $props->num_rows;
                      
@@ -1495,7 +1480,7 @@ class RelHist{
                 <tr>
                     <td rowspan="<?php echo $numProp;?>"><?php echo $hist["active_on"];?></td>
                     <td rowspan="<?php echo $numProp;?>"><?php echo $hist["inactive_on"];?></td>
-                    <td rowspan="<?php echo $numProp;?>"><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td rowspan="<?php echo $numProp;?>"><?php echo $res_RelName['name'];?></td>
                     <td rowspan="<?php echo $numProp;?>">
 <?php
                     $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
@@ -1809,16 +1794,11 @@ class RelHist{
         }
         else {
             while ($hist = $queryHistorico->fetch_assoc()) {
-                $res_EntPart = $bd->runQuery("SELECT ent_type1_id, ent_type2_id FROM rel_type WHERE id=".$hist['rel_type_id']);
-                $read_EntPart = $res_EntPart->fetch_assoc();
-                $res_name1 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type1_id']);
-                $read_name1 = $res_name1->fetch_assoc(); 
-                $res_name2 = $bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_EntPart['ent_type2_id']);
-                $read_name2 = $res_name2->fetch_assoc();
-                     
+                $read_RelName = $bd->runQuery("SELECT name FROM rel_type WHERE id=".$hist['rel_type_id']);
+                $read_RelName = $read_RelName->fetch_assoc();
 ?>
                 <tr>
-                    <td><?php echo $read_name1['name'];?> - <?php echo $read_name2['name'] ?></td>
+                    <td><?php echo $read_RelName['name'];?></td>
                     <td>
 <?php
                     $_readEnt1 = $bd->runQuery("SELECT entity_name FROM entity WHERE id=".$hist['entity1_id'])->fetch_assoc();
