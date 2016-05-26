@@ -619,8 +619,6 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
-                echo $arrayProp['value_type'];
-                echo $_REQUEST[$arrayProp['form_field_name']];
                 if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
@@ -628,7 +626,13 @@ class InsertValues{
                     $valor = "Nome da instância referenciada que também está a ser criada";
                 }
                 else if ($arrayProp['value_type'] == "ent_ref"){
-                    $valor = $this->db->getEntityName($_REQUEST[$arrayProp['form_field_name']]);
+                    $nome = $this->db->runQuery("SELECT entity_name FROM entity WHERE id = ".$_REQUEST[$arrayProp['form_field_name']])->fetch_assoc()["entity_name"];
+                    if ($nome == '') {
+                        $valor = $_REQUEST[$arrayProp['form_field_name']];
+                    }
+                    else {
+                        $valor = $nome;
+                    }
                 }
                 else {
                     $valor = $_REQUEST[$arrayProp['form_field_name']];
