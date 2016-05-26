@@ -2977,7 +2977,7 @@ class entityHist{
         <table class="table">
             <thead>
                 <tr>
-                     <th>Instância</th>
+                    <th>Instância</th>
                     <th>Estado da Instância</th>
                     <th>Propriedade</th>
                     <th>Valor</th>
@@ -3041,6 +3041,16 @@ class entityHist{
                             }
 ?>
                             </td>
+                            <td><?php
+                                if($entity['state'] == "active")
+                                {
+                                    echo "Ativo";
+                                }
+                                else
+                                {
+                                    echo "Inativo";
+                                }
+                            ?></td>
                         </tr>
 <?php
                     }
