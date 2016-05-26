@@ -1099,7 +1099,7 @@ class InsereRelacoes
                         
 ?>
                         <html>
-                            <p>Associou com sucesso a entidade <?php echo $_REQUEST['firstEnt']; ?>, a entidade <?php echo $_REQUEST['secondEnt'.$i]; ?>.</p>
+                            <p>Associou com sucesso a entidade <?php echo $this->bd->getEntityName($_REQUEST['firstEnt']); ?>, a entidade <?php echo $this->bd->getEntityName($_REQUEST['secondEnt'.$i]); ?>.</p>
                             <p>Clique em <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $this->bd->getMysqli()->insert_id; ?>"/>Inserir Propriedades</a> para preencher informações relativas a relação que acabou de criar.</p>
                         </html>
  <?php
