@@ -1677,6 +1677,7 @@ class Search{
                             echo $instancias['state'];
 ?>
                         </td>
+<?php
         $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
