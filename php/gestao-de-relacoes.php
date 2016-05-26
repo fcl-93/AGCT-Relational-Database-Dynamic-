@@ -314,17 +314,7 @@ class RelationManage
 ?>
                 <tr>
                     <td><?php echo $rel["id"];?></td>
-                    <td>
-<?php
-                        if (empty($rel["name"])) {
-                            echo $this->db->criaNomeRel($this->db->getEntityName($rel["ent_type1_id"]), $this->db->getEntityName($rel["ent_type2_id"]));
-                        }
-                        else {
-                            echo $rel["name"];
-                        }
-?>
-                    </td>
-                    
+                    <td><?php echo $rel["name"];?></td>                    
                     <td><?php echo $rel["name"];?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
