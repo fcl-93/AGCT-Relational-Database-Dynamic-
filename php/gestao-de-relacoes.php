@@ -112,7 +112,10 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        $queryInsert = "INSERT INTO `rel_type`(`ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES (".$_REQUEST["ent1"].",".$_REQUEST["ent2"].",'".date("Y-m-d H:i:s",time())."')";
+        $nome = $this->db->userInputVal($_REQUEST['nome']);
+        $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
+        $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES (".$nome.",".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
         $insert = $this->db->runQuery($queryInsert);
         if(!$insert)
         {
@@ -138,7 +141,10 @@ class RelationManage
      */
     private function estadoUpdate() {
         $this->gereHist->atualizaHistorico($this->db);
-        $queryUpdate = "UPDATE `rel_type` SET ent_type1_id = ".$_REQUEST["ent1"].", ent_type2_id = ".$_REQUEST["ent2"].",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
+        $nome = $this->db->userInputVal($_REQUEST['nome']);
+        $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
+        $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        $queryUpdate = "UPDATE `rel_type` SET name = ".$nome."ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
@@ -156,7 +162,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "ativar" or "desativar"
      */
     private function estadoAtivarDesativar() {
-        $getNomes = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id']);
+        $getNomes = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$this->db->userInputVal($_REQUEST['rel_id']));
         $nomes = $getNomes->fetch_assoc();
         $idNome1 = $nomes["ent_type1_id"];
         $idNome2 = $nomes["ent_type2_id"];
@@ -278,6 +284,7 @@ class RelationManage
             <thead>
                 <tr>
                     <th><span>ID</span></th>
+                    <th><span>Nome da Relação</span></th>
                     <th><span>Entidade 1</span></th>
                     <th><span>Entidade 2</span></th>
                     <th><span>Estado</span></th>
@@ -293,6 +300,18 @@ class RelationManage
 ?>
                 <tr>
                     <td><?php echo $rel["id"];?></td>
+                    <td>
+<?php
+                        if (empty($rel["name"])) {
+                            echo $this->db->criaNomeRel($this->db->getEntityName($rel["ent_type1_id"]), $this->db->getEntityName($rel["ent_type2_id"]));
+                        }
+                        else {
+                            echo $rel["name"];
+                        }
+?>
+                    </td>
+                    
+                    <td><?php echo $rel["name"];?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
 <?php
@@ -352,6 +371,8 @@ class RelationManage
 ?>                
             </select><br>
             <label class="error" for="ent2"></label><br>
+            <label>Nome para o tipo de relação</label><br>
+            <input type="text" name="nome"><br>
             <input type="hidden" name="estado" value="inserir"><br>
             <input type="submit" value="Inserir tipo de relação">
         </form>
@@ -383,6 +404,8 @@ class RelationManage
 ?>                
             </select><br>
             <label class="error" for="ent2"></label><br>
+            <label>Nome para o tipo de relação</label><br>
+            <input type="text" name="nome"><br>
             <input type="hidden" name="estado" value="update"><br>
             <input type="submit" value="Alterar tipo de relação">
         </form>
@@ -417,8 +440,8 @@ class RelationManage
      * @return boolean  
      */
     private function verificaRelSemelhante () {
-        $getRel = "SELECT * FROM rel_type WHERE (ent_type1_id = ".$_REQUEST["ent1"]." AND ent_type2_id = ".$_REQUEST["ent2"].") "
-                . "OR (ent_type1_id = ".$_REQUEST["ent2"]." AND ent_type2_id = ".$_REQUEST["ent1"].")";
+        $getRel = "SELECT * FROM rel_type WHERE (ent_type1_id = ".$this->db->userInputVal($_REQUEST["ent1"])." AND ent_type2_id = ".$this->db->userInputVal($_REQUEST["ent2"]).") "
+                . "OR (ent_type1_id = ".$this->db->userInputVal($_REQUEST["ent2"])." AND ent_type2_id = ".$this->db->userInputVal($_REQUEST["ent1"]).")";
         if ($this->db->runQuery($getRel)->num_rows > 0) {
 ?>
             <p>Já existe um tipo de relação com as entidades selecionadas</p>
@@ -436,12 +459,15 @@ class RelationManage
      * @return boolean  
      */
     private function checkforChanges () {
-        $getProp = "SELECT * FROM rel_type WHERE id = ".$_REQUEST["rel_id"];
+        $getProp = "SELECT * FROM rel_type WHERE id = ".$this->db->userInputVal($_REQUEST["rel_id"]);
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         if ($_REQUEST['ent1'] != $getProp["ent_type1_id"]) {
             return true;
         }
         else if ($_REQUEST['ent2'] != $getProp["ent_type2_id"]) {
+            return true;
+        }
+        else if ($_REQUEST['nome'] != $getProp["name"]) {
             return true;
         }
         else {
@@ -503,11 +529,11 @@ class RelHist{
      * @param type $db (object form the class Db_Op)
      */
     public function atualizaHistorico ($db) {
-        $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
+        $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$this->db->userInputVal($_REQUEST['rel_id']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
-        $updateHist = "INSERT INTO `hist_rel_type`(`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
-                . "VALUES ('".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
+        $updateHist = "INSERT INTO `hist_rel_type`(`name`,`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
+                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
         $updateHist =$db->runQuery($updateHist);
         if(!$updateHist)
         {
@@ -578,6 +604,7 @@ class RelHist{
                 <tr>
                     <th>Data de Ativação</th>
                     <th>Data de Desativação</th>
+                    <th>Nome da Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
                     <th>Estado</th>
@@ -618,6 +645,7 @@ class RelHist{
                     <tr>
                         <td><?php echo $hist["active_on"];?></td>
                         <td><?php echo $hist["inactive_on"];?></td>
+                        <td><?php echo $hist["name"];?></td>
                         <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
                         <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
                         <td><?php echo $hist["state"];?></td>
@@ -643,6 +671,7 @@ class RelHist{
             <thead>
                 <tr>
                     <th><span>ID</span></th>
+                    <th><span>Nome da Relação</span></th>
                     <th><span>Entidade 1</span></th>
                     <th><span>Entidade 2</span></th>
                     <th><span>Estado</span></th>
@@ -660,15 +689,16 @@ class RelHist{
 <?php
                     // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (`id` INT UNSIGNED NOT NULL,
+                            `name` VARCHAR(128),
                             `ent_type1_id` INT UNSIGNED NOT NULL,
                             `ent_type2_id` INT UNSIGNED NOT NULL,
                             `state` ENUM('active','inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
                     while ($rel = $resultSelecionaRel->fetch_assoc()) {
-                        $db->runQuery("INSERT INTO temp_table VALUES (".$rel['id'].",".$rel['ent_type1_id'].",".$rel['ent_type2_id'].",'".$rel['state']."')");
+                        $db->runQuery("INSERT INTO temp_table VALUES (".$rel['id'].",'".$rel['name']."',".$rel['ent_type1_id'].",".$rel['ent_type2_id'].",'".$rel['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['rel_type_id'].",".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
+                       $db->runQuery("INSERT INTO temp_table VALUES (".$hist['rel_type_id'].",'".$hist['name']."',".$hist['ent_type1_id'].",".$hist['ent_type2_id'].",'".$hist['state']."')");
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
@@ -677,6 +707,7 @@ class RelHist{
                     {
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
+                        <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $db->getEntityName($arraySelec["ent_type1_id"]); ?></td>
                         <td><?php echo $db->getEntityName($arraySelec["ent_type2_id"]); ?></td>
                         <td>
