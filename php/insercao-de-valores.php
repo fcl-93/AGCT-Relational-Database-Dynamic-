@@ -625,7 +625,7 @@ class InsertValues{
                 else if ($_REQUEST[$arrayProp['form_field_name']] == "instPorCriar") {
                     $valor = "Nome da instância referenciada que também está a ser criada";
                 }
-                else if ($arrayProp['form_field_name'] == "ent_type_id"){
+                else if ($arrayProp['value_type'] == "ent_ref"){
                     $valor = $this->db->getEntityName($_REQUEST[$arrayProp['form_field_name']]);
                 }
                 else {
