@@ -1667,10 +1667,14 @@ class Search{
 <?php
                         }
                     }
+        $first = true;            
         while($readVals = $getValues->fetch_assoc()){  
 ?>          
                         <td> <?php echo $readVals['value']?></td>
-                <td>
+<?php
+                    if($first == true){    
+?>
+                <td rowspan="<?php echo $getValues->num_rows;?>>
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Valores das Propriedades da Instância da Entidade]</a>
                         
 <?php
@@ -1693,6 +1697,10 @@ class Search{
                         
                         <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
                 </td>
+<?php
+$first = false;
+        }
+?>
             </tr>	
 <?php
                 array_push($arrayInstId,$instancias['id']);
