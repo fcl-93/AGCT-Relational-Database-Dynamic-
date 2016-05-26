@@ -114,15 +114,15 @@ class RelationManage
     private function estadoInserir() {
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
-        if (empty($nome)) {
-            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
-            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+        if (empty($_REQUEST['nome'])) {
+            $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
         } 
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES (".$nome.",".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
+        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
         $insert = $this->db->runQuery($queryInsert);
         if(!$insert)
         {
@@ -150,15 +150,15 @@ class RelationManage
         $this->gereHist->atualizaHistorico($this->db);
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
-        if (empty($nome)) {
-            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
-            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+        if (empty($_REQUEST['nome'])) {
+            $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
         } 
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryUpdate = "UPDATE `rel_type` SET name = ".$nome."ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
+        $queryUpdate = "UPDATE `rel_type` SET name = '".$nome."', ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
@@ -539,11 +539,11 @@ class RelHist{
      * @param type $db (object form the class Db_Op)
      */
     public function atualizaHistorico ($db) {
-        $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$this->db->userInputVal($_REQUEST['rel_id']);
+        $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`name`,`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
-                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["rel_id"].")";
+                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$db->userInputVal($_REQUEST["rel_id"]).")";
         $updateHist =$db->runQuery($updateHist);
         if(!$updateHist)
         {
@@ -560,7 +560,7 @@ class RelHist{
      */
     public function estadoVoltar ($db) {
         $this->atualizaHistorico($db);
-        $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$_REQUEST['hist'];
+        $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$db->userInputVal($_REQUEST['hist']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE rel_type SET ";
@@ -569,7 +569,7 @@ class RelHist{
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
         }
-        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST['rel_id'];
+        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
 ?>
@@ -623,21 +623,23 @@ class RelHist{
             </thead>
             <tbody>
 <?php
+            $idRel = $db->userInputVal($_REQUEST["id"]);
             if (empty($_REQUEST["data"])) {
-                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." ORDER BY inactive_on DESC";
             }
             else {
+                $data = $db->userInputVal($_REQUEST["data"]);
                 if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on <= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on <= '".$data."' ORDER BY inactive_on DESC";
                 }
                 else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
                 }
                 else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
                 }
                 else {
-                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$_REQUEST["id"]." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC";
+                    $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
                 }
             }
             $queryHistorico = $db->runQuery($queryHistorico);
@@ -659,7 +661,7 @@ class RelHist{
                         <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
                         <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
                         <td><?php echo $hist["state"];?></td>
-                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $_REQUEST["id"];?>">Voltar para esta versão</a></td>
+                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td>
                     </tr>
 <?php
                 }
