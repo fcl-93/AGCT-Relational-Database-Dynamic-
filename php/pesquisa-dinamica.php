@@ -2991,7 +2991,7 @@ class entityHist{
                 // Queries that select the verion present in the history or in the main table in the given date
                 $selecionaHist = "SELECT * FROM hist_entity WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"])." GROUP BY entity_id ORDER BY inactive_on DESC";
                 $selecionaEntity = "SELECT * FROM entity WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%') AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"]);
-                echo $selecionaEntity.$selecionaHist;
+                //echo $selecionaEntity.$selecionaHist;
                 
                 $resultSelecionaEntity = $db->runQuery($selecionaEntity);
                 $resultSelecionaHist = $db->runQuery($selecionaHist);
@@ -3018,34 +3018,37 @@ class entityHist{
                         `id` INT UNSIGNED NOT NULL ,
                         `name` VARCHAR(128) NOT NULL,
                         `ent_type_id` INT NULL,
-                        `rel_type_id` INT NULL,
-                        `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL ,
-                        `form_field_name` VARCHAR(64) NOT NULL DEFAULT,
-                        `form_field_type` ENUM('text','textbox','radio','checkbox','selectbox') NOT NULL,
-                        `unit_type_id` INT NULL,
-                        `form_field_order` INT UNSIGNED NOT NULL ,
-                        `mandatory` INT NOT NULL  ,
-                        `state` ENUM('active','inactive') NOT NULL,
-                        `fk_ent_type_id` INT NULL,
-                        `form_field_size` VARCHAR(64) NULL,
-                        `property_id` INT UNSIGNED NOT NULL,
-                        `active_on` TIMESTAMP NOT NULL,
-                        `inactive_on` TIMESTAMP NOT NULL)";
+                        `state` ENUM('active','inactive') NOT NULL)";
+                        
                     $createTempProp = $db->runQuery($createTempProp);
+                    $selecionaPropHist = "SELECT * FROM hist_property WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY property_id ORDER BY inactive_on DESC";
+                    $resultSelHistProp = $db->runQuery($selecionaPropHist);
+                    $selecionaProp = "SELECT * FROM property WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%')";
+                    $resultSelProp = $db->runQuery($selecionaProp);
+                    while ($prop = $resultSelProp->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_hist_property VALUES (".$prop['id'].",'".$prop['name']."','".$prop['ent_type_id']."','".$prop['state']."')");
+                    }
+                    while ($hProp = $resultSelHistProp->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_hist_property VALUES (".$hProp['property_id'].",'".$hProp['name']."','".$hProp['ent_type_id']."','".$hProp['state']."')");
+                    }
                     
                     $createTempVal =" CREATE TABLE temp_hist_value (
                         `id` INT UNSIGNED NOT NULL,
                         `entity_id` INT NULL,
                         `property_id` INT UNSIGNED NOT NULL,
                         `value` VARCHAR(8192) NOT NULL,
-                        `producer` VARCHAR(64) NULL,
-                        `relation_id` INT NULL,
-                        `value_id` INT UNSIGNED NOT NULL,
-                        `active_on` TIMESTAMP NOT NULL,
-                        `inactive_on` TIMESTAMP NOT NULL,
                         `state` VARCHAR(45) NOT NULL";
                     $createTempVal = $db->runQuery($createTempVal );
-                    
+                    $selecionaValHist = "SELECT * FROM hist_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY value_id ORDER BY inactive_on DESC";
+                    $resultSelValProp = $db->runQuery($selecionaValHist);
+                    $selecionaVal = "SELECT * FROM value WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%')";
+                    $resultSelVal = $db->runQuery($selecionaVal);
+                    while ($val = $resultSelVal->fetch_assoc()) {
+                        $db->runQuery("INSERT INTO temp_hist_value VALUES (".$val['id'].",'".$val['entity_id']."','".$val['property_id']."','".$val['value']."','".$val['state']."')");
+                    }
+                    while ($hVal = $resultSelValProp->fetch_assoc()) {
+                       $db->runQuery("INSERT INTO temp_hist_value VALUES (".$hVal['value_id'].",'".$hVal['entity_id']."','".$hVal['property_id']."','".$hVal['value']."','".$hVal['state']."')");
+                    }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     while($arraySelec = $resultSeleciona->fetch_assoc())
