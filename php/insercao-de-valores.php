@@ -312,9 +312,16 @@ class InsertValues{
                             while($nomeinstancia = $selecionainstancia->fetch_assoc())
                             {
                                 //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+                                if (empty($nomeinstancia['entity_name'])) {
 ?>
-                                <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+                                    <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['id'];?></option>
 <?php
+                                }
+                                else {
+?>
+                                    <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                }
                             }
                         }
                     }
