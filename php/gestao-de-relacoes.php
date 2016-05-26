@@ -114,7 +114,7 @@ class RelationManage
     private function estadoInserir() {
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
-        if (empty($nome)) {
+        if (empty($_REQUEST['nome'])) {
             $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
@@ -150,7 +150,7 @@ class RelationManage
         $this->gereHist->atualizaHistorico($this->db);
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
-        if (empty($nome)) {
+        if (empty($_REQUEST['nome'])) {
             $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
             $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
