@@ -112,9 +112,16 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "inserir"
      */
     private function estadoInserir() {
-        $nome = $this->db->userInputVal($_REQUEST['nome']);
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        if (empty($nome)) {
+            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+            $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
+        } 
+        else {
+            $nome = $this->db->userInputVal($_REQUEST['nome']);
+        }
         $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES (".$nome.",".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
         $insert = $this->db->runQuery($queryInsert);
         if(!$insert)
@@ -141,9 +148,16 @@ class RelationManage
      */
     private function estadoUpdate() {
         $this->gereHist->atualizaHistorico($this->db);
-        $nome = $this->db->userInputVal($_REQUEST['nome']);
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        if (empty($nome)) {
+            $queryNome1 = "SELECT name FROM ent_type_id WHERE id = ".$ent1;
+            $queryNome2 = "SELECT name FROM ent_type_id WHERE id = ".$ent2;
+            $nome = $this->db->criaNomeRel($queryNome1, $queryNome2);
+        } 
+        else {
+            $nome = $this->db->userInputVal($_REQUEST['nome']);
+        }
         $queryUpdate = "UPDATE `rel_type` SET name = ".$nome."ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
@@ -300,17 +314,7 @@ class RelationManage
 ?>
                 <tr>
                     <td><?php echo $rel["id"];?></td>
-                    <td>
-<?php
-                        if (empty($rel["name"])) {
-                            echo $this->db->criaNomeRel($this->db->getEntityName($rel["ent_type1_id"]), $this->db->getEntityName($rel["ent_type2_id"]));
-                        }
-                        else {
-                            echo $rel["name"];
-                        }
-?>
-                    </td>
-                    
+                    <td><?php echo $rel["name"];?></td>                    
                     <td><?php echo $rel["name"];?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
                     <td><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
