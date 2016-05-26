@@ -1674,7 +1674,7 @@ class Search{
 <?php
                     if($first == true){    
 ?>
-                <td rowspan="<?php echo $getValues->num_rows;?>>
+                <td rowspan="<?php echo $getValues->num_rows;?>">
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Valores das Propriedades da Instância da Entidade]</a>
                         
 <?php
