@@ -1634,8 +1634,8 @@ class Search{
             <tr>
 <?php
                     $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
-                    $getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
-                    //$getValue = "SELECT * FROM property, value WHERE value.property_id = property.id AND value.entity_id =".$instancias['id'];
+                    //$getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
+                    $getValue = "SELECT * FROM property, value WHERE value.property_id = property.id AND value.entity_id =".$instancias['id'];
                     $getValues = $this->bd->runQuery($getValues);
                     if ($this->bd->runQuery($getEntName)->num_rows == 0) {
 ?>
