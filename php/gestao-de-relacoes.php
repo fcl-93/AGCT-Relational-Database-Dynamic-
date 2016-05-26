@@ -122,7 +122,7 @@ class RelationManage
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES (".$nome.",".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
+        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
         $insert = $this->db->runQuery($queryInsert);
         if(!$insert)
         {
@@ -158,7 +158,7 @@ class RelationManage
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryUpdate = "UPDATE `rel_type` SET name = ".$nome."ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
+        $queryUpdate = "UPDATE `rel_type` SET name = '".$nome."', ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
