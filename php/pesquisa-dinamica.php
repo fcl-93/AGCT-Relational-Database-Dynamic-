@@ -1634,7 +1634,7 @@ class Search{
 ?>
             <tr>
 <?php
-                    $getEntName = "SELECT * v.state as ValueState FROM entity WHERE id = ".$instancias['id'];
+                    $getEntName = "SELECT *, v.state as ValueState FROM entity WHERE id = ".$instancias['id'];
                     //$getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
                     $getValues = "SELECT * FROM property as p, value as v WHERE v.property_id = p.id AND v.entity_id =".$instancias['id'];
                     $getValues = $this->bd->runQuery($getValues);
