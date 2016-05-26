@@ -1676,6 +1676,7 @@ class Search{
                         <td><?php echo $readVals['name']?></td>
                         <td> <?php 
                             //$getValState = "SELECT state FROM value WHERE"
+                        if($readVals['ValueState'] == 'active'){
                             if($readVals['value'] == "")
                             {
                                 echo "Sem Valor Atribuído";
@@ -1684,6 +1685,11 @@ class Search{
                             {
                                 echo $readVals['value'];
                             }
+                        }
+                        else
+                        {
+                            echo "-";
+                        }
                                 
                         ?></td>
                         <td><?php //print the val state
