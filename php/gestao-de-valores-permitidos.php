@@ -285,14 +285,9 @@ class ValoresPermitidos
                             //Get all enum values for the property that in will start printing now
                             $res_Enum = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$read_PropWEnum['id']);
                                                                     
-                            //Get the entity name and id that is related to the property we are printing
+                            //Get the relation name and id that is related to the property we are printing
                             $res_Rel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id = ".$read_PropWEnum['rel_type_id']);
                             $read_RelName = $res_Rel->fetch_assoc();
-                            
-                            $res_name1 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelName['ent_type1_id']);
-                            $read_name1 = $res_name1->fetch_assoc();
-                            $res_name2 = $this->bd->runQuery("SELECT * FROM ent_type WHERE id=".$read_RelName['ent_type2_id']);
-                            $read_name2 = $res_name2->fetch_assoc();
                                                                     
                             //Get the number of properties with that belong to the entity I'm printing and have enum type
                             $res_NumProps= $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id = ".$read_PropWEnum['rel_type_id']." AND value_type = 'enum'");
@@ -314,7 +309,7 @@ class ValoresPermitidos
                             if($conta == 0)
                             {
 ?>
-                                <td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_name1['name'] ?> - <?php echo $read_name2['name'] ;?></td>
+                                <td rowspan='<?php echo $acerta->num_rows + $acerta2->num_rows; ?>'><?php echo $read_RelName['name'];?></td>
 <?php                           
                                 $printedId[] = $read_PropWEnum['rel_type_id'];
                             }
@@ -901,24 +896,21 @@ class ValPerHist{
                 else
                 {
                     $data = $db->userInputVal($_REQUEST['dataRel']);
-                    $selecionaEntOrRel = "SELECT id FROM rel_type";
+                    $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
                     $idEntRel = $resEntRel["id"];
+                    $nome = $resEntRel["name"];
                     if ($tipo === "ent")
                     {
-                        $nome = $resEntRel["name"];
                         $selProp = "SELECT * FROM property WHERE value_type = 'enum' AND ent_type_id = $idEntRel";
                         $selProp = $db->runQuery($selProp);
                         
                     }
                     else
                     {
-                        $queryNome1 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type1_id";
-                        $queryNome2 = "SELECT name FROM ent_type AS ent, rel_type AS rel WHERE rel.id =".$resEntRel["id"]." AND ent.id = rel.ent_type2_id";
-                        $nome = $db->criaNomeRel($queryNome1,$queryNome2);
                         $selProp = "SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id = $idEntRel";
                         $selProp = $db->runQuery($selProp);
                         
