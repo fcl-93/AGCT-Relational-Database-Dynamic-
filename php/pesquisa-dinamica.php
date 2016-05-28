@@ -3036,8 +3036,9 @@ class entityHist{
                         `entity_id` INT NULL,
                         `property_id` INT UNSIGNED NOT NULL,
                         `value` VARCHAR(8192) NOT NULL,
-                        `state` VARCHAR(45) NOT NULL";
+                        `state` VARCHAR(45) NOT NULL)";
                     $createTempVal = $db->runQuery($createTempVal );
+                    
                     $selecionaValHist = "SELECT * FROM hist_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY value_id ORDER BY inactive_on DESC";
                     $resultSelValProp = $db->runQuery($selecionaValHist);
                     $selecionaVal = "SELECT * FROM value WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%')";
