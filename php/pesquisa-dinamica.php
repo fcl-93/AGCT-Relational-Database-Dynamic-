@@ -3098,7 +3098,15 @@ class entityHist{
                             {
 ?>
                                 <td><?php echo $readVals['name']; ?></td>
-                                <td><?php echo $readVals['value']; ?></td>
+                                <td><?php
+                                if($readVals['ValueState'] == 'inactive')
+                                {
+                                    echo "-";
+                                }
+                                else {
+                                    echo $readVals['value'];
+                                } 
+                                ?></td>
                                 <td><?php echo $readVals['ValueState']; ?></td> 
                         </tr>
 <?php
