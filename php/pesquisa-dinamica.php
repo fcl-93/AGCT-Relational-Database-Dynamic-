@@ -3055,7 +3055,7 @@ class entityHist{
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
-                        $getValues =  "SELECT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id=".$arraySelec['id'];
+                        $getValues =  "SELECT DISTINCT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id=".$arraySelec['id'];
                         $getValues = $db->runQuery($getValues);
                     
 ?>
