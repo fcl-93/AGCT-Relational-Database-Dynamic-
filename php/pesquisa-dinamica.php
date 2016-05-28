@@ -2996,7 +2996,10 @@ class entityHist{
                 $resultSelecionaHist = $db->runQuery($selecionaHist);
 ?>
                 <tr>
-<?php
+<?php  $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                    $db->runQuery("DROP TEMPORARY TABLE temp_hist_property");
+                    $db->runQuery("DROP TEMPORARY TABLE temp_hist_value");
+                    
                     // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
                         `id` INT NOT NULL,
