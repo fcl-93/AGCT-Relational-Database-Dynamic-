@@ -312,9 +312,16 @@ class InsertValues{
                             while($nomeinstancia = $selecionainstancia->fetch_assoc())
                             {
                                 //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
+                                if (empty($nomeinstancia['entity_name'])) {
 ?>
-                                <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+                                    <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['id'];?></option>
 <?php
+                                }
+                                else {
+?>
+                                    <option value="<?php echo $nomeinstancia['id'];?>"><?php echo $nomeinstancia['entity_name'];?></option>
+<?php
+                                }
                             }
                         }
                     }
@@ -622,7 +629,19 @@ class InsertValues{
                 if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
-                else{
+                else if ($_REQUEST[$arrayProp['form_field_name']] == "instPorCriar") {
+                    $valor = "Nome da instância referenciada que também está a ser criada";
+                }
+                else if ($arrayProp['value_type'] == "ent_ref"){
+                    $nome = $this->db->runQuery("SELECT entity_name FROM entity WHERE id = ".$_REQUEST[$arrayProp['form_field_name']])->fetch_assoc()["entity_name"];
+                    if ($nome == '') {
+                        $valor = $_REQUEST[$arrayProp['form_field_name']];
+                    }
+                    else {
+                        $valor = $nome;
+                    }
+                }
+                else {
                     $valor = $_REQUEST[$arrayProp['form_field_name']];
                 }
                 
@@ -639,16 +658,28 @@ class InsertValues{
             }
             if ($tipo === "ent")
             {
+                if (empty ($_REQUEST["nomeInst"])) {
+                    $valor = "Não introduziu nenhum nome";
+                }
+                else {
+                    $valor = $_REQUEST["nomeInst"];
+                }
 ?>
-                        <li>Nome para instância da entidade: <?php echo $_REQUEST["nomeInst"];?></li>
-                        <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
+                <li>Nome para instância da entidade: <?php echo $valor;?></li>
+                <input type='hidden' name="nomeInst" value="<?php echo $_REQUEST['nomeInst'];?>">
 <?php
             }
             else {
                 foreach ($arrayEntidades as $id => $nome) {
+                    if (empty ($_REQUEST["nomeInst_".$id])) {
+                        $valor = "Não introduziu nenhum nome";
+                    }
+                    else {
+                        $valor = $_REQUEST["nomeInst"];
+                    }
 ?>
-                        <li>Nome para instância da entidade <?php echo $nome; ?>: <?php echo $_REQUEST["nomeInst_".$id];?>
-                        <input type="hidden" name="nomeInst_<?php echo $id; ?>" value="<?php echo $_REQUEST["nomeInst_".$id];?>">
+                    <li>Nome para instância da entidade <?php echo $nome; ?>: <?php echo $valor;?>
+                    <input type="hidden" name="nomeInst_<?php echo $id; ?>" value="<?php echo $_REQUEST["nomeInst_".$id];?>">
 <?php
                 }
             }
