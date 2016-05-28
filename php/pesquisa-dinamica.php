@@ -1745,7 +1745,7 @@ class Search{
                 </td>
 <?php
 $first = false;
-        }
+                    }
 ?>
             </tr>	
 <?php
@@ -2982,7 +2982,6 @@ class entityHist{
                     <th>Propriedade</th>
                     <th>Valor</th>
                     <th>Estado do Valor</th>
-                    <th>Ação</th>                   
                 </tr>
             </thead>
             <tbody>
@@ -3051,11 +3050,13 @@ class entityHist{
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                    
+                    $getValues = "SELECT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id =".$db->userInputVal($_REQUEST["ent"]);
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
 ?>
                         <tr>
-                            <td>
+                            <td rowspan="<?php echo $getValues->num_rows ?>">
 <?php
                             $getEntName = "SELECT * FROM entity WHERE id = ".$arraySelec['id'];
                             if ($db->runQuery($getEntName)->num_rows == 0) {
@@ -3078,7 +3079,7 @@ class entityHist{
                             }
 ?>
                             </td>
-                            <td><?php
+                            <td rowspan="<?php echo $getValues->num_rows ?>"><?php
                                 if($entity['state'] == "active")
                                 {
                                     echo "Ativo";
@@ -3088,7 +3089,18 @@ class entityHist{
                                     echo "Inativo";
                                 }
                             ?></td>
+<?php
+                            while($readVals = $getValues->fetch_assoc())
+                            {
+?>
+                                <td><?php echo $readVals['name']; ?></td>
+                                <td><?php echo $readVals['value']; ?></td>
+                                <td><?php echo $readVals['ValueState']; ?></td> 
                         </tr>
+<?php
+                            }
+?>
+                       
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
