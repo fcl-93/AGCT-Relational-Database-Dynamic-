@@ -2997,7 +2997,7 @@ class entityHist{
 ?>
                 <tr>
 <?php
-                    echo 0;
+                    //echo 0;
                     // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
                         `id` INT NOT NULL,
@@ -3013,8 +3013,8 @@ class entityHist{
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['ent_type_id']."','".$hist['entity_name']."','".$hist['state']."')");
                     }
                    
-                    echo 1;
-                    $createTempProp = "CREATE TABLE temp_hist_property (
+                    //echo 1;
+                    $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
                         `id` INT UNSIGNED NOT NULL ,
                         `name` VARCHAR(128) NOT NULL,
                         `ent_type_id` INT NULL,
@@ -3031,8 +3031,8 @@ class entityHist{
                     while ($hProp = $resultSelHistProp->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_hist_property VALUES (".$hProp['property_id'].",'".$hProp['name']."','".$hProp['ent_type_id']."','".$hProp['state']."')");
                     }
-                    echo 2;
-                    $createTempVal =" CREATE TABLE temp_hist_value (
+                    //echo 2;
+                    $createTempVal =" CREATE TEMPORARY TABLE temp_hist_value (
                         `id` INT UNSIGNED NOT NULL,
                         `entity_id` INT NULL,
                         `property_id` INT UNSIGNED NOT NULL,
