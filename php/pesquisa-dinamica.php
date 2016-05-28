@@ -3053,7 +3053,7 @@ class entityHist{
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
-                    $getValues =  "SELECT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id =".$db->userInputVal($_REQUEST["ent"]);
+                    $getValues =  "SELECT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id";
                     $getValues = $db->runQuery($getValues);
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
