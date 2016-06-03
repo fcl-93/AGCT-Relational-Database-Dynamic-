@@ -589,7 +589,22 @@ class EntHist {
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['inactive_on'] ?></td>
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['name'] ?></td>                   
 <?php
-                                           
+                        if($getPropsHist->num_rowS == 0)
+                        {
+?>
+                        <td colspan="2">Não existem propriedades associadas a este tipo de entidade.</td>
+                        <td> <?php if($readHE['state'] == 'active')
+                                    {
+                                        echo 'Ativo';
+                                    }  else {
+                                        echo 'Inativo';
+                                    }?>
+                        </td>
+                        <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
+
+<?php
+                        }
+                        else{
                         while($propHist = $getPropsHist->fetch_assoc()){
 ?>
                             <td><?php echo $propHist['name']?></td>
@@ -617,6 +632,7 @@ class EntHist {
                 $conta++;
             }
         }
+            }
         ?>                                
         </tbody>
         </table>
