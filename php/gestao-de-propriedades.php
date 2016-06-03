@@ -781,7 +781,7 @@ class PropertyManage
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         $getValues = "SELECT * FROM value WHERE property_id = ".$propId;
         $numValues = $this->db->runQuery($getValues)->num_rows;
-        if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
+        if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"] && $numValues > 0) {
             return true;
         }
         else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) && $numValues > 0) {
