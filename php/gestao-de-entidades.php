@@ -564,6 +564,8 @@ class EntHist {
             <th>Data de Início</th>
             <th>Data de Fim</th>
             <th>Nome Tipo de Entidade</th>
+            <th>Propriedade</th>	
+            <th>Tipo de Valor</th>
             <th>Estado Durante o Período</th>
             <th>Ação</th>
         </thead>
@@ -579,22 +581,40 @@ class EntHist {
             <?php
         } else {
             while ($readHE = $resHE->fetch_assoc()) {
-                ?>
+                $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND inactive_on = '".$readHE['inactive_on']."'");
+                $conta = 0;
+ ?>
                     <tr>
-                        <td><?php echo $readHE['active_on'] ?></td>
-                        <td><?php echo $readHE['inactive_on'] ?></td>
-                        <td><?php echo $readHE['name'] ?></td>
-                        <td><?php if($readHE['state'] == 'active')
-                        {
-                            echo 'Ativo';
-                        }  else {
-                            
-                        {
-                            echo 'Inativo';
-                        }}?></td>
+                        <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['active_on'] ?></td>
+                        <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['inactive_on'] ?></td>
+                        <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['name'] ?></td>                   
+<?php
+                                           
+                        while($propHist = $getPropsHist->fetch_assoc()){
+?>
+                            <td><?php echo $propHist['name']?></td>
+                            <td><?php echo $propHist['value_type']?></td>
+<?php
+                            if($conta == 0){
+?>
+                                <td rowspan="<?php echo $getPropsHist->num_rows?>">
+                        <?php 
+                                    if($readHE['state'] == 'active')
+                                    {
+                                        echo 'Ativo';
+                                    }  else {
+                                        echo 'Inativo';
+                                    }
+                        ?>
+                                </td>
                         <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
-                    </tr>
+                     
+<?php   
+                        }
+?>                    
+                        </tr>
                 <?php
+                $conta++;
             }
         }
         ?>                                
