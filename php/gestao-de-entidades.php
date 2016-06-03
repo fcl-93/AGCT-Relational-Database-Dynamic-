@@ -134,8 +134,20 @@ class Entidade {
 ?>
                         </td>
                         <td>
-                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
+                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>
+<?php
+                            if ($read_EntType['state'] === 'active') {
+?>
+                                <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id']; ?>">[Desativar]</a>
+<?php
+                            }
+                            else
+                            {
+?>
                             <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
+<?php
+                            }
+?>
                             <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>
                         </td>
                     </tr>
