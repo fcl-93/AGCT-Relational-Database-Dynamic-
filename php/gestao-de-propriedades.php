@@ -1124,7 +1124,7 @@ class PropertyManage
         }
         else {
 ?>
-            <input type="hidden" name="ent_id" value="<?php echo $_REQUEST["rel_id"];?>"><br>
+            <input type="hidden" name="ent_id" value="<?php echo $_REQUEST["ent_id"];?>"><br>
 <?php
         }
 ?>
