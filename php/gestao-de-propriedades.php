@@ -1148,7 +1148,7 @@ class PropertyManage
         $queryProp = $this->db->runQuery($queryProp);
         $dataAlteracao = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {        
-        if(!empty($_REQUEST["entidadePertence"]))
+        if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
         {
             $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence_".$prop['id']];
         }
@@ -1164,7 +1164,7 @@ class PropertyManage
 	// Obtemos as suas 3 primeiras letras
 	$entRel = substr($entRel, 0 , 3);
 	$traco = '-';
-	$idProp = $_REQUEST["idProp"];
+	$idProp = $prop['id'];
 	// Garantimos que não há SQL injection através do campo nome
 	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome_".$prop['id']]);
 	// Substituimos todos os carateres por carateres ASCII
