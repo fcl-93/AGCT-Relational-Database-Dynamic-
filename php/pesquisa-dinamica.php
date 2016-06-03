@@ -1745,7 +1745,7 @@ class Search{
                 </td>
 <?php
 $first = false;
-        }
+                    }
 ?>
             </tr>	
 <?php
@@ -2982,7 +2982,6 @@ class entityHist{
                     <th>Propriedade</th>
                     <th>Valor</th>
                     <th>Estado do Valor</th>
-                    <th>Ação</th>                   
                 </tr>
             </thead>
             <tbody>
@@ -2998,6 +2997,7 @@ class entityHist{
 ?>
                 <tr>
 <?php
+                    //echo 0;
                     // Creates a temporary table with the results of the previous queries, this will be the table that should be printed.
                     $creatTempTable = "CREATE TEMPORARY TABLE temp_table (
                         `id` INT NOT NULL,
@@ -3013,8 +3013,8 @@ class entityHist{
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['ent_type_id']."','".$hist['entity_name']."','".$hist['state']."')");
                     }
                    
-                    
-                    $createTempProp = "CREATE TABLE temp_hist_property (
+                    //echo 1;
+                    $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
                         `id` INT UNSIGNED NOT NULL ,
                         `name` VARCHAR(128) NOT NULL,
                         `ent_type_id` INT NULL,
@@ -3031,14 +3031,15 @@ class entityHist{
                     while ($hProp = $resultSelHistProp->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_hist_property VALUES (".$hProp['property_id'].",'".$hProp['name']."','".$hProp['ent_type_id']."','".$hProp['state']."')");
                     }
-                    
-                    $createTempVal =" CREATE TABLE temp_hist_value (
+                    //echo 2;
+                    $createTempVal =" CREATE TEMPORARY TABLE temp_hist_value (
                         `id` INT UNSIGNED NOT NULL,
                         `entity_id` INT NULL,
                         `property_id` INT UNSIGNED NOT NULL,
                         `value` VARCHAR(8192) NOT NULL,
-                        `state` VARCHAR(45) NOT NULL";
+                        `state` VARCHAR(45) NOT NULL)";
                     $createTempVal = $db->runQuery($createTempVal );
+                    
                     $selecionaValHist = "SELECT * FROM hist_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY value_id ORDER BY inactive_on DESC";
                     $resultSelValProp = $db->runQuery($selecionaValHist);
                     $selecionaVal = "SELECT * FROM value WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%')";
@@ -3051,11 +3052,15 @@ class entityHist{
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
+                    
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
+                        $getValues =  "SELECT DISTINCT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id=".$arraySelec['id'];
+                        $getValues = $db->runQuery($getValues);
+                    
 ?>
                         <tr>
-                            <td>
+                            <td rowspan="<?php echo $getValues->num_rows ?>">
 <?php
                             $getEntName = "SELECT * FROM entity WHERE id = ".$arraySelec['id'];
                             if ($db->runQuery($getEntName)->num_rows == 0) {
@@ -3078,7 +3083,7 @@ class entityHist{
                             }
 ?>
                             </td>
-                            <td><?php
+                            <td rowspan="<?php echo $getValues->num_rows ?>"><?php
                                 if($entity['state'] == "active")
                                 {
                                     echo "Ativo";
@@ -3088,7 +3093,26 @@ class entityHist{
                                     echo "Inativo";
                                 }
                             ?></td>
+<?php
+                            while($readVals = $getValues->fetch_assoc())
+                            {
+?>
+                                <td><?php echo $readVals['name']; ?></td>
+                                <td><?php
+                                if($readVals['ValueState'] == 'inactive')
+                                {
+                                    echo "-";
+                                }
+                                else {
+                                    echo $readVals['value'];
+                                } 
+                                ?></td>
+                                <td><?php echo $readVals['ValueState']; ?></td> 
                         </tr>
+<?php
+                            }
+?>
+                       
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");

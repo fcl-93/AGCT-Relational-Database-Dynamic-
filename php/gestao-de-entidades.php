@@ -346,25 +346,41 @@ class Entidade {
              */
             public function disableEnt() {
                 $id = $this->bd->userInputVal($_REQUEST['ent_id']);
-
-                $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
+            //verifica se existem instancias deste tipo de entidade ativos.
+            $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id);
+             $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
+            if($checkEnt->num_rows == 0)
+            {
+               
                 $read_EntTypeD = $res_EntTypeD->fetch_assoc();
 
-                if ($this->gereHist->addHist($id, $this->bd)) {
+                if ($this->gereHist->addHist($id, $this->bd)) 
+                {
                     $this->bd->runQuery("UPDATE ent_type SET state='inactive', updated_on='" . date("Y-m-d H:i:s", time()) . "' WHERE id =" . $id);
+    ?>
+                    <p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
+                    <p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
+                    <?php
+                    $this->bd->getMysqli()->commit();
+                } else {
                     ?>
-            <p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
-            <p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
-            <?php
-            $this->bd->getMysqli()->commit();
-        } else {
-            ?>
-            <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
-            <?php
-            goBack();
+                    <p>A entidade <?php echo $read_EntTypeD['name'] ?>  não pode ser desativada</p>
+                    <?php
+                    goBack();
 
-            $this->bd->getMysqli()->rollback();
-        }
+                    $this->bd->getMysqli()->rollback();
+                }
+            }
+            else
+            {
+                                $read_EntTypeD = $res_EntTypeD->fetch_assoc();
+
+?>
+                    <p>O tipo de entidade <b><?php echo $read_EntTypeD['name'] ?></b>  não pode ser desativado.</p>
+                    <p>Uma vez que existem instancias deste tipo de entidade ativas.</p>
+<?php
+                    goBack();
+            }
         ?>
 
         <?php
@@ -376,7 +392,7 @@ class Entidade {
     public function enableEnt() {
 
         $id = $this->bd->userInputVal($_REQUEST['ent_id']);
-
+        
         $res_EntTypeA = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
         $read_EntTypeA = $res_EntTypeA->fetch_assoc();
 
@@ -486,10 +502,10 @@ class EntHist {
         ?>
         <table class="table">
             <thead>
-            <th>Data de Ativação</th>
-            <th>Data de Desativação</th>
-            <th>Nome</th>
-            <th>Estado</th>
+            <th>Data de Início</th>
+            <th>Data de Fim</th>
+            <th>Nome Tipo de Entidade</th>
+            <th>Estado Durante o Período</th>
             <th>Ação</th>
         </thead>
         <tbody>
@@ -509,7 +525,14 @@ class EntHist {
                         <td><?php echo $readHE['active_on'] ?></td>
                         <td><?php echo $readHE['inactive_on'] ?></td>
                         <td><?php echo $readHE['name'] ?></td>
-                        <td><?php echo $readHE['state'] ?></td>
+                        <td><?php if($readHE['state'] == 'active')
+                        {
+                            echo 'Ativo';
+                        }  else {
+                            
+                        {
+                            echo 'Inativo';
+                        }}?></td>
                         <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                     </tr>
                 <?php
@@ -573,7 +596,13 @@ class EntHist {
                     <tr>
                         <td><?php echo $readHE['id'] ?></td>
                         <td><?php echo $readHE['name'] ?></td>
-                        <td><?php echo $readHE['state'] ?></td>
+                        <td><?php if($readHE['state'] == 'active')
+                        {
+                            echo "Ativo";
+                        }else
+                        {
+                            echo "Inativo";
+                        }?></td>
                     </tr>
                 <?php
             }
