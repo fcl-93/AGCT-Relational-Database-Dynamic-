@@ -509,7 +509,14 @@ class EntHist {
                         <td><?php echo $readHE['active_on'] ?></td>
                         <td><?php echo $readHE['inactive_on'] ?></td>
                         <td><?php echo $readHE['name'] ?></td>
-                        <td><?php echo $readHE['state'] ?></td>
+                        <td><?php if($readHE['state'] == 'active')
+                        {
+                            echo 'Ativo';
+                        }  else {
+                            
+                        {
+                            echo 'Inativo';
+                        }}?></td>
                         <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                     </tr>
                 <?php
