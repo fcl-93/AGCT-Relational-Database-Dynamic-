@@ -402,7 +402,7 @@ class PropertyManage
                             }
 ?>
                             </select><br>
-                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label><br><br>
+                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label><br>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
                             $field = 'form_field_type';
