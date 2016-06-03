@@ -1172,7 +1172,7 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico($this->db,$data) == false) {
+        if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id']) == false) {
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1230,11 +1230,13 @@ class PropHist{
      * This method is responsible for insert into the history a copy of the property
      * before being updated
      * @param type $db (object form the class Db_Op)
+     * @param type $data (date of modification)
+     * @param type $idProp (id of the property we want to create history)
      */
-    public function atualizaHistorico ($db, $data) {
+    public function atualizaHistorico ($db, $data,$idProp) {
         $db->getMysqli()->autocommit(false);
         $db->getMysqli()->begin_transaction();
-        $selectAtributos = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $selectAtributos = "SELECT * FROM property WHERE id = ".$idProp;
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
@@ -1252,7 +1254,7 @@ class PropHist{
             }
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                . "VALUES (".$val."'".$data."',".$_REQUEST["prop_id"].")";
+                . "VALUES (".$val."'".$data."',".$idProp.")";
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
             if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
@@ -1281,7 +1283,7 @@ class PropHist{
      */
     public function estadoVoltar ($db) {
         $data = date("Y-m-d H:i:s",time());
-        $this->atualizaHistorico($db,$data);
+        $this->atualizaHistorico($db,$data,$_REQUEST['prop_id']);
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
