@@ -625,7 +625,7 @@ class EntHist {
                                     }
                         ?>
                                 </td>
-                        <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
+                        <td rowspan="<?php echo $getPropsHist->num_rows?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                      
 <?php   
                         }
