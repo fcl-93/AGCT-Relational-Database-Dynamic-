@@ -115,28 +115,18 @@ class Entidade {
                 $numLinhas = $selProp->num_rows;
                 $conta = 0;
                 while ($prop = $selProp->fetch_assoc()) {
-                    if ($conta >= $numLinhas) {
+                    if ($conta > $numLinhas) {
                         $conta = 0;
                     }
 ?>						
                 <tr>
 <?php
                     if ($conta == 0) {
-                        if($selProp->num_rows > 0)
-                        {
 ?>
                             <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
                             <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
-<?php    
-                        }
-                        else{
-                            ?>
-                       
-                           <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['id']; ?></td>
-                           <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['name'] ?></td>  
-                       <?php
+<?php
                            }
-                    }
 ?>
                     <!--property name-->
                     <td><?php echo $prop['name'] ?></td>
