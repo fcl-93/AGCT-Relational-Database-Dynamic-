@@ -508,7 +508,7 @@ class PropertyManage
                     <input type ="hidden" name="relacaoPertence" value="<?php echo $_REQUEST['rel_id'];?>">
 <?php
                 }
-                if (isset($_REQUEST['maisProp'])) {
+                if (empty($_REQUEST['maisProp'])) {
 ?>
                     <input type ="hidden" name="primeiraVez" value="true">
 <?php                    
