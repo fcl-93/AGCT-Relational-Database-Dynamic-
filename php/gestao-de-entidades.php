@@ -486,10 +486,10 @@ class EntHist {
         ?>
         <table class="table">
             <thead>
-            <th>Data de Ativação</th>
-            <th>Data de Desativação</th>
-            <th>Nome</th>
-            <th>Estado</th>
+            <th>Data de Início</th>
+            <th>Data de Fim</th>
+            <th>Nome Tipo de Entidade</th>
+            <th>Estado Durante o Período</th>
             <th>Ação</th>
         </thead>
         <tbody>
