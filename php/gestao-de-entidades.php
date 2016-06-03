@@ -503,8 +503,21 @@ class EntHist {
         $res_getEntTp = $bd->runQuery("SELECT * FROM ent_type WHERE id=" . $id . "");
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
-        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" . $read_getEntTp['updated_on'] . "','" . date("Y-m-d H:i:s", time()) . "'," . $id . ")")) {
+        $inactive = date("Y-m-d H:i:s", time());
+        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" . $read_getEntTp['updated_on'] . "','" .$inactive. "'," . $id . ")")) {
+           $saveProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
+           $error = false;
+           while($prop = $saveProps->fetch_assoc()){
+               if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
+                       . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",".$prop['rel_type_id'].",".$prop['value_type'].",".$prop['form_field_name'].",".$prop['form_field_type'].",".$prop['unit_type_id'].",".$prop['form_field_order'].",".$prop['mandatory'].",'".$prop['state']."',".$prop['fk_ent_type_id'].",".$prop['form_field_size'].",".$prop['id'].",'".$prop['updated_on']."','".$inactive."')"))
+               {
+                   $error = true;
+               }
+           }
+           if($error == false){
             return true;
+           }
+           return false;
         } else {
             return false;
         }
