@@ -401,8 +401,8 @@ class PropertyManage
 <?php
                             }
 ?>
-                            </select><br><br>
-                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
+                            </select>
+                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label><br>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
                             $field = 'form_field_type';
@@ -738,21 +738,27 @@ class PropertyManage
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
         $numValues = $this->db->runQuery($getValues)->num_rows;
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
+            echo "#1";
             return true;
         }
         else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) && $numValues > 0) {
+            echo "#2";
             return true;
         }
         else if (((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) && $numValues > 0) {
+            echo "#3";
             return true;
         }
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"] && $numValues > 0) {
+            echo "#4";
             return true;
         }
         else  if (((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+            echo "#5";
             return true;
         }
         else if (((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) && $numValues > 0) {
+            echo "#6";
             return true;
         }
         else {
@@ -777,9 +783,6 @@ class PropertyManage
             $queryUpdate = "UPDATE property SET state=";
             if ($_REQUEST["estado"] === "desativar") {
                 if ($this->verificaValue ($_REQUEST['prop_id'])) {
-?>
-                    <p>Não foi possível desativar a propriedade pretendida.</p>
-<?php 
                     goBack();
                 }
                 else {
@@ -1012,9 +1015,9 @@ class PropertyManage
             <label class="error" for="tipoUnidade"></label><br>
             <label>Ordem do campo no formulário</label><br>
             <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order;?>"><br>
+            <label class="error" for="ordem"></label><br>
             <label>Tamanho do campo no formulário</label><br>
             <input type="text" name="tamanho"value="<?php echo $form_field_size;?>"><br>
-            <label class="error" for="ordem"></label><br>
             <label>Obrigatório</label><br>
         <?php
                 if ($mandatory)
@@ -1107,9 +1110,6 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if ($this->gereHist->atualizaHistorico($this->db) == false) {
-            echo "beh";
-            var_dump($this->gereHist->atualizaHistorico($this->db));
-            echo "#1";
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1138,7 +1138,6 @@ class PropertyManage
             $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["idProp"];
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
-                echo "#2";
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1190,11 +1189,9 @@ class PropHist{
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".date("Y-m-d H:i:s",time())."',".$_REQUEST["prop_id"].")";
-        echo $updateHist;
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
             if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db) == false) {
-                echo "#3";
                 $db->getMysqli()->rollback();
                 return false;
             }
@@ -1207,7 +1204,6 @@ class PropHist{
             }
         }
         else {
-            echo "#4";
             $db->getMysqli()->rollback();
             return false;
         }
@@ -1272,7 +1268,6 @@ class PropHist{
                 . "VALUES (".$valor."'".date("Y-m-d H:i:s",time())."',".$idEnt.")";
         $updateEntHist =$db->runQuery($updateEntHist);
         if (!$updateEntHist) {
-            echo "#5";
             $db->getMysqli()->rollback();
             return false;
         }
@@ -1280,7 +1275,6 @@ class PropHist{
             $updateEnt = "UPDATE ent_type SET updated_on = '".date("Y-m-d H:i:s",time())."'";
             $updateEnt =$db->runQuery($updateEnt);
             if (!$updateEnt) {
-                echo "#6";
                 $db->getMysqli()->rollback();
                 return false;
             }
@@ -1314,7 +1308,6 @@ class PropHist{
         echo $updateRelHist;
         $updateRelHist =$db->runQuery($updateRelHist);
         if (!$updateRelHist) {
-            echo "#5";
             $db->getMysqli()->rollback();
             return false;
         }
@@ -1323,7 +1316,6 @@ class PropHist{
             echo $updateRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
-                echo "#6";
                 $db->getMysqli()->rollback();
                 return false;
             }
@@ -1352,7 +1344,7 @@ class PropHist{
             <input type="radio" name="controlDia" value="ate">até ao dia<br>
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
-            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="text" class="datepicker" name="data" placeholder="Introduza uma data">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
@@ -1581,7 +1573,6 @@ class PropHist{
                         $db->runQuery("INSERT INTO temp_table VALUES (".$prop['id'].",'".$prop['name']."',".$ent_type.",".$rel_type.",'".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."',".$prop['mandatory'].",'".$prop['state']."',".$fk.",'".$prop['form_field_size']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
-                        echo "#3";
                         if (empty($hist['ent_type_id'])) {
                             $ent_type = "NULL";
                         }
