@@ -120,6 +120,24 @@ class Entidade {
                     <tr>
                         <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['id']; ?></td>
                         <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['name'] ?></td>
+                        <td colspan="2"> Não existem propriedades associadas a este tipo de entidade </td>
+                        <td>
+<?php
+                        if ($read_EntType['state'] === 'active') 
+                        {
+                            echo "Ativo";
+                        }
+                        else
+                        {
+                            echo "Inativo";
+                        }
+?>
+                        </td>
+                        <td>
+                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
+                            <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
+                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>
+                        </td>
                     </tr>
 <?php
                 }
@@ -134,7 +152,7 @@ class Entidade {
     <?php
                         if ($conta == 0) {
     ?>
-                                <td rowspan="<?php echo $numLinhas;?>"><?php echo print_r($read_EntType);//$read_EntType['id']; ?></td>
+                                <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
                                 <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
     <?php
                                }
