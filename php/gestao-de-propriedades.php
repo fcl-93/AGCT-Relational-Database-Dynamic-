@@ -779,7 +779,7 @@ class PropertyManage
     private function checkForValues ($propId) {
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
+        $getValues = "SELECT * FROM value WHERE property_id = ".$propId;
         $numValues = $this->db->runQuery($getValues)->num_rows;
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
             return true;
