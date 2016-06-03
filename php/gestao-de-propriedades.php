@@ -401,7 +401,7 @@ class PropertyManage
 <?php
                             }
 ?>
-                            </select><br>
+                            </select>
                 <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label><br>
                 <label>Tipo do campo do formulário</label><br>
                         <?php
@@ -411,7 +411,7 @@ class PropertyManage
                             foreach($array as $values)
                             {
 ?>
-                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?>
+                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
                             }
 ?>
