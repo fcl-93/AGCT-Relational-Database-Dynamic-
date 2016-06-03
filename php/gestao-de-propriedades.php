@@ -1172,7 +1172,7 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico($this->db,$data) == false) {
+        if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id']) == false) {
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
