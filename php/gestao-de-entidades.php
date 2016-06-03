@@ -94,7 +94,7 @@ class Entidade {
         if ($res_EntType->num_rows > 0) {
             ?>
             <html>
-                <table id="sortedTable" class="table">
+                <table  class="table">
                     <thead>
                         <tr>
                             <th> <span>ID</span></th>
