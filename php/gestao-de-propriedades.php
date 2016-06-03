@@ -393,9 +393,21 @@ class PropertyManage
         }   
         if ($existeEntRel)
         {
-        ?>
-        <html>
-            <h3> Gestão de propriedades - introdução </h3>
+            if(isset($_REQUEST['ent_id']))
+            {
+                $nomeEnt = $this->db->getEntityName($_REQUEST['ent_id'])
+?>
+            <h3>Gestão de propriedades - Entidade <?php echo $nomeEnt;?> - introdução</h3>
+<?php
+            }
+            else {
+                $queryEnt = "SELECT name FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
+                $nomeRel = $this->runQuery($queryEnt)->fetch_assoc()["name"];
+?>
+            <h3>Gestão de propriedades - Relação <?php echo $nomeRel;?> - introdução</h3>
+<?php 
+            }
+?>
 
             <form id="insertProp" method="POST">
                 <label>Nome da Propriedade:</label><br>
@@ -482,21 +494,52 @@ class PropertyManage
                 if(isset($_REQUEST['ent_id']))
                 {
 ?>
-                    <input type ="hidden" name="entidadePertence" value="">
+                    <input type ="hidden" name="entidadePertence" value="<?php echo $_REQUEST['ent_id'];?>">
 <?php
                 }
                 else {
 ?>
-                    <input type ="hidden" name="relacaoPertence" value="">
+                    <input type ="hidden" name="relacaoPertence" value="<?php echo $_REQUEST['rel_id'];?>">
 <?php
+                }
+                if (isset($_REQUEST['maisProp'])) {
+?>
+                    <input type ="hidden" name="primeiraVez" value="true">
+<?php                    
                 }
 ?>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
             </form>
-        <html>
-            <?php
+<?php
             }
+    }
+    
+    /**
+     * This method finishe the introductionoff new properties
+     */
+    private function estadoConclusao () {
+        if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db)) {
+            $this->db->getMysqli()->commit();
+?>
+            <p>Inseriu todas as propriedades com sucesso.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db)) {
+            $this->db->getMysqli()->commit();
+?>
+            <p>Inseriu todas as propriedades com sucesso.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
+        }
+        else {
+            $this->db->getMysqli()->rollback();
+?>
+            <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
+<?php
+            goBack();
+        }
     }
 
     /**
@@ -531,9 +574,11 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-	// Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
-	$this->db->getMysqli()->autocommit(false);
-	$this->db->getMysqli()->begin_transaction();
+        if (isset($_REQUEST["primeiraVez"])) {
+            // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
+            $this->db->getMysqli()->autocommit(false);
+            $this->db->getMysqli()->begin_transaction();
+        }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
         if(!empty($_REQUEST["entidadePertence"]))
@@ -594,18 +639,18 @@ class PropertyManage
             }
             else
             {
-                if (!empty($_REQUEST["entidadePertence"]) && $this->gereHist->createNewEnt($_REQUEST["entidadePertence"], $this->db)) {
-                    $this->db->getMysqli()->commit();
+                if (!empty($_REQUEST["entidadePertence"])) {
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
-                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
+                    <p>Ou clique em <a href="/gestao-de-propriedades/estado=conclusao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
 <?php
                 }
-                else if (!empty($_REQUEST["relacaoPertence"]) && $this->gereHist->createNewRel($_REQUEST["relacaoPertence"], $this->db)) {
-                    $this->db->getMysqli()->commit();
+                else if (!empty($_REQUEST["relacaoPertence"])) {
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
-                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/estado=introducao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta relação.</p>
+                    <p>Ou clique em <a href="/gestao-de-propriedades/estado=conclusao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
 <?php
                 }
                 else {
@@ -720,7 +765,7 @@ class PropertyManage
         else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
             return true;
         }
-       else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
+        else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
             return true;
         }
         else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
@@ -744,6 +789,10 @@ class PropertyManage
         }
     }
     
+    /**
+     * This method validates if we could or not update the selected property with the values that are field in
+     * @return boolean
+     */
     private function validaEdicoes() {
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
@@ -753,6 +802,73 @@ class PropertyManage
         }
         $queryProp = $this->db->runQuery($queryProp);
         while ($prop = $queryProp->fetch_assoc()) {
+            if (empty($_REQUEST["nome_".$prop['id']]))
+            {
+?>
+                <p>Por favor introduza o nome da propriedade.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["tipoValor_".$prop['id']]))
+            {
+?>
+                <p>Por favor selecione um tipo de valor para a sua entidade.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["tipoCampo_".$prop['id']]))
+            {
+?>
+                <p>Por favor selecione um tipo do campo do formulário.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["obrigatorio_".$prop['id']]))
+            {
+?>
+                <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
+<?php
+                goBack();;
+                return false;
+            }
+            if(!is_numeric($_REQUEST["ordem_".$prop['id']]) || empty($_REQUEST["ordem_".$prop['id']]))
+            {
+?>
+                <p>ERRO! O valor introduzido no campo Ordem do campo no formulário não é numérico!</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            else if($_REQUEST["ordem_".$prop['id']] < 1)
+            {
+?>
+                <p>ERRO! O valor introduzido no campo Ordem do campo no formulário deve ser superior a 0!</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if(($_REQUEST["tipoCampo_".$prop['id']] === "text") && (!is_numeric($_REQUEST["tamanho_".$prop['id']]) || empty($_REQUEST["tamanho_".$prop['id']])))
+            {
+?>
+                <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
+                    uma vez que indicou que o Tipo do campo do formulário era text</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
+            if(($_REQUEST["tipoCampo_".$prop['id']] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho_".$prop['id']]) === 0) || empty($_REQUEST["tamanho_".$prop['id']])))
+            {
+?>
+                <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+                    aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto</p><br>
+<?php
+                goBack();
+                return false;
+            }
             if (!$this->checkforChanges($prop['id'])) {
               return false;
             }
