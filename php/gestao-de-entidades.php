@@ -589,7 +589,7 @@ class EntHist {
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['inactive_on'] ?></td>
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><?php echo $readHE['name'] ?></td>                   
 <?php
-                        if($getPropsHist->num_rowS == 0)
+                        if($getPropsHist->num_rows == 0)
                         {
 ?>
                         <td colspan="2">Não existem propriedades associadas a este tipo de entidade.</td>
