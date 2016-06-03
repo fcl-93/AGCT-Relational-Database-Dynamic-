@@ -110,7 +110,7 @@ class Entidade {
             //printa a restante tabela
                 $selProp = "SELECT * FROM property WHERE ent_type_id = ".$read_EntType['id']." AND state = 'active'";
                 $selProp = $this->bd->runQuery($selProp);
-                print_r($selProp);
+                //print_r($selProp);
                 $numLinhas = $selProp->num_rows;
                 $conta = 0;
                 while ($prop = $selProp->fetch_assoc()) {
@@ -124,7 +124,7 @@ class Entidade {
                         if($selProp->num_rows > 0)
                         {
 ?>
-                            <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
+                            <td rowspan="<?php echo $numLinhas;?>"><?php echoprint_r($selProp);// $read_EntType['id']; ?></td>
                             <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
 <?php    
                         }
