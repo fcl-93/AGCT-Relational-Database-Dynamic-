@@ -883,13 +883,18 @@ class PropertyManage
      * This form is pre-filled with the values that already exists in DB
      */
     private function estadoEditar() {
+?>
+        <h3> Gestão de propriedades - Edição </h3>
+        <form id="editProp" method="POST">
+<?php
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
         }
         else {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
-        while ($prop = $this->db->runQuery($queryProp)->fetch_assoc()) {
+        $queryProp = $this->db->runQuery($queryProp);
+        while ($prop = $queryProp->fetch_assoc()) {
             if(is_null($prop["ent_type_id"]))
             {
                 $tipo = "relation";
@@ -927,12 +932,10 @@ class PropertyManage
 
             $mandatory = $prop["mandatory"];
 ?>
-            <h3> Gestão de propriedades - Edição </h3>
-
-            <form id="editProp" method="POST">
+            <h3> Propriedade <?php echo $nome?> - Edição </h3>
                 <label>Nome da Propriedade:</label><br>
-                    <input id="nome" type="text" name="nome" value="<?php echo $nome?>">
-                <br><label class="error" for="nome"></label>
+                    <input id="nome" type="text" name="nome_<?php echo $prop['id'];?>" value="<?php echo $nome?>">
+                <br><label class="error" for="nome_<?php echo $prop['id'];?>"></label>
                 <br>
                 <label>Tipo de valor:</label><br>
 <?php
@@ -944,25 +947,25 @@ class PropertyManage
                         if ($values === $value_type)
                         {
 ?>
-                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
+                            <input id="tipoValor" type="radio" name="tipoValor_<?php echo $prop['id'];?>" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
 <?php
                         }
                         else
                         {
 ?>
-                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>"><?php echo $values;?><br>
+                            <input id="tipoValor" type="radio" name="tipoValor_<?php echo $prop['id'];?>" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
                         }                      
                     }
 ?>
-                    <label class="error" for="tipoValor"></label>
+                    <label class="error" for="tipoValor_<?php echo $prop['id'];?>"></label>
                     <br>
 <?php
                         if ($tipo === "entity")
                         {
 ?>
                             <label>Entidade a que irá pertencer esta propriedade</label><br>
-                            <select id="entidadePertence" name="entidadePertence">
+                            <select id="entidadePertence" name="entidadePertence_<?php echo $prop['id'];?>">
                                 <option></option>
 <?php
                             $selecionaEntRel = "SELECT name, id FROM ent_type";
@@ -971,7 +974,7 @@ class PropertyManage
                         {
 ?>
                             <label>Relação a que irá pertencer esta propriedade</label><br>
-                            <select id="relacaoPertence" name="relacaoPertence">
+                            <select id="relacaoPertence" name="relacaoPertence_<?php echo $prop['id'];?>">
                                 <option></option>
 <?php
                             $selecionaEntRel = "SELECT name, id FROM rel_type";
@@ -994,7 +997,7 @@ class PropertyManage
                         }
 ?>
                         </select><br><br>
-            <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label>
+            <label class="error" for="relacaoPertence_<?php echo $prop['id'];?>"></label><label class="error" for="entidadePertence_<?php echo $prop['id'];?>"></label>
             <label>Tipo do campo do formulário</label><br>
                     <?php
                         $field = 'form_field_type';
@@ -1005,21 +1008,21 @@ class PropertyManage
                             if ($values === $form_field_type)
                             {
 ?>
-                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
+                                <input id="formType" type="radio" name="tipoCampo_<?php echo $prop['id'];?>" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
 <?php
                             }
                             else
                             {
 ?>
-                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+                                <input id="formType" type="radio" name="tipoCampo_<?php echo $prop['id'];?>" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
                             }
                         }
 ?>
-            <label class="error" for="tipoCampo"></label>
+            <label class="error" for="tipoCampo_<?php echo $prop['id'];?>"></label>
             <br>
             <label>Tipo de unidade</label><br>
-            <select id="tipoUnidade" name="tipoUnidade">
+            <select id="tipoUnidade" name="tipoUnidade_<?php echo $prop['id'];?>">
                 <option value="NULL"></option>';
                     <?php
                         $selecionaTipoUnidade = "SELECT name, id FROM prop_unit_type";
@@ -1043,39 +1046,39 @@ class PropertyManage
 ?>
             </select>
             <br>
-            <label class="error" for="tipoUnidade"></label><br>
+            <label class="error" for="tipoUnidade_<?php echo $prop['id'];?>"></label><br>
             <label>Ordem do campo no formulário</label><br>
-            <input id="ordem" type="text" name="ordem" min="1" value="<?php echo $form_field_order;?>"><br>
-            <label class="error" for="ordem"></label><br>
+            <input id="ordem" type="text" name="ordem_<?php echo $prop['id'];?>" min="1" value="<?php echo $form_field_order;?>"><br>
+            <label class="error" for="ordem_<?php echo $prop['id'];?>"></label><br>
             <label>Tamanho do campo no formulário</label><br>
-            <input type="text" name="tamanho"value="<?php echo $form_field_size;?>"><br>
+            <input type="text" name="tamanho_<?php echo $prop['id'];?>" value="<?php echo $form_field_size;?>"><br>
             <label>Obrigatório</label><br>
 <?php
                 if ($mandatory)
                 {
 ?>       
-                    <input id="mandatory" type="radio" name="obrigatorio" value="1" checked>Sim
+                    <input id="mandatory" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="1" checked>Sim
                     <br>
-                    <input id="mandatory" type="radio" name="obrigatorio" value="2">Não
+                    <input id="mandatory" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="2">Não
                     <br>
-                    <label class="error" for="obrigatorio"></label><br>
+                    <label class="error" for="obrigatorio_<?php echo $prop['id'];?>"></label><br>
 <?php
                 }
                 else
                 {
 ?>       
-                    <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
+                    <input id="obrigatorio" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="1">Sim
                     <br>
-                    <input id="obrigatorio" type="radio" name="obrigatorio" value="2" checked>Não
+                    <input id="obrigatorio" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="2" checked>Não
                     <br>
-                    <label class="error" for="obrigatorio"></label><br>
+                    <label class="error" for="obrigatorio_<?php echo $prop['id'];?>"></label><br>
 <?php   
                 }
                 if ($tipo ==="entity")
                 {
 ?>
                     <label>Entidade referenciada por esta propriedade</label><br>
-                    <select id="entidadeReferenciada" name="entidadeReferenciada">
+                    <select id="entidadeReferenciada" name="entidadeReferenciada_<?php echo $prop['id'];?>">
                     <option value="NULL"></option>
 <?php                 
                     $selecionaEntidades= "SELECT id, name FROM ent_type";
@@ -1100,13 +1103,14 @@ class PropertyManage
 <?php
                 }
 ?>
-                <label class="error" for="entidadeReferenciada"></label><br>
-                <input type="hidden" name="estado" value="update"><br>
-                <input type="hidden" name="idProp" value="<?php echo $_REQUEST['prop_id']?>">
-                <input type="submit" value="Editar propriedade">
-            </form>
+                <label class="error" for="entidadeReferenciada_<?php echo $prop['id'];?>"></label><br>
  <?php       
-        } 
+        }
+?>
+                <input type="hidden" name="estado" value="update"><br>
+                <input type="submit" value="Editar propriedades">
+            </form>
+<?php
     }
     
     /**
