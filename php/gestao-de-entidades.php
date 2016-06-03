@@ -622,6 +622,7 @@ class EntHist {
         </table>
         <?php
     }
+    }
 
     public function tablePresentHist($data,$bd){
                 ?>
