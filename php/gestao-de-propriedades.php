@@ -1151,7 +1151,7 @@ class PropertyManage
         $contaProp = 1;
         $data = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {  
-            if ($contaProp = $numProp) {
+            if ($contaProp === $numProp) {
                 $last = true;
             }
         if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
