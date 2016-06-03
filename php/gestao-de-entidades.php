@@ -508,7 +508,7 @@ class EntHist {
            $saveProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
            $error = false;
            while($prop = $saveProps->fetch_assoc()){
-               $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",".$prop['rel_type_id'].",'".$prop['value_type']=="" ?  : $prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',NULL,'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',NULL,NULL,'".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
+               $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",".$prop['rel_type_id'].",NULL,'".$prop['form_field_name']."','".$prop['form_field_type']."',NULL,'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',NULL,NULL,'".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
                //echo $query;
                if(!$bd->runQuery($query))
                {
