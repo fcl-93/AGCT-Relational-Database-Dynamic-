@@ -753,7 +753,7 @@ class PropertyManage
             echo "#4";
             return true;
         }
-        else  if (((empty($getProp["unit_type"]) && !is_null($_REQUEST['tipoUnidade'])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+        else if (((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != "NULL") || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
             echo "#5";
             echo "BD: ".$getProp["unit_type"]."FM: ".$_REQUEST['tipoUnidade'];
             return true;
