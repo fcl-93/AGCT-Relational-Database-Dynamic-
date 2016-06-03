@@ -1198,7 +1198,7 @@ class PropertyManage
             {
                 $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence_".$prop['id']];
             }
-            $queryUpdate .= ",updated_on ='".$dataAlteracao."' WHERE id = ".$prop['id'];
+            $queryUpdate .= ",updated_on ='".$data."' WHERE id = ".$prop['id'];
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
 ?>
