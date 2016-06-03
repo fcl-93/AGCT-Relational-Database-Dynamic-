@@ -642,15 +642,15 @@ class PropertyManage
                 if (!empty($_REQUEST["entidadePertence"])) {
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
-                    <p>Clique em <a href="/gestao-de-propriedades/estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
-                    <p>Ou clique em <a href="/gestao-de-propriedades/estado=conclusao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
+                    <p>Ou clique em <a href="/gestao-de-propriedades/?estado=conclusao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
 <?php
                 }
                 else if (!empty($_REQUEST["relacaoPertence"])) {
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
-                    <p>Clique em <a href="/gestao-de-propriedades/estado=introducao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta relação.</p>
-                    <p>Ou clique em <a href="/gestao-de-propriedades/estado=conclusao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta relação.</p>
+                    <p>Ou clique em <a href="/gestao-de-propriedades/?estado=conclusao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>">Concluir</a> para terminar o processo de inserção de propriedades.</p>
 <?php
                 }
                 else {
