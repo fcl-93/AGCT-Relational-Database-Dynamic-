@@ -884,10 +884,10 @@ class PropertyManage
      */
     private function estadoEditar() {
         if (isset($_REQUEST["rel_id"])) {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_type_id"];
+            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
         }
         else {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_type_id"];
+            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
         while ($prop = $this->db->runQuery($queryProp)->fetch_assoc()) {
             if(is_null($prop["ent_type_id"]))
