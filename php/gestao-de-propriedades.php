@@ -259,8 +259,12 @@ class PropertyManage
                 <tr>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
+                        $controlo = 1;
                         while($arraySelec = $resultSeleciona->fetch_assoc())
                         {
+                            if ($controlo === $numLinhas + 1) {
+                                $controlo = 1;
+                            }
                 ?>
                             <td><?php echo $arraySelec["id"]; ?></td>
                             <td><?php echo $arraySelec["name"]; ?></td>
@@ -314,25 +318,30 @@ class PropertyManage
                                     <a href="gestao-de-propriedade?estado=ativar&prop_id=<?php echo $arraySelec['id'];?>">[Ativar]</a>
                                     <a href="?estado=historico&id=<?php echo $arraySelec["id"];?>">[Histórico]</a>
                                 </td>
-                <?php
+<?php
                             }
                 
                             if ($tipo === "entity")
                             {
-                        ?>
-                            <a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Editar propriedades]</a>  
-                        <?php
+                                if ($controlo === 1) {
+?>
+                                <td rowspan="<?php echo $numLinhas; ?>"><a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Editar propriedades]</a></td>  
+<?php
+                                }
                             }
                             else
                             {
-                        ?>
-                            <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>  
-                        <?php
+                                if ($controlo === 1) {
+?>
+                                <td rowspan="<?php echo $numLinhas; ?>">><a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a></td> 
+<?php
+                                }
                             }
-                        ?>
+?>
                             </td>
                 </tr>
                 <?php
+                            $controlo++;
                         }
                     }
                 ?>
