@@ -883,6 +883,10 @@ class PropertyManage
      * This form is pre-filled with the values that already exists in DB
      */
     private function estadoEditar() {
+?>
+        <h3> Gestão de propriedades - Edição </h3>
+        <form id="editProp" method="POST">
+<?php
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
         }
@@ -928,9 +932,7 @@ class PropertyManage
 
             $mandatory = $prop["mandatory"];
 ?>
-            <h3> Gestão de propriedades - Edição </h3>
-
-            <form id="editProp" method="POST">
+            <h3> Propriedade <?php echo $nome?> - Edição </h3>
                 <label>Nome da Propriedade:</label><br>
                     <input id="nome" type="text" name="nome_<?php echo $prop['id'];?>" value="<?php echo $nome?>">
                 <br><label class="error" for="nome_<?php echo $prop['id'];?>"></label>
@@ -1102,11 +1104,13 @@ class PropertyManage
                 }
 ?>
                 <label class="error" for="entidadeReferenciada_<?php echo $prop['id'];?>"></label><br>
-                <input type="hidden" name="estado" value="update"><br>
-                <input type="submit" value="Editar propriedade">
-            </form>
  <?php       
-        } 
+        }
+?>
+                <input type="hidden" name="estado" value="update"><br>
+                <input type="submit" value="Editar propriedades">
+            </form>
+<?php
     }
     
     /**
