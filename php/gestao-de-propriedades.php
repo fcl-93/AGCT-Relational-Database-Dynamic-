@@ -1146,7 +1146,7 @@ class PropertyManage
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
         $queryProp = $this->db->runQuery($queryProp);
-        $dataAlteracao = date("Y-m-d H:i:s",time());
+        $data = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {        
         if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
         {
