@@ -330,7 +330,7 @@ class PropertyManage
 ?>
                                 <td rowspan="<?php echo $numLinhas; ?>">
                                     <a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Editar propriedades]</a>
-                                    <a href="gestao-de-propriedade?estado=introducaor&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Inserir propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducao&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Inserir propriedades]</a>
                                 </td>  
 <?php
                                 }
@@ -341,7 +341,7 @@ class PropertyManage
 ?>
                                 <td rowspan="<?php echo $numLinhas; ?>">
                                     <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
-                                    <a href="gestao-de-propriedade?estado=introducaor&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Inserir propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Inserir propriedades]</a>
                                 </td> 
 <?php
                                 }
