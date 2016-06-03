@@ -89,7 +89,7 @@ class Entidade {
 <?php
         //Apresentar tabela
         $res_EntType = $this->bd->runQuery("SELECT * FROM ent_type");
-        print_r($res_EntType);
+       
         //verifica se há ou não entidades
         if ($res_EntType->num_rows > 0) {
             ?>
@@ -115,7 +115,7 @@ class Entidade {
                 $numLinhas = $selProp->num_rows;
                 $conta = 0;
                 while ($prop = $selProp->fetch_assoc()) {
-                    if ($conta > $numLinhas) {
+                    if ($conta >= $numLinhas) {
                         $conta = 0;
                     }
 ?>						
