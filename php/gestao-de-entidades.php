@@ -89,6 +89,7 @@ class Entidade {
 <?php
         //Apresentar tabela
         $res_EntType = $this->bd->runQuery("SELECT * FROM ent_type");
+        print_r($res_EntType);
         //verifica se há ou não entidades
         if ($res_EntType->num_rows > 0) {
             ?>
@@ -124,7 +125,7 @@ class Entidade {
                         if($selProp->num_rows > 0)
                         {
 ?>
-                            <td rowspan="<?php echo $numLinhas;?>"><?php echoprint_r($selProp);// $read_EntType['id']; ?></td>
+                            <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
                             <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
 <?php    
                         }
