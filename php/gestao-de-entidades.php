@@ -376,7 +376,7 @@ class Entidade {
                                 $read_EntTypeD = $res_EntTypeD->fetch_assoc();
 
 ?>
-                    <p>O tipo de entidade <?php echo $read_EntTypeD['name'] ?>  Não pode ser desativado.</p>
+                    <p>O tipo de entidade <b><?php echo $read_EntTypeD['name'] ?></b>  não pode ser desativado.</p>
                     <p>Uma vez que existem instancias deste tipo de entidade ativas.</p>
 <?php
                     goBack();
