@@ -513,7 +513,7 @@ class EntHist {
                if(!$bd->runQuery($query))
                {
                    $error = true;
-                   break;
+                   
                }
                
            }
