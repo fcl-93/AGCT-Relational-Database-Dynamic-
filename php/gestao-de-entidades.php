@@ -94,15 +94,15 @@ class Entidade {
         if ($res_EntType->num_rows > 0) {
             ?>
             <html>
-                <table  class="table">
+                <table class="table">
                     <thead>
                         <tr>
-                            <th> <span>ID</span></th>
-                            <th> <span>Nome</span></th>
-                            <th> <span>Propriedade</span></th>
-                            <th> <span>Tipo de Valor</span></th>
-                            <th> <span>Estado</span></th>
-                            <th> <span>Ação</span></th>
+                            <th> ID</th>
+                            <th> Nome</th>
+                            <th> Propriedade</th>
+                            <th>Tipo de Valor</th>
+                            <th> Estado</th>
+                            <th> Ação</th>
                         </tr>
                     </thead>
                     <tbody>
