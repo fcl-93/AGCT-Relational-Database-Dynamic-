@@ -457,25 +457,25 @@ class PropertyManage
                 <br>
                 <label class="error" for="obrigatorio"></label><br>
 <?php
-                            if ($tipo ==="entity")
-                            {
+                if (isset($_REQUEST['ent_id']))
+                {
 ?>
-                                <label>Entidade referenciada por esta propriedade</label><br>
-                                <select id="entidadeReferenciada" name="entidadeReferenciada">
-                                <option value="NULL"></option>
+                    <label>Entidade referenciada por esta propriedade</label><br>
+                    <select id="entidadeReferenciada" name="entidadeReferenciada">
+                    <option value="NULL"></option>
 <?php
-                                $selecionaEntidades= "SELECT id, name FROM ent_type";
-                                $result = $this->db->runQuery($selecionaEntidades);
-                                while($guardaEntidade = $result->fetch_assoc())
-                                {
+                    $selecionaEntidades= "SELECT id, name FROM ent_type";
+                    $result = $this->db->runQuery($selecionaEntidades);
+                    while($guardaEntidade = $result->fetch_assoc())
+                    {
 ?>
-                                    <option value="<?php echo $guardaEntidade["id"];?>"><?php echo $guardaEntidade["name"];?></option>
+                        <option value="<?php echo $guardaEntidade["id"];?>"><?php echo $guardaEntidade["name"];?></option>
 <?php
-                                }
+                    }
 ?>
-                                </select><br><br>
+                    </select><br><br>
 <?php
-                            }
+                }
 ?>
                 <label class="error" for="entidadeReferenciada"></label>
 <?php
