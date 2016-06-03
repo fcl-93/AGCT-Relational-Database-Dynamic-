@@ -580,7 +580,13 @@ class EntHist {
                     <tr>
                         <td><?php echo $readHE['id'] ?></td>
                         <td><?php echo $readHE['name'] ?></td>
-                        <td><?php echo $readHE['state'] ?></td>
+                        <td><?php if($readHE['state'] == 'active')
+                        {
+                            echo "Ativo";
+                        }else
+                        {
+                            echo "Inativo";
+                        }?></td>
                     </tr>
                 <?php
             }
