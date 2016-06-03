@@ -411,7 +411,7 @@ class PropertyManage
                             foreach($array as $values)
                             {
 ?>
-                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?>
 <?php
                             }
 ?>
