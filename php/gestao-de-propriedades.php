@@ -1006,13 +1006,13 @@ class PropertyManage
                             if ($values === $form_field_type)
                             {
 ?>
-                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
+                                <input id="formType" type="radio" name="tipoCampo_<?php echo $prop['id'];?>" value="<?php echo $values;?>" checked="checked"><?php echo $values;?><br>
 <?php
                             }
                             else
                             {
 ?>
-                                <input id="formType" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+                                <input id="formType" type="radio" name="tipoCampo_<?php echo $prop['id'];?>" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
                             }
                         }
