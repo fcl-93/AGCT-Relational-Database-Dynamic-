@@ -418,13 +418,13 @@ class Entidade {
             }
             else
             {
-                                $read_EntTypeD = $res_EntTypeD->fetch_assoc();
+                $read_EntTypeD = $res_EntTypeD->fetch_assoc();
 
 ?>
                     <p>O tipo de entidade <b><?php echo $read_EntTypeD['name'] ?></b>  não pode ser desativado.</p>
                     <p>Uma vez que existem instâncias deste tipo de entidade ativas.</p>
-                    <p>Clique em <a href="/pesquisa-dinamica/?estado=escolha&ent="<?php echo $read_EntTypeD['id']?>/>desativar</a> para poder desativá-las</p>
-                    <p>Ou clique em <?php goBack();?> para voltar a página anterior.</p>
+                    <p>Clique em <a href="/pesquisa-dinamica/?estado=escolha&ent=<?php echo $id?>"/>desativar</a> para pesquisar pelas</p>
+                    <p>entidades que pretende desativar ou clique em <?php goBack();?> para voltar a página anterior.</p>
 <?php
             }
         ?>
