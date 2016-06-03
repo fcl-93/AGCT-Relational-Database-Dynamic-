@@ -9,6 +9,8 @@ class PropertyManage
     private $db;            // Object from DB_Op that contains the access to the database
     private $capability;    // Wordpress's Capability for this component
     private $gereHist;
+    private $dataInsercao;      // date of the insertion of new properties
+    private $dataAtualizacao;   // date of the update of some properties
 
     /**
      * Constructor method
@@ -523,14 +525,14 @@ class PropertyManage
      * This method finishe the introductionoff new properties
      */
     private function estadoConclusao () {
-        if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db)) {
+        if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $this->$dataInsercao)) {
             $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
-        else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db)) {
+        else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $this->$dataInsercao)) {
             $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
@@ -582,6 +584,7 @@ class PropertyManage
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
             $this->db->getMysqli()->begin_transaction();
+            $this->$dataInsercao = date("Y-m-d H:i:s",time());
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
@@ -622,7 +625,7 @@ class PropertyManage
         {
             $queryInsere .=  ','.$_REQUEST["entidadeReferenciada"];
         }
-        $queryInsere .=  ', "'.date("Y-m-d H:i:s",time()).'")';
+        $queryInsere .=  ', "'.$dataInsercao.'")';
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
