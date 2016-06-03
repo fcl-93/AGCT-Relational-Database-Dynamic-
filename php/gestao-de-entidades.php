@@ -114,50 +114,62 @@ class Entidade {
                 //print_r($selProp);
                 $numLinhas = $selProp->num_rows;
                 $conta = 0;
-                while ($prop = $selProp->fetch_assoc()) {
-                    if ($conta > $numLinhas) {
-                        $conta = 0;
-                    }
-?>						
-                <tr>
-<?php
-                    if ($conta == 0) {
+                if($selProp->num_rows == 0)
+                {
 ?>
-                            <td rowspan="<?php echo $numLinhas;?>"><?php echo print_r($read_EntType);//$read_EntType['id']; ?></td>
-                            <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
+                    <tr>
+                        <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['id']; ?></td>
+                        <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['name'] ?></td>
+                    </tr>
 <?php
-                           }
-?>
-                    <!--property name-->
-                    <td><?php echo $prop['name'] ?></td>
-                    <td><?php echo $prop['value_type'] ?></td>
-<?php
-                    if($conta == 0) {
-                        if ($read_EntType['state'] === 'active') {
-?>								
-                            <td rowspan="<?php echo $numLinhas;?>"> Ativo </td>
-                            <td rowspan="<?php echo $numLinhas;?>">
-                                <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
-                                <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id']; ?>">[Desativar]</a>
-                                <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a> 
-                            </td>
-<?php
-                        } else {
-?>
-                            <td rowspan="<?php echo $numLinhas;?>"> Inativo </td>
-                            <td rowspan="<?php echo $numLinhas;?>">
-                                <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
-                                <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
-                                <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>  
-                            </td>	
-<?php
+                }
+                else
+                {
+                    while ($prop = $selProp->fetch_assoc()) {
+                        if ($conta > $numLinhas) {
+                            $conta = 0;
                         }
+    ?>						
+                    <tr>
+    <?php
+                        if ($conta == 0) {
+    ?>
+                                <td rowspan="<?php echo $numLinhas;?>"><?php echo print_r($read_EntType);//$read_EntType['id']; ?></td>
+                                <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
+    <?php
+                               }
+    ?>
+                        <!--property name-->
+                        <td><?php echo $prop['name'] ?></td>
+                        <td><?php echo $prop['value_type'] ?></td>
+    <?php
+                        if($conta == 0) {
+                            if ($read_EntType['state'] === 'active') {
+    ?>								
+                                <td rowspan="<?php echo $numLinhas;?>"> Ativo </td>
+                                <td rowspan="<?php echo $numLinhas;?>">
+                                    <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id']; ?>">[Desativar]</a>
+                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a> 
+                                </td>
+    <?php
+                            } else {
+    ?>
+                                <td rowspan="<?php echo $numLinhas;?>"> Inativo </td>
+                                <td rowspan="<?php echo $numLinhas;?>">
+                                    <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
+                                    <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
+                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>  
+                                </td>	
+    <?php
+                            }
+                        }
+    ?>
+                    </td>
+                </tr>
+    <?php
+                    $conta++;
                     }
-?>
-                </td>
-            </tr>
-<?php
-                $conta++;
                 }
             }
 ?>
