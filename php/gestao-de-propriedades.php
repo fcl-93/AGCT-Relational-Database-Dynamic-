@@ -124,6 +124,10 @@ class PropertyManage
         {
             $this->apresentaForm();		
         }
+        elseif($_REQUEST['estado'] == 'conclusao')
+        {
+            $this->estadoConclusao();		
+        }
     }
     
     /**
