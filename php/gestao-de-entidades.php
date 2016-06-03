@@ -134,8 +134,20 @@ class Entidade {
 ?>
                         </td>
                         <td>
-                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
+                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>
+<?php
+                            if ($read_EntType['state'] === 'active') {
+?>
+                                <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id']; ?>">[Desativar]</a>
+<?php
+                            }
+                            else
+                            {
+?>
                             <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
+<?php
+                            }
+?>
                             <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>
                         </td>
                     </tr>
@@ -380,7 +392,7 @@ class Entidade {
             public function disableEnt() {
                 $id = $this->bd->userInputVal($_REQUEST['ent_id']);
             //verifica se existem instancias deste tipo de entidade ativos.
-            $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id);
+            $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id." AND state='active'");
              $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
             if($checkEnt->num_rows == 0)
             {
@@ -411,8 +423,9 @@ class Entidade {
 ?>
                     <p>O tipo de entidade <b><?php echo $read_EntTypeD['name'] ?></b>  não pode ser desativado.</p>
                     <p>Uma vez que existem instâncias deste tipo de entidade ativas.</p>
+                    <p>Clique em <a href="/pesquisa-dinamica/?estado=escolha&ent="<?php echo $read_EntTypeD['id']?>/>desativar</a> para poder desativá-las</p>
+                    <p>Ou clique em <?php goBack();?> para voltar a página anterior.</p>
 <?php
-                    goBack();
             }
         ?>
 
