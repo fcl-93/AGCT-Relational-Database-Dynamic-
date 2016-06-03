@@ -510,7 +510,7 @@ class EntHist {
            while($prop = $saveProps->fetch_assoc()){
                if($prop['fk_ent_type_id'] == "")
                {
-                   $fkId ="";
+                   $fkId ="NULL";
                }
                else
                {
