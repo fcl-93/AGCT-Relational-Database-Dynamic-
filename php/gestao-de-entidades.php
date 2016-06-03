@@ -80,7 +80,7 @@ class Entidade {
     //echo "Olá Olé";
 ?>      
         <form method="GET">
-            Verificar propriedades existentes no dia : 
+            Verificar entidades existentes no dia : 
             <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="histAll" value="true">
@@ -120,12 +120,23 @@ class Entidade {
                 <tr>
 <?php
                     if ($conta == 0) {
+                        if($selProp->num_rows > 0)
+                        {
 ?>
-                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
-                    <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
-<?php
+                            <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
+                            <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
+<?php    
+                        }
+                        else{
+                            ?>
+                       
+                           <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['id']; ?></td>
+                           <td rowspan="<?php echo 1;?>"><?php echo $read_EntType['name'] ?></td>  
+                       <?php
+                           }
                     }
 ?>
+                    <!--property name-->
                     <td><?php echo $prop['name'] ?></td>
                     <td><?php echo $prop['value_type'] ?></td>
 <?php
@@ -166,7 +177,7 @@ class Entidade {
         } else {
             ?>
             <html>
-                <p> Não há componentes.</p>
+                <p> Não há entidades.</p>
             </html>
                             <?php
                         }
@@ -377,7 +388,7 @@ class Entidade {
 
 ?>
                     <p>O tipo de entidade <b><?php echo $read_EntTypeD['name'] ?></b>  não pode ser desativado.</p>
-                    <p>Uma vez que existem instancias deste tipo de entidade ativas.</p>
+                    <p>Uma vez que existem instâncias deste tipo de entidade ativas.</p>
 <?php
                     goBack();
             }
