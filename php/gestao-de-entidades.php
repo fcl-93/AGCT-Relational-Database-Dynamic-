@@ -392,7 +392,7 @@ class Entidade {
             public function disableEnt() {
                 $id = $this->bd->userInputVal($_REQUEST['ent_id']);
             //verifica se existem instancias deste tipo de entidade ativos.
-            $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id." AND state=\'active\'");
+            $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id." AND state=active");
              $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
             if($checkEnt->num_rows == 0)
             {
