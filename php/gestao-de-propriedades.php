@@ -120,6 +120,10 @@ class PropertyManage
         {
             $this->estadoAtivarDesativar();		
         }
+        elseif($_REQUEST['estado'] == 'introducao')
+        {
+            $this->apresentaForm();		
+        }
     }
     
     /**
@@ -166,7 +170,6 @@ class PropertyManage
             $this->apresentaTabela($tipo);
 
         }
-        $this->apresentaForm($tipo);
     }
 
     /**
@@ -325,7 +328,10 @@ class PropertyManage
                             {
                                 if ($controlo === 1) {
 ?>
-                                <td rowspan="<?php echo $numLinhas; ?>"><a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Editar propriedades]</a></td>  
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducaor&ent_id=<?php echo $arraySelec['ent_type_id'];?>">[Inserir propriedades]</a>
+                                </td>  
 <?php
                                 }
                             }
@@ -333,7 +339,10 @@ class PropertyManage
                             {
                                 if ($controlo === 1) {
 ?>
-                                <td rowspan="<?php echo $numLinhas; ?>">><a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a></td> 
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducaor&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Inserir propriedades]</a>
+                                </td> 
 <?php
                                 }
                             }
@@ -352,12 +361,11 @@ class PropertyManage
     
     /**
      * Method that builds and print the form that user uses to add properties to the type selected in the first state
-     * @param type $tipo ("relation" if we selected relation in first state, "entity" if we selected entity in first state)
      */
-    private function apresentaForm($tipo)
+    private function apresentaForm()
     {
         $existeEntRel = true;
-        if($tipo == "entity")
+        if(isset($_REQUEST['ent_id']))
         {
             $verificaEntidades = "SELECT * FROM ent_type";
             $numEnt = $this->db->runQuery($verificaEntidades)->num_rows;
@@ -395,59 +403,30 @@ class PropertyManage
                     <br><label class="error" for="nome"></label>
                 <br>
                 <label>Tipo de valor:</label><br>
-                        <?php
-                        $field = 'value_type';
-                        $table = 'property';
-                        $array =$this->db->getEnumValues($table, $field);
-                        foreach($array as $values)
-                        {
-?>
-                            <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
-                        }
+                $field = 'value_type';
+                $table = 'property';
+                $array =$this->db->getEnumValues($table, $field);
+                foreach($array as $values)
+                {
+?>
+                    <input id="tipoValor" type="radio" name="tipoValor" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
+                }
 ?>
                 <label class="error" for="tipoValor"></label>
                 <br>
-                        <?php
-                            if ($tipo === "entity")
-                            {
-?>
-                                <label>Entidade a que irá pertencer esta propriedade</label><br>
-                                <select id="entidadePertence" name="entidadePertence">
-                                    <option></option>
-<?php
-                                $selecionaEntRel = "SELECT name, id FROM ent_type";
-                            }
-                            else
-                            {
-?>
-                                <label>Relação a que irá pertencer esta propriedade</label><br>
-                                <select id="relacaoPertence" name="relacaoPertence">
-                                    <option></option>
-<?php
-                                $selecionaEntRel = "SELECT name, id FROM rel_type";
-                            }
-                            $result = $this->db->runQuery($selecionaEntRel);
-                            while($guardaEntRel= $result->fetch_assoc())
-                            {
-?>
-                                <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
-<?php
-                            }
-?>
-                            </select><br>
-                <label class="error" for="relacaoPertence"></label><label class="error" for="entidadePertence"></label><br>
                 <label>Tipo do campo do formulário</label><br>
-                        <?php
-                            $field = 'form_field_type';
-                            $table = 'property';
-                            $array = $this->db->getEnumValues($table, $field);
-                            foreach($array as $values)
-                            {
-?>
-                                <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
 <?php
-                            }
+                $field = 'form_field_type';
+                $table = 'property';
+                $array = $this->db->getEnumValues($table, $field);
+                foreach($array as $values)
+                {
+?>
+                    <input id="tipoCampo" type="radio" name="tipoCampo" value="<?php echo $values;?>"><?php echo $values;?><br>
+<?php
+                }
 ?>
                 <label class="error" for="tipoCampo"></label>
                 <br>
@@ -499,6 +478,19 @@ class PropertyManage
                             }
 ?>
                 <label class="error" for="entidadeReferenciada"></label>
+<?php
+                if(isset($_REQUEST['ent_id']))
+                {
+?>
+                    <input type ="hidden" name="entidadePertence" value="">
+<?php
+                }
+                else {
+?>
+                    <input type ="hidden" name="relacaoPertence" value="">
+<?php
+                }
+?>
                 <input type="hidden" name="estado" value="inserir"><br>
                 <input type="submit" value="Inserir propriedade">
             </form>
