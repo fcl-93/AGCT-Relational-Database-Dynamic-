@@ -140,7 +140,7 @@ class Entidade {
     <?php
                         if ($conta == 0) {
     ?>
-                                <td rowspan="<?php echo $numLinhas;?>"><?php echo print_r($read_EntType);//$read_EntType['id']; ?></td>
+                                <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['id']; ?></td>
                                 <td rowspan="<?php echo $numLinhas;?>"><?php echo $read_EntType['name'] ?></td>
     <?php
                                }
