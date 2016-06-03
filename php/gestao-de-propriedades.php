@@ -738,21 +738,28 @@ class PropertyManage
         $getValues = "SELECT * FROM value WHERE property_id = ".$_REQUEST["prop_id"];
         $numValues = $this->db->runQuery($getValues)->num_rows;
         if ($_REQUEST['tipoValor'] != $getProp["value_type"] && $numValues > 0) {
+            echo "#1";
             return true;
         }
         else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence'])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence'] != $getProp["ent_type_id"])) && $numValues > 0) {
+            echo "#2";
             return true;
         }
         else if (((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence'])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence'] != $getProp["rel_type_id"])) && $numValues > 0) {
+            echo "#3";
             return true;
         }
         else if ($_REQUEST['tipoCampo'] != $getProp["form_field_type"] && $numValues > 0) {
+            echo "#4";
             return true;
         }
-        else  if (((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != "NULL") || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+        else if (((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != "NULL") || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade'] != $getProp["unit_type"])) && $numValues > 0) {
+            echo "#5";
+            echo "BD: ".$getProp["unit_type"]."FM: ".$_REQUEST['tipoUnidade'];
             return true;
         }
         else if (((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada'])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada'] != $getProp["fk_ent_type_id"])) && $numValues > 0) {
+            echo "#6";
             return true;
         }
         else {
