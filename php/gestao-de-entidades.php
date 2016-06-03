@@ -348,9 +348,10 @@ class Entidade {
                 $id = $this->bd->userInputVal($_REQUEST['ent_id']);
             //verifica se existem instancias deste tipo de entidade ativos.
             $checkEnt = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$id);
+             $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
             if($checkEnt->num_rows == 0)
             {
-                $res_EntTypeD = $this->bd->runQuery("SELECT name FROM ent_type WHERE id = " . $id);
+               
                 $read_EntTypeD = $res_EntTypeD->fetch_assoc();
 
                 if ($this->gereHist->addHist($id, $this->bd)) 
