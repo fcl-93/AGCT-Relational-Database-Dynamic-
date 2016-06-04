@@ -653,6 +653,7 @@ class PropertyManage
             else
             {
                 if (!empty($_REQUEST["entidadePertence"])) {
+                $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
