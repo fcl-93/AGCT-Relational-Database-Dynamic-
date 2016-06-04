@@ -627,7 +627,11 @@ class PropertyManage
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
-		$this->db->getMysqli()->rollback();
+            $this->db->getMysqli()->rollback();
+?>
+            <p>Não foi possível inserir uma nova propriedade.</p>
+<?php
+            goBack();
 	}
 	else
 	{
@@ -641,6 +645,10 @@ class PropertyManage
             if(!$atualiza)
             {
                 $this->db->getMysqli()->rollback();
+?>
+                <p>Não foi possível inserir uma nova propriedade.</p>
+<?php
+                goBack();
             }
             else
             {
