@@ -917,9 +917,7 @@ class ValPerHist{
                     }
                     while ($prop = $selProp->fetch_assoc()) {
                         $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
-                        echo $selecionaHist;
                         $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$data."'OR updated_on LIKE '".$data."%') AND property_id = ".$prop["id"];
-                        echo $selecionaProp;
                         $resultSelecionaProp = $db->runQuery($selecionaProp);
                         $resultSelecionaHist = $db->runQuery($selecionaHist);
 
