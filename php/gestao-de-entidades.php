@@ -660,8 +660,9 @@ class EntHist {
                           }
                           else
                           {
-?>
+?>                          <td rowspan="<?php echo $getPropsHist->num_rows?>">
                                 <p>Não pode voltar para esta versão porque as propriedades que lhe estão atribuidas foram modificadas</p>
+                            </td>
 <?php
                           }?>
 <?php   
