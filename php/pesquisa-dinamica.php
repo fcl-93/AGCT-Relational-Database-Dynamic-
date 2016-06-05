@@ -2677,15 +2677,15 @@ class entityHist{
      * @return boolean
      */
     public function addEntToHist($id,$bd,$inactiveTime){
-        echo "#2";
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
         //$inactive = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
-            echo "#3";    
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){   
             return false;
         }
-         echo "#4";  
+        else if (!$bd->runQuery("UPDATE entity SET updated_on = '".$inactiveTime."' WHERE id = ".$id)) {
+            return false;
+        }
         return true;
     }
     
