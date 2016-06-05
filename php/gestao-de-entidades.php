@@ -730,7 +730,8 @@ class EntHist {
          while($readEntTP = $querEntTp->fetch_assoc())
          {
              $readEntTP['value_type'] == "" ? $val = "NULL" : $val = $readEntTP['value_type'];
-             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$val."',".$readEntTP['ent_type_id'].",'".$readEntTP['state']."')");
+             $readEntTP['ent_type_id'] == "" ? $entID = "NULL" : $entID = $readEntTP['ent_type_id'];
+             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$val."',".$entID.",'".$readEntTP['state']."')");
          }
          
         $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
@@ -739,7 +740,8 @@ class EntHist {
         while($readHist = $querHist->fetch_assoc())
         {
             $readEntTP['value_type'] == "" ? $val = "NULL" : $val = $readEntTP['value_type'];
-            $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readHist['id'].",'".$readHist['name']."','".$val."',".$readHist['ent_type_id'].",'".$readHist['state']."')");
+            $readEntTP['ent_type_id'] == "" ? $entID = "NULL" : $entID = $readEntTP['ent_type_id'];
+            $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readHist['id'].",'".$readHist['name']."','".$val."',".$entID.",'".$readHist['state']."')");
         }
         
         $resHe = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
