@@ -682,7 +682,8 @@ class EntHist {
     }
 
     public function tablePresentHist($data,$bd){
-                ?>
+        echo "Qj";        
+        ?>
         <table class="table">
             <thead>
                 <th>Data de Início</th>
@@ -743,7 +744,7 @@ class EntHist {
         if ($resHe->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="3">Não existe registos referente à entidade selecionada no histórico</td>
+                    <td colspan="7">Não existe registos para esta tabela no dia selecionado</td>
                 </tr>
             <?php
         } else {
@@ -763,7 +764,6 @@ class EntHist {
 <?php
                             }
 ?>
-                             <!--   <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td> -->
 <?php
 ?>
                                 <td><?php echo $propP['name']; ?></td>
