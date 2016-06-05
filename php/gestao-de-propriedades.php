@@ -542,21 +542,21 @@ class PropertyManage
      */
     private function estadoConclusao () {
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
-            $this->db->getMysqli()->commit();
+            $this->db->runQuery("COMMTI");
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $_SESSION["data"])) {
-            $this->db->getMysqli()->commit();
+            $this->db->runQuery("COMMIT");
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
-            $this->db->getMysqli()->rollback();
+            $this->db->runQuery("ROLLBACK");
 ?>
             <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
 <?php
@@ -599,7 +599,7 @@ class PropertyManage
         if (isset($_REQUEST["primeiraVez"])) {
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
-            $this->db->getMysqli()->begin_transaction();
+            $this->db->runQuery("START TRANSACTION");
             $_SESSION["data"] = date("Y-m-d H:i:s",time());
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
@@ -645,7 +645,7 @@ class PropertyManage
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
-            $this->db->getMysqli()->rollback();
+            $this->db->runQuery("ROLLBACK");
 ?>
             <p>Não foi possível inserir uma nova propriedade.</p>
 <?php
@@ -685,7 +685,7 @@ class PropertyManage
 <?php
                 }
                 else {
-                    $this->db->getMysqli()->rollback();
+                    $this->db->runQuery("ROLLBACK");
 ?>
                     <p>Não foi possível inserir uma nova propriedade.</p>
 <?php
