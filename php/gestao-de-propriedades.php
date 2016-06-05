@@ -541,6 +541,7 @@ class PropertyManage
      * This method finishe the introductionoff new properties
      */
     private function estadoConclusao () {
+        print_r($_SESSION);
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
             $_SESSION['mysqliObject']->commit();
 ?>
@@ -602,6 +603,7 @@ class PropertyManage
             $_SESSION['mysqliObject'] = $this->db->getMysqli();
             $_SESSION['mysqliObject']->begin_transaction();
             $_SESSION["data"] = date("Y-m-d H:i:s",time());
+            print_r($_SESSION);
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
