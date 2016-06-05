@@ -984,7 +984,6 @@ class InsereRelacoes
                         $erro = true;
                         break;
                     }
-
                 }
             }
             if ($erro) {
