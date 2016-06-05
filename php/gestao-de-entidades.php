@@ -729,12 +729,12 @@ class EntHist {
         $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
          $res_getProp = $bd->runQuery($selecionaProp);
          while($prop = $res_getProp->fetch_assoc()){
-                $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$prop['id'].",'".$prop['name']."','".$prop['value_type']."','".$prop['state']."')");
+                $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$prop['id'].",'".$prop['name']."','".$prop['value_type']."',".$prop['ent_type_id'].",'".$prop['state']."')");
          }
         $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
         $res_getPropHist = $bd->runQuery($selecionaHist);
          while($propHist = $res_getPropHist->fetch_assoc()){
-             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$propHist['property_id'].",'".$propHist['name']."','".$propHist['value_type']."','".$propHist['state']."')");
+             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$propHist['property_id'].",'".$propHist['name']."','".$propHist['value_type']."',".$propHist['ent_type_id'].",'".$propHist['state']."')");
          }
         
         $resHe = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
