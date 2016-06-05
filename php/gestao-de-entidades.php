@@ -506,7 +506,7 @@ class EntHist {
         $inactive = date("Y-m-d H:i:s", time());
         echo $inactive;
         if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" .$read_getEntTp['updated_on']. "','" . $inactive . "'," . $id . ")")) {
-           $this->bd->runQuery("UPDATE ent_type SET updated_on='" .$inactive. "' WHERE id =" . $id);
+           $bd->runQuery("UPDATE ent_type SET updated_on='" .$inactive. "' WHERE id =" . $id);
            
            $saveProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
            $error = false;
