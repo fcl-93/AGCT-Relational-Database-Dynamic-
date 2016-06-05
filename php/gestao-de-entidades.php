@@ -686,8 +686,7 @@ class EntHist {
         ?>
         <table class="table">
             <thead>
-                <th>Data de Início</th>
-                <th>Data de Fim</th>
+                <th>Id</th>
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
