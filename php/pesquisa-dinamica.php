@@ -2077,7 +2077,6 @@ $first = false;
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
-                echo "i: ".$i." se: ".$_SESSION['entPropPrinted'];
                 if(isset($_REQUEST['check'.$i]))
                 {
                     if(isset($_REQUEST['radio'.$i]))
@@ -2096,6 +2095,7 @@ $first = false;
                     $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
                     
                     if ($i === $_SESSION['entPropPrinted']) {
+                        echo "#1";
                         if(!$this->gereInsts->addEntToHist($id,$this->bd,$updated_on)) {
                             $erro = true;
                             break;
@@ -2676,12 +2676,15 @@ class entityHist{
      * @return boolean
      */
     public function addEntToHist($id,$bd,$inactiveTime){
+        echo "#2";
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
         
         //$inactive = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
-                return false;
+            echo "#3";    
+            return false;
         }
+         echo "#4";  
         return true;
     }
     
