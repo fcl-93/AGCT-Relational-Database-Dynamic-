@@ -60,8 +60,3 @@ cursor: pointer;
 #acertaCabecalho {
     background: white;
 }
-/*Css do datepicker*/
-.datepicker{
-     /*position: "relative";*/
-    z-index: 999999  !important;
-}
