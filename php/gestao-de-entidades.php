@@ -607,13 +607,13 @@ class EntHist {
                         {
 ?>
                         <td colspan="2">Não existem propriedades associadas a este tipo de entidade.</td>
-                        <td> <?php if($readHE['state'] == 'active')
+                        <!--<td>--> <?php /*if($readHE['state'] == 'active')
                                     {
                                         echo 'Ativo';
-                                    }  else {
+                        }  else {
                                         echo 'Inativo';
-                                    }?>
-                        </td>
+                                    }*/?>
+                       <!-- </td>-->
 <?php
                      
 ?>
