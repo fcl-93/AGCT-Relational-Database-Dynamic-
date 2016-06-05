@@ -576,7 +576,7 @@ class EntHist {
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
-                <th>Estado Durante o Período</th>
+                <!--<th>Estado Durante o Período</th>-->
                 <th>Ação</th>
             </thead>
         <tbody>
@@ -627,16 +627,16 @@ class EntHist {
 <?php
                             if($conta == 0){
 ?>
-                                <td rowspan="<?php echo $getPropsHist->num_rows?>">
+                            <!--<td rowspan="<?php/* echo $getPropsHist->num_rows*/?>">-->
                         <?php 
-                                    if($readHE['state'] == 'active')
+                          /*          if($readHE['state'] == 'active')
                                     {
                                         echo 'Ativo';
                                     }  else {
                                         echo 'Inativo';
-                                    }
+                                    }*/
                         ?>
-                                </td>
+                                <!--</td>-->
                           <?php
                           /*if($getProp['name'] == $propHist['name'] &&
                              $getProp['ent_type_id'] == $propHist['ent_type_id'] &&
