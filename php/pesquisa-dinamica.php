@@ -2077,6 +2077,15 @@ $first = false;
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
+                $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
+                echo "i: ".$i." se: ".$_SESSION['entPropPrinted'];
+                if ($i == $_SESSION['entPropPrinted']) {
+                    echo "#1";
+                    if(!$this->gereInsts->addEntToHist($id,$this->bd,$updated_on)) {
+                        $erro = true;
+                        break;
+                    }
+                }
                 if(isset($_REQUEST['check'.$i]))
                 {
                     if(isset($_REQUEST['radio'.$i]))
@@ -2092,15 +2101,7 @@ $first = false;
                         $newValue =$_REQUEST['textbox'.$i];
                     }
                     
-                    $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
-                    echo "i: ".$i." se: ".$_SESSION['entPropPrinted'];
-                    if ($i == $_SESSION['entPropPrinted']) {
-                        echo "#1";
-                        if(!$this->gereInsts->addEntToHist($id,$this->bd,$updated_on)) {
-                            $erro = true;
-                            break;
-                        }
-                    }
+                    
                     
                     $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
                     $erro = false;
