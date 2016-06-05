@@ -61,7 +61,7 @@ cursor: pointer;
     background: white;
 }
 /*Css do datepicker*/
-.datepicker{
-     position: "relative";
+#datepicker{
+     /*position: "relative";*/
     z-index: 999999;
 }
