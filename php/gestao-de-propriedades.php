@@ -266,6 +266,24 @@ class PropertyManage
                 <tr>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
+                        if ($resultSeleciona->num_rows === 0) {
+                            if ($tipo === "entity") {
+?>
+                                <td colspan="11">Esta entidade ainda não possui quaisquer propriedades</td>
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=introducao&ent_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
+                                </td> 
+<?php
+                            }
+                            else {
+?>
+                                <td colspan="11">Esta relação ainda não possui quaisquer propriedades</td>
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
+                                </td> 
+<?php
+                            }
+                        }
                         $controlo = 1;
                         while($arraySelec = $resultSeleciona->fetch_assoc())
                         {
@@ -523,22 +541,24 @@ class PropertyManage
      * This method finishe the introductionoff new properties
      */
     private function estadoConclusao () {
+        $this->db->getMysqli()->begin_transaction();
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
-            $_SESSION['mysqliObject']->commit();
+            $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $_SESSION["data"])) {
-            $_SESSION['mysqliObject']->commit();
+            $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
-            $_SESSION['mysqliObject']->rollback();
+            $this->db->getMysqli()->rollback();
+            $this->rollbackNewProp ();
 ?>
             <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
 <?php
@@ -581,8 +601,8 @@ class PropertyManage
         if (isset($_REQUEST["primeiraVez"])) {
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
-            $_SESSION['mysqliObject'] = $this->db->getMysqli();
-            $_SESSION['mysqliObject']->begin_transaction();
+            $this->db->getMysqli()->begin_transaction();
+            $_SESSION['newProp'] = array();
             $_SESSION["data"] = date("Y-m-d H:i:s",time());
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
@@ -629,6 +649,7 @@ class PropertyManage
 	if(!$insere)
 	{
             $this->db->getMysqli()->rollback();
+            $this->rollbackNewProp ();
 ?>
             <p>Não foi possível inserir uma nova propriedade.</p>
 <?php
@@ -646,6 +667,7 @@ class PropertyManage
             if(!$atualiza)
             {
                 $this->db->getMysqli()->rollback();
+                $this->rollbackNewProp ();
 ?>
                 <p>Não foi possível inserir uma nova propriedade.</p>
 <?php
@@ -654,6 +676,8 @@ class PropertyManage
             else
             {
                 if (!empty($_REQUEST["entidadePertence"])) {
+                    $this->db->getMysqli()->commit();
+                    array_push($_SESSION['newProp'], $id);
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
@@ -661,6 +685,8 @@ class PropertyManage
 <?php
                 }
                 else if (!empty($_REQUEST["relacaoPertence"])) {
+                    $this->db->getMysqli()->commit();
+                    array_push($_SESSION['newProp'], $id);
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta relação.</p>
@@ -669,6 +695,7 @@ class PropertyManage
                 }
                 else {
                     $this->db->getMysqli()->rollback();
+                    $this->rollbackNewProp ();
 ?>
                     <p>Não foi possível inserir uma nova propriedade.</p>
 <?php
@@ -678,6 +705,16 @@ class PropertyManage
             }
 	}
 
+    }
+    
+    /**
+     * This method rollbacks the already inserted properties if anything goes wrong
+     */
+    private function rollbackNewProp () {
+        foreach($_SESSION['newProp'] as $id) {
+            $removeProp = "DELETE FROM property WHERE id = ".$id;
+            $this->db->runQuery($removeProp);
+        }
     }
 
     /**
