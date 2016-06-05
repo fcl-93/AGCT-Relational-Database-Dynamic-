@@ -1021,7 +1021,7 @@ class InsereRelacoes
             {
                 $id = $this->bd->userInputVal($_REQUEST['iddarel']);
                 if ($i == $_SESSION['propImpressas']) {
-                    if($this->gereInsRel->addHist($id, $this->bd)) {
+                    if(!$this->gereInsRel->addHist($id, $this->bd)) {
                         $erro = true;
                         break;
                     }
