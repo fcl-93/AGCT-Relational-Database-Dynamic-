@@ -504,7 +504,10 @@ class EntHist {
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
         $inactive = date("Y-m-d H:i:s", time());
-        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" . $read_getEntTp['updated_on'] . "','" .$inactive. "'," . $id . ")")) {
+        echo $inactive;
+        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" .$read_getEntTp['updated_on']. "','" . $inactive . "'," . $id . ")")) {
+           $bd->runQuery("UPDATE ent_type SET updated_on='" .$inactive. "' WHERE id =" . $id);
+           
            $saveProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
            $error = false;
            while($prop = $saveProps->fetch_assoc()){
@@ -576,7 +579,7 @@ class EntHist {
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
-                <th>Estado Durante o Período</th>
+                <!--<th>Estado Durante o Período</th>-->
                 <th>Ação</th>
             </thead>
         <tbody>
@@ -585,7 +588,7 @@ class EntHist {
         if ($resHE->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="4">Não existe registo referente à entidade selecionada no histórico</td>
+                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                     <td><?php goBack(); ?></td>
                 </tr>
             <?php
@@ -604,13 +607,13 @@ class EntHist {
                         {
 ?>
                         <td colspan="2">Não existem propriedades associadas a este tipo de entidade.</td>
-                        <td> <?php if($readHE['state'] == 'active')
+                        <!--<td>--> <?php /*if($readHE['state'] == 'active')
                                     {
                                         echo 'Ativo';
-                                    }  else {
+                        }  else {
                                         echo 'Inativo';
-                                    }?>
-                        </td>
+                                    }*/?>
+                       <!-- </td>-->
 <?php
                      
 ?>
@@ -627,18 +630,18 @@ class EntHist {
 <?php
                             if($conta == 0){
 ?>
-                                <td rowspan="<?php echo $getPropsHist->num_rows?>">
+                            <!--<td rowspan="<?php/* echo $getPropsHist->num_rows*/?>">-->
                         <?php 
-                                    if($readHE['state'] == 'active')
+                          /*          if($readHE['state'] == 'active')
                                     {
                                         echo 'Ativo';
                                     }  else {
                                         echo 'Inativo';
-                                    }
+                                    }*/
                         ?>
-                                </td>
+                                <!--</td>-->
                           <?php
-                          if($getProp['name'] == $propHist['name'] &&
+                          /*if($getProp['name'] == $propHist['name'] &&
                              $getProp['ent_type_id'] == $propHist['ent_type_id'] &&
                              $getProp['rel_type_id'] == $propHist['rel_type_id'] &&     
                              $getProp['value_type'] == $propHist['value_type'] &&     
@@ -653,18 +656,18 @@ class EntHist {
                              $getProp['id'] == $propHist['property_id'] 
                                   )
                           {
-                          ?>
+                          */?>
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                           <?php
                           
-                          }
+                          /*}
                           else
                           {
 ?>                          <td rowspan="<?php echo $getPropsHist->num_rows?>">
                                 <p>Não pode voltar para esta versão porque as propriedades que lhe estão atribuidas foram modificadas</p>
                             </td>
 <?php
-                          }?>
+                          }*/?>
 <?php   
                         }
 ?>                    
@@ -674,25 +677,24 @@ class EntHist {
             }
         }
             }
-        ?>                                
+        
+    }
+    ?>                                
         </tbody>
         </table>
         <?php
     }
-    }
 
     public function tablePresentHist($data,$bd){
-        echo "Qj";        
+        //echo "Qj";        
         ?>
         <table class="table">
             <thead>
-                <th>Data de Início</th>
-                <th>Data de Fim</th>
+                <th>Id</th>
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
                 <th>Estado Durante o Período</th>
-                <th>Ação</th>
             </thead>
         <tbody>
         <?php
@@ -767,7 +769,7 @@ class EntHist {
 <?php
 ?>
                                 <td><?php echo $propP['name']; ?></td>
-                                <td><?php echo $propP['value']; ?></td>
+                                <td><?php echo $propP['value_type']; ?></td>
 <?php
                             if($count == 0)
                             {
