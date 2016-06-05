@@ -969,10 +969,10 @@ class PropertyManage
      * to ativate and desactivate the select property on the table presented in states entity and relation
      */
     private function estadoAtivarDesativar() {
-        $data = 
+        $data = date("Y-m-d H:i:s",time());
         $avanca = false;
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
-        if ($this->gereHist->atualizaHistorico($this->db,date("Y-m-d H:i:s",time()),$_REQUEST['prop_id'],true) == false) {
+        if ($this->gereHist->atualizaHistorico($this->db,$data,$_REQUEST['prop_id'],true) == false) {
 ?>
             <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
 <?php 
@@ -997,7 +997,7 @@ class PropertyManage
 
             }
             if ($avanca) {
-                $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['prop_id'];
+                $queryUpdate .= ",updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
                 $queryUpdate= $this->db->runQuery($queryUpdate);
                 if ($queryUpdate) {
                     $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
