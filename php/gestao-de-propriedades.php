@@ -541,23 +541,22 @@ class PropertyManage
      * This method finishe the introductionoff new properties
      */
     private function estadoConclusao () {
-        print_r($_SESSION);
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
-            $_SESSION['mysqliObject']->commit();
+            $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $_SESSION["data"])) {
-            $_SESSION['mysqliObject']->commit();
+            $this->db->getMysqli()->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
-            $_SESSION['mysqliObject']->rollback();
+            $this->db->getMysqli()->rollback();
 ?>
             <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
 <?php
@@ -600,10 +599,8 @@ class PropertyManage
         if (isset($_REQUEST["primeiraVez"])) {
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
-            $_SESSION['mysqliObject'] = $this->db->getMysqli();
-            $_SESSION['mysqliObject']->begin_transaction();
+            $this->db->getMysqli()->begin_transaction();
             $_SESSION["data"] = date("Y-m-d H:i:s",time());
-            print_r($_SESSION);
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
 	$queryInsere = 'INSERT INTO `property`(`id`, `name`,';
