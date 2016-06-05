@@ -638,7 +638,7 @@ class EntHist {
                         ?>
                                 </td>
                           <?php
-                          if($getProp['name'] == $propHist['name'] &&
+                          /*if($getProp['name'] == $propHist['name'] &&
                              $getProp['ent_type_id'] == $propHist['ent_type_id'] &&
                              $getProp['rel_type_id'] == $propHist['rel_type_id'] &&     
                              $getProp['value_type'] == $propHist['value_type'] &&     
@@ -653,18 +653,18 @@ class EntHist {
                              $getProp['id'] == $propHist['property_id'] 
                                   )
                           {
-                          ?>
+                          */?>
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
                           <?php
                           
-                          }
+                          /*}
                           else
                           {
 ?>                          <td rowspan="<?php echo $getPropsHist->num_rows?>">
                                 <p>Não pode voltar para esta versão porque as propriedades que lhe estão atribuidas foram modificadas</p>
                             </td>
 <?php
-                          }?>
+                          }*/?>
 <?php   
                         }
 ?>                    
