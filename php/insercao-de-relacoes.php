@@ -954,9 +954,16 @@ class InsereRelacoes
          */
         private function updateAttr()
         {
+            $erro = false;
             for($i= 0; $i <= $_SESSION['attrDaRelImp']; $i++ )
             {
-                
+                $id = $this->bd->userInputVal($_REQUEST['iddarel']);
+                if ($i == $_SESSION['propImpressas']) {
+                    if(!$this->gereInsRel->addHist($id, $this->bd)) {
+                        $erro = true;
+                        break;
+                    }
+                }
                 if(isset($_REQUEST['check'.$i]))
                 {
                     if(isset($_REQUEST['radio'.$i]))
@@ -972,42 +979,30 @@ class InsereRelacoes
                     {
                         $newValue =$_REQUEST['textbox'.$i];
                     }
-                     $id = $this->bd->userInputVal($_REQUEST['iddarel']);
-                    if($this->gereInsRel->addHist($id, $this->bd))
+                    if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."', `updated_on`='".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['check'.$i]))
                     {
-                        if($this->bd->runQuery("UPDATE `value` SET `value`='".$newValue."', `updated_on`='".date("Y-m-d H:i:s",time())."' WHERE id=".$_REQUEST['check'.$i]))
-                        {
-?>
-                            <html>
-                                <p>A propriedades foi atualizada</p>
-                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                            </html>
-<?php
-                            $this->bd->getMysqli()->commit();
-                        }
-                        else
-                        {
-?>
-                            <html>
-                                <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
-                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                            </html>
-<?php
-                            $this->bd->getMysqli()->rollback();
-                        }
+                        $erro = true;
+                        break;
                     }
-                    else
-                    {
-?>
-                            <html>
-                                <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
-                                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
-                            </html>
-<?php                       
-                    $this->bd->getMysqli()->rollback();
-                    }
-                     
                 }
+            }
+            if ($erro) {
+?>
+                <html>
+                    <p>Ocorreu um erro pelo que a propriedade não foi atualizada</p>
+                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                </html>
+<?php
+                $this->bd->getMysqli()->rollback();
+            }
+            else {
+?>
+                <html>
+                    <p>A propriedades foi atualizada</p>
+                    <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+                </html>
+<?php
+                $this->bd->getMysqli()->commit();
             }
         }
         
