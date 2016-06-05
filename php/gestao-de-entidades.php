@@ -766,7 +766,7 @@ class EntHist {
 <?php
 ?>
                                 <td><?php echo $propP['name']; ?></td>
-                                <td><?php echo $propP['value']; ?></td>
+                                <td><?php echo $propP['value_type']; ?></td>
 <?php
                             if($count == 0)
                             {
