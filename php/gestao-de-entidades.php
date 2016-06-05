@@ -701,14 +701,7 @@ class EntHist {
         `name` varchar(128) NOT NULL,
         `state` enum('active','inactive') NOT NULL)";
         $creatTempTable = $bd->runQuery($creatTempTable);
-        
-        $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
-                        `id` INT UNSIGNED NOT NULL ,
-                        `name` VARCHAR(128) NOT NULL,
-                        `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL COMMENT 'text, int, double, boolean, enum',
-                        `ent_type_id` INT NULL,
-                        `state` ENUM('active','inactive') NOT NULL)";
-        $createTempProp = $bd->runQuery($createTempProp);                
+                   
 
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
         $querEntTp = $bd->runQuery($selecionaProp);
@@ -725,24 +718,24 @@ class EntHist {
             $bd->runQuery("INSERT INTO temp_table VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readHist['state']."')");
         }
        //get the properties
-         $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
-        $querEntTp = $bd->runQuery($selecionaProp);
-         while($readEntTP = $querEntTp->fetch_assoc())
-         {
-             $readEntTP['value_type'] == "" ? $val = "NULL" : $val = $readEntTP['value_type'];
-             $readEntTP['ent_type_id'] == "" ? $entID = "NULL" : $entID = $readEntTP['ent_type_id'];
-             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$val."',".$entID.",'".$readEntTP['state']."')");
+        $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
+                        `id` INT UNSIGNED NOT NULL ,
+                        `name` VARCHAR(128) NOT NULL,
+                        `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL COMMENT 'text, int, double, boolean, enum',
+                        `ent_type_id` INT NULL,
+                        `state` ENUM('active','inactive') NOT NULL)";
+        $createTempProp = $bd->runQuery($createTempProp);     
+        
+        $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
+         $res_getProp = $bd->runQuery($selecionaProp);
+         while($prop = $res_getProp->fetch_assoc()){
+                $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$prop['id'].",'".$prop['name']."','".$prop['value_type']."',".$prop['ent_type_id'].",'".$prop['state']."')");
          }
-         
         $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
-
-        $querHist = $bd->runQuery($selecionaHist);
-        while($readHist = $querHist->fetch_assoc())
-        {
-            $readEntTP['value_type'] == "" ? $val = "NULL" : $val = $readEntTP['value_type'];
-            $readEntTP['ent_type_id'] == "" ? $entID = "NULL" : $entID = $readEntTP['ent_type_id'];
-            $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readHist['id'].",'".$readHist['name']."','".$val."',".$entID.",'".$readHist['state']."')");
-        }
+        $res_getPropHist = $bd->runQuery($selecionaHist);
+         while($propHist = $res_getPropHist->fetch_assoc()){
+             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$propHist['property_id'].",'".$propHist['name']."','".$propHist['value_type']."',".$propHist['ent_type_id'].",'".$propHist['state']."')");
+         }
         
         $resHe = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
         if ($resHe->num_rows < 1) {
