@@ -2072,6 +2072,7 @@ $first = false;
             
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
+        $erro = false;
         if($this->ssValidationUp($_SESSION['entPropPrinted'],2)){
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
@@ -2091,71 +2092,68 @@ $first = false;
                     {
                         $newValue =$_REQUEST['textbox'.$i];
                     }
+                    
                     $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
                     
-                    if($this->gereInsts->addEntToHist($id,$this->bd,$updated_on))
-                    {
-                        $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
-                        $erro = false;
-                        while($readVal = $getCurrentVals->fetch_assoc()){
-                            if(!$this->gereInsts->addHistValues($readVal['id'],$this->bd,$updated_on)){
-                                $erro = true;
-                            }
+                    if ($i === $_SESSION['entPropPrinted']) {
+                        if(!$this->gereInsts->addEntToHist($id,$this->bd,$updated_on)) {
+                            $erro = true;
+                            break;
                         }
+                    }
+                    
+                    $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
+                    $erro = false;
+                    while($readVal = $getCurrentVals->fetch_assoc()){
+                        if(!$this->gereInsts->addHistValues($readVal['id'],$this->bd,$updated_on)){
+                            $erro = true;
+                        }
+                    }
                         
-                        if(!$erro){
-                            if($this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active','".$updated_on."')"))
-                            {
-?>
-                                <html>
-                                    <p>As propriedades foram adicionadas à entidade.</p>
-                                    <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
-                                </html>
-<?php
-                            $this->bd->getMysqli()->commit();
-                            }
-                            else
-                            {
-?>
-                                <html>
-                                    <p>Erro ao adicionar as propriedades selecionadas à entidade.</p>
-                                    <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
-                                </html>
-<?php
-                            $this->bd->getMysqli()->rollback();
-                            }
-                        }
-                        else{
+                    if(!$erro){
+                        if(!$this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active','".$updated_on."')"))
+                        {
 ?>
                             <html>
-                                <p>Erro ao criar uma cópia dos valores autuais da entidade na tabela hist_value.</p>
-                                <p><?php goBack(); ?></p>
+                                <p>Erro ao adicionar as propriedades selecionadas à entidade.</p>
+                                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
                             </html>
 <?php
-                             $this->bd->getMysqli()->rollback();
+                            $erro = true;
+                            break;
                         }
                     }
-                    else
-                    {
+                    else{
 ?>
-                            <html>
-                                <p>Erro ao criar heckuma cópia da entidade na tabela hist_entity.</p>
-                                <p><?php goBack(); ?></p>
-                            </html>
-<?php  
-                        $this->bd->getMysqli()->rollback();
+                        <html>
+                            <p>Erro ao criar uma cópia dos valores autuais da entidade na tabela hist_value.</p>
+                        </html>
+<?php
+                        break;
                     }
-                    
-
-                    
                 }
             }
         }
-        else
-        {
-          $this->bd->getMysqli()->rollback();  
+        else {
+            $erro = true;
         }
+        if (!$erro) {
+?>
+        
+            <html>
+                <p>As propriedades foram adicionadas à entidade.</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+            </html>
+<?php
+            $this->bd->getMysqli()->commit(); 
         }
+        else {
+            $this->bd->getMysqli()->rollback();  
+?>
+            <p><?php goBack(); ?></p>
+<?php
+        }
+    }
     
     /**
      * This method will handle the activation and the the desativation of the
