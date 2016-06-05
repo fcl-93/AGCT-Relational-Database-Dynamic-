@@ -607,9 +607,12 @@ class ValoresPermitidos
 	 */
 	public function desactivate(){
             
-                $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
-                $idProp = $selProp->fetch_assoc()["property_id"];
+            $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
+            $prop = $selProp->fetch_assoc();
+            $idProp = $prop["property_id"];
+            $value = $prop['value'];
+            if (!$this->checkValues($idProp,$value)) {
                 if($this->histVal->addHist($idProp, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
@@ -618,10 +621,10 @@ class ValoresPermitidos
                     $read_enumName = $res_enumName->fetch_assoc();
                     $this->bd->getMysqli()->commit();
 ?>
-		<html>
-		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
-		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
-		</html>
+                <html>
+                        <p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
+                        <p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
+                </html>
 <?php 
                 }
                 else
@@ -631,11 +634,27 @@ class ValoresPermitidos
                     <p>O valor enum selecionado não pode ser desativado.</p>
                     <p>	Clique em <?php goBack(); ?></p>
 <?php
-        
                 }
-            
-
+            }
+            else {
+?>
+                <p>O valor enum selecionado não pode ser desativado.</p>
+                <p>	Clique em <?php goBack(); ?></p>
+<?php
+       
+            }
 	}
+        
+        private function checkValues ($idProp,$enum) {
+            $selVal = "SELECT * FROM value WHERE property_id = ".$idProp;
+            $selVal = $this->bd->runQuery($selVal);
+            while ($selVal = $selVal->fetch_assoc()) {
+                if ($selVal['value'] === $enum) {
+                    return true;
+                }
+            }
+            return false;
+        }
 	
 }
 /**
