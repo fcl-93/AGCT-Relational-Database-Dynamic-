@@ -509,9 +509,12 @@ class EntHist {
            $error = false;
            while($prop = $saveProps->fetch_assoc()){
                $prop['rel_type_id']==""? $rel = "" : $rel = $prop['rel_type_id'];
+               $prop['unit_type_id'] == "" ? $unit = "" : $unit = $prop['unit_type_id'];
+               $prop['form_field_size'] == "" ? $f_sz = "" : $f_sz = $prop['form_field_size'];
+               $prop['fk_ent_type_id'] == ""? $fk_ent="" : $fk_ent = $prop['fk_ent_type_id'];
                
                $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
-                       . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',NULL,'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',NULL,NULL,'".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
+                       . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',$unit,'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",".$f_sz.",'".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
                //echo $query;
                if(!$bd->runQuery($query))
                {
