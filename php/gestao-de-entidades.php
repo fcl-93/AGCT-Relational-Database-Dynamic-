@@ -705,6 +705,7 @@ class EntHist {
         $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
                         `id` INT UNSIGNED NOT NULL ,
                         `name` VARCHAR(128) NOT NULL,
+                        `value_type` ENUM('text', 'bool', 'int', 'double', 'enum', 'ent_ref') NOT NULL COMMENT 'text, int, double, boolean, enum',
                         `ent_type_id` INT NULL,
                         `state` ENUM('active','inactive') NOT NULL)";
         $createTempProp = $bd->runQuery($createTempProp);                
@@ -728,21 +729,16 @@ class EntHist {
         $querEntTp = $bd->runQuery($selecionaProp);
          while($readEntTP = $querEntTp->fetch_assoc())
          {
-             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['value_type']."','".$readEntTP['state']."')");
+             $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readEntTP['id'].",'".$readEntTP['name']."','".$readEntTP['value_type']."',".$readEntTP['ent_type_id'].",'".$readEntTP['state']."')");
          }
          
-         $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
+        $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
 
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
         {
-            $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readHist['ent_type_id'].",'".$readHist['name']."','".$readEntTP['value_type']."','".$readHist['state']."')");
+            $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$readHist['id'].",'".$readHist['name']."','".$readEntTP['value_type']."',".$readHist['ent_type_id'].",'".$readHist['state']."')");
         }
-        
-        
-        
-        
-        
         
         $resHe = $bd->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
         if ($resHe->num_rows < 1) {
@@ -754,25 +750,31 @@ class EntHist {
         } else {
             
             while ($readHE = $resHe->fetch_assoc()) {
-            
-                ?>
+                $propPrint = $bd->runQuery("SELECT * FROM temp_hist_property WHERE ent_type_id=".$readHE['id']."");
+                $numLines = $propPrint->num_rows;
+?>
                     <tr>
-                        <td rowspan=""><?php echo $readHE['id'] ?></td>
-                        <td rowspan=""><?php echo $readHE['name'] ?></td>
-                            
+                        
+                        <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>
+                        <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td> 
 <?php
-                        if()
-                        {
-                            
-                        }
-                        else{
+                        
+                        while($propP = $propPrint->fetch_assoc()){
+                            if($numLines == 0){
+?>
+                                <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td>
+<?php
+                            }
+                            else{
+?>                            
+                                <td><?php echo $propP['name']; ?></td>
+                                <td><?php echo $propP['value']; ?></td>
+<?php
+                            }
                             
                         }
 ?>
-                        
-                        
-                        
-                        <td rowspan=""><?php if($readHE['state'] == 'active')
+                        <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
                         {
                             echo "Ativo";
                         }else
