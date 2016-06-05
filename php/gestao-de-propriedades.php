@@ -542,6 +542,7 @@ class PropertyManage
      */
     private function estadoConclusao () {
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
+            echo "#1";
             $this->db->runQuery("COMMIT");
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
@@ -549,6 +550,7 @@ class PropertyManage
 <?php
         }
         else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $_SESSION["data"])) {
+            echo "#2";
             $this->db->runQuery("COMMIT");
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
@@ -556,6 +558,7 @@ class PropertyManage
 <?php
         }
         else {
+            echo "#3";
             $this->db->runQuery("ROLLBACK");
 ?>
             <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
@@ -597,6 +600,7 @@ class PropertyManage
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if (isset($_REQUEST["primeiraVez"])) {
+            echo "#4";
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
             $this->db->runQuery("START TRANSACTION");
@@ -645,6 +649,7 @@ class PropertyManage
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
+            echo "#5";
             $this->db->runQuery("ROLLBACK");
 ?>
             <p>Não foi possível inserir uma nova propriedade.</p>
@@ -653,6 +658,7 @@ class PropertyManage
 	}
 	else
 	{
+            echo "#6";
             //obtem o último id que foi introduzido na BD
             $id = $this->db->getMysqli()->insert_id;
             // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
@@ -662,6 +668,7 @@ class PropertyManage
             $atualiza = $this->db->runQuery($atualiza);
             if(!$atualiza)
             {
+                echo "#7";
                 $this->db->getMysqli()->rollback();
 ?>
                 <p>Não foi possível inserir uma nova propriedade.</p>
@@ -670,7 +677,9 @@ class PropertyManage
             }
             else
             {
+                echo "#8";
                 if (!empty($_REQUEST["entidadePertence"])) {
+                    echo "#9";
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
@@ -678,6 +687,7 @@ class PropertyManage
 <?php
                 }
                 else if (!empty($_REQUEST["relacaoPertence"])) {
+                    echo "#10";
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&rel_id=<?php echo $_REQUEST["relacaoPertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta relação.</p>
@@ -685,6 +695,7 @@ class PropertyManage
 <?php
                 }
                 else {
+                    echo "#11";
                     $this->db->runQuery("ROLLBACK");
 ?>
                     <p>Não foi possível inserir uma nova propriedade.</p>
