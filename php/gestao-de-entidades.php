@@ -682,7 +682,8 @@ class EntHist {
     }
 
     public function tablePresentHist($data,$bd){
-                ?>
+        echo "Qj";        
+        ?>
         <table class="table">
             <thead>
                 <th>Data de Início</th>
