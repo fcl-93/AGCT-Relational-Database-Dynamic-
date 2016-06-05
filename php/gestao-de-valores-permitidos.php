@@ -648,8 +648,8 @@ class ValoresPermitidos
         private function checkValues ($idProp,$enum) {
             $selVal = "SELECT * FROM value WHERE property_id = ".$idProp;
             $selVal = $this->bd->runQuery($selVal);
-            while ($selVal = $selVal->fetch_assoc()) {
-                if ($selVal['value'] === $enum) {
+            while ($val = $selVal->fetch_assoc()) {
+                if ($val['value'] === $enum) {
                     return true;
                 }
             }
