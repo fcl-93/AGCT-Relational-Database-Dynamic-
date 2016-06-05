@@ -756,7 +756,7 @@ class EntHist {
 <?php
                         $count = 0;
                         while($propP = $propPrint->fetch_assoc()){
-                            if($count1 == 0){
+                            if($count == 0){
 ?>
                                 <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>  
                                 <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td>
