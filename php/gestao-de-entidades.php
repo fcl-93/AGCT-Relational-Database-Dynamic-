@@ -674,11 +674,12 @@ class EntHist {
             }
         }
             }
-        ?>                                
+        
+    }
+    ?>                                
         </tbody>
         </table>
         <?php
-    }
     }
 
     public function tablePresentHist($data,$bd){
