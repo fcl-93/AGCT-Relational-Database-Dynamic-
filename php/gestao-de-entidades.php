@@ -682,7 +682,7 @@ class EntHist {
     }
 
     public function tablePresentHist($data,$bd){
-        echo "Qj";        
+        //echo "Qj";        
         ?>
         <table class="table">
             <thead>
