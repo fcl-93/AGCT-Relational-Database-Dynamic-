@@ -2078,9 +2078,7 @@ $first = false;
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
                 $id = $this->bd->userInputVal($_REQUEST['iddaEnt']);
-                echo "i: ".$i." se: ".$_SESSION['entPropPrinted'];
                 if ($i == $_SESSION['entPropPrinted']) {
-                    echo "#1";
                     if(!$this->gereInsts->addEntToHist($id,$this->bd,$updated_on)) {
                         $erro = true;
                         break;
