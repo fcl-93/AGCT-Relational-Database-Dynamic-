@@ -753,13 +753,15 @@ class EntHist {
                 $numLines = $propPrint->num_rows;
 ?>
                     <tr>
-                        
-                        <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>
-                        <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td> 
 <?php
-                        
+                        $count = 0;
                         while($propP = $propPrint->fetch_assoc()){
-                            
+                            if($count1 == 0){
+?>
+                                <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>  
+                                <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td>
+<?php
+                            }
 ?>
                              <!--   <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td> -->
 <?php
@@ -767,16 +769,24 @@ class EntHist {
                                 <td><?php echo $propP['name']; ?></td>
                                 <td><?php echo $propP['value']; ?></td>
 <?php
+                            if($count == 0)
+                            {
+?>
+                               <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
+                                {
+                                    echo "Ativo";
+                                }else
+                                {
+                                    echo "Inativo";
+                                }?></td>
+
+                            }
+<?php
+                            $count ++;
+                            ?></tr><?php
                         }
 ?>
-                        <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
-                        {
-                            echo "Ativo";
-                        }else
-                        {
-                            echo "Inativo";
-                        }?></td>
-                    </tr>
+                      
                 <?php
             }
             $bd->runQuery("DROP TEMPORARY TABLE temp_table");
