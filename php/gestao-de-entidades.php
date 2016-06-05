@@ -691,7 +691,6 @@ class EntHist {
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
                 <th>Estado Durante o Período</th>
-                <th>Ação</th>
             </thead>
         <tbody>
         <?php
