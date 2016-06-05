@@ -62,5 +62,5 @@ cursor: pointer;
 }
 /*Css do datepicker*/
 .datepicker{
-    z.index: 999999;
+    z-index: 999999;
 }
