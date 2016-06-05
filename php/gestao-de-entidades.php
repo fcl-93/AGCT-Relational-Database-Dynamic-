@@ -763,7 +763,6 @@ class EntHist {
 <?php
                             }
 ?>
-                             <!--   <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td> -->
 <?php
 ?>
                                 <td><?php echo $propP['name']; ?></td>
