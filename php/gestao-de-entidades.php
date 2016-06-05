@@ -537,6 +537,7 @@ class EntHist {
      * that is present in the history table
      */
     public function returnPreviousVersion($id, $bd) {
+        
         //gets the entity that is in the history
         $goToEnt = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE id=" . $id)->fetch_assoc();
         //gets the entity that is present in the table entity type
@@ -591,6 +592,7 @@ class EntHist {
         } else {
             while ($readHE = $resHE->fetch_assoc()) {
                 $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND inactive_on = '".$readHE['inactive_on']."'");
+                
                 $conta = 0;
  ?>
                     <tr>
@@ -609,12 +611,16 @@ class EntHist {
                                         echo 'Inativo';
                                     }?>
                         </td>
+<?php
+                     
+?>
                         <td><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
 
 <?php
                         }
                         else{
                         while($propHist = $getPropsHist->fetch_assoc()){
+                            $getProp = $bd->runQuery("SELECT * FROM property WHERE id =".$propHist['property_id']."" )->fetch_assoc();                            
 ?>
                             <td><?php echo $propHist['name']?></td>
                             <td><?php echo $propHist['value_type']?></td>
@@ -631,8 +637,34 @@ class EntHist {
                                     }
                         ?>
                                 </td>
+                          <?php
+                          if($getProp['name'] == $propHist['name'] &&
+                             $getProp['ent_type_id'] == $propHist['ent_type_id'] &&
+                             $getProp['rel_type_id'] == $propHist['rel_type_id'] &&     
+                             $getProp['value_type'] == $propHist['value_type'] &&     
+                             $getProp['form_field_name'] == $propHist['form_field_name'] &&     
+                             $getProp['form_field_type'] == $propHist['form_field_type'] &&
+                             $getProp['unit_type_id'] == $propHist['unit_type_id'] &&
+                             $getProp['form_field_order'] == $propHist['form_field_order'] &&
+                             $getProp['mandatory'] == $propHist['mandatory'] &&
+                             $getProp['state'] == $propHist['state'] &&
+                             $getProp['fk_ent_type_id'] == $propHist['fk_ent_type_id'] &&
+                             $getProp['form_field_size'] == $propHist['form_field_size'] &&
+                             $getProp['id'] == $propHist['property_id'] 
+                                  )
+                          {
+                          ?>
                         <td rowspan="<?php echo $getPropsHist->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>
-                     
+                          <?php
+                          
+                          }
+                          else
+                          {
+?>                          <td rowspan="<?php echo $getPropsHist->num_rows?>">
+                                <p>Não pode voltar para esta versão porque as propriedades que lhe estão atribuidas foram modificadas</p>
+                            </td>
+<?php
+                          }?>
 <?php   
                         }
 ?>                    
