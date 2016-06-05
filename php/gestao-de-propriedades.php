@@ -542,7 +542,7 @@ class PropertyManage
      */
     private function estadoConclusao () {
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
-            $this->db->runQuery("COMMTI");
+            $this->db->runQuery("COMMIT");
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
