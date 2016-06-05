@@ -639,7 +639,7 @@ class ValoresPermitidos
             else {
 ?>
                 <p>O valor enum selecionado não pode ser desativado.</p>
-                <p>	Clique em <?php goBack(); ?></p>
+                <p>Clique em <?php goBack(); ?></p>
 <?php
        
             }
