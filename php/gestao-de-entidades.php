@@ -779,9 +779,9 @@ class EntHist {
                                 {
                                     echo "Inativo";
                                 }?></td>
-
-                            }
 <?php
+                            }
+
                             $count ++;
                             ?></tr><?php
                         }
