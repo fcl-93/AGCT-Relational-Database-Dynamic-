@@ -524,21 +524,21 @@ class PropertyManage
      */
     private function estadoConclusao () {
         if (!empty($_REQUEST["ent_id"]) && $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $_SESSION["data"])) {
-            $this->db->getMysqli()->commit();
+            $_SESSION['mysqliObject']->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else if (!empty($_REQUEST["rel_id"]) && $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $_SESSION["data"])) {
-            $this->db->getMysqli()->commit();
+            $_SESSION['mysqliObject']->commit();
 ?>
             <p>Inseriu todas as propriedades com sucesso.</p>
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
-            $this->db->getMysqli()->rollback();
+            $_SESSION['mysqliObject']->rollback();
 ?>
             <p>Devido a um erro não foi possível inserir as propriedades pretendidas.</p>
 <?php
@@ -581,7 +581,8 @@ class PropertyManage
         if (isset($_REQUEST["primeiraVez"])) {
             // Inicia uma tansação uma vez que, devido ao id no campo form_field_name vamos ter de atualizar esse atributo, após a inserção
             $this->db->getMysqli()->autocommit(false);
-            $this->db->getMysqli()->begin_transaction();
+            $_SESSION['mysqliObject'] = $this->db->getMysqli();
+            $_SESSION['mysqliObject']->begin_transaction();
             $_SESSION["data"] = date("Y-m-d H:i:s",time());
         }
 	// De modo a evitar problemas na execução da query quando o campo form_field_size é NULL, executamos duas queries diferentes, uma sem esse campo e outra com esse campo
@@ -653,7 +654,6 @@ class PropertyManage
             else
             {
                 if (!empty($_REQUEST["entidadePertence"])) {
-                $this->db->getMysqli()->commit();
 ?>
                     <p>Inseriu os dados de nova propriedade com sucesso.</p>
                     <p>Clique em <a href="/gestao-de-propriedades/?estado=introducao&ent_id=<?php echo $_REQUEST["entidadePertence"];?>&maisProp=true">Adicionar mais Propriedade</a> para continuar a introduzir propriedades nesta entidade.</p>
