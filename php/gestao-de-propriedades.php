@@ -271,7 +271,6 @@ class PropertyManage
 ?>
                                 <td colspan="11">Esta entidade ainda não possui quaisquer propriedades</td>
                                 <td rowspan="<?php echo $numLinhas; ?>">
-                                    <a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $idEntRel;?>">[Editar propriedades]</a>
                                     <a href="gestao-de-propriedade?estado=introducao&ent_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
                                 </td> 
 <?php
@@ -280,7 +279,6 @@ class PropertyManage
 ?>
                                 <td colspan="11">Esta relação ainda não possui quaisquer propriedades</td>
                                 <td rowspan="<?php echo $numLinhas; ?>">
-                                    <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $idEntRel;?>">[Editar propriedades]</a>
                                     <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
                                 </td> 
 <?php
