@@ -744,7 +744,7 @@ class EntHist {
         if ($resHe->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="4">Não existe registos para esta tabela no dia selecionado</td>
+                    <td colspan="7">Não existe registos para esta tabela no dia selecionado</td>
                 </tr>
             <?php
         } else {
