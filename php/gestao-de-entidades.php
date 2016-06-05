@@ -759,18 +759,14 @@ class EntHist {
 <?php
                         
                         while($propP = $propPrint->fetch_assoc()){
-                            //if($numLines == 0){
+                            
 ?>
-                             <!--   <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td>-->
+                             <!--   <td colspan="2"><p>Não existem propriedades associadas a este tipo de entidade</p></td> -->
 <?php
-                            /*}
-                            else{
-?>                          */  
+?>
                                 <td><?php echo $propP['name']; ?></td>
                                 <td><?php echo $propP['value']; ?></td>
 <?php
-                            //}
-                            
                         }
 ?>
                         <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
