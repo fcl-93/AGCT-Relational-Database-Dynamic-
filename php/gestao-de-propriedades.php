@@ -266,6 +266,26 @@ class PropertyManage
                 <tr>
                         <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
                 <?php
+                        if ($resultSeleciona->num_rows === 0) {
+                            if ($tipo === "entity") {
+?>
+                                <td colspan="11">Esta entidade ainda não possui quaisquer propriedades</td>
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=editar&ent_id=<?php echo $idEntRel;?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducao&ent_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
+                                </td> 
+<?php
+                            }
+                            else {
+?>
+                                <td colspan="11">Esta relação ainda não possui quaisquer propriedades</td>
+                                <td rowspan="<?php echo $numLinhas; ?>">
+                                    <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $idEntRel;?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $idEntRel;?>">[Inserir propriedades]</a>
+                                </td> 
+<?php
+                            }
+                        }
                         $controlo = 1;
                         while($arraySelec = $resultSeleciona->fetch_assoc())
                         {
