@@ -2077,7 +2077,7 @@ $first = false;
             $updated_on = date("Y-m-d H:i:s",time());
             for($i= 0; $i <= $_SESSION['entPropPrinted']; $i++ )
             {
-                
+                echo "i: ".$i." se: ".$_SESSION['entPropPrinted'];
                 if(isset($_REQUEST['check'.$i]))
                 {
                     if(isset($_REQUEST['radio'.$i]))
