@@ -2724,7 +2724,7 @@ class entityHist{
          if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($bd);
         }
-        else if ($bd->validaDatas ($_REQUEST['data'])){
+        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))){
 ?>
                 <form method="GET">
                                 Verificar histórico:<br>
@@ -2732,6 +2732,7 @@ class entityHist{
                                 <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
                                 <input type="radio" name="controlDia" value="dia">no dia<br>
                                 <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="hidden" name="selData" value="true">
                                 <input type="hidden" name="estado" value="historico">
                                 <input type="hidden" name="ent_id" value="<?php echo $id; ?>">
                                 <input type="submit" value="Apresentar histórico">

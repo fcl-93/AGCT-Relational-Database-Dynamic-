@@ -1418,7 +1418,8 @@ class RelHist{
      * After that he presents a table with all the versions presented in the history
      * @param type $bd (object form the class Db_Op)
      */
-    public function showHist ($bd) {      
+    public function showHist ($bd) {  
+        if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))) {
 ?>
         <form method="GET">
             Verificar histórico:<br>
@@ -1426,6 +1427,7 @@ class RelHist{
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text"  class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="selData" value="true">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="rel" value="<?php echo $_REQUEST["rel"]; ?>">
             <input type="submit" value="Apresentar histórico">
@@ -1577,7 +1579,7 @@ class RelHist{
             <tbody>
         </table>
 <?php
-        
+        }
     }
     
     /**
