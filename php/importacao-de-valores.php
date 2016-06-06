@@ -818,7 +818,6 @@ class ImportValues{
         else {
             $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
-        echo $queryInsertValue;
         $queryInsertValue = $this->db->runQuery($queryInsertValue);
         if(!$queryInsertValue)
         {
