@@ -399,7 +399,6 @@ class GereForms
                                 return false;
                             }
                             if (isset($_REQUEST["idProp".$i]) && empty($_REQUEST["obrigatorio".$i])) {
-                                echo $i;
 ?> 
                                 <p>Deve escolher uma opção para o campo Obrigatório no forumlário costumizado.</p><br>
 <?php 
