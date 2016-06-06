@@ -650,7 +650,7 @@ class InsereRelacoes
                                 while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                                 {
                                     $verificaRel = "SELECT * FROM relation WHERE (entity1_id = ".$prev_SelEnt." AND entity2_id = ".$read_SecondEnt['id'].") OR (entity2_id = ".$prev_SelEnt." AND entity1_id = ".$read_SecondEnt['id'].")";
-                                    if ($this->bd->runQuery($verificaRel)->num_rows() === 0) {
+                                    if ($this->bd->runQuery($verificaRel)->num_rows === 0) {
                                         if($read_SecondEnt['entity_name'] != '')
                                         {
     ?>
