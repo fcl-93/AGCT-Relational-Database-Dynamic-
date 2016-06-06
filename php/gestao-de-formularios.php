@@ -836,7 +836,7 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
-        if ($this->bd->validaDatas($_REQUEST['data'])) {
+        if ($bd->validaDatas($_REQUEST['data'])) {
         
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
                         $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
