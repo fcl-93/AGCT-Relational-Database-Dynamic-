@@ -635,7 +635,7 @@ class InsereRelacoes
             
             if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM entity WHERE id NOT IN (SELECT entity.id FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id'].")");
+               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']);
 ?>
                 <html>
                     <form>
@@ -649,26 +649,29 @@ class InsereRelacoes
                                 $control = 0;
                                 while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                                 {
-                                    if($read_SecondEnt['entity_name'] != '')
-                                    {
-?>
-                                    <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
-                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                    <tr>
-<?php
+                                    $verificaRel = "SELECT * FROM relation WHERE (entity1_id = ".$prev_SelEnt." AND entity2_id = ".$read_SecondEnt['entity_name'].") OR (entity2_id = ".$prev_SelEnt." AND entity1_id = ".$read_SecondEnt['entity_name'].")";
+                                    if ($this->bd->runQuery($verificaRel)->num_rows() === 0) {
+                                        if($read_SecondEnt['entity_name'] != '')
+                                        {
+    ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                            <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <tr>
+    <?php
+                                        }
+                                        else
+                                        { 
+                                            //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+    ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
+                                            <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <tr>
+    <?php
+                                        }
+                                        $control++;
                                     }
-                                    else
-                                    { 
-                                        //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-?>
-                                    <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
-                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                    <tr>
-<?php
-                                    }
-                                    $control++;
                                 }
                                 $_SESSION['numEnt2Max'] = $control; 
 ?>
