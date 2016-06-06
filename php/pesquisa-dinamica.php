@@ -2724,7 +2724,7 @@ class entityHist{
          if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($bd);
         }
-        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))){
+        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $bd->validaDatas($_REQUEST['data']))){
 ?>
                 <form method="GET">
                                 Verificar histórico:<br>
