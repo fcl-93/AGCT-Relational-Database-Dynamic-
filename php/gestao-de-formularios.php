@@ -62,7 +62,9 @@ class GereForms
                                 else if($_REQUEST['estado'] == 'historico')
                                 {
                                     if(isset($_REQUEST['histAll'])){
-                                        $this->gereFormHist->tableHistPrint($this->bd->userInputVal($_REQUEST['data']), $this->bd);
+                                        if ($this->bd->validaDatas($_REQUEST['data'])) {
+                                            $this->gereFormHist->tableHistPrint($this->bd->userInputVal($_REQUEST['data']), $this->bd);
+                                        }
                                     }
                                     else{
                                         $this->gereFormHist->tableHist($this->bd->userInputVal($_REQUEST['form_id']), $this->bd);    
