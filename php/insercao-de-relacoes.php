@@ -1419,7 +1419,7 @@ class RelHist{
      * @param type $bd (object form the class Db_Op)
      */
     public function showHist ($bd) {  
-        if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))) {
+        if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $bd->validaDatas($_REQUEST['data']))) {
 ?>
         <form method="GET">
             Verificar histórico:<br>
