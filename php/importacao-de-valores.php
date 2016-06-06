@@ -610,10 +610,10 @@ class ImportValues{
         print_r($_FILES);
         $target_file = $_FILES["file"]["name"];
         $targetLocation = $_FILES["file"]["tmp_name"];
-	$fileType = pathinfo($targetLocation,PATHINFO_EXTENSION);
+	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
 	// Check if file already exists
-	if (!file_exists($target_file)) {
+	if (!file_exists($targetLocation)) {
 ?>
 	    <p>Pedimos desculpa, mas o seu ficheiro não foi carregado!</p>
 <?php
