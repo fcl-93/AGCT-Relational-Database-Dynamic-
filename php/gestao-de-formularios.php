@@ -836,124 +836,123 @@ class HistDeForms{
      * @param type $bd
      */
     public function tableHist($id,$bd){
+        if ($this->bd->validaDatas($_REQUEST['data'])) {
         
-                                    if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
-                                    }
-                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
-                                    }
-                                    else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
+            if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on<='".$_REQUEST['data']."' ORDER BY inactive_on DESC");   
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on>='".$_REQUEST['data']."' ORDER BY inactive_on DESC");
+            }
+            else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($_REQUEST["data"]) + 86400))."' AND inactive_on >= '".$_REQUEST["data"]."' ORDER BY inactive_on DESC");
 
-                                    }
-                                    else {
-                                                $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
+            }
+            else {
+                        $goToCFN = $bd->runQuery("SELECT * FROM hist_custom_form WHERE custom_form_id=".$id);
 
-                                    }
-        //echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;   
+            }
+//echo "SELECT * FROM hist_custom_form WHERE custom_form_id=".$id;   
 ?>
-                        <form method="GET">
-                                Verificar histórico:<br>
-                                <input type="radio" name="controlDia" value="ate">até ao dia<br>
-                                <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
-                                <input type="radio" name="controlDia" value="dia">no dia<br>
-                                <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
-                                <input type="hidden" name="estado" value="historico">
-                                <input type="hidden" name="form_id" value="<?php echo $id; ?>">
-                                <input type="submit" value="Apresentar histórico">
-                        </form>
-                        
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Data de Ativação</th>
-                                    <th>Data de Desativação</th>
-                                    <th>Nome do Formulário</th>
-                                    <th>Propriedade</th>
-                                    <th>Nome do campo no formulário</th>
-                                    <th>Tamanho do campo no formulário</th>
-                                    <th>Ordem do campo no formulário</th>
-                                    <th>Obrigatório no forumulário customizado</th>
-                                    <th>Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+            <form method="GET">
+                    Verificar histórico:<br>
+                    <input type="radio" name="controlDia" value="ate">até ao dia<br>
+                    <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+                    <input type="radio" name="controlDia" value="dia">no dia<br>
+                    <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
+                    <input type="hidden" name="estado" value="historico">
+                    <input type="hidden" name="form_id" value="<?php echo $id; ?>">
+                    <input type="submit" value="Apresentar histórico">
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data de Ativação</th>
+                        <th>Data de Desativação</th>
+                        <th>Nome do Formulário</th>
+                        <th>Propriedade</th>
+                        <th>Nome do campo no formulário</th>
+                        <th>Tamanho do campo no formulário</th>
+                        <th>Ordem do campo no formulário</th>
+                        <th>Obrigatório no forumulário customizado</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
 <?php
-                           //  echo $goToCFN->num_rows;
-                            if($goToCFN->num_rows == 0){
+               //  echo $goToCFN->num_rows;
+                if($goToCFN->num_rows == 0){
 ?>                                
-                                <tr>
-                                    <td colspan="8">Não existe registo referente à entidade selecionada no histórico</td>
-                                    <td><?php goBack()?></td>
-                                </tr>
+                <tr>
+                    <td colspan="8">Não existe registo referente à entidade selecionada no histórico</td>
+                    <td><?php goBack()?></td>
+                </tr>
 <?php 
+                }
+                else
+                {
+                    while($readFNhist = $goToCFN->fetch_assoc()){
+?>
+                    <tr> 
+<?php
+                        //echo "SELECT * FROM hist_custom_form_has_property WHERE inactive_on='".$readFNhist['inactive_on']."'";
+                        $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND  inactive_on='".$readFNhist['inactive_on']."'");
+                        $spanSize = $getPropHist->num_rows;                                            
+?>              
+                        <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['active_on']?></td>
+                        <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['inactive_on']?></td>
+                        <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['name']?></td>
+<?php
+                        $checkIfFIrst = true;
+                        while($getPropId = $getPropHist ->fetch_assoc())
+                       {
+                            $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
+?>
+                            <td><?php echo $getPropName['name']?></td>
+                            <td><?php echo $getPropName['form_field_name']?></td>
+                            <td><?php echo $getPropName['form_field_size']?></td>
+
+                            <td><?php echo $getPropId['field_order']?></td>
+                            <td>
+<?php 
+                            if($getPropId['mandatory_form'] == 1)
+                            {
+                                echo "Sim";
                             }
                             else
                             {
-                                    while($readFNhist = $goToCFN->fetch_assoc()){
-?>
-                                        <tr> 
-<?php
-                                            //echo "SELECT * FROM hist_custom_form_has_property WHERE inactive_on='".$readFNhist['inactive_on']."'";
-                                            $getPropHist  = $bd->runQuery("SELECT * FROM hist_custom_form_has_property WHERE custom_form_id = ".$id."  AND  inactive_on='".$readFNhist['inactive_on']."'");
-                                            $spanSize = $getPropHist->num_rows;                                            
-?>              
-                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['active_on']?></td>
-                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['inactive_on']?></td>
-                                                <td rowspan="<?php echo $spanSize ?>"><?php echo $readFNhist['name']?></td>
-<?php
-                                                $checkIfFIrst = true;
-                                                while($getPropId = $getPropHist ->fetch_assoc())
-                                               {
-                                                        $getPropName = $bd->runQuery("SELECT * FROM hist_property WHERE property_id=".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
-?>
-                                                    <td><?php echo $getPropName['name']?></td>
-                                                    <td><?php echo $getPropName['form_field_name']?></td>
-                                                    <td><?php echo $getPropName['form_field_size']?></td>
-
-                                                    <td><?php echo $getPropId['field_order']?></td>
-                                                    <td>
-<?php 
-                                                    if($getPropId['mandatory_form'] == 1)
-                                                    {
-                                                        echo "Sim";
-                                                    }
-                                                    else
-                                                    {
-                                                        echo "Não";
-                                                    }
+                                echo "Não";
+                            }
 ?> 
-                                         <?php
-                                                        if($checkIfFIrst == true){
-                                                           // echo "href=\"?estado=versionBack&histId=<?php echo ."$getPropHist['custom_form_id']."?\>";
-?>
-                                                        </td> <td rowspan="<?php echo$spanSize ?>">
-                                                            
-                                                            
-                                                        <a href="?estado=versionBack&histId=<?php echo $getPropId['id']?>">Voltar para esta versão</a>
 <?php
-                                                        $checkIfFIrst =false;
+                            if($checkIfFIrst == true){
+                               // echo "href=\"?estado=versionBack&histId=<?php echo ."$getPropHist['custom_form_id']."?\>";
+?>
+                                </td> <td rowspan="<?php echo$spanSize ?>">
+                                <a href="?estado=versionBack&histId=<?php echo $getPropId['id']?>">Voltar para esta versão</a>
+<?php
+                                $checkIfFIrst =false;
 ?> 
-                                                    </td> 
+                            </td> 
 <?php
-                                                        }
+                            }
 ?>
-
-                                            </tr>                               
+                    </tr>                               
 <?php                                   
-                                                } 
+                    } 
 ?>
                                    
 <?php
-                                                    }
+                }
                                  
-                            }                   
+            }                   
                             
 ?>
-                            </tbody>
-                        </table>
+            </tbody>
+        </table>
 <?php
+        }
     }
     
     /**
