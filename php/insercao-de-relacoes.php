@@ -569,9 +569,6 @@ class InsereRelacoes
                 //print_r($_REQUEST);
                
             }
-            echo "bef";
-            echo $_REQUEST['ent'];
-            echo "aft;";
             //after
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
             $read_EntType = $res_EntType->fetch_assoc();
@@ -1075,7 +1072,7 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            
+            $erro = false;
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
                 
                 if(isset($_REQUEST['nomeDaRel'.$i]))
@@ -1108,7 +1105,7 @@ class InsereRelacoes
                     }
                     else
                     {
-?>
+?>                      
                         <html>
                             <p>A inserção de esta nova relação falhou.</p>
                             <p>Clique em <a href="insercao-de-relacoes"/>Continuar</a> para continuar</p>
@@ -1717,7 +1714,6 @@ class RelHist{
         }
         $updateHist = "INSERT INTO `hist_relation`(".$attr." inactive_on, relation_id) "
                 . "VALUES (".$val."'".$dataUpdate."',".$_REQUEST["rel"].")";
-        echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
             return true;
