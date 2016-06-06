@@ -609,7 +609,8 @@ class ImportValues{
         print_r($_REQUEST);
         print_r($_FILES);
         $target_file = $_FILES["file"]["name"];
-	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
+        $targetLocation = $_FILES["file"]["tmp_name"];
+	$fileType = pathinfo($targetLocation,PATHINFO_EXTENSION);
 
 	// Check if file already exists
 	if (!file_exists($target_file)) {
