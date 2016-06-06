@@ -2973,7 +2973,7 @@ class entityHist{
      * @param Db_Op $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($db) {
-        if ($this->bd->validaDatas($_REQUEST['data'])) {
+        if ($db->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
