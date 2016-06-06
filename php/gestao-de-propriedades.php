@@ -1571,7 +1571,7 @@ class PropHist{
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
-        else if (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data'])){
+        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))){
         //meto um datepicker 
 ?>
         <form method="GET">
