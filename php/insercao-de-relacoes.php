@@ -66,7 +66,9 @@ class InsereRelacoes
                     {
                         if(isset($_REQUEST['histAll']))
                         {
-                            $this->gereInsRel->tableState($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                            if ($this->bd->validaDatas($_REQUEST['data'])) {
+                                $this->gereInsRel->tableState($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                            }
                         }
                         else{
                             $this->gereInsRel->showHist($this->bd);

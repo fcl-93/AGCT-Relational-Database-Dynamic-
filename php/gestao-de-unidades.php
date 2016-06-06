@@ -372,7 +372,7 @@ class UnidadeHist
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($db);
         }
-        else {
+        else if ($this->bd->validaDatas($_REQUEST['data'])) {
         //meto um datepicker        
 ?>
         <form method="GET">
@@ -486,6 +486,7 @@ class UnidadeHist
      * @param type $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($db) {
+        if ($this->bd->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
@@ -547,6 +548,7 @@ class UnidadeHist
             </tbody>
         </table>
 <?php
+        }
     }
 }
 ?>

@@ -2724,7 +2724,7 @@ class entityHist{
          if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($bd);
         }
-        else {
+        else if ($bd->validaDatas ($_REQUEST['data'])){
 ?>
                 <form method="GET">
                                 Verificar histórico:<br>
@@ -2973,6 +2973,7 @@ class entityHist{
      * @param Db_Op $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($db) {
+        if ($this->bd->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
@@ -3122,6 +3123,7 @@ class entityHist{
             </tbody>
         </table>
 <?php
+        }
     }
      
 }

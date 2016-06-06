@@ -743,7 +743,7 @@ class ValPerHist{
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
-        else {
+        else if ($this->bd->validaDatas($_REQUEST['data'])){
         //meto um datepicker        
 ?>
         <form method="GET">
@@ -881,6 +881,7 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($tipo, $db) {
+        if ($this->bd->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
@@ -982,6 +983,7 @@ class ValPerHist{
             </tbody>
         </table>
 <?php
+        }
     }
 }
 

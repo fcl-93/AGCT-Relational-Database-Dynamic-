@@ -152,6 +152,26 @@ class Db_Op
         $nome = $nome1."-".$nome2;
         return $nome;
     }
+    
+    /**
+     * This method checks if the date is in a format that can be used in MySQL queries
+     * @param type $date
+     * @return boolean
+     */
+    public function validaDatas($date) {
+        $format = "Y-m-d";
+        $d = DateTime::createFromFormat($format, $date);
+        if(!($d && $d->format($format) == $date)) {
+?>
+            <p>A data introduzida não é válida. Certifique-se que esta se encontra no formato AAAA-MM-DD</p>
+<?php
+            goBack();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
    
 }
 
