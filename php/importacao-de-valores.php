@@ -606,8 +606,6 @@ class ImportValues{
      * @return boolean true if the file is OK, false otherwise
      */
     private function verificaFicheiro () {
-        print_r($_REQUEST);
-        print_r($_FILES);
         $target_file = $_FILES["file"]["name"];
         $targetLocation = $_FILES["file"]["tmp_name"];
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
