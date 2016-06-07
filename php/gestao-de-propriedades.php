@@ -90,6 +90,10 @@ class PropertyManage
         {
             $this->estadoEditar();
         }
+        elseif($_REQUEST['estado'] =='inactive')
+        {
+            $this->estadoInactive();
+        }
         elseif($_REQUEST['estado'] =='update')
         {
             if($this->validaEdicoes())
