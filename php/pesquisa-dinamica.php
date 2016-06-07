@@ -1608,7 +1608,7 @@ class Search{
             if ($selected == 0) {
 ?>
                 <form method="GET">
-                    Verificar propriedades existentes no dia : 
+                    Verificar tabela apresentada abaixo no dia : 
                     <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                     <input type="hidden" name="estado" value="historico">
                     <input type="hidden" name="ent" value="<?php echo $this->bd->userInputVal($_REQUEST["ent"])?>">
@@ -1759,7 +1759,7 @@ $first = false;
             </tbody>
         </table>
 <?php
-        $_SESSION['typeId'] = $this->bd->userInputVal($_REQUEST['ent']);
+        
             $excelGen = new ExportValues();
             $excelGen->geraExcel($querydinamica,$this->frase,$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
