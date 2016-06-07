@@ -1571,8 +1571,8 @@ class PropHist{
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
-        else {
-        //meto um datepicker        
+        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))){
+        //meto um datepicker 
 ?>
         <form method="GET">
             Verificar histórico:<br>
@@ -1580,6 +1580,7 @@ class PropHist{
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text" class="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="selData" value="true">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="id" value="<?php echo $_REQUEST["id"]; ?>">
             <input type="submit" value="Apresentar histórico">
@@ -1702,6 +1703,7 @@ class PropHist{
      * @param type $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($tipo, $db) {
+        if ($db->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
@@ -1895,6 +1897,7 @@ class PropHist{
             </tbody>
         </table>
 <?php
+        }
     }
 }
 

@@ -607,10 +607,11 @@ class ImportValues{
      */
     private function verificaFicheiro () {
         $target_file = $_FILES["file"]["name"];
+        $targetLocation = $_FILES["file"]["tmp_name"];
 	$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
 	// Check if file already exists
-	if (!file_exists($target_file)) {
+	if (!file_exists($targetLocation)) {
 ?>
 	    <p>Pedimos desculpa, mas o seu ficheiro não foi carregado!</p>
 <?php
@@ -818,7 +819,6 @@ class ImportValues{
         else {
             $queryInsertValue = "INSERT INTO `value`(`id`, `relation_id`, `property_id`, `value`, `updated_on`, `producer`) VALUES (NULL,".$idEntRel.", ".$idProp.",'".$valores."','".date("Y-m-d H:i:s",time())."','".wp_get_current_user()->user_login."')";
         }
-        echo $queryInsertValue;
         $queryInsertValue = $this->db->runQuery($queryInsertValue);
         if(!$queryInsertValue)
         {

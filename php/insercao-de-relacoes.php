@@ -66,7 +66,9 @@ class InsereRelacoes
                     {
                         if(isset($_REQUEST['histAll']))
                         {
-                            $this->gereInsRel->tableState($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                            if ($this->bd->validaDatas($_REQUEST['data'])) {
+                                $this->gereInsRel->tableState($this->bd->userInputVal($_REQUEST['data']),$this->bd);
+                            }
                         }
                         else{
                             $this->gereInsRel->showHist($this->bd);
@@ -569,9 +571,6 @@ class InsereRelacoes
                 //print_r($_REQUEST);
                
             }
-            echo "bef";
-            echo $_REQUEST['ent'];
-            echo "aft;";
             //after
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
             $read_EntType = $res_EntType->fetch_assoc();
@@ -649,26 +648,29 @@ class InsereRelacoes
                                 $control = 0;
                                 while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                                 {
-                                    if($read_SecondEnt['entity_name'] != '')
-                                    {
-?>
-                                    <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
-                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                    <tr>
-<?php
+                                    $verificaRel = "SELECT * FROM relation WHERE (entity1_id = ".$prev_SelEnt." AND entity2_id = ".$read_SecondEnt['id'].") OR (entity2_id = ".$prev_SelEnt." AND entity1_id = ".$read_SecondEnt['id'].")";
+                                    if ($this->bd->runQuery($verificaRel)->num_rows === 0) {
+                                        if($read_SecondEnt['entity_name'] != '')
+                                        {
+    ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                            <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <tr>
+    <?php
+                                        }
+                                        else
+                                        { 
+                                            //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+    ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
+                                            <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <tr>
+    <?php
+                                        }
+                                        $control++;
                                     }
-                                    else
-                                    { 
-                                        //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-?>
-                                    <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
-                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                    <tr>
-<?php
-                                    }
-                                    $control++;
                                 }
                                 $_SESSION['numEnt2Max'] = $control; 
 ?>
@@ -700,26 +702,29 @@ class InsereRelacoes
                             $control = 0;
                             while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                             {
-                                if($read_SecondEnt['entity_name'] != '')
-                                {
-        ?>
-                                <tr>
-                                    <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
-                                    <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                </tr>
-        <?php   
-                                }
-                                else
-                                {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
-?>
+                                $verificaRel = "SELECT * FROM relation WHERE (entity1_id = ".$prev_SelEnt." AND entity2_id = ".$read_SecondEnt['id'].") OR (entity2_id = ".$prev_SelEnt." AND entity1_id = ".$read_SecondEnt['id'].")";
+                                if ($this->bd->runQuery($verificaRel)->num_rows === 0) {
+                                    if($read_SecondEnt['entity_name'] != '')
+                                    {
+            ?>
                                     <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
-                                        <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
-                                    <tr>
-<?php                                    
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                        <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                    </tr>
+            <?php   
+                                    }
+                                    else
+                                    {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
+    ?>
+                                        <tr>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
+                                            <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <tr>
+    <?php                                    
 
+                                    }
+                                    $control++;
                                 }
-                                $control++;
                             }
                             $_SESSION['numEnt2Max'] = $control; 
         ?>
@@ -1069,7 +1074,7 @@ class InsereRelacoes
          */
         private function nedita(){
             //a preencher
-            
+            $erro = false;
             for($i=0; $i <= $_SESSION['numEnt2Max'];$i++){    
                 
                 if(isset($_REQUEST['nomeDaRel'.$i]))
@@ -1102,7 +1107,7 @@ class InsereRelacoes
                     }
                     else
                     {
-?>
+?>                      
                         <html>
                             <p>A inserção de esta nova relação falhou.</p>
                             <p>Clique em <a href="insercao-de-relacoes"/>Continuar</a> para continuar</p>
@@ -1305,6 +1310,7 @@ class InsereRelacoes
 ?>
             <h3>Inserção de Relações - Nova Relação</h3>
             <form>
+                <label>Entidade 1</label><br>
                 <select id="ent" name="ent">
                         <option></option>
 <?php
@@ -1412,7 +1418,8 @@ class RelHist{
      * After that he presents a table with all the versions presented in the history
      * @param type $bd (object form the class Db_Op)
      */
-    public function showHist ($bd) {      
+    public function showHist ($bd) {  
+        if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $bd->validaDatas($_REQUEST['data']))) {
 ?>
         <form method="GET">
             Verificar histórico:<br>
@@ -1420,6 +1427,7 @@ class RelHist{
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
             <input type="text"  class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="selData" value="true">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="rel" value="<?php echo $_REQUEST["rel"]; ?>">
             <input type="submit" value="Apresentar histórico">
@@ -1571,7 +1579,7 @@ class RelHist{
             <tbody>
         </table>
 <?php
-        
+        }
     }
     
     /**
@@ -1710,7 +1718,6 @@ class RelHist{
         }
         $updateHist = "INSERT INTO `hist_relation`(".$attr." inactive_on, relation_id) "
                 . "VALUES (".$val."'".$dataUpdate."',".$_REQUEST["rel"].")";
-        echo $updateHist;
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
             return true;

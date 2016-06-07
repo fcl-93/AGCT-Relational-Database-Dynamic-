@@ -607,9 +607,12 @@ class ValoresPermitidos
 	 */
 	public function desactivate(){
             
-                $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
-                $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
-                $idProp = $selProp->fetch_assoc()["property_id"];
+            $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
+            $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
+            $prop = $selProp->fetch_assoc();
+            $idProp = $prop["property_id"];
+            $value = $prop['value'];
+            if (!$this->checkValues($idProp,$value)) {
                 if($this->histVal->addHist($idProp, $this->bd))
                 {
                     $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
@@ -618,10 +621,10 @@ class ValoresPermitidos
                     $read_enumName = $res_enumName->fetch_assoc();
                     $this->bd->getMysqli()->commit();
 ?>
-		<html>
-		 	<p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
-		 	<p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
-		</html>
+                <html>
+                        <p>O valor <?php echo $read_enumName['value'] ?> foi desativado</p>
+                        <p>Clique em <a href="/gestao-de-valores-permitidos"/>Continuar</a> para avançar</p>
+                </html>
 <?php 
                 }
                 else
@@ -631,11 +634,27 @@ class ValoresPermitidos
                     <p>O valor enum selecionado não pode ser desativado.</p>
                     <p>	Clique em <?php goBack(); ?></p>
 <?php
-        
                 }
-            
-
+            }
+            else {
+?>
+                <p>O valor enum selecionado não pode ser desativado.</p>
+                <p>Clique em <?php goBack(); ?></p>
+<?php
+       
+            }
 	}
+        
+        private function checkValues ($idProp,$enum) {
+            $selVal = "SELECT * FROM value WHERE property_id = ".$idProp;
+            $selVal = $this->bd->runQuery($selVal);
+            while ($val = $selVal->fetch_assoc()) {
+                if ($val['value'] === $enum) {
+                    return true;
+                }
+            }
+            return false;
+        }
 	
 }
 /**
@@ -724,7 +743,7 @@ class ValPerHist{
         if (isset($_REQUEST["histAll"])) {
             $this->apresentaHistTodas($_REQUEST["tipo"], $db);
         }
-        else {
+        else if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $db->validaDatas($_REQUEST['data']))){
         //meto um datepicker        
 ?>
         <form method="GET">
@@ -732,7 +751,8 @@ class ValPerHist{
             <input type="radio" name="controlDia" value="ate">até ao dia<br>
             <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
             <input type="radio" name="controlDia" value="dia">no dia<br>
-            <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
+            <input type="hidden" name="selData" value="true">
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="prop_id" value="<?php echo $_REQUEST["prop_id"]; ?>">
             <input type="submit" value="Apresentar histórico">
@@ -862,6 +882,7 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     private function apresentaHistTodas ($tipo, $db) {
+        if ($db->validaDatas($_REQUEST['data'])) {
 ?>
         <table class="table">
             <thead>
@@ -963,6 +984,7 @@ class ValPerHist{
             </tbody>
         </table>
 <?php
+        }
     }
 }
 
