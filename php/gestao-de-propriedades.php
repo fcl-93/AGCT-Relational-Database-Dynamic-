@@ -972,6 +972,7 @@ class PropertyManage
         $data = date("Y-m-d H:i:s",time());
         $avanca = false;
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
         if ($this->gereHist->atualizaHistorico($this->db,$data,$_REQUEST['prop_id'],true) == false) {
 ?>
             <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
@@ -979,37 +980,29 @@ class PropertyManage
             goBack();
         }
         else {
-            $queryUpdate = "UPDATE property SET state=";
             if ($_REQUEST["estado"] === "desativar") {
-                if ($this->verificaValue ($_REQUEST['prop_id'])) {
-                    goBack();
-                }
-                else {
-                    $queryUpdate .= "'inactive'";
-                    $estado = "desativada";
-                    $avanca = true;
-                }
+?>
+            <p>Está prestes a desativar a propriedade <?php echo $nome?>  e por isso todos os valores que estão associados a esta.</p>
+            <p>Clique em <a href="/gestao-de-propriedades?estado=inactive&prop_id=<?php echo $_REQUEST['prop_id'];?>">Continuar</a> se deseja prosseguir ou em <?php goBack()?> caso contrário.</p>
+<?php
             }
             else {
-                $queryUpdate .= "'active'";
-                $estado = "ativada";
-                $avanca = true;
-
-            }
-            if ($avanca) {
-                $queryUpdate .= ",updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
+                $queryUpdate = "UPDATE property SET state= 'active', updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
                 $queryUpdate= $this->db->runQuery($queryUpdate);
                 if ($queryUpdate) {
-                    $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
                     $this->db->getMysqli()->commit();
 ?>
-                    <p>A propriedade <?php echo $nome ?> foi <?php echo $estado ?></p>
+                    <p>A propriedade <?php echo $nome ?> foi ativada</p>
                     <br>
                     <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
 <?php   
                 }
                 else {
+?>
+                    <p>Não foi possível ativar a propriedade pretendida.</p>
+<?php 
                     $this->db->getMysqli()->rollback;
+                    goBack();
                 }
             }
         }
@@ -1017,35 +1010,45 @@ class PropertyManage
     }
     
     /**
-     * This method verifies if there is any value for the selected property
+     * This method desactivates the selected proprerty and all the values associated to it
+     */
+    private function estadoInactive() {
+        $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
+        $this->desativaValue($_REQUEST['prop_id']);
+        $queryUpdate = "UPDATE property SET state='inactive',updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
+        $queryUpdate= $this->db->runQuery($queryUpdate);
+        if ($queryUpdate) {
+            $this->db->getMysqli()->commit();
+?>
+            <p>A propriedade <?php echo $nome ?> foi desativada</p>
+            <br>
+            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+<?php   
+        }
+        else {
+?>
+            <p>Não foi possível desativar a propriedade pretendida.</p>
+<?php 
+            $this->db->getMysqli()->rollback;
+            goBack();
+        }
+    }
+    
+    /**
+     * This method desativates a value if there is any value for the selected property
      * @param type $idProp (id of the property we want to check)
      * @return boolean (true if already exists)
      */
-    private function verificaValue ($idProp) {
+    private function desativaValue ($idProp) {
         $queryProp = "SELECT * FROM property WHERE id = ".$idProp;
         $queryProp = $this->db->runQuery($queryProp);
         $prop = $queryProp->fetch_assoc();
         $queryCheck = "SELECT * FROM value WHERE state = 'active' AND property_id = ".$idProp;
         $queryCheck = $this->db->runQuery($queryCheck);
-        if ($queryCheck->num_rows > 0) {
-            if (isset($prop["ent_type_id"])) {
-?>
-                <p>Não pode desativar esta propriedade, uma vez que já existem entidades com valores para essas propriedades.</p>
-                <p>Necessita de desativar estas propriedades nessas entidades antes de desativar esta propriedade.</p>
-                <p>Para fazê-lo deve dirigir-se à página <a href = "/pesquisa-dinamica?estado=execucao&ent=<?php echo $prop["ent_type_id"]?>">Pesquisa dinâmica</a></p>
-<?php
-            }
-            else {
-?>
-                <p>Não pode desativar esta propriedade, uma vez que já existem relações com valores para essas propriedades.</p>
-                <p>Necessita de desativar estas propriedades nessas relações antes de desativar esta propriedade.</p>
-                <p>Para fazê-lo deve dirigir-se à página <a href = "/insercao-de-relacoes">Inserção de Relações</a></p>
-<?php
-            }
-            return true;
-        }
-        else {
-            return false;
+        
+        while ($val = $queryCheck->fetch_assoc()) {
+            $this->db->runQuery("UPDATE value SET state = 'inactive' WHERE id = ".$val['id']);
         }
     }
     
