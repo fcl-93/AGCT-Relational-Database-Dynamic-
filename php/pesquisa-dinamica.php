@@ -2195,7 +2195,8 @@ $first = false;
                     }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi ativado</p>
-                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
+                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar para a página inicial da pesquisa dinâmica</p>
+                    <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Continuar a Desativar </a> para prosseguir com a desativação de instânicas </p>
 <?php
                     $this->bd->getMysqli()->commit();   
                 }
@@ -2222,8 +2223,8 @@ $first = false;
                     }
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
-                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
-                    <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Pesquisa dinâmica </a> </p>
+                    <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar para a página inicial da pesquisa dinâmica</p>
+                    <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Continuar a Desativar </a> para prosseguir com a desativação de instânicas </p>
 <?php 
                     $this->bd->getMysqli()->commit();   
                 }
