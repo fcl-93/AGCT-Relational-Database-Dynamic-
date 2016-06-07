@@ -52,7 +52,8 @@ class Search{
                 } 
                 else if ($_REQUEST['estado'] == 'inactive')
                 {
-                    $this->changeState();
+                     $idEntTp = $_SESSION['typeId'];
+                    $this->changeState($idEntTp);
                 }
                 else if ($_REQUEST['estado'] == 'active')
                 {
