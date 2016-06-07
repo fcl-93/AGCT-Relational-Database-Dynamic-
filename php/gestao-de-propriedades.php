@@ -1017,9 +1017,10 @@ class PropertyManage
      * This method desactivates the selected proprerty and all the values associated to it
      */
     private function estadoInactive() {
+        $data = date("Y-m-d H:i:s",time());
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
         $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
-        $this->desativaValue($_REQUEST['prop_id']);
+        $this->desativaValue($_REQUEST['prop_id'], $data);
         $queryUpdate = "UPDATE property SET state='inactive',updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
         $queryUpdate= $this->db->runQuery($queryUpdate);
         if ($queryUpdate) {
@@ -1044,7 +1045,7 @@ class PropertyManage
      * @param type $idProp (id of the property we want to check)
      * @return boolean (true if already exists)
      */
-    private function desativaValue ($idProp) {
+    private function desativaValue ($idProp, $data) {
         $queryProp = "SELECT * FROM property WHERE id = ".$idProp;
         $queryProp = $this->db->runQuery($queryProp);
         $prop = $queryProp->fetch_assoc();
@@ -1052,7 +1053,7 @@ class PropertyManage
         $queryCheck = $this->db->runQuery($queryCheck);
         
         while ($val = $queryCheck->fetch_assoc()) {
-            $this->db->runQuery("UPDATE value SET state = 'inactive' WHERE id = ".$val['id']);
+            $this->db->runQuery("UPDATE value SET state = 'inactive',updated_on ='".$data."' WHERE id = ".$val['id']);
         }
     }
     
