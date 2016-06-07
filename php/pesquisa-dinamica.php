@@ -56,8 +56,8 @@ class Search{
                 }
                 else if ($_REQUEST['estado'] == 'active')
                 {
-                    $idEntTp = $this->bd->userInputVal($_SESSION['typeId']);
-                    unset($_SESSION['typeId']);
+                    $idEntTp = $_SESSION['typeId'];
+                 
                     $this->changeState($idEntTp);
                 }
                 else if ($_REQUEST['estado'] == 'updateValoresEnt')
