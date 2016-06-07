@@ -1616,7 +1616,8 @@ class Search{
                     <input type="submit" value="Apresentar propriedades">
                 </form>
 <?php
-            }          
+            }      
+            $_SESSION['typeId'] = $this->bd->userInputVal($_REQUEST['ent']);
 ?>
         <table class="table">
             <thead>
