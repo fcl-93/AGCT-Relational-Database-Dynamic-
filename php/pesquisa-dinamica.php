@@ -56,7 +56,8 @@ class Search{
                 }
                 else if ($_REQUEST['estado'] == 'active')
                 {
-                    $idEntTp = $this->bd->userInputVal($_REQUEST['ent']);
+                    $idEntTp = $this->bd->userInputVal($_SESSION['typeId']);
+                    unset($_SESSION['typeId']);
                     $this->changeState($idEntTp);
                 }
                 else if ($_REQUEST['estado'] == 'updateValoresEnt')
@@ -1758,6 +1759,7 @@ $first = false;
             </tbody>
         </table>
 <?php
+        $_SESSION['typeId'] = $this->bd->userInputVal($_REQUEST['ent']);
             $excelGen = new ExportValues();
             $excelGen->geraExcel($querydinamica,$this->frase,$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
