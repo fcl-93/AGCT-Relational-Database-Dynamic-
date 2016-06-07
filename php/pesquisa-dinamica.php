@@ -56,7 +56,7 @@ class Search{
                 }
                 else if ($_REQUEST['estado'] == 'active')
                 {
-                    $idEntTp = $_REQUEST['ent'];
+                    $idEntTp = $this->bd->userInputVal($_REQUEST['ent']);
                     $this->changeState($idEntTp);
                 }
                 else if ($_REQUEST['estado'] == 'updateValoresEnt')
@@ -2219,7 +2219,7 @@ $first = false;
 ?>
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar</p>
-                    <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo?>">Pesquisa dinâmica </a> </p>
+                    <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Pesquisa dinâmica </a> </p>
 <?php 
                     $this->bd->getMysqli()->commit();   
                 }
