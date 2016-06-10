@@ -97,3 +97,7 @@ $().ready(function(){
 	//$("#table").tablesorter();
 		
 });
+
+function validateGP(){
+    console.log("Ole");
+}
