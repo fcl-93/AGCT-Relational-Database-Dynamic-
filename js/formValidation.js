@@ -65,8 +65,7 @@ $().ready(function(){
                       $('#errTam').text("");
                       $(this).submit(function(e){
                              console.log('submit sucess');
-                            e.stopPropagation();
-                            $(this).submit();
+                            return true;
                         });
                     }
                     else
@@ -104,7 +103,7 @@ $().ready(function(){
                             $('#errTam').text("");
                             $(this).submit(function(e){
                              console.log('submit sucess');
-                            e.stopPropagation();$(this).submit();
+                            return true;
                         });
 
                     }else{
