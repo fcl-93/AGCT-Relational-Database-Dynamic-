@@ -614,14 +614,12 @@ class PropertyManage
             if ($_REQUEST['tipoUnidade'] != 'NULL') {
                 $nomeUnidade = $this->db->runQuery("SELECT name FROM prop_unit_type WHERE id =".$_REQUEST['tipoUnidade'])->fetch_assoc()['name'];
                 echo $nomeUnidade;
-?>
-                <input type="hidden" name="tipoUnidade" value="<?php echo $_REQUEST['tipoUnidade']?>">
-<?php
             }
             else {
                 echo "Sem unidade";
             }
 ?>
+            <input type="hidden" name="tipoUnidade" value="<?php echo $_REQUEST['tipoUnidade']?>">
             </li>
             <li>Ordem do campo no formulário: <?php echo $_REQUEST['ordem']?></li>
             <input type="hidden" name="ordem" value="<?php echo $_REQUEST['ordem']?>">
