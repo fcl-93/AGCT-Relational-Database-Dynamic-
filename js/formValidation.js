@@ -59,7 +59,7 @@ $().ready(function(){
                 var sizeVal = $("#size").val();
                 if($.isNumeric(sizeVal) && sizeVal > 0 && sizeVal.length > 0)
                 {
-                    alert("Ok");
+                   //alert("Ok");
                     ('#errTam').text("");
                 }
                 else
