@@ -622,7 +622,7 @@ class PropertyManage
             <input type="hidden" name="ordem" value="<?php echo $_REQUEST['ordem']?>">
             <li>Tamanho do campo no formulário: 
 <?php 
-            if (isset($_REQUEST['tamanho'])) {
+            if (!empty($_REQUEST['tamanho'])) {
                 echo "&1";
                 echo $_REQUEST['tamanho'];
 ?>
