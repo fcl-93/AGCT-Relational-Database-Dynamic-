@@ -63,7 +63,7 @@ $().ready(function(){
                 }
                 else
                 {
-                    allert("Erro");
+                   $('input[for=size]').text("Erro");
                 }
             }else{
                 alert("Select tro");
