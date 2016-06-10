@@ -97,7 +97,7 @@ $().ready(function(){
             } 
 
 
-        });
+        }});
         
         
         //edition form in page gestão de propriedades.php
