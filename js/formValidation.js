@@ -61,21 +61,20 @@ $().ready(function(){
                 {
                     if($.isNumeric(sizeVal) && sizeVal > 0)
                     {
-                      console.log("Ok");
+                      //console.log("Ok");
                       $('#errTam').text("");
                     }
                     else
                     {
-                        console.log("Erro");  $('#errTam').text("Por favor introduza um valor superior a 0.");
-                        
-                    
+                        //console.log("Erro");  
+                       $('#errTam').text("Por favor introduza um valor superior a 0.");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
                        
                     }
                 }
-            }else if($('input[name=tipoCampo]:checked', '#insertProp')){ 
+            }else{ 
                 alert("Select tro");
             } 
 
