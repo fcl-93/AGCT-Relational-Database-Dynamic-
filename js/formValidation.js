@@ -66,7 +66,7 @@ $().ready(function(){
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-vbind('submit').submit();
+$(this).on( "click", "#submitBttInProp" );
 
                     }
                     else
@@ -80,7 +80,7 @@ vbind('submit').submit();
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-$(this).unbind('submit');
+$(this).off( "click", "#submitBttInProp" );
 
                     }
                 }
@@ -94,7 +94,7 @@ $(this).unbind('submit');
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit');
+$(this).off( "click", "#submitBttInProp" );
 
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
@@ -109,7 +109,8 @@ $(this).unbind('submit');
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$(this).bind('submit');
+$(this).on( "click", "#submitBttInProp" );
+
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -121,7 +122,8 @@ $(this).bind('submit');
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit');
+$(this).off( "click", "#submitBttInProp" );
+
 
                     }
                 }else
@@ -135,7 +137,7 @@ $(this).unbind('submit');
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit');
+$(this).off( "click", "#submitBttInProp" );
                 }
 
 
