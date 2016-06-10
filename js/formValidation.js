@@ -74,7 +74,7 @@ $().ready(function(){
                        
                     }
                 }
-            }else if($("#tipoCampo")){ 
+            }else if($("[name='tipoCampo']").val){ 
                 alert("Select tro");
             } 
 
