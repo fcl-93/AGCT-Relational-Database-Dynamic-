@@ -72,7 +72,7 @@ $().ready(function(){
                        $('#errTam').css("display: inline;");   
                     }
                 }
-            }else{ 
+            }else if($('input[name=tipoCampo]:checked', '#insertProp')){ 
                 alert("Select tro");
             } 
 
