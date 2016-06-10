@@ -68,7 +68,7 @@ $().ready(function(){
                     {
                         console.log("Erro");
                        $('#errTam').text("Por favor introduza um valor superior a 0.");
-                       //$('#errTam').addClass("error");
+                       $('#errTam').addClass("error");
                     }
                 }
             }else{
