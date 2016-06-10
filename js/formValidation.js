@@ -69,9 +69,9 @@ $().ready(function(){
                         console.log("Erro"); 
                         
                        $('#errTam').text("Por favor introduza um valor superior a 0.");
-                      
-                       $('#errTam').css("color","red");
-                       $('#errTam').css("font-style","italic");
+                     $('#errTam').addclass("error");
+                       //$('#errTam').css("color","red");
+                       //$('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
                        
                     }
