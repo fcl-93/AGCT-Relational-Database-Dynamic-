@@ -81,7 +81,7 @@ $().ready(function(){
                     var arrayMatches = sizeVal.match("/[0-9]{2}x[0-9]{2}/") //return array
                     if(arrayMatches == null)
                     {
-                       console.log(arrayMatches.length);
+                       console.log("It's Null");
                        $('#errTam').text("");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
