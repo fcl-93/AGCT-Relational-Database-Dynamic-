@@ -63,7 +63,6 @@ $().ready(function(){
                 }
                 else
                 {
-                    $('input[for=size]').css("display: inline");
                    $('input[for=size]').text("Erro");
                 }
             }else{
