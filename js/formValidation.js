@@ -79,7 +79,7 @@ $().ready(function(){
                 if(sizeVal.length > 0)
                 {
                     var arrayMatches = sizeVal.match("/[0-9]{2}x[0-9]{2}/") //return array
-                    if(arrayMatches.length == 0)
+                    if(arrayMatches == null)
                     {
                        console.log(arrayMatches.length);
                        $('#errTam').text("");
