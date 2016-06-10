@@ -78,7 +78,7 @@ $().ready(function(){
                 var sizeVal = $("#size").val();
                 if(sizeVal.length > 0)
                 {
-                    var arrayMatches = sizeVal.match("/[0-9]{2}x[0-9]{2}/") //return array
+                    var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/); //return array
                     if(arrayMatches != null)
                     {
                         console.log(arrayMatches.length);
