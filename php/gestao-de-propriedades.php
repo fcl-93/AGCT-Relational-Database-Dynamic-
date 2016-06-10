@@ -607,7 +607,7 @@ class PropertyManage
             <li>Tipo de unidade: 
 <?php 
             if ($_REQUEST['tipoUnidade'] != 'NULL') {
-                $nomeUnidade = $this->bd->runQuery("SELECT name FROM prop_unit_type WHERE id =".$_REQUEST['tipoUnidade'])->fetch_assoc()['name'];
+                $nomeUnidade = $this->db->runQuery("SELECT name FROM prop_unit_type WHERE id =".$_REQUEST['tipoUnidade'])->fetch_assoc()['name'];
                 echo $nomeUnidade;
 ?>
                 <input type="hidden" name="tipoUnidade" value="<?php echo $_REQUEST['tipoUnidade']?>">
