@@ -63,6 +63,10 @@ $().ready(function(){
                     {
                       //console.log("Ok");
                       $('#errTam').text("");
+                      $(this).submit(function(e){
+                             console.log('submit sucess');
+                            e.stopPropagation();
+                        });
                     }
                     else
                     {
@@ -97,6 +101,10 @@ $().ready(function(){
                     {
                             console.log(arrayMatches.length);
                             $('#errTam').text("");
+                            $(this).submit(function(e){
+                             console.log('submit sucess');
+                            e.stopPropagation();
+                        });
 
                     }else{
                         console.log(sizeVal);
