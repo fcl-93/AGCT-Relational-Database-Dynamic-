@@ -74,6 +74,13 @@ $().ready(function(){
                        
                     }
                 }
+                else
+                {   
+                       $('#errTam').text("Por favor introduza um valor superior a 0.");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
                 if(sizeVal.length > 0)
@@ -81,18 +88,26 @@ $().ready(function(){
                     var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/g); //return array
                     if(arrayMatches != null)
                     {
-                        console.log(arrayMatches.length);
-                        $('#errTam').text("");
+                            console.log(arrayMatches.length);
+                            $('#errTam').text("");
+
+                    }else{
+                        console.log(sizeVal);
+                            console.log("It's Null");
+                           $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
+                           $('#errTam').css("color","red");
+                           $('#errTam').css("font-style","italic");
+                           $('#errTam').css("display","inline");
+                    }
+                }else
+                {
                     
-                }else{
-                    console.log(sizeVal);
                         console.log("It's Null");
                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
                 }
-            } 
 
 
         }});
