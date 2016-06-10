@@ -60,10 +60,12 @@ $().ready(function(){
                 if($.isNumeric(sizeVal) && sizeVal > 0)
                 {
                     alert("Ok");
+                    ('#errTam').text("");
                 }
                 else
                 {
                    $('#errTam').text("Erro");
+                   $('#errTam').addClass("error");
                 }
             }else{
                 alert("Select tro");
