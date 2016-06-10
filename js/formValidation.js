@@ -71,7 +71,10 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
-                       
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
                     }
                 }
                 else
@@ -80,6 +83,10 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -98,6 +105,10 @@ $().ready(function(){
                            $('#errTam').css("color","red");
                            $('#errTam').css("font-style","italic");
                            $('#errTam').css("display","inline");
+                           $(this)).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
                     }
                 }else
                 {
@@ -106,6 +117,10 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
                 }
 
 
