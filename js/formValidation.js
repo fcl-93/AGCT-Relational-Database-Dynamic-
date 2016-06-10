@@ -82,16 +82,11 @@ $().ready(function(){
                     if(arrayMatches != null)
                     {
                         console.log(arrayMatches.length);
-                      
                         $('#errTam').text("");
-                       $('#errTam').css("color","red");
-                       $('#errTam').css("font-style","italic");
-                       $('#errTam').css("display","inline");
                     
                 }else{
-                    console.log("It's Null");
-                       
-                       $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 99");
+                        console.log("It's Null");
+                       $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
