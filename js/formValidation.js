@@ -54,20 +54,22 @@ $().ready(function(){
 		}
 	});
         
-        $("#size").change(function(){
+        $("#insertProp").change(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
                 var sizeVal = $("#size").val();
-                if(sizeVal.length > 0){
-                if($.isNumeric(sizeVal) && sizeVal > 0)
+                if(sizeVal.length > 0)
                 {
-                   //alert("Ok");
-                    //('#errTam').text("");
+                    if($.isNumeric(sizeVal) && sizeVal > 0)
+                    {
+                       //alert("Ok");
+                        //('#errTam').text("");
+                    }
+                    else
+                    {
+                       $('#errTam').text("Erro");
+                       $('#errTam').addClass("error");
+                    }
                 }
-                else
-                {
-                   $('#errTam').text("Erro");
-                   $('#errTam').addClass("error");
-                }}
             }else{
                 alert("Select tro");
             } 
