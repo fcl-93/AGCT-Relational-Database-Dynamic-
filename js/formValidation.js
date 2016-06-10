@@ -74,7 +74,7 @@ $().ready(function(){
                        
                     }
                 }
-            }else if($("[name='tipoCampo']").val){ 
+            }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 alert("Select tro");
             } 
 
