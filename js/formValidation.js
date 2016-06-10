@@ -62,7 +62,7 @@ $().ready(function(){
                     if($.isNumeric(sizeVal) && sizeVal > 0)
                     {
                       console.log("Ok");
-                      ('#errTam').text("");
+                      $('#errTam').text("");
                     }
                     else
                     {
