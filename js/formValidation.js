@@ -118,7 +118,7 @@ $("#submitBttInProp").on();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp")..off();
+$("#submitBttInProp").off();
                     }
                 }else
                 {
