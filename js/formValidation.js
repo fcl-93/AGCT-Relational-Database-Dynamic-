@@ -83,7 +83,7 @@ $().ready(function(){
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
-                if(sizeVal.length > 0 && sizeVal.lenght < 6)
+                if(sizeVal.length > 0 && sizeVal.length < 6)
                 {
                     var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/g); //return array
                     if(arrayMatches != null)
@@ -101,7 +101,7 @@ $().ready(function(){
                     }
                 }else
                 {
-                    console.log(sizeVal.lenght);
+                    console.log(sizeVal.length);
                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
