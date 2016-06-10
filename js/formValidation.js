@@ -54,8 +54,8 @@ $().ready(function(){
 		}
 	});
         
-        $("#insertProp input").change(function(){
-            alert($('input[name=tipoCampo]:checked', '#myForm').val()); 
+        $("#insertProp").change(function(){
+            alert($('input[name=tipoCampo]:checked', '#insertProp').val()); 
 });
 
         });
