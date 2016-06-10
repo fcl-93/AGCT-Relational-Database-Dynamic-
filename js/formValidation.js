@@ -55,7 +55,14 @@ $().ready(function(){
 	});
         
         $("#tipoCampo").change(function(){
-            alert("Break");
+           if (!$('input[name=tipoCampo]:checked').val() ) { 
+               alert("Test");
+           }
+           else
+           {
+               alert("don't know");
+           }
+
         });
         
         
