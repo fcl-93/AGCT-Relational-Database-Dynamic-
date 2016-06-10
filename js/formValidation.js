@@ -54,9 +54,9 @@ $().ready(function(){
 		}
 	});
         
-        $("#insertProp").change(function(){
+        $("#insertProp").submit(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
-                alert("Sele text");
+                alert("Select text");
             }else{
                 alert("Select tro");
             } 
