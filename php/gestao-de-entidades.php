@@ -566,6 +566,22 @@ class EntHist {
             }
         }
     }
+    
+    /**
+     * Changes the state of the property according with the version.
+     * @param type $idEnt
+     */
+    private function changeProp ($idEnt, $bd) {
+        $getProp = $bd->runQuery("SELECT * from property WHERE ent_type_id = ".$idEnt);
+        
+        while ($prop = $getProp->fetch_assoc()) {
+            $histProp = $bd->runQuery("SELECT * from hist_property WHERE property_id = ".$prop['id']);
+            while ($hist = $histProp->fetch_assoc()) {
+                
+            }
+        }
+        
+    }
 
     /**
      * This method will create a table where the history will be showned.
