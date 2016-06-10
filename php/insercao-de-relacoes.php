@@ -123,7 +123,8 @@ class InsereRelacoes
         </form>
 <?php
                                 $res_Rel = $this->bd->runQuery("SELECT * From relation");
-                                 if($res_Rel->num_rows == 0)
+                                $numdeRels = $res_Rel->num_rows; 
+                                 if($numdeRels == 0)
                                  {
 ?>
                                     <html>
@@ -260,7 +261,7 @@ class InsereRelacoes
                                   <option value="20">20</option>
                                   <option value="30">30</option>
                                   <option value="40">40</option>
-                                  <option value="all">All Rows</option>
+                                  <option value="<?php echo $numdeRels?>">All Rows</option>
                                 </select>
                               </form>
                             </div>
