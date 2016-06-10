@@ -86,7 +86,7 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
-                    }
+                    
                 }else{
                         console.log(arrayMatches.length);
                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 99");
