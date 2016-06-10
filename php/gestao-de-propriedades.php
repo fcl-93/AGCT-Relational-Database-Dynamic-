@@ -495,7 +495,7 @@ class PropertyManage
                 <label>Obrigatório</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                 <br>
-                <input id="obrigatorio" type="radio" name="obrigatorio" value="2">Não
+                <input id="obrigatorio" type="radio" name="obrigatorio" value="0">Não
                 <br>
                 <label class="error" for="obrigatorio"></label><br>
 <?php
@@ -633,7 +633,16 @@ class PropertyManage
             }
 ?>
             </li>
-            <li>Obrigatório: <?php echo $_REQUEST['obrigatorio']?></li>
+            <li>Obrigatório: 
+<?php 
+                if ($_REQUEST['obrigatorio'] == 1) {
+                    echo "Sim";
+                }
+                else {
+                    echo "Não";
+                }
+?>
+            </li>
             <input type="hidden" name="obrigatorio" value="<?php echo $_REQUEST['obrigatorio']?>">
 <?php
         if(isset($_REQUEST['ent_id'])) {
