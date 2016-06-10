@@ -57,7 +57,8 @@ $().ready(function(){
         $("#insertProp").change(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
                 var sizeVal = $("#size").val();
-                if($.isNumeric(sizeVal) && sizeVal > 0 && sizeVal.length > 0)
+                if(sizeVal.length > 0){
+                if($.isNumeric(sizeVal) && sizeVal > 0)
                 {
                    //alert("Ok");
                     ('#errTam').text("");
@@ -66,7 +67,7 @@ $().ready(function(){
                 {
                    $('#errTam').text("Erro");
                    $('#errTam').addClass("error");
-                }
+                }}
             }else{
                 alert("Select tro");
             } 
