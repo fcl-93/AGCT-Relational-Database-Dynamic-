@@ -85,6 +85,7 @@ $().ready(function(){
                         $('#errTam').text("");
                     
                 }else{
+                    console.log(sizeVal);
                         console.log("It's Null");
                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
                        $('#errTam').css("color","red");
