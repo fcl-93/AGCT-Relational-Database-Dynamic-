@@ -54,9 +54,17 @@ $().ready(function(){
 		}
 	});
         
-        $("#insertProp").submit(function(){
+        $("#insertProp").change(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
-                alert("Select text");
+                var sizeVal = $("#size").val();
+                if(sizeVal > 0)
+                {
+                    alert("Ok");
+                }
+                else
+                {
+                    allert("Erro");
+                }
             }else{
                 alert("Select tro");
             } 
