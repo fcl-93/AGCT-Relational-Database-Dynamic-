@@ -538,7 +538,7 @@ class PropertyManage
 <?php                    
                 }
 ?>
-                <input type="hidden" name="estado" value="inserir"><br>
+                <input type="hidden" name="estado" value="validar"><br>
                 <input type="submit" onsubmit="validateGP" value="Inserir propriedade">
             </form>
 <?php
