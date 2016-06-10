@@ -623,7 +623,6 @@ class PropertyManage
             <li>Tamanho do campo no formulário: 
 <?php 
             if (!empty($_REQUEST['tamanho'])) {
-                echo "&1";
                 echo $_REQUEST['tamanho'];
 ?>
                 <input type="hidden" name="tamanho" value="<?php echo $_REQUEST['tamanho']?>">
