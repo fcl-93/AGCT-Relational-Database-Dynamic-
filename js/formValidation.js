@@ -66,7 +66,7 @@ $().ready(function(){
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$('#insertProp').bind('submit').submit();
+vbind('submit').submit();
 
                     }
                     else
@@ -80,7 +80,7 @@ $('#insertProp').bind('submit').submit();
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-$('#insertProp').unbind('submit').submit();
+$(this).unbind('submit').submit();
 
                     }
                 }
@@ -94,7 +94,7 @@ $('#insertProp').unbind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$('#insertProp').unbind('submit').submit();
+$(this).unbind('submit').submit();
 
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
@@ -109,7 +109,7 @@ $('#insertProp').unbind('submit').submit();
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$('#insertProp').bind('submit').submit();
+$(this).bind('submit').submit();
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -121,7 +121,7 @@ $('#insertProp').bind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$('#insertProp').unbind('submit').submit();
+$(this).unbind('submit').submit();
 
                     }
                 }else
@@ -135,7 +135,7 @@ $('#insertProp').unbind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$('#insertProp').unbind('submit').submit();
+$(this).unbind('submit').submit();
                 }
 
 
