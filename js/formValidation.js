@@ -57,7 +57,7 @@ $().ready(function(){
         $("#insertProp").change(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
                 var sizeVal = $("#size").val();
-                if($.isNumeric(sizeVal) && sizeVal > 0)
+                if($.isNumeric(sizeVal) && sizeVal > 0 && sizeVal.length > 0)
                 {
                     alert("Ok");
                     ('#errTam').text("");
