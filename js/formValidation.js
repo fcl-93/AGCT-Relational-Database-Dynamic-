@@ -56,7 +56,11 @@ $().ready(function(){
         
         $("#tipoCampo").change(function(){
            if (!$('input[name=tipoCampo]:checked').val() ) { 
-               alert("Test")
+               alert("Test");
+           }
+           else
+           {
+               alert("don't know");
            }
 
         });
