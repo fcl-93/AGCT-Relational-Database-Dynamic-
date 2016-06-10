@@ -79,16 +79,18 @@ $().ready(function(){
                 if(sizeVal.length > 0)
                 {
                     var arrayMatches = sizeVal.match("/[0-9]{2}x[0-9]{2}/") //return array
-                    if(arrayMatches == null)
+                    if(arrayMatches != null)
                     {
-                       console.log("It's Null");
-                       $('#errTam').text("");
+                        console.log(arrayMatches.length);
+                      
+                        $('#errTam').text("");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
                     
                 }else{
-                        console.log(arrayMatches.length);
+                    console.log("It's Null");
+                       
                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 99");
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
