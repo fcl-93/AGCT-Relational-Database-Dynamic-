@@ -83,7 +83,7 @@ $().ready(function(){
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
-                if(sizeVal.length > 0)
+                if(sizeVal.length > 0 && sizeVal < 6)
                 {
                     var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/g); //return array
                     if(arrayMatches != null)
