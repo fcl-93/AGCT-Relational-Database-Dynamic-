@@ -57,20 +57,82 @@ $().ready(function(){
         $("#insertProp").change(function(){
             if($('input[name=tipoCampo]:checked', '#insertProp').val() == "text"){
                 var sizeVal = $("#size").val();
-                if($.isNumeric(sizeVal) && sizeVal > 0)
+                if(sizeVal.length > 0)
                 {
-                    alert("Ok");
+                    if($.isNumeric(sizeVal) && sizeVal > 0)
+                    {
+                      //console.log("Ok");
+                      $('#errTam').text("");
+                      $(this).submit(function(e){
+                             console.log('submit sucess');
+                            return true;
+                        });
+                    }
+                    else
+                    {
+                        //console.log("Erro");  
+                       $('#errTam').text("Por favor introduza um valor superior a 0.");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
+                    }
                 }
                 else
-                {
-                    allert("Erro");
+                {   
+                       $('#errTam').text("Por favor introduza um valor superior a 0.");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
                 }
-            }else{
-                alert("Select tro");
-            } 
+            }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
+                var sizeVal = $("#size").val();
+                if(sizeVal.length > 0 && sizeVal.length < 6)
+                {
+                    var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/g); //return array
+                    if(arrayMatches != null)
+                    {
+                            console.log(arrayMatches.length);
+                            $('#errTam').text("");
+                            $(this).submit(function(e){
+                             console.log('submit sucess');
+                            return true;
+                        });
+
+                    }else{
+                        console.log(sizeVal);
+                            console.log("It's Null");
+                           $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
+                           $('#errTam').css("color","red");
+                           $('#errTam').css("font-style","italic");
+                           $('#errTam').css("display","inline");
+                           $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
+                    }
+                }else
+                {
+                    console.log(sizeVal.length);
+                       $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                       $(this).submit(function(e){
+                            console.log('submit intercepted');
+                            e.preventDefault(e);
+                        });
+                }
 
 
-        });
+        }});
         
         
         //edition form in page gestão de propriedades.php

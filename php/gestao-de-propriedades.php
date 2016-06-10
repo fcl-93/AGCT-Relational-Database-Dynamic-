@@ -494,7 +494,7 @@ class PropertyManage
                 
                 <label>Tamanho do campo no formulário</label><br>
                 <input id="size" type="text" name="tamanho"><br>
-                <label class="error" for="size"></label><br><br>
+                <label id="errTam" for="size"></label><br><br>
                 
                 
                 <label>Obrigatório</label><br>
