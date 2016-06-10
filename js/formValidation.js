@@ -66,7 +66,8 @@ $().ready(function(){
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").on();
+$('#insertProp').bind('submit').submit();
+
                     }
                     else
                     {
@@ -79,7 +80,8 @@ $("#submitBttInProp").on();
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-                        $("#submitBttInProp").off();
+$('#insertProp').unbind('submit').submit();
+
                     }
                 }
                 else
@@ -92,7 +94,8 @@ $("#submitBttInProp").on();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").off();
+$('#insertProp').unbind('submit').submit();
+
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -106,7 +109,7 @@ $("#submitBttInProp").off();
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").on();
+$('#insertProp').bind('submit').submit();
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -118,7 +121,8 @@ $("#submitBttInProp").on();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").off();
+$('#insertProp').unbind('submit').submit();
+
                     }
                 }else
                 {
@@ -131,7 +135,7 @@ $("#submitBttInProp").off();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").off();
+$('#insertProp').unbind('submit').submit();
                 }
 
 
