@@ -56,7 +56,7 @@ $().ready(function(){
         
         $("#insertProp").change(function(){
             alert($('input[name=tipoCampo]:checked', '#insertProp').val()); 
-});
+
 
         });
         
