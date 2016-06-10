@@ -979,7 +979,7 @@ class PropertyManage
         <form id="editProp" method="POST">
 <?php
         if (isset($_REQUEST["rel_id"])) {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
+            $queryProp = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel_id"];
         }
         else {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
