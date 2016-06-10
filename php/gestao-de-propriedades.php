@@ -79,12 +79,16 @@ class PropertyManage
         {
             $this->estadoEntityRelation("entity");
         }
-        elseif ($_REQUEST["estado"] === "inserir")
+        elseif ($_REQUEST["estado"] === "validar")
         {
             if($this->validarDados())
             {
-                 $this->estadoInserir();
+                 $this->estadoValidar();
             }
+        }
+        elseif ($_REQUEST["estado"] === "inserir")
+        {
+            $this->estadoInserir();
         }
         elseif($_REQUEST['estado'] =='editar')
         {
@@ -570,6 +574,94 @@ class PropertyManage
         }
     }
 
+    /**
+     * This method asks the user about the property he will insert to confirm the inserted data
+     */
+    private function estadoValidar() {
+        if(isset($_REQUEST['ent_id']))
+        {
+            $nomeEnt = $this->db->getEntityName($_REQUEST['ent_id'])
+?>
+        <h3>Gestão de propriedades - Entidade <?php echo $nomeEnt;?> - Validar</h3>
+<?php
+        }
+        else {
+            $queryEnt = "SELECT name FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
+            $nomeRel = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
+?>
+        <h3>Gestão de propriedades - Relação <?php echo $nomeRel;?> - Validar</h3>
+<?php 
+        }
+?>
+        <form method="POST">
+            <p>Estamos prestes a inserir a propriedade abaixo na base de dados.</p>
+            <p style='color: red'>Tenha em consideração que uma ve submetido só poderá alterar os campo ...</p>
+            <p>Confirma que os dados estão correctos e pretende submeter os mesmos?</p>
+        <ul>
+            <li>Nome da propriedade: <?php echo $_REQUEST['nome']?></li>
+            <input type="hidden" name="nome" value="<?php echo $_REQUEST['nome']?>">
+            <li>Tipo de valor: <?php echo $_REQUEST['tipoValor']?></li>
+            <input type="hidden" name="tipoValor" value="<?php echo $_REQUEST['tipoValor']?>">
+            <li>Tipo do campo do formulário: <?php echo $_REQUEST['tipoCampo'];?></li>
+            <input type="hidden" name="tipoCampo" value="<?php echo $_REQUEST['tipoCampo']?>">
+            <li>Tipo de unidade: 
+<?php 
+            if (isset($_REQUEST['tipoUnidade'])) {
+                echo $_REQUEST['tipoUnidade'];
+?>
+                <input type="hidden" name="tipoUnidade" value="<?php echo $_REQUEST['tipoUnidade']?>">
+<?php
+            }
+            else {
+                echo "Sem unidade";
+            }
+?>
+            </li>
+            <li>Ordem do campo no formulário: <?php echo $_REQUEST['ordem']?></li>
+            <input type="hidden" name="ordem" value="<?php echo $_REQUEST['ordem']?>">
+            <li>Tamanho do campo no formulário: 
+<?php 
+            if (isset($_REQUEST['tamanho'])) {
+                echo $_REQUEST['tamanho'];
+?>
+                <input type="hidden" name="tamanho" value="<?php echo $_REQUEST['tamanho']?>">
+<?php
+            }
+            else {
+                echo "Sem tamanho definido";
+            }
+?>
+            </li>
+            <li>Obrigatório: <?php echo $_REQUEST['obrigatorio']?></li>
+            <input type="hidden" name="obrigatorio" value="<?php echo $_REQUEST['obrigatorio']?>">
+<?php
+        if(isset($_REQUEST['ent_id'])) {
+?>
+            <li>Entidade referenciada por esta propriedade: 
+<?php 
+            if (isset($_REQUEST['entidadeReferenciada'])) {
+                echo $this->db->getEntityName ($_REQUEST['entidadeReferenciada']);
+?>
+                <input type="hidden" name="entidadeReferenciada" value="<?php echo $_REQUEST['entidadeReferenciada']?>">
+<?php
+            }
+            else {
+                echo "Esta propriedade não referencia nenhuma entidade.";
+            }
+?>
+            </li>
+<?php
+        }
+?>
+        </ul>
+        <input type="hidden" name="estado" value="inserir">
+        <input type="submit" value="Submeter">
+        </form>
+            
+<?php
+        goBack();
+
+    }
     /**
      * This method inserts the new property in the database
      */
