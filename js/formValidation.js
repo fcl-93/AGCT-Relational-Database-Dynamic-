@@ -63,9 +63,10 @@ $().ready(function(){
                     {
                       //console.log("Ok");
                       $('#errTam').text("");
-                      $(this).submit(function(e){
-                             console.log('submit sucess');
-                        });
+//                      $(this).submit(function(e){
+//                             console.log('submit sucess');
+//                        });
+$("#submitBttInProp").bind();
                     }
                     else
                     {
@@ -74,10 +75,11 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
-                       $(this).submit(function(e){
+                       /*$(this).submit(function(e){
                             console.log('submit intercepted');
                             e.preventDefault(e);
-                        });
+                        });*/
+                        $("#submitBttInProp").unbind();
                     }
                 }
                 else
@@ -86,10 +88,11 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
-                       $(this).submit(function(e){
-                            console.log('submit intercepted');
-                            e.preventDefault(e);
-                        });
+//                       $(this).submit(function(e){
+//                            console.log('submit intercepted');
+//                            e.preventDefault(e);
+//                        });
+$("#submitBttInProp").unbind();
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -98,12 +101,12 @@ $().ready(function(){
                     var arrayMatches = sizeVal.match(/[0-9]{2}x[0-9]{2}/g); //return array
                     if(arrayMatches != null)
                     {
-                            console.log(arrayMatches.length);
-                            $('#errTam').text("");
-                            $(this).submit(function(e){
-                             console.log('submit sucess');
-                        });
-
+//                            console.log(arrayMatches.length);
+//                            $('#errTam').text("");
+//                            $(this).submit(function(e){
+//                             console.log('submit sucess');
+//                        });
+$("#submitBttInProp").bind();
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -111,10 +114,11 @@ $().ready(function(){
                            $('#errTam').css("color","red");
                            $('#errTam').css("font-style","italic");
                            $('#errTam').css("display","inline");
-                           $(this).submit(function(e){
-                            console.log('submit intercepted');
-                            e.preventDefault(e);
-                        });
+//                           $(this).submit(function(e){
+//                            console.log('submit intercepted');
+//                            e.preventDefault(e);
+//                        });
+$("#submitBttInProp").unbind();
                     }
                 }else
                 {
@@ -123,10 +127,11 @@ $().ready(function(){
                        $('#errTam').css("color","red");
                        $('#errTam').css("font-style","italic");
                        $('#errTam').css("display","inline");
-                       $(this).submit(function(e){
-                            console.log('submit intercepted');
-                            e.preventDefault(e);
-                        });
+//                       $(this).submit(function(e){
+//                            console.log('submit intercepted');
+//                            e.preventDefault(e);
+//                        });
+$("#submitBttInProp").unbind();
                 }
 
 
