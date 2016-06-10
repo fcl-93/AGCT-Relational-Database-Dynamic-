@@ -53,6 +53,12 @@ $().ready(function(){
                         obrigatorio:"Por favor indique se esta propriedade deve ou não ser obrigatória."
 		}
 	});
+        
+        $("#tipoCampo").change(function(){
+            alert("Break");
+        });
+        
+        
         //edition form in page gestão de propriedades.php
 	$("#editProp").validate({
 		rules:{
@@ -89,11 +95,5 @@ $().ready(function(){
 		}
 	});
 	
-	
-	
-	
-	
-	
-	//$("#table").tablesorter();
-		
+        
 });
