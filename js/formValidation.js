@@ -54,14 +54,9 @@ $().ready(function(){
 		}
 	});
         
-        $("#tipoCampo").change(function(){
-           if (!$('input[name=tipoCampo]:checked').val() ) { 
-               alert("Test");
-           }
-           else
-           {
-               alert("don't know");
-           }
+        $("#insertProp").change(function(){
+            alert($('input[name=tipoCampo]:checked', '#insertProp').val()); 
+});
 
         });
         
