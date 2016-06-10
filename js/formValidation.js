@@ -66,10 +66,11 @@ $().ready(function(){
                     }
                     else
                     {
-                        console.log("Erro");
+                        console.log("Erro"); 
+                        $('#errTam').addClass("error");
                        $('#errTam').text("Por favor introduza um valor superior a 0.");
-                       $('#errTam').addClass("error");
-                       $('#errTam').css("display: inline;");   
+                      
+                       //$('#errTam').css("display: inline;");   
                     }
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp')){ 
