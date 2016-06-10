@@ -606,7 +606,7 @@ class PropertyManage
             <input type="hidden" name="tipoCampo" value="<?php echo $_REQUEST['tipoCampo']?>">
             <li>Tipo de unidade: 
 <?php 
-            if (!is_null($_REQUEST['tipoUnidade'])) {
+            if ($_REQUEST['tipoUnidade'] != 'NULL') {
                 echo $_REQUEST['tipoUnidade'];
 ?>
                 <input type="hidden" name="tipoUnidade" value="<?php echo $_REQUEST['tipoUnidade']?>">
@@ -639,7 +639,7 @@ class PropertyManage
 ?>
             <li>Entidade referenciada por esta propriedade: 
 <?php 
-            if (!is_null($_REQUEST['entidadeReferenciada'])) {
+            if ($_REQUEST['entidadeReferenciada'] != "NULL") {
                 echo $this->db->getEntityName ($_REQUEST['entidadeReferenciada']);
 ?>
                 <input type="hidden" name="entidadeReferenciada" value="<?php echo $_REQUEST['entidadeReferenciada']?>">
