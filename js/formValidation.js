@@ -80,7 +80,7 @@ vbind('submit').submit();
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-$(this).unbind('submit').submit();
+$(this).unbind('submit');
 
                     }
                 }
@@ -94,7 +94,7 @@ $(this).unbind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit').submit();
+$(this).unbind('submit');
 
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
@@ -109,7 +109,7 @@ $(this).unbind('submit').submit();
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$(this).bind('submit').submit();
+$(this).bind('submit');
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -121,7 +121,7 @@ $(this).bind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit').submit();
+$(this).unbind('submit');
 
                     }
                 }else
@@ -135,7 +135,7 @@ $(this).unbind('submit').submit();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).unbind('submit').submit();
+$(this).unbind('submit');
                 }
 
 
