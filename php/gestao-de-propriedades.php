@@ -655,6 +655,24 @@ class PropertyManage
         }
 ?>
         </ul>
+<?php
+        if(isset($_REQUEST['ent_id']))
+        {
+?>
+            <input type ="hidden" name="entidadePertence" value="<?php echo $_REQUEST['ent_id'];?>">
+<?php
+        }
+        else {
+?>
+            <input type ="hidden" name="relacaoPertence" value="<?php echo $_REQUEST['rel_id'];?>">
+<?php
+        }
+        if (empty($_REQUEST['maisProp'])) {
+?>
+            <input type ="hidden" name="primeiraVez" value="true">
+<?php                    
+        }
+?>
         <input type="hidden" name="estado" value="inserir">
         <input type="submit" value="Submeter">
         </form>
