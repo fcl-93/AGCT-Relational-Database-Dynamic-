@@ -61,11 +61,12 @@ $().ready(function(){
                 {
                     if($.isNumeric(sizeVal) && sizeVal > 0)
                     {
-                       //alert("Ok");
+                      alert("Ok");
                         //('#errTam').text("");
                     }
                     else
                     {
+                        console.log("Erro");
                        $('#errTam').text("Erro");
                        $('#errTam').addClass("error");
                     }
