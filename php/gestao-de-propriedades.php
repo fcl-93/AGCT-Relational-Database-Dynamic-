@@ -908,7 +908,7 @@ class PropertyManage
             return false;
 	}
         // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
-	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"])))
+	if(($_REQUEST["tipoCampo"] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho"]) === 0) || empty($_REQUEST["tamanho"]) || strlen($_REQUEST["tamanho"]) > 5))
 	{
 ?>
             <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
