@@ -66,8 +66,7 @@ $().ready(function(){
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$(this).on( "click", "#submitBttInProp" );
-
+$("#submitBttInProp").prop('disabled', false);
                     }
                     else
                     {
@@ -80,8 +79,7 @@ $(this).on( "click", "#submitBttInProp" );
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-$(this).off( "click", "#submitBttInProp" );
-
+$("#submitBttInProp").prop('disabled', true);
                     }
                 }
                 else
@@ -94,8 +92,7 @@ $(this).off( "click", "#submitBttInProp" );
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).off( "click", "#submitBttInProp" );
-
+$("#submitBttInProp").prop('disabled', true);
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -109,8 +106,7 @@ $(this).off( "click", "#submitBttInProp" );
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$(this).on( "click", "#submitBttInProp" );
-
+$("#submitBttInProp").prop('disabled', false);
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -122,7 +118,7 @@ $(this).on( "click", "#submitBttInProp" );
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).off( "click", "#submitBttInProp" );
+$("#submitBttInProp").prop('disabled', true);
 
 
                     }
@@ -137,7 +133,7 @@ $(this).off( "click", "#submitBttInProp" );
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$(this).off( "click", "#submitBttInProp" );
+$("#submitBttInProp").prop('disabled', true);
                 }
 
 
