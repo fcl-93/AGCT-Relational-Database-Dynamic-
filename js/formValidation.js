@@ -70,7 +70,10 @@ $().ready(function(){
                         
                        $('#errTam').text("Por favor introduza um valor superior a 0.");
                       
-                       $('#errTam').css("color:red;font-style: italic ;display: inline;");   
+                       $('#errTam').css("color,red");
+                       $('#errTam').css("font-style,italic");
+                       $('#errTam').css("display,inline");
+                       
                     }
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp')){ 
