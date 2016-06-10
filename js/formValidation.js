@@ -105,7 +105,7 @@ $().ready(function(){
                            $('#errTam').css("color","red");
                            $('#errTam').css("font-style","italic");
                            $('#errTam').css("display","inline");
-                           $(this)).submit(function(e){
+                           $(this).submit(function(e){
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });
