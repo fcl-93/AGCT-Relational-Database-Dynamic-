@@ -55,7 +55,7 @@ $().ready(function(){
 	});
         
         $("#tipoCampo").change(function(){
-            console.log("test");
+            alert("Break");
         });
         
         
