@@ -75,7 +75,25 @@ $().ready(function(){
                     }
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
-                alert("Select tro");
+                var sizeVal = $("#size").val();
+                if(sizeVal.length > 0)
+                {
+                    var arrayMatches = sizeVal.match("/[0-9]{2}x[0-9]{2}/") //return array
+                    if(arrayMatches.length == 0)
+                    {
+                       
+                       $('#errTam').text("");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                    }
+                }else{
+                    
+                       $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 99");
+                       $('#errTam').css("color","red");
+                       $('#errTam').css("font-style","italic");
+                       $('#errTam').css("display","inline");
+                }
             } 
 
 
