@@ -66,7 +66,7 @@ $().ready(function(){
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").bind();
+$("#submitBttInProp").on();
                     }
                     else
                     {
@@ -79,7 +79,7 @@ $("#submitBttInProp").bind();
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-                        $("#submitBttInProp").unbind();
+                        $("#submitBttInProp").off();
                     }
                 }
                 else
@@ -92,7 +92,7 @@ $("#submitBttInProp").bind();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").unbind();
+$("#submitBttInProp").off();
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -106,7 +106,7 @@ $("#submitBttInProp").unbind();
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").bind();
+$("#submitBttInProp").on();
                     }else{
                         console.log(sizeVal);
                             console.log("It's Null");
@@ -118,7 +118,7 @@ $("#submitBttInProp").bind();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").unbind();
+$("#submitBttInProp")..off();
                     }
                 }else
                 {
@@ -131,7 +131,7 @@ $("#submitBttInProp").unbind();
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").unbind();
+$("#submitBttInProp").off();
                 }
 
 
