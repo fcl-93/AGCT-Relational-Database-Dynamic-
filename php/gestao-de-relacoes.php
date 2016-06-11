@@ -386,8 +386,8 @@ class RelationManage
                     <td><input type="text" name="nome"><br></td>
                 </tr> 
                 <tr>
-                    <td> <label class="error" for="ent1">Deve selecionar uma entidade em ambos os campos.</label><br></td>
-                    <td> <label class="error" for="ent2">Deve selecionar uma entidade em ambos os campos.</label><br> </td>
+                    <td> <label class="error" for="ent1"></label><br></td>
+                    <td> <label class="error" for="ent2"></label><br> </td>
                     <td> <label>* Não é obrigatório</label></td>
                 </tr>
             </table>
