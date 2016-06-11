@@ -356,8 +356,8 @@ class RelationManage
      */
     private function formInsert() {
 ?>
-        <h3>Gestão de relações - introdução </h3>
-        <form id="insertRelation" method="POST">
+        <h3 align="center">Gestão de relações - Introdução </h3>
+        <form id="insertRelation" method="POST" align="center">
             <label>Entidade 1</label><br>
             <select id="ent1" name="ent1">
                 <option></option>
