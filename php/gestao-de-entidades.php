@@ -658,8 +658,15 @@ class EntHist {
                             $getProp = $bd->runQuery("SELECT * FROM property WHERE id =".$propHist['property_id']."" )->fetch_assoc();                            
 ?>
                             <td><?php echo $propHist['name']?></td>
-                            <td><?php echo $propHist['state'];?></td>
                             <td><?php echo $propHist['value_type']?></td>
+                            <td><?php 
+                            if($propHist['state'] == 'active'){ 
+                                echo "Ativo";
+                                
+                            }else{
+                                echo "Inativo"; 
+                                
+                            }?></td>
 <?php
                             if($conta == 0){
 ?>
