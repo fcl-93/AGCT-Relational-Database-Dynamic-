@@ -357,12 +357,12 @@ class RelationManage
     private function formInsert() {
 ?>
         <h3 align="center">Gestão de relações - Introdução </h3>
-        <form id="insertRelation" method="POST" align="center">
+        <form id="insertRelation" method="POST" align="center" class="tablegr">
             <table>
                 <tr>
                     <td><label>Entidade 1</label></td>
                     <td><label>Entidade 2</label></td>
-                    <td><label>Nome para o tipo de relação</label></td>
+                    <td><label>Nome para o tipo de relação*</label></td>
                 </tr>  
                 <tr>
                     <td>
@@ -383,11 +383,12 @@ class RelationManage
 ?>             
                         </select><br>
                     </td>
-                    <td rowspan="2"><input type="text" name="nome"><br></td>
+                    <td><input type="text" name="nome"><br></td>
                 </tr> 
                 <tr>
                     <td> <label class="error" for="ent1"></label><br></td>
                     <td> <label class="error" for="ent2"></label><br> </td>
+                    <td> <label>* Não não é obrigatório</label></td>
                 </tr>
             </table>
            
