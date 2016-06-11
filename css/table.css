@@ -62,6 +62,6 @@ cursor: pointer;
     background: white;
 }
 
-td:hover{
+tr:hover{
     background: black;
 }
