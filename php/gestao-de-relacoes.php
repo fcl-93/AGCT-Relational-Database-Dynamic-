@@ -723,6 +723,7 @@ class RelHist{
                     $selPropHist =$db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on <= '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     
                     $numProp = $selProp->num_rows+$selPropHist->num_rows;
+                    echo $numProp;
 ?>
                     <tr>    
                         <td rowspan="<?php echo $numProp?>"><?php echo $hist["active_on"];?></td>
