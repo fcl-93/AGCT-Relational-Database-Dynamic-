@@ -602,7 +602,6 @@ class EntHist {
                 <input type="hidden" name="ent_id" value="<?php echo $_REQUEST['ent_id']; ?>">
                 <input type="submit" value="Apresentar histórico">
             </form>
-                <?phpecho "test";?>
         <table class="table">
             <thead>
                 <th>Data de Início</th>
@@ -672,7 +671,7 @@ class EntHist {
                                 <td><?php echo $readProp['value_type']?></td>
                                 <td><?php echo $readProp['state']?></td>
 <?php
-                                if($conta = 0)
+                                if($conta == 0)
                                 {
 ?>
                                     <td rowspan="<?php echo $numlinhas ?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
@@ -690,7 +689,7 @@ class EntHist {
                                 <td><?php echo $readProp['value_type']?></td>
                                 <td><?php echo $readProp['state']?></td>
 <?php
-                                if($conta = 0)
+                                if($conta == 0)
                                 {
 ?>
                                     <td rowspan="<?php echo $numlinhas ?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
