@@ -732,6 +732,31 @@ class RelHist{
                         <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
 <?php
                     $conta=0;
+                    if ($numProp == 0) {
+?>
+                        <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
+<?php 
+                        if ($hist["state"] === "active")
+                        {
+?>
+                            <td rowspan="<?php echo $numProp?>">Ativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td>
+                            </td>
+                        </tr>
+<?php
+                        }
+                        else
+                        {
+?>
+                            <td rowspan="<?php echo $numProp?>">Inativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td> 
+                            </td>
+                        </tr>
+<?php
+                        }
+                    }
                     while ($prop = $selProp->fetch_assoc()) {
                         echo "#1 "."conta ".$conta." prop ".$prop["name"]."<br>";
                         if ($conta = 0) {
