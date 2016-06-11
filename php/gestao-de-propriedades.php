@@ -1283,7 +1283,7 @@ class PropHist{
         $selectAtributos = "SELECT * FROM property WHERE id = ".$selectProp->fetch_assoc()['ent_type_id'];
         $selectAtributos = $db->runQuery($selectAtributos);
         $erro = false;
-        while ($prop = $selectAtributos->fetch_assoc());
+        while ($prop = $selectAtributos->fetch_assoc()){
           $attr = $val = "";
           $isEntity = false;
           foreach ($prop as $atributo => $valor) {
