@@ -313,56 +313,61 @@ class RelationManage
             $resSelRel = $this->db->runQuery($querySelRel);
             while ($rel = $resSelRel->fetch_assoc())
             {
-                $selProp =$this->db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$rel["id"]);
+                $selProp =$this->db->runQuery("SELECT * FROM property WHERE state = 'active' AND rel_type_id = ".$rel["id"]);
                 $numProp = $selProp->num_rows;
-                $primeiraVez = true;
-                while ($prop = $selProp->fetch_assoc()) {
 ?>
-                    <tr>
+                <tr>    
+                    <td rowspan="<?php echo $numProp?>"><?php echo $rel["id"];?></td>
+                    <td rowspan="<?php echo $numProp?>"><?php echo $rel["name"];?></td>                    
+                    <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
+                    <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
 <?php
+                $primeiraVez=true;
+                if ($numProp == 0) {
+?>
+                    <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
+<?php
+                }
+                while ($prop = $selProp->fetch_assoc()) {
                     if ($primeiraVez) {
                         $primeiraVez = false;
-?>
-                        <td rowspan="<?php echo $numProp?>"><?php echo $rel["id"];?></td>
-                        <td rowspan="<?php echo $numProp?>"><?php echo $rel["name"];?></td>                    
-                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
-                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
+?>                   
                         <td><?php echo $prop["name"];?></td>
                         <td><?php echo $prop["value_type"];?></td>
 <?php
-                        if ($rel["state"] === "active")
-                        {
-?>
-                            <td rowspan="<?php echo $numProp?>">Ativo</td>
-                            <td rowspan="<?php echo $numProp?>">
-                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                                <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
-                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                            </td>
-<?php
-                        }
-                        else
-                        {
-?>
-                            <td rowspan="<?php echo $numProp?>">Inativo</td>
-                            <td rowspan="<?php echo $numProp?>">
-                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                                <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
-                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                            </td>
-<?php
-                        }
                     }
                     else {
-?>
+?>                   
+                    <tr>
                         <td><?php echo $prop["name"];?></td>
-                        <td><?php echo $prop["value_type"];?></td>    
-<?php
-                    }
-?>
+                        <td><?php echo $prop["value_type"];?></td>
                     </tr>
+<?php                        
+                    }
+                }
+                if ($rel["state"] === "active")
+                {
+?>
+                    <td rowspan="<?php echo $numProp?>">Ativo</td>
+                    <td rowspan="<?php echo $numProp?>">
+                        <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                        <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                        <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                    </td>
 <?php
                 }
+                else
+                {
+?>
+                    <td rowspan="<?php echo $numProp?>">Inativo</td>
+                    <td rowspan="<?php echo $numProp?>">
+                        <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                        <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                        <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                    </td>
+<?php
+                }
+                
             }
 ?>
             </tbody>
