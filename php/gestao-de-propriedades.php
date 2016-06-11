@@ -1307,11 +1307,11 @@ class PropHist{
           }
         }
         if (!$erro) {
-            if ($last && $isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
+            if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
-            else if ($last && !$isEntity && $this->createNewRel($atributos["rel_type_id"], $db, $data) == false) {
+            else if (!$isEntity && $this->createNewRel($atributos["rel_type_id"], $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
