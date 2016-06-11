@@ -1022,7 +1022,7 @@ class PropertyManage
         $i = 1;
         while ($prop = $selProp->fetch_assoc()){
           echo "i ".$i."num ".$numRows;
-          if ($numRows < $i) {
+          if ($i < $numRows) {
             if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) {
 ?>
                 <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
