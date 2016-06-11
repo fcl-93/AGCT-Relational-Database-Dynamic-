@@ -1359,7 +1359,6 @@ class PropHist{
         }
         $updateRelHist = "INSERT INTO hist_rel_type (".$atributo."inactive_on, rel_type_id) "
                 . "VALUES (".$valor."'".$data."',".$idRel.")";
-        echo $updateRelHist;
         $updateRelHist =$db->runQuery($updateRelHist);
         if (!$updateRelHist) {
             $db->getMysqli()->rollback();
@@ -1367,7 +1366,6 @@ class PropHist{
         }
         else {
             $updateRel = "UPDATE rel_type SET updated_on = '".$data."'";
-            echo $updateRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
                 $db->getMysqli()->rollback();
