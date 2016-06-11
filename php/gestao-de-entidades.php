@@ -665,7 +665,7 @@ class EntHist {
 <?php
                         }
                         else{
-                            
+                            //print properties from the hist table
                             while($readProp = $getPropsHist->fetch_assoc()){
 ?>
                                 <td><?php echo $readProp['name']?></td>
@@ -683,6 +683,7 @@ class EntHist {
                                 </tr>
 <?php
                             }
+                            //Print properties from normal table
                             while($readProp = $getProp->fetch_assoc()){
 ?>
                                 <td><?php echo $readProp['name']?></td>
