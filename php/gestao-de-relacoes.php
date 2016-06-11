@@ -738,7 +738,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            if ($rel["state"] === "active")
+                            if ($hist["state"] === "active")
                             {
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
@@ -773,7 +773,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            if ($rel["state"] === "active")
+                            if ($hist["state"] === "active")
                             {
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
