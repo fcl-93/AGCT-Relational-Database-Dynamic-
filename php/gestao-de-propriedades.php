@@ -928,34 +928,7 @@ class PropertyManage
 
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        if ($_REQUEST['nome_'.$propId] != $getProp["name"]) {
-            return true;
-        }
-        else if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"]) {
-            return true;
-        }
-        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) {
-            return true;
-        }
-        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) {
-            return true;
-        }
-        else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
-            return true;
-        }
-        else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
-            return true;
-        }
-        else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
-            return true;
-        }
-        else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
-            return true;
-        }
-        else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
-            return true;
-        }
-        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+        if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
             return true;
         }
         else {
