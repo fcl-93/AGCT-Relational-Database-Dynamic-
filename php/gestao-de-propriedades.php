@@ -1280,7 +1280,7 @@ class PropHist{
         $db->getMysqli()->begin_transaction();
         $selectProp = "SELECT * FROM property WHERE id = ".$idProp;
         $selectProp = $db->runQuery($selectProp);
-        $selectAtributos = "SELECT * FROM property WHERE id = ".$selectProp->fetch_assoc()['ent_type_id'];
+        $selectAtributos = "SELECT * FROM property WHERE ent_type_id = ".$selectProp->fetch_assoc()['ent_type_id'];
         $selectAtributos = $db->runQuery($selectAtributos);
         $erro = false;
         while ($prop = $selectAtributos->fetch_assoc()){
