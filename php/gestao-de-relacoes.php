@@ -358,22 +358,37 @@ class RelationManage
 ?>
         <h3 align="center">Gestão de relações - Introdução </h3>
         <form id="insertRelation" method="POST" align="center">
-            <label>Entidade 1</label><br>
-            <select id="ent1" name="ent1">
-                <option></option>
+            <table>
+                <tr>
+                    <td><label>Entidade 1</label><br></td>
+                    <td><label>Entidade 2</label><br></td>
+                </tr>  
+                <tr>
+                    <td>
+                
+                    <select id="ent1" name="ent1">
+                        <option></option>
 <?php
-                $this->getEntities();
+                            $this->getEntities();
 ?>
-            </select><br>
-            <label class="error" for="ent1"></label><br>
-            <label>Entidade 2</label><br>
-            <select id="ent2" name="ent2">
-                <option></option>
+                    </select><br>
+                    </td>
+                    <td>
+                    
+                        <select id="ent2" name="ent2">
+                            <option></option>
 <?php
-                $this->getEntities();
-?>                
-            </select><br>
-            <label class="error" for="ent2"></label><br>
+                            $this->getEntities();
+?>             
+                        </select><br>
+                    </td>
+                </tr> 
+                <tr>
+                    <td> <label class="error" for="ent1"></label><br></td>
+                    <td> <label class="error" for="ent2"></label><br> </td>
+                </tr>
+            </table>
+           
             <label>Nome para o tipo de relação</label><br>
             <input type="text" name="nome"><br>
             <input type="hidden" name="estado" value="inserir"><br>
