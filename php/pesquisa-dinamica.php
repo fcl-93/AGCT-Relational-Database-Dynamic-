@@ -1,11 +1,11 @@
-<?php
+<?phpa
 require_once("custom/php/common.php");
 require_once("custom/php/exportacao-de-valores.php");
 
 $pesquisa = new Search();
 
 class Search{
- 
+
     private $bd;                         // object from the Db_Op class
     private $operators;                  // array of operators used in dynmic search
     private $guardaidDosSelecionados;   // array that saves the id of the properties selected for the search
@@ -13,7 +13,7 @@ class Search{
     private $guardaValorDaProp;         // array that value for the properties selected for the search
     private $saveNames;                 // array that value for the properties selected for the search
     private $frase;                     // string with the setence that describes the search made
-    
+
     /**
      * Constructor method
      */
@@ -28,17 +28,17 @@ class Search{
         $this->saveNames = array();
         $this->checkUser();
     }
-    
+
     /**
      * Main method that controls the capability of the current user to acces this component
-     * and controls his execution flow 
+     * and controls his execution flow
      */
     public function checkUser(){
         $capability = 'dynamic_search';
 	if(is_user_logged_in()){
-            if(current_user_can($capability)){ 
+            if(current_user_can($capability)){
                 if(empty($_REQUEST['estado'])){
-                 
+
                    $this->tableEmpStt();
                 }
                 else if($_REQUEST['estado'] == 'escolha'){
@@ -46,10 +46,10 @@ class Search{
                 }
                 else if($_REQUEST['estado'] == 'execucao'){
                     $this->estadoExecucao();
-                }                
+                }
                 else if($_REQUEST['estado'] == 'apresentacao'){
                     $this->estadoApresentacao();
-                } 
+                }
                 else if ($_REQUEST['estado'] == 'inactive')
                 {
                      $idEntTp = $_SESSION['typeId'];
@@ -58,7 +58,7 @@ class Search{
                 else if ($_REQUEST['estado'] == 'active')
                 {
                     $idEntTp = $_SESSION['typeId'];
-                 
+
                     $this->changeState($idEntTp);
                 }
                 else if ($_REQUEST['estado'] == 'updateValoresEnt')
@@ -85,30 +85,30 @@ class Search{
                 {
                     $this->ativarVal();
                 }
-                
-                
+
+
             }
             else {
 ?>
             <html>
                 <p>Não tem autorização para a aceder a esta página.</p>
             </html>
-<?php                
+<?php
             }
         }
         else{
 ?>
             <html>
-                <p>O utilizador não tem sessão iniciada.</p>   
+                <p>O utilizador não tem sessão iniciada.</p>
                 <p>Clique <a href="/login">aqui</a> para iniciar sessão.</p>
             </html>
 <?php
         }
     }
-    
+
     /**
      * This is the form that will allow the user to  make his searchs
-     * 
+     *
      */
     private function tableChsStt(){
         if (isset($_REQUEST["ent"])) {
@@ -119,7 +119,7 @@ class Search{
             $_SES0SION["tipo"] = "rel";
             $_SESSION["id"] = $_REQUEST["rel"];
         }
-        
+
 ?>
             <html>
                 <form method="POST">
@@ -134,7 +134,7 @@ class Search{
             </html>
 <?php
     }
-    
+
     /**
      * This method will show all the properties form the entity that is related to the one we have chosed
      * @param type $idDaRel
@@ -146,13 +146,13 @@ class Search{
 ?>
             <h3>Entidades que se relacionam com <?php  echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];;?></h3>
             <p>Não existem entidades que se relacionem com a entidade selecionada</p>
-<?php            
+<?php
         }
         else
         {
 ?>
             <html>
-                <h3>Entidades que se relacionam com 
+                <h3>Entidades que se relacionam com
 <?php
                 echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];
 ?>
@@ -206,7 +206,7 @@ class Search{
                                     <select name="selectER<?php echo $count ?>">
 <?php
                                         while($read_AlldVal = $res_AlldVal->fetch_assoc()){
-?>                                            
+?>
                                             <option><?php echo $read_AlldVal['value']; ?></option>
 <?php
                                         }
@@ -228,12 +228,12 @@ class Search{
                                             {
 ?>
                                                 <option><?php echo $value;?></option>
-<?php                                   
+<?php
                                             }
 ?>
                                         </select>
                                         <input type="text" name="doubleER<?php echo $count;?>">
-<?php                                                
+<?php
                                         break;
                                     case 'text':
 ?>
@@ -247,7 +247,7 @@ class Search{
 <?php                                       foreach($this->operators as$key=>$value){
 ?>
                                                 <option><?php echo $value;?></option>
-<?php                                   
+<?php
                                             }
 ?>
                                         </select>
@@ -259,7 +259,7 @@ class Search{
                                         <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
-                                               
+
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
                                                     $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps["id"]." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
@@ -268,7 +268,7 @@ class Search{
                                                         $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
                                                         $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-                                                        //array associativo que guarda o resultado que vem da query 
+                                                        //array associativo que guarda o resultado que vem da query
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
                                                             //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
@@ -277,25 +277,25 @@ class Search{
 <?php
                                                         }
                                                     }
-                                                
+
 ?>
                                             </select></br>
 <?php
                                         break;
                             }
 ?>
-                            </td>                              
+                            </td>
 <?php
-                $x--; 
-                
+                $x--;
+
             $count++;
 ?>
                 </tr>
 <?php
                 }
-            $run++;    
+            $run++;
 ?>
-               
+
 <?php
         }
     }
@@ -306,9 +306,9 @@ class Search{
         </html>
 <?php
     }
-    
+
     /**
-     * This method will print table showing all the relation types and their atributes/properties where there is 
+     * This method will print table showing all the relation types and their atributes/properties where there is
      * one entity equal the one we have choosed
      */
     private function showRelation(){
@@ -323,7 +323,7 @@ class Search{
                 <p>Não existem relações em que a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?> está presente.</p>
             </html>
 <?php
-            
+
         }
         else
         {
@@ -347,13 +347,13 @@ class Search{
                 <tr>
                     <td rowspan="<?php echo $res_GetRelProps->num_rows?>"><?php echo $read_GetRelType['name']?></td>
 <?php
-                   
+
                     while($read_GetRelProps = $res_GetRelProps->fetch_assoc()){
 ?>
                         <td><?php echo $read_GetRelProps['name']?></td>                              <!--Id da propriedade da relação-->
                         <td><input type="checkbox" name="checkRL<?php echo $count?>" value="<?php echo $read_GetRelProps['id'] ?>"></td>
                         <td>
-<?php                       
+<?php
                             switch ($read_GetRelProps['value_type']) {
                                 case 'enum':
                                     //get enum values if the component valu_type is enum
@@ -362,7 +362,7 @@ class Search{
                                     <select name="selectRL<?php echo $count ?>">
 <?php
                                         while($read_AlldVal = $res_AlldVal->fetch_assoc()){
-?>                                            
+?>
                                             <option><?php echo $read_AlldVal['value']; ?></option>
 <?php
                                         }
@@ -388,7 +388,7 @@ class Search{
 ?>
                                     </select>
                                     <input type="text" name="doubleRL<?php echo $count;?>">
-<?php                                                
+<?php
                                     break;
 				case 'text':
 ?>
@@ -414,7 +414,7 @@ class Search{
                                         <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
-                                               
+
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
                                                     $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetRelProps["id"]." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
@@ -423,7 +423,7 @@ class Search{
                                                         $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
                                                         $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-                                                        //array associativo que guarda o resultado que vem da query 
+                                                        //array associativo que guarda o resultado que vem da query
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
                                                             //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
@@ -432,7 +432,7 @@ class Search{
 <?php
                                                         }
                                                     }
-                                                
+
 ?>
                                             </select></br>
 <?php
@@ -440,7 +440,7 @@ class Search{
                             }
 ?>
                         </td>
-                        
+
                 </tr>
 
 <?php
@@ -449,7 +449,7 @@ class Search{
                     $_SESSION['relPropCount'] = $count;
             }
 ?>
-                          
+
                     </tbody>
                 </table>
             </html>
@@ -457,15 +457,15 @@ class Search{
         $this->showPropRelQSRel($guardaRelTpId);
         }
     }
-    
+
     /**
-     * Show a table of entities, where at least the value_type of one o the properties of the selected entity is ent_ref, and fk_ent_type_id 		
-     * references the select entity 
+     * Show a table of entities, where at least the value_type of one o the properties of the selected entity is ent_ref, and fk_ent_type_id
+     * references the select entity
      */
     private function showPropValueType(){
         $count = $_SESSION['countPrintedProps'];
         $res_EntRef = $this->bd->runQuery("SELECT ent_type.id, ent_type.name FROM ent_type, property WHERE ent_type.id = property.ent_type_id AND property.value_type = 'ent_ref' AND property.fk_ent_type_id = ".$this->bd->userInputVal($_REQUEST['ent'])."");
-    
+
         if($res_EntRef->num_rows == 0)
 	{
 ?>
@@ -473,7 +473,7 @@ class Search{
                 <h3>Propriedades de entidades que contenham pelo menos uma propriedade que referêncie a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?></h3>
                 <p>Não existem propriedades de entidades que referenciem a entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name']; ?>.</p>
             </html>
-<?php                                       
+<?php
         }
         else
         {
@@ -482,8 +482,8 @@ class Search{
 <?php
             while($read_EntRef = $res_EntRef->fetch_assoc())
             {
-                
-?>              
+
+?>
                 <h5>Tipo de Entidade: <?php echo $read_EntRef['name']; ?></h5>
                 <table class="table">
                     <thead>
@@ -515,7 +515,7 @@ class Search{
                                         <select name="selectVT<?php echo $count ?>">
 <?php
                                             while($read_AlldVal = $res_AlldVal->fetch_assoc()){
-?>                                            
+?>
                                                 <option><?php echo $read_AlldVal['value']; ?></option>
 <?php
                                             }
@@ -541,7 +541,7 @@ class Search{
 ?>
                                                     </select>
 						<input type="text" name="doubleVT<?php echo $count;?>">
-<?php                                                
+<?php
 						break;
 					case 'text':
 ?>
@@ -567,7 +567,7 @@ class Search{
                                             <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
-                                               
+
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
                                                     $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_PropRelEnt["id"]." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
@@ -576,7 +576,7 @@ class Search{
                                                         $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
                                                         $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-                                                        //array associativo que guarda o resultado que vem da query 
+                                                        //array associativo que guarda o resultado que vem da query
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
                                                             //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
@@ -585,7 +585,7 @@ class Search{
 <?php
                                                         }
                                                     }
-                                                
+
 ?>
                                             </select></br>
 <?php
@@ -595,7 +595,7 @@ class Search{
 ?>
                                     </td>
                         </tr>
-<?php                       
+<?php
                         }
                         $_SESSION['vtPropCount'] = $count;
                     }
@@ -607,8 +607,8 @@ class Search{
 ?>
 <?php
         }
-    }    
-    
+    }
+
     /**
      * Show the properties for the selected entities
      * the properties will be presented in a table
@@ -623,7 +623,7 @@ class Search{
                 <p>A entidade <?php echo $this->bd->runQuery("SELECT name FROM ent_type WHERE id=".$this->bd->userInputVal($_REQUEST['ent']))->fetch_assoc()['name'];?> não tem propriedades.</p>
             </html>
 
-<?php            
+<?php
         }
         else
         {
@@ -638,7 +638,7 @@ class Search{
                                 <th>Seleção</th>
                                 <th>Valor</th>
                             </tr>
-                  
+
                         </thead>
                     <tbody>
 <?php
@@ -658,7 +658,7 @@ class Search{
                                             <select name="selectET<?php echo $count ?>">
 <?php
                                                 while($read_AlldVal = $res_AlldVal->fetch_assoc()){
-?>                                            
+?>
                                                     <option><?php echo $read_AlldVal['value']; ?></option>
 <?php
                                                 }
@@ -684,7 +684,7 @@ class Search{
 ?>
                                                     </select>
 						<input type="text" name="doubleET<?php echo $count;?>">
-<?php                                                
+<?php
 						break;
 					case 'text':
 ?>
@@ -710,7 +710,7 @@ class Search{
                                             <select name="ent_refER<?php echo $count ?>">
                                             <option></option>
 <?php
-                                               
+
                                                     //vai buscar todos as referencias a entidades que tem como chave estrangeira uma referenca a outra entidade
                                                     $selecionaFK = $this->bd->runQuery("SELECT `fk_ent_type_id` FROM `property` WHERE ".$_REQUEST['ent']." = ent_type_id AND value_type = 'ent_ref' AND ".$read_GetProp["id"]." = id");
                                                     while($FK = $selecionaFK->fetch_assoc())
@@ -719,7 +719,7 @@ class Search{
                                                         $nomeEntRef = $this->bd->runQuery("SELECT name FROM ent_type WHERE ".$FK['fk_ent_type_id']." = id")->fetch_assoc()["name"];
                                                         // vai buscar o id e o nome da instancia do componente que tem uma referencia de outro compoenente
                                                         $selecionainstancia = $this->bd->runQuery("SELECT `id`, `entity_name` FROM `entity` WHERE ent_type_id = ".$FK['fk_ent_type_id']."");
-                                                        //array associativo que guarda o resultado que vem da query 
+                                                        //array associativo que guarda o resultado que vem da query
                                                         while($nomeinstancia = $selecionainstancia->fetch_assoc())
                                                         {
                                                             //criação das opções dinamicas que recebm o nome do componente que vem do array associativo
@@ -728,7 +728,7 @@ class Search{
 <?php
                                                         }
                                                     }
-                                                
+
 ?>
                                             </select></br>
 <?php
@@ -747,7 +747,7 @@ class Search{
 <?php
         }
     }
-    
+
     /**
      * Prints the table when the state is empty this table will have
      * all the entities type that you can select to make searches
@@ -768,7 +768,7 @@ class Search{
 ?>
             <h3>Pesquisa Dinâmica - escolher tipo de entidade</h3>
 <?php
-            $res_getEnt = $this->bd->runQuery("SELECT  id, name FROM  ent_type"); //get all entities from ent type 
+            $res_getEnt = $this->bd->runQuery("SELECT  id, name FROM  ent_type"); //get all entities from ent type
             if($res_getEnt->num_rows == 0)
             {
 ?>
@@ -778,7 +778,7 @@ class Search{
 
 <?php
             }
-            else 
+            else
             {
 ?>
             <ul>
@@ -789,10 +789,10 @@ class Search{
                     //need to filter the entities previously selected.
                     //$res_FilterEntities = $this->bd->runQuery("SELECT ent_type.name, ent_type.id FROM ent_type INNER JOIN property ON property.fk_ent_type_id = ent_type.id AND ent_type.id = '".$read_getEnt['id']."'");
 ?>
-<?php               
+<?php
                             //while($read_Filter = $res_FilterEntities->fetch_assoc())
                             //{
-?>          
+?>
                                 <ul>
                                     <li><a href="pesquisa-dinamica?estado=escolha&ent=<?php echo $read_getEnt['id']; ?>">[<?php echo $read_getEnt['name']; ?>]</a></li>
                                 </ul>
@@ -805,18 +805,18 @@ class Search{
             }
         }
     }
-    
+
     /**
      * This method controls the state execution.
-     * It is on this method that the dynamic query used for the is 
+     * It is on this method that the dynamic query used for the is
      * created with help of several other methods above.
-     * In a simplified way the dynamic query that is generated in this method 
+     * In a simplified way the dynamic query that is generated in this method
      * is composed by other subqueries that are joined together using the IN clause
      */
     private function estadoExecucao() {
         $tipo = $_SESSION["tipo"];
-        $idEnt = $_SESSION['id']; 
-        // the number of printed checks equals the $_SESSION['ER'] because the ER retains the number 
+        $idEnt = $_SESSION['id'];
+        // the number of printed checks equals the $_SESSION['ER'] because the ER retains the number
         // of printed checks inthe ER table types plus all the previous table types
         $numeroDechecksImpressos = $_SESSION['ER'];
         // control variables count the number of checkboxes selected by type
@@ -825,7 +825,7 @@ class Search{
         $checkSelectedVT = 0;
         $checkSelectedRL = 0;
         $checkSelectedER = 0;
-        // arrays that retains the id of the refered entities, relations and related 
+        // arrays that retains the id of the refered entities, relations and related
         // entities wich properties where selected fo the search
         $arrayVT = array();
         $arrayRL = array();
@@ -834,7 +834,7 @@ class Search{
         $vtExiste = false;
         $relExiste = false;
         $i = 0;
-        
+
         // cycles to count the number of checks selected by each category
         $erro = false;
         while( $i <=  $numeroDechecksImpressos) {
@@ -863,15 +863,15 @@ class Search{
         $queryEntType = "SELECT name FROM ent_type WHERE id = ".$idEnt;
         $tipoEntidade = $this->bd->runQuery($queryEntType)->fetch_assoc()["name"];
         $this->frase = "Pesquisa de todas as entidades do tipo ".$tipoEntidade;
-        
+
         // headers of all the queries that will be used for do the dynamic search
         $querydinamica = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE e.id IN (";
         $cabecalhoQuery = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Ref = $query1Ent = $query1ER = "SELECT DISTINCT e.id FROM entity AS e, value AS v WHERE ";
         $query1Rel = "SELECT DISTINCT r.id FROM relation AS r WHERE ";
         $primeiraVezET = $primeiraVezVT = $primeiraVezRL = $primeiraVezER = true;
-        
-        //cycle that grants that all the checks are analysed to see if it was 
+
+        //cycle that grants that all the checks are analysed to see if it was
         //selected and if true add it to the dynamic search
         for($count = 0 ;$count < $numeroDechecksImpressos; $count++ ) {
             //CheckBoxes não foram selecionadas
@@ -902,9 +902,9 @@ class Search{
                 $queryNomeValProp = $queryNomeValProp->fetch_assoc();
                 $nomeProp = $queryNomeValProp["name"];
                 $tipoValor = $queryNomeValProp["value_type"];
-                
+
                 // each type of property will have a different treatment
-                
+
                 if ($tipo == "ET") {
                     if ($primeiraVezET) {
                         $this->frase .= " cuja propriedade ".$nomeProp." é ";
@@ -918,10 +918,10 @@ class Search{
                         break;
                     }
                 }
-                else if ($tipo == "VT") {   
+                else if ($tipo == "VT") {
                     $getEntRef = "SELECT e.id, e.name FROM property AS p, ent_type AS e WHERE p.id = ".$idDaPropriedade." AND p.ent_type_id = e.id";
                     $getEntRef = $this->bd->runQuery($getEntRef)->fetch_assoc();
-                    
+
                     // checks if the id of the entity type related to the property in case was already used in the search
                     foreach ($arrayVT as $id) {
                         if ($getEntRef["id"] == $id) {
@@ -950,7 +950,7 @@ class Search{
                     $idRel = "SELECT DISTINCT r.* FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt;
                     $rel = $this->bd->runQuery($idRel)->fetch_assoc();
                     $idRel = $rel["id"];
-                    
+
                     // checks if the id of the relation type related to the property in case was already used in the search
                     foreach ($arrayRL as $id) {
                         if ($rel["id"] == $id) {
@@ -981,12 +981,12 @@ class Search{
                         break;
                     }
                 }
-                else if($tipo == "ER") 
+                else if($tipo == "ER")
                 {
                     $idRel = "SELECT DISTINCT r.* FROM rel_type AS r, property AS p  WHERE p.id = ".$idDaPropriedade." AND p.rel_type_id = r.id AND r.ent_type1_id = ".$idEnt." OR r.ent_type1_id = ".$idEnt;
                     $rel = $this->bd->runQuery($idRel)->fetch_assoc();
                     $idRel = $rel["id"];
-                    
+
                     // checks if the id of the entity type related to the property in case was already used in the search
                     foreach ($arrayER as $id) {
                         if ($rel["id"] == $id) {
@@ -1011,15 +1011,15 @@ class Search{
                     else {
                         $this->frase .= ", cuja propriedade ".$nomeProp." é ";
                     }
-                    
-                    // in this case we don't use a different method becaus in his 
+
+                    // in this case we don't use a different method becaus in his
                     // essence what we need to do in first step is the same we did for the second type of filters
                     $query1ER = $this->filtros2Tabela($query1ER, $primeiraVezER, $count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo);
                     $primeiraVezER = false;
                     if ($query1ER === true) {
                         break;
                     }
-                
+
                 }
             }
         }
@@ -1030,7 +1030,7 @@ class Search{
         }
         else {
             $primeiraVez = true;
-            // the strlen presented above checks if anything was added to the 
+            // the strlen presented above checks if anything was added to the
             // 1st subquery during the previous cycle.
             // if it was it means that we need to go to another methods to
             // generated the others subqueries
@@ -1047,7 +1047,7 @@ class Search{
                     }
                     else {
                         $querydinamica .= $this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery).")";
-                        $primeiraVez = false;   
+                        $primeiraVez = false;
                     }
                 }
                 else {
@@ -1110,14 +1110,14 @@ class Search{
             $this->apresentaResultado ($querydinamica, $checkSelected);
         }
     }
-    
+
     /**
-     * 
+     *
      * This method creates a query when the user selected on or more properties
      * presented in the table type where we found properties about entities that
      * has references to the selected entity.
      * Before we selected all the refered entities that have the properties selected.
-     * In this method we will check if anyone of the results of that query is 
+     * In this method we will check if anyone of the results of that query is
      * refered by one of the entities wich type is the selected
      *
      * @param type $query1 (query that selects all the entities that satisfy the properties selected)
@@ -1140,7 +1140,7 @@ class Search{
                 return false;
             }
             else {
-                $idPropEntRef = $propEntRef->fetch_assoc()["id"];  
+                $idPropEntRef = $propEntRef->fetch_assoc()["id"];
             }
             //obtem o id das entidades que satisfazem a pesquisa
             $query3 = "SELECT v.value FROM property AS p, entity AS e, value AS v WHERE v.property_id = ".$idPropEntRef." AND v.entity_id = ".$entRef["id"]." AND v.property_id = p.id AND e.id = v.entity_id";
@@ -1159,14 +1159,14 @@ class Search{
         }
         return $querydinamica;
     }
-    
+
     /**
      *
      * This method creates a query when the user selected one or more properties
      * presented in the table type where we found properties about relations that
      * where the ent type selected is envolved
      * Before we selected all the relations that have the properties selected.
-     * In this method we will check if anyone of the results of that query has 
+     * In this method we will check if anyone of the results of that query has
      * an entity wich type is the selected
      *
      * @param type $query1REL (query that selects all the relations that satisfy the properties selected)
@@ -1209,11 +1209,11 @@ class Search{
             $conta++;
         }
         return $querydinamica;
-        
+
     }
-    
+
     /**
-     * 
+     *
      * This method creates a query when the user selected one or more properties
      * presented in the table type where we found properties about entities that
      * where involved in a relation between the ent type selected
@@ -1268,13 +1268,13 @@ class Search{
             $querydinamica .= "SELECT id FROM entity WHERE id = ".$entidades.")";
             $conta++;
         }
-        return $querydinamica;    
+        return $querydinamica;
     }
-    
+
     /**
-     * This method will create the query that returns all the entities of 
+     * This method will create the query that returns all the entities of
      * the selected ent type that satisfy the selected properties
-     * 
+     *
      * @param type $query1Ent (header of the query that will return all the entities of the selected ent type that satisfy the selected properties)
      * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
      * @param type $count (variable that indicates wich of the checkboxes is being analysed)
@@ -1327,13 +1327,13 @@ class Search{
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1Ent;
     }
-   
+
     /**
-     * 
-     * This method will create the query that returns all the entities of 
+     *
+     * This method will create the query that returns all the entities of
      * the ent type correpondent to the table type
      * that satisfy the selected properties
-     * 
+     *
      * @param type $query1 (header of the query that will return all the entities of the ent type correspondent to the table type that satisfy the selected properties)
      * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
      * @param type $count (variable that indicates wich of the checkboxes is being analysed)
@@ -1352,7 +1352,7 @@ class Search{
             $query1 .= "e.id IN (";
         }
         else {
-           
+
             //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
@@ -1363,8 +1363,8 @@ class Search{
             else
             {
                 array_push($this->saveNames, $read_GetEntId['ent_type_id']);
-                $query1 .= " OR e.id IN (";        
-                        
+                $query1 .= " OR e.id IN (";
+
             }
             //print_r($this->saveNames);
         }
@@ -1406,10 +1406,10 @@ class Search{
     }
 
     /**
-     * 
-     * This method will create the query that returns all the entities of 
+     *
+     * This method will create the query that returns all the entities of
      * the relation that satisfy the selected properties
-     * 
+     *
      * @param type $query1 (header of the query that will return all the relations that satisfy the selected properties)
      * @param type $controlo (variable that checks if the this is the first time that this method is invoked)
      * @param type $count (variable that indicates wich of the checkboxes is being analysed)
@@ -1427,7 +1427,7 @@ class Search{
             $query1 .= "r.id IN (";
         }
         else {
-           
+
             //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
@@ -1438,8 +1438,8 @@ class Search{
             else
             {
                 array_push($this->saveNames, $read_GetEntId['ent_type_id']);
-                $query1 .= " OR r.id IN (";        
-                        
+                $query1 .= " OR r.id IN (";
+
             }
             //print_r($this->saveNames);
         }
@@ -1479,7 +1479,7 @@ class Search{
         $this->preencheArrays ($idDaPropriedade,$nomeProp,$valor);
         return $query1;
     }
-    
+
     /**
      * Method that validates the user input when it's type is suposed to be of an int
      * @param type $count (the number of the input)
@@ -1490,11 +1490,11 @@ class Search{
         if ($this->verificaOperadores($count)) {
             $int_escaped = $this->bd->userInputVal($_REQUEST['int'.$tipo.$count.'']);
             if(ctype_digit($int_escaped))
-            {	
+            {
                     //Se todo o input do user são numeros então converter para inteitro
                     $int_escaped = (int)$int_escaped;
                     if(is_int($int_escaped))
-                    {			
+                    {
                         return $int_escaped;
                     }
                 else
@@ -1510,14 +1510,14 @@ class Search{
 ?>
                 <p>Verifique se introduziu um valor numérico.</p>
 <?php
-                return false;	
+                return false;
             }
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Method that validates the user input when it's type is suposed to be of an double
      * @param type $count (the number of the input)
@@ -1547,14 +1547,14 @@ class Search{
 ?>
                 <p>Verifique se introduziu um valor numérico.</p>
 <?php
-                return false;	
+                return false;
             }
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Method that check if the user selected one operator
      * @param type $count (the number of the input)
@@ -1572,7 +1572,7 @@ class Search{
             return true;
         }
     }
-    
+
     /**
      * This method populates the arrays that are used to save the properties and its values.
      * @param type $idDaPropriedade (id of the property)
@@ -1584,11 +1584,11 @@ class Search{
         array_push($this->guardanomePropSelec, $nomeProp);
         array_push($this->guardaValorDaProp,$valor);
     }
-    
+
     /**
      * This method presents the results of tha dynamic search.
      * First it writes a descritive sentence about the search
-     * Then it presents a table with all the results, where the user can edit, 
+     * Then it presents a table with all the results, where the user can edit,
      * view the history, or activate/desactivate
      * @param type $querydinamica
      * @param type $selected (number of the selected filters)
@@ -1597,7 +1597,7 @@ class Search{
 ?>
         <p><?php echo $this->frase;?></p>
 <?php
-        $instEnt = $this->bd->runquery($querydinamica);		
+        $instEnt = $this->bd->runquery($querydinamica);
         //imprime a lista de instancias do componente selecionado de acordo com os filtros
         if ($instEnt->num_rows === 0) {
 ?>
@@ -1609,15 +1609,15 @@ class Search{
             if ($selected == 0) {
 ?>
                 <form method="GET">
-                    Verificar tabela apresentada abaixo no dia : 
-                    <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
+                    Verificar tabela apresentada abaixo no dia :
+                    <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data">
                     <input type="hidden" name="estado" value="historico">
                     <input type="hidden" name="ent" value="<?php echo $this->bd->userInputVal($_REQUEST["ent"])?>">
                     <input type="hidden" name="histAll" value="true">
                     <input type="submit" value="Apresentar propriedades">
                 </form>
 <?php
-            }      
+            }
             $_SESSION['typeId'] = $this->bd->userInputVal($_REQUEST['ent']);
 ?>
         <table class="table">
@@ -1648,7 +1648,7 @@ class Search{
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                             echo $instancias['id'];
-?>     
+?>
                         </td>
 <?php
                     }
@@ -1657,16 +1657,16 @@ class Search{
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
-?> 
-                        <td rowspan="<?php echo $getValues->num_rows;?>"> 
+?>
+                        <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                             echo $entity_name;
-?>   
+?>
                         </td>
 <?php
                         }
                         else {
-?>                        
+?>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                            echo $entity_id;
@@ -1677,7 +1677,7 @@ class Search{
                     }
 ?>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
-<?php 
+<?php
                            if($instancias['state'] == 'active')
                            {
                                echo 'Ativo';
@@ -1689,11 +1689,11 @@ class Search{
 ?>
                         </td>
 <?php
-        $first = true;            
-        while($readVals = $getValues->fetch_assoc()){  
-?>          
+        $first = true;
+        while($readVals = $getValues->fetch_assoc()){
+?>
                         <td><?php echo $readVals['name']?></td>
-                        <td> <?php 
+                        <td> <?php
                             //$getValState = "SELECT state FROM value WHERE"
                         if($readVals['ValueState'] == 'active'){
                             if($readVals['value'] == "")
@@ -1709,7 +1709,7 @@ class Search{
                         {
                             echo "-";
                         }
-                                
+
                         ?></td>
                         <td><?php //print the val state
                             if($readVals['ValueState'] == 'active')
@@ -1722,11 +1722,11 @@ class Search{
                             }
                         ?></td>
 <?php
-                    if($first == true){    
+                    if($first == true){
 ?>
                 <td rowspan="<?php echo $getValues->num_rows;?>">
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Valores das Propriedades da Instância da Entidade]</a>
-                        
+
 <?php
 
                     $readState = $this->bd->runQuery("SELECT state FROM entity WHERE id=".$entity_id)->fetch_assoc();
@@ -1734,7 +1734,7 @@ class Search{
                     {
 ?>
                         <a href="?estado=inactive&id=<?php echo $entity_id;?>">[Desativar]</a>
-<?php                    
+<?php
                     }
                     else
                     {
@@ -1742,31 +1742,31 @@ class Search{
                         <a href="?estado=active&id=<?php echo $entity_id;?>">[Ativar]</a>
 <?php
                     }
-                    
+
 ?>
-                        
-                        <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>  
+
+                        <a href="?estado=historico&ent_id=<?php echo $entity_id;?>">[Histórico]</a>
                 </td>
 <?php
 $first = false;
                     }
 ?>
-            </tr>	
+            </tr>
 <?php
                 array_push($arrayInstId,$instancias['id']);
-                array_push($arrayInstComp,$entity_name); 
+                array_push($arrayInstComp,$entity_name);
                 }
             }
 ?>
             </tbody>
         </table>
 <?php
-        
+
             $excelGen = new ExportValues();
             $excelGen->geraExcel($querydinamica,$this->frase,$this->guardaidDosSelecionados,$this->guardanomePropSelec,$this->guardaValorDaProp,$arrayInstId,$arrayInstComp);
         }
     }
-    
+
     /**
      * Method that creates the tables where the user can view and edit the values
      * of properties for the entity selected in the previous state
@@ -1791,7 +1791,7 @@ $first = false;
             $this->printEntAttrAdder($idEnt);
 ?>
             <h3>Entidade <?php echo $idEnt;?> - Alteração de Propriedades</h3>
-<?php            
+<?php
         }
         $ent_type = $ent["ent_type_id"];
 
@@ -1806,7 +1806,7 @@ $first = false;
                 <th>Valor Atual</th>
                 <th>Estado</th>
                 <th>Selecionar</th>
-                <th>Novo Valor</th> 
+                <th>Novo Valor</th>
                 <th>Ação</th>
             </thead>
             <tbody>
@@ -1831,11 +1831,11 @@ $first = false;
                     else {
                         $valor = $value["value"];
                     }
-                    
+
                 }
 ?>
                 <td><?php echo $prop["name"];?></td>
-                <td><?php 
+                <td><?php
                 if($valor == "")
                 {
                    echo "Sem Valor Atribuido";
@@ -1857,8 +1857,8 @@ $first = false;
                     }
                     ?>
                 </td>
-                  
-               
+
+
 <?php
                     $getValType = $this->bd->runQuery("SELECT * FROM property WHERE id = ".$value['property_id'])->fetch_assoc();
                     if($value["state"] == 'active')
@@ -1866,7 +1866,7 @@ $first = false;
 ?>
                         <td>
                             <input type="checkbox" name="check<?php echo $x?>" value="<?php echo $value["id"] ?>">
-                        </td>  
+                        </td>
                         <td>
 <?php
                         if($getValType['value_type'] == 'bool')
@@ -1878,7 +1878,7 @@ $first = false;
 <?php
                         }
                         else if($getValType['value_type'] == 'enum')
-                        {   
+                        {
                         $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$value['property_id']);
 ?>
                         <select name="<?php echo 'select'.$x ?>">
@@ -1895,7 +1895,7 @@ $first = false;
                         else if($getValType['value_type'] == 'ent_ref')
                         {
                             $getEntToRef = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id=".$getValType['fk_ent_type_id']);
-?>                      
+?>
                             <select name="<?php echo 'select'.$x ?>">
 <?php
                             while($readEntToRef = $getEntToRef->fetch_assoc()){
@@ -1920,12 +1920,12 @@ $first = false;
                         {
 ?>
                             <input type="text" name="<?php echo 'textbox'.$x ?>">
-<?php  
+<?php
                         }
 ?>
                 </td>
-              
-                
+
+
 <?php
                     }
                     else
@@ -1948,13 +1948,13 @@ $first = false;
                     {
 ?>
                         <a href="pesquisa-dinamica?estado=ativarVal&valOfEnt=<?php echo $value['id'];?>">[Ativar]</a>
-                        
+
 <?php
                     }
 ?>
                    <input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
-              
+
             </tr>
 <?php
             }
@@ -1972,19 +1972,19 @@ $first = false;
             <input type="hidden" name="id" value="<?php echo $_REQUEST['id']?>"><br>
             <input type="hidden" name="estado" value="updateValoresEnt"><br>
            <input type="submit" value="Atualizar">
-    </form>        
+    </form>
 <?php
-    
+
     }
-    
+
     /**
      * Prints a table with all the attributes that you cana dd to a entity.
      * @param type $id -> id from the entity in which we want to add values
      */
     private function printEntAttrAdder($id){
-        
+
 ?>
-        
+
 <?php
                     //echo "SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND  p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")";
                     $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
@@ -2013,7 +2013,7 @@ $first = false;
 <?php
                         $conta = 0;
                         while($printProps = $getAvaiablePropsToAdd->fetch_assoc()){
-?>                        
+?>
                             <tr>
                                 <td><?php echo $printProps['id']?></td>
                                 <td><?php echo $printProps['name']?></td>
@@ -2029,7 +2029,7 @@ $first = false;
 <?php
                                         }
                                         else if($printProps['value_type'] == 'enum')
-                                        {   
+                                        {
                                                 $res_EnumValue = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$printProps['id']);
 ?>
                                                 <select name="<?php echo 'select'.$conta ?>">
@@ -2048,7 +2048,7 @@ $first = false;
                                         {
 ?>
                                                 <input type="text" name="<?php echo 'textbox'.$conta ?>">
-                                            
+
 <?php
                                        }
 ?>
@@ -2061,20 +2061,20 @@ $first = false;
 ?>
                 </tbody>
             </table>
-        </html> 
+        </html>
                         <input type="hidden" name="estado" value="novasPropriedadesAdd" >
                         <input type="hidden" name="iddaEnt" value="<?php echo $id ?>" >
                         <input type="submit" value="Adicionar Novas Propriedades">
                     </form>
-<?php                        
+<?php
                     }
     }
-    
+
     /**
      *This method will insert new properties in the entity choosed by the user
      */
-    private function addAttrEnt(){ 
-            
+    private function addAttrEnt(){
+
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
         $erro = false;
@@ -2103,9 +2103,9 @@ $first = false;
                     {
                         $newValue =$_REQUEST['textbox'.$i];
                     }
-                    
-                    
-                    
+
+
+
                     $getCurrentVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
                     $erro = false;
                     while($readVal = $getCurrentVals->fetch_assoc()){
@@ -2113,7 +2113,7 @@ $first = false;
                             $erro = true;
                         }
                     }
-                        
+
                     if(!$erro){
                         if(!$this->bd->runQuery("INSERT INTO `value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `state`, `updated_on`) VALUES (NULL,".$id.",".$_REQUEST['check'.$i].",'".$newValue."','".wp_get_current_user()->user_login."',NULL,'active','".$updated_on."')"))
                         {
@@ -2143,22 +2143,22 @@ $first = false;
         }
         if (!$erro) {
 ?>
-        
+
             <html>
                 <p>As propriedades foram adicionadas à entidade.</p>
                 <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
             </html>
 <?php
-            $this->bd->getMysqli()->commit(); 
+            $this->bd->getMysqli()->commit();
         }
         else {
-            $this->bd->getMysqli()->rollback();  
+            $this->bd->getMysqli()->rollback();
 ?>
             <p><?php goBack(); ?></p>
 <?php
         }
     }
-    
+
     /**
      * This method will handle the activation and the the desativation of the
      * entities.
@@ -2175,7 +2175,7 @@ $first = false;
                 if($estado == 'active')
                 {
                     $this->bd->runQuery("UPDATE `entity` SET `state`='active',`updated_on`='".$updated_on."' WHERE id=".$id);
-                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
                     while($readVals = $getUnadedVals->fetch_assoc())
                     {
                         if($readVals['relation_id'] == "")
@@ -2198,12 +2198,12 @@ $first = false;
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar para a página inicial da pesquisa dinâmica</p>
                     <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Continuar a Desativar </a> para prosseguir com a desativação de instânicas </p>
 <?php
-                    $this->bd->getMysqli()->commit();   
+                    $this->bd->getMysqli()->commit();
                 }
                 else if ($estado == 'inactive')
                 {
                     $this->bd->runQuery("UPDATE `entity` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$id);
-                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id); 
+                    $getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$id);
                     while($readVals = $getUnadedVals->fetch_assoc())
                     {
                         if($readVals['relation_id'] == "")
@@ -2225,10 +2225,10 @@ $first = false;
                     <p>A instância <?php $readVal['entity_name'] == "" ?  $readVal['id']: $readVal['entity_name'] ?> foi desativada</p>
                     <p>Clique em <a href="/pesquisa-dinamica/">Pesquisa dinâmica </a> para continuar para a página inicial da pesquisa dinâmica</p>
                     <p>ou Clique em <a href="/pesquisa-dinamica/?estado=execucao&ent=<?php echo$idTipo?>">Continuar a Desativar </a> para prosseguir com a desativação de instânicas </p>
-<?php 
-                    $this->bd->getMysqli()->commit();   
+<?php
+                    $this->bd->getMysqli()->commit();
                 }
-                
+
             }
             else
             {
@@ -2250,22 +2250,22 @@ $first = false;
                 $this->bd->getMysqli()->rollback();
         }
     }
-    
+
     /**
      * Updates the values for the selected entity
      */
     public function updatEntVal(){
         if($this->ssValidationUp($_SESSION['updateValue'],1)){
-            
+
             $this->bd->getMysqli()->autocommit(false);
             $this->bd->getMysqli()->begin_transaction();
-            
+
             $updated_on = date("Y-m-d H:i:s",time());
             $error = false;
             $added =false;
             $id = 0;
             for($x = 0; $x <= $_SESSION['updateValue']; $x++)
-            { 
+            {
                 if(isset($_REQUEST['check'.$x]))
                 {
                      if(isset($_REQUEST['select'.$x]))
@@ -2276,7 +2276,7 @@ $first = false;
                                 $error = true;
                                 break;
                             }
-                        
+
                         }
                         else
                         {
@@ -2293,7 +2293,7 @@ $first = false;
                                 break;
                             }
                         }
-                        else 
+                        else
                         {
                             $error = true;
                             break;
@@ -2330,11 +2330,11 @@ $first = false;
                                 break;
                             }
                         }
-                        $added = true;   
+                        $added = true;
                     }
-                    
+
                 }
-            }   
+            }
             //Backups the value that haven't been changed
             $saveRemainValue = $this->bd->runQuery("SELECT * FROM value WHERE value. id NOT IN (SELECT value_id FROM hist_value WHERE inactive_on = '".$updated_on."'AND entity_id = ".$id.") AND entity_id = ".$id);
             while($readVals = $saveRemainValue->fetch_assoc())
@@ -2357,7 +2357,7 @@ $first = false;
                 }
             }
             //$getUnadedVals = $this->bd->runQuery("SELECT * FROM value WHERE ");
-            
+
             /*while($readVals = $getUnadedVals->fetch_assoc())
             {
                 if($readVals['relation_id'] == "")
@@ -2377,14 +2377,14 @@ $first = false;
                     }
                 }
             }*/
-            
+
             if($error == false)
             {
                 $this->bd->getMysqli()->commit();
 ?>
                 <p>Os valores das propriedades da entidade selecionada foram alterados.</p>
                 <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
-                
+
 <?php
             }
             else
@@ -2395,10 +2395,10 @@ $first = false;
                 <p>Clique em <?php goBack()?> para voltar a página anterior</p>
 <?php
             }
-                    
+
         }
     }
-    
+
     /**
      * Ensures that all data that will be inserted in the database is what was supossed.
      * @return boolean -> true = all ok, false = something wrong happened
@@ -2409,7 +2409,7 @@ $first = false;
     {
         $count = 0;
         for($x = 0; $x <= $max; $x++)
-        {           
+        {
             if(isset($_REQUEST['check'.$x]))
             {
                 if(empty($_REQUEST['select'.$x]) && empty($_REQUEST['radio'.$x]) && empty($_REQUEST['textbox'.$x]))
@@ -2419,7 +2419,7 @@ $first = false;
                             <p>Verifique se para todas as checkBoxes selecionadas introduziu valores.</p>
                             <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                         </html>
-<?php   
+<?php
                     return false;
                 }
                 else
@@ -2450,7 +2450,7 @@ $first = false;
                                 <p>Verifique se o tipo introduzido num dos campos é compativel com o valor aceite na base de dados.</p>
                                  <p>Clique em <?php goBack()?> para voltar a página anterior</p>
                             </html>
-                        
+
 <?php
                                         return false;
                         }
@@ -2459,7 +2459,7 @@ $first = false;
                             $count++;
             }
         }
-                    
+
                 if($count == 0)
                 {
 ?>
@@ -2471,10 +2471,10 @@ $first = false;
                     return false;
                 }
                     return true;
-           
+
         }
-    
-    
+
+
     /**
      * Check if a value is an integer or a bool or a double.
      * @param type $value_type ->type of that value
@@ -2531,51 +2531,51 @@ $first = false;
                 break;
         }
         return $tipoCorreto;
-    }    
-    
-    
+    }
+
+
     /**
      * Disables the values from on entity
      */
     public function desativarVal(){
-        
+
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
-        
+
         $valToDisable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
         $updated_on = date("Y-m-d H:i:s",time());
         $error = false;
-        
+
         //makes the backup
         $valueDis = $this->bd->runQuery("SELECT * FROM value WHERE id=".$valToDisable)->fetch_assoc();
         if($this->gereInsts->addEntToHist($valueDis['entity_id'],$this->bd,$updated_on)){ //-----> backups the entity
-            
+
             $this->bd->runQuery("UPDATE `entity` SET `updated_on`='".$updated_on."' WHERE id=".$valueDis['entity_id']);
-            
+
             $getvals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id = ".$valueDis['entity_id']);
             while($valsToHist = $getvals->fetch_assoc())
             {
                 if(!$this->gereInsts->addHistValues($valsToHist['id'],$this->bd,$updated_on))
                 {
                   $error = true;
-                  break; 
+                  break;
                 }
             }
         }
-        
+
         //changes the version
         if(!$this->bd->runQuery("UPDATE `value` SET `state`='inactive',`updated_on`='".$updated_on."' WHERE id=".$valToDisable))
         {
             $error = true;
         }
-        
+
         if($error == false)
         {
 ?>
-            
+
                 <p>O valor selecionada foi desativado.</p>
                 <p>Clique em <a href="pesquisa-dinamica/?estado=apresentacao&id=<?php echo$valueDis['entity_id'] ?>"/>Continuar</a> para avançar</p>
-<?php            
+<?php
             $this->bd->getMysqli()->commit();
         }
         else
@@ -2583,10 +2583,10 @@ $first = false;
 ?>
                 <p>O valor selecionado não pôde ser desativado.</p>
                 <p>Clique em <?php goBack()?> para voltar à página anterior</p>
-<?php            
+<?php
             $this->bd->getMysqli()->rollback();
         }
-        
+
     }
     /**
      * Activates the values from one entity
@@ -2594,44 +2594,44 @@ $first = false;
     public function ativarVal(){
         $valToEnable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
         $updated_on = date("Y-m-d H:i:s",time());
-                
+
         $this->bd->getMysqli()->autocommit(false);
 	$this->bd->getMysqli()->begin_transaction();
-        
+
         $valToDisable = $this->bd->userInputVal($_REQUEST['valOfEnt']);
         $updated_on = date("Y-m-d H:i:s",time());
         $error = false;
-        
+
         //makes the backup
         $valueDis = $this->bd->runQuery("SELECT * FROM value WHERE id=".$valToDisable)->fetch_assoc();
         if($this->gereInsts->addEntToHist($valueDis['entity_id'],$this->bd,$updated_on)){ //-----> backups the entity
-            
+
             $this->bd->runQuery("UPDATE `entity` SET `updated_on`='".$updated_on."' WHERE id=".$valueDis['entity_id']);
-            
+
             $getvals = $this->bd->runQuery("SELECT * FROM value WHERE entity_id = ".$valueDis['entity_id']);
             while($valsToHist = $getvals->fetch_assoc())
             {
                 if(!$this->gereInsts->addHistValues($valsToHist['id'],$this->bd,$updated_on))
                 {
                   $error = true;
-                  break; 
+                  break;
                 }
             }
         }
-        
+
         //changes the version
         if(!$this->bd->runQuery("UPDATE `value` SET `state`='active',`updated_on`='".$updated_on."' WHERE id=".$valToDisable))
         {
             $error = true;
         }
-        
+
         if($error == false)
         {
 ?>
-            
+
                 <p>O valor selecionada foi ativado.</p>
                 <p>Clique em <a href="pesquisa-dinamica/?estado=apresentacao&id=<?php echo$valueDis['entity_id'] ?>"/>Continuar</a> para avançar</p>
-<?php            
+<?php
             $this->bd->getMysqli()->commit();
         }
         else
@@ -2639,22 +2639,22 @@ $first = false;
 ?>
                 <p>O valor selecionado não pôde ser ativada.</p>
                 <p>Clique em <?php goBack()?> para voltar à página anterior</p>
-<?php            
+<?php
             $this->bd->getMysqli()->rollback();
         }
     }
 }
-    
+
 
 /**
  * This class will manage the history that is created for the entity table
  */
 class entityHist{
-                                        
+
     public function __construct() {
-       
+
     }
-    
+
     /**
      * Adds the previous entity version to the table hist_ent and gives permision to create a new entity
      * @param type $id -> from the entity that we want to change
@@ -2664,18 +2664,18 @@ class entityHist{
     public function addHist($id,$bd){
         $bd->getMysqli()->autocommit(false);
 	$bd->getMysqli()->begin_transaction();
-        
+
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
-        
+
         $inactive = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactive."')")){
                 return false;
         }
         return true;
     }
-    
+
     /**
-     * 
+     *
      * @param type $id ->Receives the id of the entity that i want to add to the history
      * @param type $bd
      * @param type $inactiveTime -> time of add
@@ -2683,9 +2683,9 @@ class entityHist{
      */
     public function addEntToHist($id,$bd,$inactiveTime){
         $readEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$id)->fetch_assoc();
-        
+
         //$inactive = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){   
+        if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readEnt['ent_type_id'].",".$readEnt['id'].",'".$readEnt['entity_name']."','".$readEnt['state']."','".$readEnt['updated_on']."','".$inactiveTime."')")){
             return false;
         }
         else if (!$bd->runQuery("UPDATE entity SET updated_on = '".$inactiveTime."' WHERE id = ".$id)) {
@@ -2693,12 +2693,12 @@ class entityHist{
         }
         return true;
     }
-    
+
     /**
      * Adds the previous values t the table hist_values and gives permission to create a new value
      * @param type $id -> of the value we will change
-     * @param type $bd -> database object to alllow 
-     * @param type $inactiveTime -> 
+     * @param type $bd -> database object to alllow
+     * @param type $inactiveTime ->
      * @return boolean
      */
     public function addHistValues($id,$bd,$inactiveTime){
@@ -2720,7 +2720,7 @@ class entityHist{
         }
         return true;
     }
-    
+
     /**
      * Presents the table history to the selected entity
      * @param type $id -> id from the selected entity
@@ -2763,7 +2763,7 @@ class entityHist{
                             $data = $bd->userInputVal($_REQUEST['data']);
                         }
                         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");   
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
                         }
                         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
                             $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
@@ -2794,10 +2794,10 @@ class entityHist{
                                 <tr>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
                                     <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['inactive_on']?></td>
-                                    
-                                    
+
+
 <?php
-                                    
+
                                     if($oneTimePrint == false){
                                         if($readHistory['entity_name'] == '')
                                         {
@@ -2816,8 +2816,8 @@ class entityHist{
                                     $oneTimePrint = true;
                                     }
 ?>
-                                    
-                                    
+
+
 <?php                               //echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
                                     //$readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
                                     $oneTimePrint2 = false;
@@ -2830,15 +2830,15 @@ class entityHist{
 
                                         <td><?php echo $readHV['value']?></td>
 <?php
-                                   
+
                                    if($oneTimePrint2 == false){
                                        if($readHistory['state'] == 'inactive')
                                        {
-?> 
+?>
                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Inativo"?></td>
 <?php
                                        }
-                                       else 
+                                       else
                                        {
 ?>
                                          <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Ativo"?></td>
@@ -2846,30 +2846,30 @@ class entityHist{
                                        }
 ?>
                                           <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
-                                
+
                                      <?php
                                      $oneTimePrint2 = true;
                                    }
                                      $oneTimePrint = false;
                                      ?></tr><?php
                                     }
-                                     ?>   
-                                
-<?php                                
-                                    
+                                     ?>
+
+<?php
+
                             }
                         }
-                        
-                        
+
+
 ?>
                         </tbody>
                     </table>
 <?php
         }
      }
-     
+
      /**
-      * Procedes to the version change move a group of values from 
+      * Procedes to the version change move a group of values from
       * hist_entity and hist_value to the value and entity tables.
       * @param type $id -> id from the entity we want to reactivate
       * @param type $bd
@@ -2878,22 +2878,22 @@ class entityHist{
          //Get the entity we want to reactivate
         $getHisEnt = $bd->runQuery("SELECT * FROM hist_entity WHERE id =".$id);
         $readHistEnt = $getHisEnt->fetch_assoc();
-        //Get values from the hist_value table 
-        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on='".$readHistEnt['inactive_on']."'"); 
-         
+        //Get values from the hist_value table
+        $getOldAttr = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on='".$readHistEnt['inactive_on']."'");
+
         //get the actual entity
         $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id=".$readHistEnt['entity_id']);
         $readActENt = $getActEnt->fetch_assoc();
-        //get the actual entity values 
+        //get the actual entity values
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']);
-       
-        
+
+
         //backup the current values
         $bd->getMysqli()->autocommit(false);
 	$bd->getMysqli()->begin_transaction();
-        
+
         $errorFound = false;
-        
+
         $updated_on = date("Y-m-d H:i:s",time());
         if(!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActENt['ent_type_id'].",".$readActENt['id'].",'".$readActENt['entity_name']."','".$readActENt['state']."','".$readActENt['updated_on']."','".$updated_on."')"))
         {
@@ -2904,7 +2904,7 @@ class entityHist{
         {
             while( $readActVal = $getActVal->fetch_assoc())
             {
-            
+
                 if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readActVal['entity_id'].",".$readActVal['property_id'].",'".$readActVal['value']."','".$readActVal['producer']."',NULL,".$readActVal['id'].",'".$readActVal['updated_on']."','".$updated_on."','".$readActVal['state']."')")){
                      echo "#NO BACKUP DOS VALUES";
                     $errorFound = true;
@@ -2912,15 +2912,15 @@ class entityHist{
                 }
             }
         }
-        
-        
+
+
         //changes the current valuees and entities to the ones that come from the history
         if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='".$readHistEnt['state']."',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
         {
              echo "#NO UPDATE DA ENTITY";
             $errorFound = true;
         }
-        else 
+        else
         {
             //print_r($getOldAttr);
             while($moveToMain = $getOldAttr->fetch_assoc())
@@ -2934,7 +2934,7 @@ class entityHist{
                 }
             }
         }
-        
+
         //check if there is more properties on the history table or more properties on the normal table
         echo "SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'";
         $getActVal = $bd->runQuery("SELECT * FROM value WHERE entity_id=".$readActENt['id']." AND updated_on != '".$updated_on."'");
@@ -2954,13 +2954,13 @@ class entityHist{
                 }
             }
         }
-        
+
         //Updates if there is no error
         if($errorFound)
         {
-?>                    
+?>
                 <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
-                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>           
+                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
 <?php
             $bd->getMysqli()->rollback();
         }
@@ -2968,14 +2968,14 @@ class entityHist{
         {
 ?>
                 <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
-                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>                
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
 <?php
             $bd->getMysqli()->commit();
         }
-        
-        
+
+
      }
-     
+
      /**
      * This method creates a table with a view of all the entities in the selected day
      * @param Db_Op $db (object form the class Db_Op)
@@ -3000,7 +3000,7 @@ class entityHist{
                 $selecionaHist = "SELECT * FROM hist_entity WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"])." GROUP BY entity_id ORDER BY inactive_on DESC";
                 $selecionaEntity = "SELECT * FROM entity WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%') AND ent_type_id = ".$db->userInputVal($_REQUEST["ent"]);
                 //echo $selecionaEntity.$selecionaHist;
-                
+
                 $resultSelecionaEntity = $db->runQuery($selecionaEntity);
                 $resultSelecionaHist = $db->runQuery($selecionaHist);
 ?>
@@ -3014,21 +3014,21 @@ class entityHist{
                         `entity_name` VARCHAR(255) NULL,
                         `state` ENUM('active', 'inactive') NOT NULL)";
                     $creatTempTable = $db->runQuery($creatTempTable);
-                    
+
                     while ($ent = $resultSelecionaEntity->fetch_assoc()) {
                         $db->runQuery("INSERT INTO temp_table VALUES (".$ent['id'].",'".$ent['ent_type_id']."','".$ent['entity_name']."','".$ent['state']."')");
                     }
                     while ($hist = $resultSelecionaHist->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_table VALUES (".$hist['entity_id'].",'".$hist['ent_type_id']."','".$hist['entity_name']."','".$hist['state']."')");
                     }
-                   
+
                     //echo 1;
                     $createTempProp = "CREATE TEMPORARY TABLE  temp_hist_property (
                         `id` INT UNSIGNED NOT NULL ,
                         `name` VARCHAR(128) NOT NULL,
                         `ent_type_id` INT NULL,
                         `state` ENUM('active','inactive') NOT NULL)";
-                        
+
                     $createTempProp = $db->runQuery($createTempProp);
                     $selecionaPropHist = "SELECT * FROM hist_property WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY property_id ORDER BY inactive_on DESC";
                     $resultSelHistProp = $db->runQuery($selecionaPropHist);
@@ -3048,7 +3048,7 @@ class entityHist{
                         `value` VARCHAR(8192) NOT NULL,
                         `state` VARCHAR(45) NOT NULL)";
                     $createTempVal = $db->runQuery($createTempVal );
-                    
+
                     $selecionaValHist = "SELECT * FROM hist_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%'))  GROUP BY value_id ORDER BY inactive_on DESC";
                     $resultSelValProp = $db->runQuery($selecionaValHist);
                     $selecionaVal = "SELECT * FROM value WHERE (updated_on < '".$data."' OR updated_on LIKE '".$data."%')";
@@ -3059,14 +3059,14 @@ class entityHist{
                     while ($hVal = $resultSelValProp->fetch_assoc()) {
                        $db->runQuery("INSERT INTO temp_hist_value VALUES (".$hVal['value_id'].",'".$hVal['entity_id']."','".$hVal['property_id']."','".$hVal['value']."','".$hVal['state']."')");
                     }
-                    
+
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
-                    
+
                     while($arraySelec = $resultSeleciona->fetch_assoc())
                     {
                         $getValues =  "SELECT DISTINCT *, v.state as ValueState FROM temp_hist_property as p, temp_hist_value as v WHERE v.property_id = p.id AND v.entity_id=".$arraySelec['id'];
                         $getValues = $db->runQuery($getValues);
-                    
+
 ?>
                         <tr>
                             <td rowspan="<?php echo $getValues->num_rows ?>">
@@ -3114,14 +3114,14 @@ class entityHist{
                                 }
                                 else {
                                     echo $readVals['value'];
-                                } 
+                                }
                                 ?></td>
-                                <td><?php echo $readVals['ValueState']; ?></td> 
+                                <td><?php echo $readVals['ValueState']; ?></td>
                         </tr>
 <?php
                             }
 ?>
-                       
+
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
@@ -3133,8 +3133,7 @@ class entityHist{
 <?php
         }
     }
-     
+
 }
 
 ?>
-
