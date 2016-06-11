@@ -1282,11 +1282,11 @@ class PropHist{
         $selectProp = $db->runQuery($selectProp);
         if (!is_null($selectProp->fetch_assoc()['ent_type_id'])) {
           $entId = $selectProp->fetch_assoc()['ent_type_id'];
-          isEntity = true;
+          $isEntity = true;
         }
         else {
           $relId = $selectProp->fetch_assoc()['rel_type_id'];
-          isEntity = false;
+          $isEntity = false;
         }
         $selectAtributos = "SELECT * FROM property WHERE ent_type_id = ".$selectProp->fetch_assoc()['ent_type_id'];
         $selectAtributos = $db->runQuery($selectAtributos);
