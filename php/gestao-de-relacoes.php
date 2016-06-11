@@ -728,8 +728,8 @@ class RelHist{
                         <td rowspan="<?php echo $numProp?>"><?php echo $hist["active_on"];?></td>
                         <td rowspan="<?php echo $numProp?>"><?php echo $hist["inactive_on"];?></td>
                         <td rowspan="<?php echo $numProp?>"><?php echo $hist["name"];?></td>                    
-                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($hist["ent_type1_id"]);?></td>
-                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($hist["ent_type2_id"]);?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
 <?php
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
