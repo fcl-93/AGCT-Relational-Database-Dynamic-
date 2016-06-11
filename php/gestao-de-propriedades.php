@@ -928,41 +928,10 @@ class PropertyManage
 
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        if ($_REQUEST['nome_'.$propId] != $getProp["name"]) {
-            return true;
-        }
-        else if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"]) {
-            return true;
-        }
-        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) {
-            return true;
-        }
-        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) {
-            return true;
-        }
-        else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
-            return true;
-        }
-        else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
-            return true;
-        }
-        else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
-            return true;
-        }
-        else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
-            return true;
-        }
-        else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
-            return true;
-        }
-        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+        if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
             return true;
         }
         else {
-?>
-            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
-<?php
-            goBack();
             return false;
         }
     }
@@ -979,6 +948,7 @@ class PropertyManage
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
         $queryProp = $this->db->runQuery($queryProp);
+        $changes = array();
         while ($prop = $queryProp->fetch_assoc()) {
             if(!is_numeric($_REQUEST["ordem_".$prop['id']]) || empty($_REQUEST["ordem_".$prop['id']]))
             {
@@ -997,10 +967,22 @@ class PropertyManage
                 return false;
             }
             if (!$this->checkforChanges($prop['id'])) {
-              return false;
+              array_push($changes,false);
+            }
+            else {
+              array_push($changes,true);
             }
         }
-        return true;
+        foreach ($changes as $key => $value) {
+          if ($value == true) {
+            return true;
+          }
+        }
+?>
+        <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+        goBack();
+        return false;
     }
 
     /**
@@ -1280,12 +1262,21 @@ class PropHist{
         $db->getMysqli()->begin_transaction();
         $selectProp = "SELECT * FROM property WHERE id = ".$idProp;
         $selectProp = $db->runQuery($selectProp);
-        $selectAtributos = "SELECT * FROM property WHERE id = ".$selectProp->fetch_assoc()['ent_type_id'];
+        $propriedade = $selectProp->fetch_assoc();
+        if (!is_null($propriedade['ent_type_id'])) {
+          $entId = $propriedade['ent_type_id'];
+          $selectAtributos = "SELECT * FROM property WHERE ent_type_id = ".$propriedade['ent_type_id'];
+          $isEntity = true;
+        }
+        else {
+          $relId = $propriedade['rel_type_id'];
+          $selectAtributos = "SELECT * FROM property WHERE rel_type_id = ".$propriedade['rel_type_id'];
+          $isEntity = false;
+        }
         $selectAtributos = $db->runQuery($selectAtributos);
         $erro = false;
         while ($prop = $selectAtributos->fetch_assoc()){
           $attr = $val = "";
-          $isEntity = false;
           foreach ($prop as $atributo => $valor) {
               if ($atributo == "updated_on") {
                   $atributo = "active_on";
@@ -1293,9 +1284,6 @@ class PropHist{
               if ($atributo != "id" && !is_null($valor)) {
                   $attr .= "`".$atributo."`,";
                   $val .= "'".$valor."',";
-              }
-              if ($atributo == "ent_type_id" && !is_null($valor)) {
-                 $isEntity = true;
               }
           }
           $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
@@ -1307,11 +1295,11 @@ class PropHist{
           }
         }
         if (!$erro) {
-            if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
+            if ($isEntity && $this->createNewEnt($entId, $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
-            else if (!$isEntity && $this->createNewRel($atributos["rel_type_id"], $db, $data) == false) {
+            else if (!$isEntity && $this->createNewRel($relId, $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
