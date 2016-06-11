@@ -675,7 +675,7 @@ class EntHist {
                                 if($conta = 0)
                                 {
 ?>
-                                    <td <?php echo $numlinhas ?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
+                                    <td rowspan="<?php echo $numlinhas ?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
 <?php
                                 }
                                 $conta++;
@@ -693,7 +693,7 @@ class EntHist {
                                 if($conta = 0)
                                 {
 ?>
-                                    <td <?php echo $numlinhas ?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
+                                    <td rowspan="<?php echo $numlinhas ?>"><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
 <?php
                                 }
                                 $conta++;
