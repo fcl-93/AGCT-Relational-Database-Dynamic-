@@ -931,9 +931,6 @@ class PropertyManage
         if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
             return true;
         }
-        else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
-            return true;
-        }
         else {
 ?>
             <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
