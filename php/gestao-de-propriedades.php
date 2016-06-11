@@ -928,34 +928,10 @@ class PropertyManage
         
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        if ($_REQUEST['nome_'.$propId] != $getProp["name"]) {
-            return true;
-        }
-        else if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"]) {
-            return true;
-        }
-        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) {
-            return true;
-        }
-        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) {
-            return true;
-        }
-        else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
-            return true;
-        }
-        else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
-            return true;
-        }
-        else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
+        if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
             return true;
         }
         else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
-            return true;
-        }
-        else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
-            return true;
-        }
-        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
             return true;
         }
         else {
@@ -1154,12 +1130,12 @@ class PropertyManage
         }
         if (isset($_REQUEST["rel_id"])) {
 ?>
-            <input type="hidden" name="rel_id" value="<?php echo $_REQUEST["rel_id"];?>"><br>
+            <input type="hidden" name="relacaoPertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["rel_id"];?>"><br>
 <?php
         }
         else {
 ?>
-            <input type="hidden" name="ent_id" value="<?php echo $_REQUEST["ent_id"];?>"><br>
+            <input type="hidden" name="entidadePertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["ent_id"];?>"><br>
 <?php
         }
 ?>
@@ -1189,74 +1165,31 @@ class PropertyManage
             if ($contaProp === $numProp) {
                 $last = true;
             }
-        if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
-        {
-            $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence_".$prop['id']];
-        }
-        else
-        {
-            $entRelQuery = "SELECT name FROM rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence_".$prop['id']];
-        }
-        $entRelResult = $this->db->runQuery($entRelQuery);
-        $entRelArray = $entRelResult->fetch_assoc();
-        // contrução do form_field_name
-        // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
-        $entRel = $entRelArray["name"];
-	// Obtemos as suas 3 primeiras letras
-	$entRel = substr($entRel, 0 , 3);
-	$traco = '-';
-	$idProp = $prop['id'];
-	// Garantimos que não há SQL injection através do campo nome
-	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome_".$prop['id']]);
-	// Substituimos todos os carateres por carateres ASCII
-	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
-	// Substituimos todos pos espaços por underscore
-	$nomeField = str_replace(' ', '_', $nomeField);
-	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
-?>
-            <p>Não foi possível atualizar a propriedade pretendida.</p>
-<?php 
-            goBack();
-        }
-        else {
-            $queryUpdate = 'UPDATE property SET name=\''.$this->db->getMysqli()->real_escape_string($_REQUEST["nome_".$prop['id']]).'\',value_type=\''.$_REQUEST["tipoValor_".$prop['id']].'\',form_field_name=\''.$form_field_name.'\',form_field_type=\''.$_REQUEST["tipoCampo_".$prop['id']].'\',unit_type_id='.$_REQUEST["tipoUnidade_".$prop['id']];
-            if(!empty($_REQUEST["tamanho_".$prop['id']]))
-            {
-                $queryUpdate .= ',form_field_size="'.$this->db->getMysqli()->real_escape_string($_REQUEST["tamanho_".$prop['id']]).'"';
-            }
-            $queryUpdate .= ',form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']]).',mandatory='.$_REQUEST["obrigatorio_".$prop['id']].',state="active"';
-
-            if (!empty($_REQUEST["entidadeReferenciada_".$prop['id']]))
-            {
-                $queryUpdate .= ',fk_ent_type_id='.$_REQUEST["entidadeReferenciada_".$prop['id']];
-            }
-            if (!empty($_REQUEST["entidadePertence_".$prop['id']]))
-            {
-                $queryUpdate .= ',ent_type_id='.$_REQUEST["entidadePertence_".$prop['id']];
-            }
-            else
-            {
-                $queryUpdate .= ',rel_type_id='.$_REQUEST["relacaoPertence_".$prop['id']];
-            }
-            $queryUpdate .= ",updated_on ='".$data."' WHERE id = ".$prop['id'];
-            $update = $this->db->runQuery($queryUpdate);
-            if (!$update){
+            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
-            goBack();
+                goBack();
             }
-            else
-            {
-                $this->db->getMysqli()->commit();
+            else {
+                $queryUpdate = "UPDATE property SET form_field_order= ".$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']]).",updated_on ='".$data."' WHERE id = ".$prop['id'];
+                $update = $this->db->runQuery($queryUpdate);
+                if (!$update){
 ?>
-                <p>Atualizou os dados de nova propriedade com sucesso.</p>
-                <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+                    <p>Não foi possível atualizar a propriedade pretendida.</p>
+<?php 
+                goBack();
+                }
+                else
+                {
+                    $this->db->getMysqli()->commit();
+?>
+                    <p>Atualizou os dados de nova propriedade com sucesso.</p>
+                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
+                }
             }
-        }
-        $contaProp++;
+            $contaProp++;
         }
     }
 }
