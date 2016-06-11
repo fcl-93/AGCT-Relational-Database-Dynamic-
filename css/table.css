@@ -13,8 +13,7 @@ cursor: pointer;
 .table thead , #primCol {
   font-weight: bold;
   color: black;
- /* background: #c9dff0;*/
- background: #80ff80;
+  background: #c9dff0;
 }
 .table thead tr th {
   font-weight: bold;
@@ -60,8 +59,4 @@ cursor: pointer;
 
 #acertaCabecalho {
     background: white;
-}
-
-tr:hover{
-    background: black;
 }
