@@ -733,6 +733,7 @@ class RelHist{
 <?php
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
+                        echo "#1";
                         if ($conta = 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
@@ -770,6 +771,7 @@ class RelHist{
                         $conta++;
                     } 
                     while ($prop = $selPropHist->fetch_assoc()) {
+                        echo "#2";
                         if ($conta = 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
