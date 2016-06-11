@@ -1168,7 +1168,7 @@ class PropertyManage
         $contaProp = 1;
         $data = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {
-            if ($_REQUEST['ordem_'.$propId] != $prop["form_field_order"]) {
+            if ($_REQUEST['ordem_'.$prop['id']] != $prop["form_field_order"]) {
                 if ($contaProp === $numProp) {
                     $last = true;
                 }
