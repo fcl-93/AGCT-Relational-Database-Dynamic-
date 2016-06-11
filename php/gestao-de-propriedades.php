@@ -994,12 +994,11 @@ class PropertyManage
         $avanca = false;
         $querySelNome = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
         $querySelNome =  $this->db->runQuery($querySelNome);
-        $idEnt = $querySelNome->fetch_assoc()["ent_type_id"];
         $nome = $querySelNome->fetch_assoc()["name"];
 
             if ($_REQUEST["estado"] === "desativar") {
 ?>
-            <p>Está prestes a desativar a propriedade <?php echo $nome?>  e por isso todos os valores que estão associados a esta.</p>
+            <p>Está prestes a desativar a propriedade <?php echo $nome?>  e por isso todos os valores que estão associados a esta também serão desativados.</p>
             <p>Clique em <a href="/gestao-de-propriedades?estado=inactive&prop_id=<?php echo $_REQUEST['prop_id'];?>">Continuar</a> se deseja prosseguir ou em <?php goBack()?> caso contrário.</p>
 <?php
             }
