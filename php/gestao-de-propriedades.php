@@ -1175,6 +1175,7 @@ class PropertyManage
               $erro = true;
               break;
           }
+        }
           $primeiraVez = false;
             $queryUpdate = 'UPDATE property SET form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']])." WHERE id = ".$prop['id'];
             $update = $this->db->runQuery($queryUpdate);
@@ -1187,7 +1188,7 @@ class PropertyManage
                 break;
 
             }
-          }
+        }
           if (!$erro) {
             $this->db->getMysqli()->commit();
 ?>
@@ -1195,7 +1196,7 @@ class PropertyManage
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
           }
-        }
+
     }
 }
 
