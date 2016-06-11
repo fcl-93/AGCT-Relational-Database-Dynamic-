@@ -1244,7 +1244,7 @@ class PropHist{
               }
           }
           $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                  . "VALUES (".$val."'".$data."',".$idProp.")";
+                  . "VALUES (".$val."'".$data."',".$prop['id'].")";
           $updateHist =$db->runQuery($updateHist);
           if (!$updateHist) {
             $erro = true;
