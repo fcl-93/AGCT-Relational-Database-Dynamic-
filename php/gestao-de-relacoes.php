@@ -327,6 +327,28 @@ class RelationManage
 ?>
                     <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
 <?php
+                    if ($rel["state"] === "active")
+                    {
+?>
+                        <td rowspan="<?php echo $numProp?>">Ativo</td>
+                        <td rowspan="<?php echo $numProp?>">
+                            <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                            <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                            <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                        </td>
+<?php
+                    }
+                    else
+                    {
+?>
+                        <td rowspan="<?php echo $numProp?>">Inativo</td>
+                        <td rowspan="<?php echo $numProp?>">
+                            <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                            <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                            <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                        </td>
+<?php
+                    }
                 }
                 while ($prop = $selProp->fetch_assoc()) {
                     if ($primeiraVez) {
@@ -335,6 +357,28 @@ class RelationManage
                         <td><?php echo $prop["name"];?></td>
                         <td><?php echo $prop["value_type"];?></td>
 <?php
+                        if ($rel["state"] === "active")
+                        {
+?>
+                            <td rowspan="<?php echo $numProp?>">Ativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                                <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            </td>
+<?php
+                        }
+                        else
+                        {
+?>
+                            <td rowspan="<?php echo $numProp?>">Inativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                                <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            </td>
+<?php
+                        }
                     }
                     else {
 ?>                   
@@ -345,29 +389,6 @@ class RelationManage
 <?php                        
                     }
                 }
-                if ($rel["state"] === "active")
-                {
-?>
-                    <td rowspan="<?php echo $numProp?>">Ativo</td>
-                    <td rowspan="<?php echo $numProp?>">
-                        <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                        <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
-                        <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                    </td>
-<?php
-                }
-                else
-                {
-?>
-                    <td rowspan="<?php echo $numProp?>">Inativo</td>
-                    <td rowspan="<?php echo $numProp?>">
-                        <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                        <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
-                        <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                    </td>
-<?php
-                }
-                
             }
 ?>
             </tbody>
