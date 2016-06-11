@@ -1155,7 +1155,7 @@ class PropertyManage
      * This method executes the necessary update's query to update the values inserted in the database
      */
     private function estadoUpdate() {
-        $last = false;
+        $last = $erro = false;
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
@@ -1176,6 +1176,8 @@ class PropertyManage
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
                 goBack();
+                $erro = true;
+                break;
             }
             else {
                 $queryUpdate = "UPDATE property SET form_field_order= ".$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']]).",updated_on ='".$data."' WHERE id = ".$prop['id'];
@@ -1184,18 +1186,19 @@ class PropertyManage
 ?>
                     <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
-                goBack();
-                }
-                else
-                {
-                    $this->db->getMysqli()->commit();
-?>
-                    <p>Atualizou os dados de nova propriedade com sucesso.</p>
-                    <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
-<?php
+                    $erro = true;
+                    goBack();
+                    break;
                 }
             }
             $contaProp++;
+        }
+        if (!$erro) {
+            $this->db->getMysqli()->commit();
+?>
+            <p>Atualizou os dados de nova propriedade com sucesso.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+<?php
         }
     }
 }
