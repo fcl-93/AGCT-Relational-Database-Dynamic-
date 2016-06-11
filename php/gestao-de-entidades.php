@@ -639,7 +639,7 @@ class EntHist {
         if ($resHE->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
+                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                     <td><?php goBack(); ?></td>
                 </tr>
             <?php
