@@ -712,7 +712,7 @@ class RelHist{
             if ($queryHistorico->num_rows == 0) {
 ?>
                 <tr>
-                    <td colspan="6">Não existe registo referente ao tipo de relação selecionado no histórico</td>
+                    <td colspan="8">Não existe registo referente ao tipo de relação selecionado no histórico</td>
                     <td><?php goBack(); ?></td>
                 </tr>
 <?php
@@ -766,6 +766,7 @@ class RelHist{
 <?php
                             if ($hist["state"] === "active")
                             {
+                                echo "#3 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
@@ -776,6 +777,7 @@ class RelHist{
                             }
                             else
                             {
+                                echo "#4 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
@@ -804,6 +806,7 @@ class RelHist{
 <?php
                             if ($hist["state"] === "active")
                             {
+                                echo "#5 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
@@ -814,6 +817,7 @@ class RelHist{
                             }
                             else
                             {
+                                echo "#6 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
