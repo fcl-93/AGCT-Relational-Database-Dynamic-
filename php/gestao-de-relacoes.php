@@ -360,8 +360,9 @@ class RelationManage
         <form id="insertRelation" method="POST" align="center">
             <table>
                 <tr>
-                    <td><label>Entidade 1</label><br></td>
-                    <td><label>Entidade 2</label><br></td>
+                    <td><label>Entidade 1</label></td>
+                    <td><label>Entidade 2</label></td>
+                    <td><label>Nome para o tipo de relação</label></td>
                 </tr>  
                 <tr>
                     <td>
@@ -382,6 +383,7 @@ class RelationManage
 ?>             
                         </select><br>
                     </td>
+                    <td rowspan="2"><input type="text" name="nome"><br></td>
                 </tr> 
                 <tr>
                     <td> <label class="error" for="ent1"></label><br></td>
@@ -389,8 +391,8 @@ class RelationManage
                 </tr>
             </table>
            
-            <label>Nome para o tipo de relação</label><br>
-            <input type="text" name="nome"><br>
+            <br>
+            
             <input type="hidden" name="estado" value="inserir"><br>
             <input type="submit" value="Inserir tipo de relação">
         </form>
