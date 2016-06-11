@@ -681,6 +681,8 @@ class RelHist{
                     <th>Nome da Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de Valor</th>
                     <th>Estado</th>
                     <th>Ação</th>
                 </tr>
@@ -717,17 +719,89 @@ class RelHist{
             }
             else {
                 while ($hist = $queryHistorico->fetch_assoc()) {
+                    $selProp =$this->db->runQuery("SELECT * FROM property WHERE updated_on < ".$hist["inactive_on"]." AND rel_type_id = ".$idRel);
+                    $selPropHist =$this->db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= ".$hist["inactive_on"]." AND active_on <= ".$hist["inactive_on"]."AND rel_type_id = ".$idRel);
+                    
+                    $numProp = $selProp->num_rows+$selPropHist->num_rows;
 ?>
-                    <tr>
-                        <td><?php echo $hist["active_on"];?></td>
-                        <td><?php echo $hist["inactive_on"];?></td>
-                        <td><?php echo $hist["name"];?></td>
-                        <td><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
-                        <td><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
-                        <td><?php echo $hist["state"];?></td>
-                        <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td>
-                    </tr>
+                    <tr>    
+                        <td rowspan="<?php echo $numProp?>"><?php echo $hist["active_on"];?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $hist["inactive_on"];?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $hist["name"];?></td>                    
+                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($hist["ent_type1_id"]);?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($hist["ent_type2_id"]);?></td>
 <?php
+                    $conta=0;
+                    while ($prop = $selProp->fetch_assoc()) {
+                        if ($conta = 0) {
+?>                   
+                            <td><?php echo $prop["name"];?></td>
+                            <td><?php echo $prop["value_type"];?></td>
+<?php
+                            if ($rel["state"] === "active")
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Ativo</td>
+                                <td rowspan="<?php echo $numProp?>">
+                                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td>
+                                </td>
+<?php
+                            }
+                            else
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Inativo</td>
+                                <td rowspan="<?php echo $numProp?>">
+                                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td> 
+                                </td>
+<?php
+                            }
+                        }
+                        else {
+?>                   
+                            <tr>
+                                <td><?php echo $prop["name"];?></td>
+                                <td><?php echo $prop["value_type"];?></td>
+                            </tr>
+<?php                        
+                        }
+                        $conta++;
+                    } 
+                    while ($prop = $selPropHist->fetch_assoc()) {
+                        if ($conta = 0) {
+?>                   
+                            <td><?php echo $prop["name"];?></td>
+                            <td><?php echo $prop["value_type"];?></td>
+<?php
+                            if ($rel["state"] === "active")
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Ativo</td>
+                                <td rowspan="<?php echo $numProp?>">
+                                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td>
+                                </td>
+<?php
+                            }
+                            else
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Inativo</td>
+                                <td rowspan="<?php echo $numProp?>">
+                                    <td><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a></td> 
+                                </td>
+<?php
+                            }
+                        }
+                        else {
+?>                   
+                            <tr>
+                                <td><?php echo $prop["name"];?></td>
+                                <td><?php echo $prop["value_type"];?></td>
+                            </tr>
+<?php                        
+                        }
+                        $conta++;
+                    }
                 }
             }
 ?>
