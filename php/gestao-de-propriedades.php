@@ -1167,28 +1167,30 @@ class PropertyManage
         $numProp = $queryProp->num_rows;
         $contaProp = 1;
         $data = date("Y-m-d H:i:s",time());
-        while ($prop = $queryProp->fetch_assoc()) {  
-            if ($contaProp === $numProp) {
-                $last = true;
-            }
-            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
-?>
-                <p>Não foi possível atualizar a propriedade pretendida.</p>
-<?php 
-                goBack();
-                $erro = true;
-                break;
-            }
-            else {
-                $queryUpdate = "UPDATE property SET form_field_order= ".$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']]).",updated_on ='".$data."' WHERE id = ".$prop['id'];
-                $update = $this->db->runQuery($queryUpdate);
-                if (!$update){
+        while ($prop = $queryProp->fetch_assoc()) {
+            if ($_REQUEST['ordem_'.$propId] != $prop["form_field_order"]) {
+                if ($contaProp === $numProp) {
+                    $last = true;
+                }
+                if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
 ?>
                     <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
-                    $erro = true;
                     goBack();
+                    $erro = true;
                     break;
+                }
+                else {
+                    $queryUpdate = "UPDATE property SET form_field_order= ".$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']]).",updated_on ='".$data."' WHERE id = ".$prop['id'];
+                    $update = $this->db->runQuery($queryUpdate);
+                    if (!$update){
+?>
+                        <p>Não foi possível atualizar a propriedade pretendida.</p>
+<?php 
+                        $erro = true;
+                        goBack();
+                        break;
+                    }
                 }
             }
             $contaProp++;
