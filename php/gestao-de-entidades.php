@@ -665,12 +665,6 @@ class EntHist {
 <?php
                         }
                         else{
-                            if($conta = 0)
-                            {
-                                ?>
-                                    <td <?php echo $numlinhas ?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>                
-<?php
-                            }
                             
                             while($readProp = $getPropsHist->fetch_assoc()){
 ?>
@@ -678,6 +672,12 @@ class EntHist {
                                 <td><?php echo $readProp['value_type']?></td>
                                 <td><?php echo $readProp['state']?></td>
 <?php
+                                if($conta = 0)
+                                {
+?>
+                                    <td <?php echo $numlinhas ?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
+<?php
+                                }
                                 $conta++;
 ?>
                                 </tr>
@@ -689,6 +689,12 @@ class EntHist {
                                 <td><?php echo $readProp['value_type']?></td>
                                 <td><?php echo $readProp['state']?></td>
 <?php
+                                if($conta = 0)
+                                {
+?>
+                                    <td <?php echo $numlinhas ?>><a href="?estado=versionBack&histId=<?php echo $readHE['id'] ?>">Voltar para esta versão</a></td>     
+<?php
+                                }
                                 $conta++;
 ?>
                                 </tr>
