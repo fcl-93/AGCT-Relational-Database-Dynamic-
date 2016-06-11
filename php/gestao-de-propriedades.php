@@ -1033,7 +1033,7 @@ class PropertyManage
             }
           }
           else {
-            if ($numRows == $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false) {
+            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false) {
 ?>
                 <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
 <?php
