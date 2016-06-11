@@ -251,8 +251,8 @@ class Unidade
 	 */
 	public function insertFormPrint(){
 ?>
-		<h3>Gestão de unidades - introdução</h3>
-			<form id="insertForm" method="post">
+		<h3 align="center">Gestão de unidades - Introdução</h3>
+			<form id="insertForm" method="post" align="center">
 				<label>Inserir nova unidade:</label> 
 				<br>
 				<input type="text" id ="nome" name="nome"/>
