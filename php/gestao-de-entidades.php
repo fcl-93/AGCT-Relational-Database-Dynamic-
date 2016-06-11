@@ -229,7 +229,7 @@ class Entidade {
                         ?>
         <html>
             <h3>Gestão de Componentes - Introdução</h3>
-            <form id="insertForm">
+            <form id="insertForm" style="align: center"> 
                 <label>Nome:</label>
                 <br>
                 <input type="text" id="nome" name="nome">
