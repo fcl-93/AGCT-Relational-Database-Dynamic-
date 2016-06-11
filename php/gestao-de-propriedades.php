@@ -1163,18 +1163,20 @@ class PropertyManage
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
         $queryProp = $this->db->runQuery($queryProp);
-        $numProp = $queryProp->num_rows;
-        $contaProp = 1;
         $data = date("Y-m-d H:i:s",time());
-        if ($this->gereHist->atualizaHistorico($this->db,$data,$idProp) == false) {
+        $primeiraVez = true;
+        while ($prop = $queryProp->fetch_assoc()) {
+          if ($primeiraVez) {
+            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id']) == false) {
 ?>
-          <p>Não foi possível atualizar a propriedade pretendida.</p>
+              <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php
-          goBack();
-        }
-        else {
-          while ($prop = $queryProp->fetch_assoc()) {
-            $queryUpdate = 'UPDATE property SET form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']])." WHERE id = ".$idProp;
+              goBack();
+              $erro = true;
+              break;
+          }
+          $primeiraVez = false;
+            $queryUpdate = 'UPDATE property SET form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']])." WHERE id = ".$prop['id'];
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
 ?>
@@ -1185,7 +1187,6 @@ class PropertyManage
                 break;
 
             }
-          $contaProp++;
           }
           if (!$erro) {
             $this->db->getMysqli()->commit();
