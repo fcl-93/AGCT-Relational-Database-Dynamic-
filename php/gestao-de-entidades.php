@@ -688,7 +688,7 @@ class EntHist {
                                 <td><?php echo $readProp['name']?></td>
                                 <td><?php echo $readProp['value_type']?></td>
                                 <td><?php 
-                                    $readProp['state'] == "active"? echo "Ativo" : "Inativo";
+                                    echo $readProp['state']
                                 ?></td>
 <?php
                                 if($conta == 0)
