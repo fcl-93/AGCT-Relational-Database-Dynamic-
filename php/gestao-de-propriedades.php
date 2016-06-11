@@ -1154,6 +1154,7 @@ class PropertyManage
      * This method executes the necessary update's query to update the values inserted in the database
      */
     private function estadoUpdate() {
+      $erro = false;
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
@@ -1165,57 +1166,34 @@ class PropertyManage
         $numProp = $queryProp->num_rows;
         $contaProp = 1;
         $data = date("Y-m-d H:i:s",time());
-        while ($prop = $queryProp->fetch_assoc()) {
-        if(!empty($_REQUEST["entidadePertence"]))
-        {
-            $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence"];
-        }
-        else
-        {
-            $entRelQuery = "SELECT name FROM rel_type AS rel WHERE rel.id = ".$_REQUEST["relacaoPertence"];
-        }
-        $entRelResult = $this->db->runQuery($entRelQuery);
-        $entRelArray = $entRelResult->fetch_assoc();
-        // contrução do form_field_name
-        // obtém-se o nome da entidade a que corresponde a propriedade que queremos introduzir
-        $entRel = $entRelArray["name"];
-	// Obtemos as suas 3 primeiras letras
-	$entRel = substr($entRel, 0 , 3);
-	$traco = '-';
-	$idProp = $prop['id'];
-	// Garantimos que não há SQL injection através do campo nome
-	$nome = $this->db->getMysqli()->real_escape_string($_REQUEST["nome_".$prop['id']]);
-	// Substituimos todos os carateres por carateres ASCII
-	$nomeField = preg_replace('/[^a-z0-9_ ]/i', '', $nome);
-	// Substituimos todos pos espaços por underscore
-	$nomeField = str_replace(' ', '_', $nomeField);
-	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
         if ($this->gereHist->atualizaHistorico($this->db,$data,$idProp) == false) {
 ?>
-            <p>Não foi possível atualizar a propriedade pretendida.</p>
+          <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php
-            goBack();
+          goBack();
         }
         else {
+          while ($prop = $queryProp->fetch_assoc()) {
             $queryUpdate = 'UPDATE property SET form_field_order='.$this->db->getMysqli()->real_escape_string($_REQUEST["ordem_".$prop['id']])." WHERE id = ".$idProp;
             $update = $this->db->runQuery($queryUpdate);
             if (!$update){
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php
-            goBack();
+                goBack();
+                $erro = true;
+                break;
+
             }
-            else
-            {
-                $this->db->getMysqli()->commit();
+          $contaProp++;
+          }
+          if (!$erro) {
+            $this->db->getMysqli()->commit();
 ?>
-                <p>Atualizou os dados de nova propriedade com sucesso.</p>
-                <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
+            <p>Atualizou os dados de nova propriedade com sucesso.</p>
+            <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
-            }
-        }
-        $contaProp++;
-        }
+          }
     }
 }
 
