@@ -1050,6 +1050,7 @@ class PropertyManage
             <p>Está prestes a desativar a propriedade <?php echo $nome?>  e por isso todos os valores que estão associados a esta.</p>
             <p>Clique em <a href="/gestao-de-propriedades?estado=inactive&prop_id=<?php echo $_REQUEST['prop_id'];?>">Continuar</a> se deseja prosseguir ou em <?php goBack()?> caso contrário.</p>
 <?php
+            $this->db->getMysqli()->commit();
             }
             else {
                 $queryUpdate = "UPDATE property SET state= 'active', updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
@@ -1085,7 +1086,6 @@ class PropertyManage
         $queryUpdate = "UPDATE property SET state='inactive',updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
         $queryUpdate= $this->db->runQuery($queryUpdate);
         if ($queryUpdate) {
-            $this->db->getMysqli()->commit();
 ?>
             <p>A propriedade <?php echo $nome ?> foi desativada</p>
             <br>
@@ -1096,7 +1096,6 @@ class PropertyManage
 ?>
             <p>Não foi possível desativar a propriedade pretendida.</p>
 <?php
-            $this->db->getMysqli()->rollback;
             goBack();
         }
     }
