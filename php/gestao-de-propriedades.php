@@ -1010,9 +1010,9 @@ class PropertyManage
     private function estadoAtivarDesativar() {
         $data = date("Y-m-d H:i:s",time());
         $avanca = false;
-        $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
+        $querySelNome = "SELECT * FROM property WHERE id = ".$_REQUEST['prop_id'];
         $querySelNome =  $this->db->runQuery($querySelNome);
-        $idEnt = $querySelNome->fetch_assoc()["ent_type_id"]
+        $idEnt = $querySelNome->fetch_assoc()["ent_type_id"];
         $nome = $querySelNome->fetch_assoc()["name"];
 
         $selProp = $this->db->runQuery("SELECT * FROM property WHERE ent_type_id = ".$idEnt);
