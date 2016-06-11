@@ -708,6 +708,7 @@ class RelHist{
                     $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
                 }
             }
+            echo $queryHistorico;
             $queryHistorico = $db->runQuery($queryHistorico);
             if ($queryHistorico->num_rows == 0) {
 ?>
