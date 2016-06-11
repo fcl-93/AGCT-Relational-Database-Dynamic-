@@ -932,10 +932,6 @@ class PropertyManage
             return true;
         }
         else {
-?>
-            <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
-<?php
-            goBack();
             return false;
         }
     }
@@ -952,6 +948,7 @@ class PropertyManage
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
         }
         $queryProp = $this->db->runQuery($queryProp);
+        $changes = array();
         while ($prop = $queryProp->fetch_assoc()) {
             if(!is_numeric($_REQUEST["ordem_".$prop['id']]) || empty($_REQUEST["ordem_".$prop['id']]))
             {
@@ -970,10 +967,22 @@ class PropertyManage
                 return false;
             }
             if (!$this->checkforChanges($prop['id'])) {
-              return false;
+              array_push($changes,false);
+            }
+            else {
+              array_push($changes,true);
             }
         }
-        return true;   
+        foreach ($changes as $key => $value) {
+            if ($value == true) {
+                return true;   
+            }
+        }
+?>
+        <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
+<?php
+        goBack();
+        return false;
     }
     
     /**
