@@ -228,8 +228,8 @@ class Entidade {
     public function form() {
                         ?>
         <html>
-            <h3>Gestão de Componentes - Introdução</h3>
-            <form id="insertForm" style="align: center"> 
+            <h3 align="center">Gestão de Componentes - Introdução</h3>
+            <form id="insertForm" align="center"> 
                 <label>Nome:</label>
                 <br>
                 <input type="text" id="nome" name="nome">
