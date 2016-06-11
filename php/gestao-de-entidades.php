@@ -610,6 +610,7 @@ class EntHist {
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
+                <th>Estado da Propriedade</th>
                 <!--<th>Estado Durante o Período</th>-->
                 <th>Ação</th>
             </thead>
@@ -657,6 +658,7 @@ class EntHist {
                             $getProp = $bd->runQuery("SELECT * FROM property WHERE id =".$propHist['property_id']."" )->fetch_assoc();                            
 ?>
                             <td><?php echo $propHist['name']?></td>
+                            <td><?php echo $propHist['state'];?></td>
                             <td><?php echo $propHist['value_type']?></td>
 <?php
                             if($conta == 0){
