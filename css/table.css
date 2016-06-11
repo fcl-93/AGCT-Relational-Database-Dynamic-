@@ -61,6 +61,6 @@ cursor: pointer;
     background: white;
 }
 
-.tablegr{
+.tablegr, td, th{
     text-align: center;
 }
