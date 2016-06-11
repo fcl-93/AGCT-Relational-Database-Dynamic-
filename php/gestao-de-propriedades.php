@@ -1194,6 +1194,7 @@ class PropertyManage
             <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
           }
+        }
     }
 }
 
