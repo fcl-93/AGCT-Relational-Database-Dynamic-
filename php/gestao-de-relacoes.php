@@ -301,6 +301,8 @@ class RelationManage
                     <th><span>Nome da Relação</span></th>
                     <th><span>Entidade 1</span></th>
                     <th><span>Entidade 2</span></th>
+                    <th><span>Propriedade</span></th>
+                    <th><span>Tipo de Valor</span></th>
                     <th><span>Estado</span></th>
                     <th><span>Ação</span></th>
                 </tr>
@@ -311,39 +313,56 @@ class RelationManage
             $resSelRel = $this->db->runQuery($querySelRel);
             while ($rel = $resSelRel->fetch_assoc())
             {
+                $selProp =$this->db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$rel["id"]);
+                $numProp = $selProp->num_rows;
+                $primeiraVez = true;
+                while ($prop = $selProp->fetch_assoc()) {
 ?>
-                <tr>
-                    <td><?php echo $rel["id"];?></td>
-                    <td><?php echo $rel["name"];?></td>                    
-                    <td><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
-                    <td><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
+                    <tr>
 <?php
-            if ($rel["state"] === "active")
-            {
+                    if ($primeiraVez) {
+                        $primeiraVez = false;
 ?>
-                <td>Ativo</td>
-                <td>
-                    <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                    <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
-                    <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                </td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $rel["id"];?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $rel["name"];?></td>                    
+                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type1_id"]);?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $this->db->getEntityName($rel["ent_type2_id"]);?></td>
+                        <td><?php echo $prop["name"];?></td>
+                        <td><?php echo $prop["value_type"];?></td>
 <?php
-            }
-            else
-            {
+                        if ($rel["state"] === "active")
+                        {
 ?>
-                <td>Inativo</td>
-                <td>
-                    <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
-                    <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
-                    <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
-                </td>
+                            <td rowspan="<?php echo $numProp?>">Ativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                                <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
+                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            </td>
 <?php
-            }
+                        }
+                        else
+                        {
 ?>
-            </td>
-                </tr>
+                            <td rowspan="<?php echo $numProp?>">Inativo</td>
+                            <td rowspan="<?php echo $numProp?>">
+                                <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
+                                <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
+                                <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            </td>
 <?php
+                        }
+                    }
+                    else {
+?>
+                        <td><?php echo $prop["name"];?></td>
+                        <td><?php echo $prop["value_type"];?></td>    
+<?php
+                    }
+?>
+                    </tr>
+<?php
+                }
             }
 ?>
             </tbody>
