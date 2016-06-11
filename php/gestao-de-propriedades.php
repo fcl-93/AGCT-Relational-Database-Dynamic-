@@ -1015,44 +1015,14 @@ class PropertyManage
         $idEnt = $querySelNome->fetch_assoc()["ent_type_id"];
         $nome = $querySelNome->fetch_assoc()["name"];
 
-        $selProp = $this->db->runQuery("SELECT * FROM property WHERE ent_type_id = ".$idEnt);
-        $erro = false;
-        //cria histórico com todas a propriedades e respetivos estado neste momento
-        $numRows = $selProp->num_rows;
-        $i = 1;
-        while ($prop = $selProp->fetch_assoc()){
-          echo "i ".$i."num ".$numRows;
-          if ($i < $numRows) {
-            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) {
-?>
-                <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
-<?php
-                goBack();
-                $erro = true;
-                break;
-            }
-          }
-          else {
-            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false) {
-?>
-                <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
-<?php
-                goBack();
-                $erro = true;
-                break;
-            }
-          }
-          $i++;
-        }
-        if (!$erro) {
             if ($_REQUEST["estado"] === "desativar") {
 ?>
             <p>Está prestes a desativar a propriedade <?php echo $nome?>  e por isso todos os valores que estão associados a esta.</p>
             <p>Clique em <a href="/gestao-de-propriedades?estado=inactive&prop_id=<?php echo $_REQUEST['prop_id'];?>">Continuar</a> se deseja prosseguir ou em <?php goBack()?> caso contrário.</p>
 <?php
-            $this->db->getMysqli()->commit();
             }
             else {
+              if ($this->gereHist->atualizaHistorico($this->db,$data,$_REQUEST['prop_id'])) {
                 $queryUpdate = "UPDATE property SET state= 'active', updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
                 $queryUpdate= $this->db->runQuery($queryUpdate);
                 if ($queryUpdate) {
@@ -1083,20 +1053,24 @@ class PropertyManage
         $querySelNome = "SELECT name FROM property WHERE id = ".$_REQUEST['prop_id'];
         $nome = $this->db->runQuery($querySelNome)->fetch_assoc()["name"];
         $this->desativaValue($_REQUEST['prop_id'], $data);
-        $queryUpdate = "UPDATE property SET state='inactive',updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
-        $queryUpdate= $this->db->runQuery($queryUpdate);
-        if ($queryUpdate) {
+        if ($this->gereHist->atualizaHistorico($this->db,$data,$_REQUEST['prop_id'])) {
+          $queryUpdate = "UPDATE property SET state='inactive',updated_on ='".$data."' WHERE id =".$_REQUEST['prop_id'];
+          $queryUpdate= $this->db->runQuery($queryUpdate);
+          if ($queryUpdate) {
+              $this->db->getMysqli()->commit();
 ?>
-            <p>A propriedade <?php echo $nome ?> foi desativada</p>
-            <br>
-            <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
+              <p>A propriedade <?php echo $nome ?> foi desativada</p>
+              <br>
+              <p>Clique em <a href="/gestao-de-propriedades"/>Continuar</a> para avançar</p>
 <?php
-        }
-        else {
+          }
+          else {
 ?>
-            <p>Não foi possível desativar a propriedade pretendida.</p>
+              <p>Não foi possível desativar a propriedade pretendida.</p>
 <?php
-            goBack();
+              $this->db->getMysqli()->rollback;
+              goBack();
+          }
         }
     }
 
@@ -1238,7 +1212,7 @@ class PropertyManage
 	// Substituimos todos pos espaços por underscore
 	$nomeField = str_replace(' ', '_', $nomeField);
 	$form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
+        if ($this->gereHist->atualizaHistorico($this->db,$data,$idProp) == false) {
 ?>
             <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php
@@ -1301,30 +1275,38 @@ class PropHist{
      * @param type $idProp (id of the property we want to create history)
      * @param boolean $last (indicates that it is the last property inserted on the history if so we need to create a new ent_type version )
      */
-    public function atualizaHistorico ($db, $data,$idProp, $last) {
+    public function atualizaHistorico ($db, $data,$idProp) {
         $db->getMysqli()->autocommit(false);
         $db->getMysqli()->begin_transaction();
-        $selectAtributos = "SELECT * FROM property WHERE id = ".$idProp;
+        $selectProp = "SELECT * FROM property WHERE id = ".$idProp;
+        $selectProp = $db->runQuery($selectProp);
+        $selectAtributos = "SELECT * FROM property WHERE id = ".$selectProp->fetch_assoc()['ent_type_id'];
         $selectAtributos = $db->runQuery($selectAtributos);
-        $atributos = $selectAtributos->fetch_assoc();
-        $attr = $val = "";
-        $isEntity = false;
-        foreach ($atributos as $atributo => $valor) {
-            if ($atributo == "updated_on") {
-                $atributo = "active_on";
-            }
-            if ($atributo != "id" && !is_null($valor)) {
-                $attr .= "`".$atributo."`,";
-                $val .= "'".$valor."',";
-            }
-            if ($atributo == "ent_type_id" && !is_null($valor)) {
-               $isEntity = true;
-            }
+        $erro = false;
+        while ($prop = $selectAtributos->fetch_assoc());
+          $attr = $val = "";
+          $isEntity = false;
+          foreach ($prop as $atributo => $valor) {
+              if ($atributo == "updated_on") {
+                  $atributo = "active_on";
+              }
+              if ($atributo != "id" && !is_null($valor)) {
+                  $attr .= "`".$atributo."`,";
+                  $val .= "'".$valor."',";
+              }
+              if ($atributo == "ent_type_id" && !is_null($valor)) {
+                 $isEntity = true;
+              }
+          }
+          $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
+                  . "VALUES (".$val."'".$data."',".$idProp.")";
+          $updateHist =$db->runQuery($updateHist);
+          if (!$updateHist) {
+            $erro = true;
+            break;
+          }
         }
-        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                . "VALUES (".$val."'".$data."',".$idProp.")";
-        $updateHist =$db->runQuery($updateHist);
-        if ($updateHist) {
+        if (!$erro) {
             if ($last && $isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
@@ -1351,7 +1333,7 @@ class PropHist{
      */
     public function estadoVoltar ($db) {
         $data = date("Y-m-d H:i:s",time());
-        $this->atualizaHistorico($db,$data,$_REQUEST['prop_id'],true);
+        $this->atualizaHistorico($db,$data,$_REQUEST['prop_id']);
         $selectAtributos = "SELECT * FROM hist_property WHERE id = ".$_REQUEST['hist'];
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
