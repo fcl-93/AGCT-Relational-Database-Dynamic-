@@ -1022,13 +1022,25 @@ class PropertyManage
         $i = 1;
         while ($prop = $selProp->fetch_assoc()){
           echo "i ".$i."num ".$numRows;
-          if (($numRows < $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) || ($numRows == $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false)) {
+          if ($numRows < $i) {
+            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) {
 ?>
-              <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
+                <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
 <?php
-              goBack();
-              $erro = true;
-              break;
+                goBack();
+                $erro = true;
+                break;
+            }
+          }
+          else {
+            if ($numRows == $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false) {
+?>
+                <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
+<?php
+                goBack();
+                $erro = true;
+                break;
+            }
           }
           $i++;
         }
