@@ -1280,12 +1280,19 @@ class PropHist{
         $db->getMysqli()->begin_transaction();
         $selectProp = "SELECT * FROM property WHERE id = ".$idProp;
         $selectProp = $db->runQuery($selectProp);
+        if (!is_null($selectProp->fetch_assoc()['ent_type_id'])) {
+          $entId = $selectProp->fetch_assoc()['ent_type_id'];
+          isEntity = true;
+        }
+        else {
+          $relId = $selectProp->fetch_assoc()['rel_type_id'];
+          isEntity = false;
+        }
         $selectAtributos = "SELECT * FROM property WHERE ent_type_id = ".$selectProp->fetch_assoc()['ent_type_id'];
         $selectAtributos = $db->runQuery($selectAtributos);
         $erro = false;
         while ($prop = $selectAtributos->fetch_assoc()){
           $attr = $val = "";
-          $isEntity = false;
           foreach ($prop as $atributo => $valor) {
               if ($atributo == "updated_on") {
                   $atributo = "active_on";
@@ -1293,9 +1300,6 @@ class PropHist{
               if ($atributo != "id" && !is_null($valor)) {
                   $attr .= "`".$atributo."`,";
                   $val .= "'".$valor."',";
-              }
-              if ($atributo == "ent_type_id" && !is_null($valor)) {
-                 $isEntity = true;
               }
           }
           $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
@@ -1307,11 +1311,11 @@ class PropHist{
           }
         }
         if (!$erro) {
-            if ($isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
+            if ($isEntity && $this->createNewEnt($entId, $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
-            else if (!$isEntity && $this->createNewRel($atributos["rel_type_id"], $db, $data) == false) {
+            else if (!$isEntity && $this->createNewRel($relId, $db, $data) == false) {
                 $db->getMysqli()->rollback();
                 return false;
             }
