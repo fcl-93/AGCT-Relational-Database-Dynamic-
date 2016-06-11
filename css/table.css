@@ -13,7 +13,8 @@ cursor: pointer;
 .table thead , #primCol {
   font-weight: bold;
   color: black;
-  background: #c9dff0;
+ /* background: #c9dff0;*/
+ background: #80ff80;
 }
 .table thead tr th {
   font-weight: bold;
