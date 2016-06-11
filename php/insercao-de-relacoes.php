@@ -1309,8 +1309,8 @@ class InsereRelacoes
          */
         private function createNewRel(){
 ?>
-            <h3>Inserção de Relações - Nova Relação</h3>
-            <form>
+            <h3 align="center">Inserção de Relações - Nova Relação</h3>
+            <form align="center">
                 <label>Entidade 1</label><br>
                 <select id="ent" name="ent">
                         <option></option>
