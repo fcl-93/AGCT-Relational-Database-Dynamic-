@@ -2738,7 +2738,7 @@ class entityHist{
                                 <input type="radio" name="controlDia" value="ate">até ao dia<br>
                                 <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
                                 <input type="radio" name="controlDia" value="dia">no dia<br>
-                                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="text" id="datepicker" class="datepicker" name="data" placeholder="Introduza uma data">
                                 <input type="hidden" name="selData" value="true">
                                 <input type="hidden" name="estado" value="historico">
                                 <input type="hidden" name="ent_id" value="<?php echo $_REQUEST['ent_id']; ?>">

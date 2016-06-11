@@ -596,7 +596,7 @@ class EntHist {
                 <input type="radio" name="controlDia" value="ate">até ao dia<br>
                 <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
                 <input type="radio" name="controlDia" value="dia">no dia<br>
-                <input type="text" id="datepicker" name="data" placeholder="Introduza uma data">
+                <input type="text" id="datepicker" class="datepicker" name="data" placeholder="Introduza uma data">
                 <input type="hidden" name="selData" value="true">
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="ent_id" value="<?php echo $_REQUEST['ent_id']; ?>">
@@ -610,16 +610,36 @@ class EntHist {
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
+                <th>Estado da Propriedade</th>
                 <!--<th>Estado Durante o Período</th>-->
                 <th>Ação</th>
             </thead>
         <tbody>
         <?php
-        $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=" . $id);
+        
+        if (isset($_REQUEST['data'])) {
+            $data = $bd->userInputVal($_REQUEST['data']);
+        }
+        
+        if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
+        }
+        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+        }
+        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+        }
+        else {              
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=" . $id);
+        }
+        
+        
+        
         if ($resHE->num_rows < 1) {
             ?>
                 <tr>
-                    <td colspan="5">Não existe registo referente à entidade selecionada no histórico</td>
+                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
                     <td><?php goBack(); ?></td>
                 </tr>
             <?php
@@ -658,6 +678,14 @@ class EntHist {
 ?>
                             <td><?php echo $propHist['name']?></td>
                             <td><?php echo $propHist['value_type']?></td>
+                            <td><?php 
+                            if($propHist['state'] == 'active'){ 
+                                echo "Ativo";
+                                
+                            }else{
+                                echo "Inativo"; 
+                                
+                            }?></td>
 <?php
                             if($conta == 0){
 ?>
