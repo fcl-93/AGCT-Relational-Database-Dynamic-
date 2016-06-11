@@ -602,7 +602,7 @@ class EntHist {
                 <input type="hidden" name="ent_id" value="<?php echo $_REQUEST['ent_id']; ?>">
                 <input type="submit" value="Apresentar histórico">
             </form>
-                
+                <?phpecho "test";?>
         <table class="table">
             <thead>
                 <th>Data de Início</th>
