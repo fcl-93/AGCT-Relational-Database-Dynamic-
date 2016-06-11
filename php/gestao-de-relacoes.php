@@ -743,6 +743,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
+                            echo "#7 "."conta ".$conta." prop ".$prop["name"]."<br>";
                             if ($hist["state"] === "active")
                             {
                                 echo "#3 "."conta ".$conta." prop ".$prop["name"]."<br>";
@@ -764,9 +765,11 @@ class RelHist{
                                 </td>
                             </tr>
 <?php
+                            echo "#8 "."conta ".$conta." prop ".$prop["name"]."<br>";
                             }
                         }
                         else {
+                            echo "#9 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>                   
                             <tr>
                                 <td><?php echo $prop["name"];?></td>
