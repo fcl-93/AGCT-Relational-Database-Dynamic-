@@ -1020,7 +1020,7 @@ class PropertyManage
         //cria histórico com todas a propriedades e respetivos estado neste momento
         $numRow = $selProp->num_rows;
         $i = 1;
-        while ($prop = $selProp->fetch_assoc())
+        while ($prop = $selProp->fetch_assoc()){
           if (($num_rows < $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) || ($num_rows == $i && $this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],true) == false)) {
 ?>
               <p>Não foi possível desativar/ativar a propriedade pretendida.</p>
