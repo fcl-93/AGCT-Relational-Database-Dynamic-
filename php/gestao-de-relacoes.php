@@ -738,7 +738,7 @@ class RelHist{
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
                         echo "#1 "."conta ".$conta." prop ".$prop["name"]."<br>";
-                        if ($conta = 0) {
+                        if ($conta == 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
@@ -781,7 +781,7 @@ class RelHist{
                     } 
                     while ($prop = $selPropHist->fetch_assoc()) {
                         echo "#2";
-                        if ($conta = 0) {
+                        if ($conta == 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
