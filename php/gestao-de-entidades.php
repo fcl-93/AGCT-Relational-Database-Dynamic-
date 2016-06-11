@@ -616,7 +616,27 @@ class EntHist {
             </thead>
         <tbody>
         <?php
-        $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=" . $id);
+        
+        if (isset($_REQUEST['data'])) {
+            $data = $bd->userInputVal($_REQUEST['data']);
+        }
+        if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
+        }
+        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+        }
+        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_entity WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+
+        }
+        else {
+                          
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=" . $id);
+        }
+        
+        
+        
         if ($resHE->num_rows < 1) {
             ?>
                 <tr>
