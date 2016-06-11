@@ -622,13 +622,13 @@ class EntHist {
         }
         
         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id."AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
         }
         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id."AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
         }
         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id."AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+            $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
         }
         else {              
             $resHE = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE ent_type_id=" . $id);
