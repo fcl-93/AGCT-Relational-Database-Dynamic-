@@ -893,10 +893,10 @@ class RelHist{
                         $selecionaHistProp = $db->runQuery($selecionaHistProp);
                         $numProp = $selecionaProp->num_rows+$selecionaHistProp->num_rows;
 ?>
-                        <td><?php echo $arraySelec["id"]; ?></td>
-                        <td><?php echo $arraySelec["name"]; ?></td>
-                        <td><?php echo $db->getEntityName($arraySelec["ent_type1_id"]); ?></td>
-                        <td><?php echo $db->getEntityName($arraySelec["ent_type2_id"]); ?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $arraySelec["id"]; ?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $arraySelec["name"]; ?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($arraySelec["ent_type1_id"]); ?></td>
+                        <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($arraySelec["ent_type2_id"]); ?></td>
 <?php
                         $conta = 0;
                         while ($prop = $selecionaProp->fetch_assoc()) {
