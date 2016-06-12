@@ -903,6 +903,21 @@ class RelHist{
 ?>
                             <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
 <?php
+                            if ($arraySelec["state"] === "active")
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Ativo</td>
+                            </tr>
+<?php
+                            }
+                            else
+                            {
+?>
+                                <td rowspan="<?php echo $numProp?>">Inativo</td>
+                            </tr>
+<?php
+                            }
+     
                         }
                         while ($prop = $selecionaProp->fetch_assoc()) {
                             if ($conta == 0) {
