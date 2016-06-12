@@ -849,11 +849,13 @@ class RelHist{
         <table id="sortedTable" class="table">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
-                    <th><span>Nome da Relação</span></th>
-                    <th><span>Entidade 1</span></th>
-                    <th><span>Entidade 2</span></th>
-                    <th><span>Estado</span></th>
+                    <th>ID</th>
+                    <th>Nome da Relação></th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de Valor</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
@@ -882,13 +884,120 @@ class RelHist{
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
                     
-                    while($arraySelec = $resultSeleciona->fetch_assoc())
-                    {
+                    while($arraySelec = $resultSeleciona->fetch_assoc()) {
+                        
+                        $selecionaHistProp = "SELECT * FROM hist_property WHERE inactive_on >= '".$_REQUEST["data"]." 23:59:59' AND active_on < '".$_REQUEST["data"]." 23:59:59'";
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]." 23:59:59'";
+
+                        $selecionaProp = $db->runQuery($selecionaProp);
+                        $selecionaHistProp = $db->runQuery($selecionaHistProp);
+                        $numProp = $selecionaProp->num_rows+$selecionaHistProp->num_rows;
 ?>
                         <td><?php echo $arraySelec["id"]; ?></td>
                         <td><?php echo $arraySelec["name"]; ?></td>
                         <td><?php echo $db->getEntityName($arraySelec["ent_type1_id"]); ?></td>
                         <td><?php echo $db->getEntityName($arraySelec["ent_type2_id"]); ?></td>
+<?php
+                        $conta = 0;
+                        while ($prop = $selecionaProp->fetch_assoc()) {
+                            if ($conta == 0) {
+?>                   
+                                <td><?php echo $prop["name"];?></td>
+                                <td><?php echo $prop["value_type"];?></td>
+<?php
+                                if ($prop["state"] === "active")
+                                {
+?>
+                                    <td>Ativo</td>
+                                    <td rowspan="<?php echo $numProp?>">
+                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                                    </td>
+                                </tr>
+<?php
+                                }
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+                                    <td rowspan="<?php echo $numProp?>">
+                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                                    </td>
+                                </tr>
+<?php
+                                }
+                            }
+                            else {
+?>                   
+                                <tr>
+                                    <td><?php echo $prop["name"];?></td>
+                                    <td><?php echo $prop["value_type"];?></td>
+<?php
+                                    if ($prop["state"] === "active") {
+?>
+                                        <td>Ativo</td>
+<?php
+                                    }
+                                    else {
+?>
+                                        <td>Inativo</td>
+<?php
+                                    }
+?>
+                                </tr>
+<?php                        
+                            }
+                            $conta++;
+                        }
+                        while ($prop = $selecionaHistProp->fetch_assoc()) {
+                            if ($conta == 0) {
+?>                   
+                                <td><?php echo $prop["name"];?></td>
+                                <td><?php echo $prop["value_type"];?></td>
+<?php
+                                if ($prop["state"] === "active")
+                                {
+?>
+                                    <td>Ativo</td>
+                                    <td rowspan="<?php echo $numProp?>">
+                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                                    </td>
+                                </tr>
+<?php
+                                }
+                                else
+                                {
+?>
+                                    <td>Inativo</td>
+                                    <td rowspan="<?php echo $numProp?>">
+                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                                    </td>
+                                </tr>
+<?php
+                                }
+                            }
+                            else {
+?>                   
+                                <tr>
+                                    <td><?php echo $prop["name"];?></td>
+                                    <td><?php echo $prop["value_type"];?></td>
+<?php
+                                    if ($prop["state"] === "active") {
+?>
+                                        <td>Ativo</td>
+<?php
+                                    }
+                                    else {
+?>
+                                        <td>Inativo</td>
+<?php
+                                    }
+?>
+                                </tr>
+<?php                        
+                            }
+                            $conta++;
+                        }
+?>
                         <td>
 <?php
                         if ($arraySelec["state"] === "active")
