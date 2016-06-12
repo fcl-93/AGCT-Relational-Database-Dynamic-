@@ -1326,7 +1326,7 @@ class PropHist{
             return false;
         }
         else {
-            $updateEnt = "UPDATE ent_type SET updated_on = '".$data."'";
+            $updateEnt = "UPDATE ent_type SET updated_on = '".$data."' WHERE id = ".$idEnt;
             $updateEnt =$db->runQuery($updateEnt);
             if (!$updateEnt) {
                 $db->getMysqli()->rollback();
@@ -1365,7 +1365,7 @@ class PropHist{
             return false;
         }
         else {
-            $updateRel = "UPDATE rel_type SET updated_on = '".$data."'";
+            $updateRel = "UPDATE rel_type SET updated_on = '".$data."' WHERE id = ".$idRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
                 $db->getMysqli()->rollback();
