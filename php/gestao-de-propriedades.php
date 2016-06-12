@@ -840,8 +840,6 @@ class PropertyManage
      */
     private function validarDados()
     {
-        $saveOrdem = array();
-
         if(isset($_REQUEST['entidadePertence'])){
             $queryCheckOrdem = "SELECT form_field_order FROM property WHERE ent_type_id=".$_REQUEST['entidadePertence'];
             $resOrder = $this->db->runQuery($queryCheckOrdem);
@@ -849,7 +847,7 @@ class PropertyManage
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
 ?>
-                    <p> Já uma propriedade com uma ordem igual a introduzida.</p><br>
+                    <p> Já existe uma propriedade com uma ordem igual a introduzida.</p><br>
 <?php 
                    goBack();
                    return false;
@@ -857,13 +855,13 @@ class PropertyManage
             }
         }
         else if(isset ($_REQUEST['relacaoPertence'])){
-            $queryCheckOrdem = "SELECT form_field_order FROM property WHERE rel_type_id=".$_REQUEST['entidadePertence'];
+            $queryCheckOrdem = "SELECT form_field_order FROM property WHERE rel_type_id=".$_REQUEST['relacaoPertence'];
             $resOrder = $this->db->runQuery($queryCheckOrdem);
             while($readOrder = $resOrder->fetch_assoc()){
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
 ?>
-                    <p> Já uma propriedade com uma ordem igual a introduzida.</p><br>
+                    <p> Já existe uma propriedade com uma ordem igual a introduzida.</p><br>
 <?php 
                    goBack();
                    return false;
