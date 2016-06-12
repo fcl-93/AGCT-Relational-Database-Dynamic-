@@ -737,16 +737,13 @@ class RelHist{
 <?php
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
-                        echo "#1 "."conta ".$conta." prop ".$prop["name"]."<br>";
                         if ($conta == 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            echo "#7 "."conta ".$conta." prop ".$prop["name"]."<br>";
                             if ($hist["state"] === "active")
                             {
-                                echo "#3 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
@@ -756,20 +753,16 @@ class RelHist{
 <?php
                             }
                             else
-                            {
-                                echo "#4 "."conta ".$conta." prop ".$prop["name"]."<br>";
-?>
+                            {?>
                                 <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
                                     <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
                                 </td>
                             </tr>
 <?php
-                            echo "#8 "."conta ".$conta." prop ".$prop["name"]."<br>";
                             }
                         }
                         else {
-                            echo "#9 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>                   
                             <tr>
                                 <td><?php echo $prop["name"];?></td>
@@ -780,7 +773,6 @@ class RelHist{
                         $conta++;
                     } 
                     while ($prop = $selPropHist->fetch_assoc()) {
-                        echo "#2";
                         if ($conta == 0) {
 ?>                   
                             <td><?php echo $prop["name"];?></td>
@@ -788,7 +780,6 @@ class RelHist{
 <?php
                             if ($hist["state"] === "active")
                             {
-                                echo "#5 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
@@ -799,7 +790,6 @@ class RelHist{
                             }
                             else
                             {
-                                echo "#6 "."conta ".$conta." prop ".$prop["name"]."<br>";
 ?>
                                 <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
