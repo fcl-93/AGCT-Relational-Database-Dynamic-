@@ -708,7 +708,6 @@ class RelHist{
                     $queryHistorico = "SELECT * FROM hist_rel_type WHERE rel_type_id = ".$idRel." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
                 }
             }
-            echo $queryHistorico;
             $queryHistorico = $db->runQuery($queryHistorico);
             if ($queryHistorico->num_rows == 0) {
 ?>
@@ -720,13 +719,10 @@ class RelHist{
             }
             else {
                 while ($hist = $queryHistorico->fetch_assoc()) {
-                    echo "SELECT * FROM property WHERE updated_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel."<br>";
-                    echo "SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on <= '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel."<br>";
                     $selProp =$db->runQuery("SELECT * FROM property WHERE updated_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     $selPropHist =$db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on <= '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     
                     $numProp = $selProp->num_rows+$selPropHist->num_rows;
-                    echo $numProp;
 ?>
                     <tr>    
                         <td rowspan="<?php echo $numProp?>"><?php echo $hist["active_on"];?></td>
