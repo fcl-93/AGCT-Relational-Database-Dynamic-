@@ -844,7 +844,7 @@ class PropertyManage
 
         if(isset($_REQUEST['entidadePertence'])){
             $queryCheckOrdem = "SELECT form_field_order FROM property WHERE ent_type_id=".$_REQUEST['entidadePertence'];
-            $resOrder = $this->bd->runQuery($queryCheckOrdem);
+            $resOrder = $this->db->runQuery($queryCheckOrdem);
             while($readOrder = $resOrder->fetch_assoc()){
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
@@ -858,7 +858,7 @@ class PropertyManage
         }
         else if(isset ($_REQUEST['relacaoPertence'])){
             $queryCheckOrdem = "SELECT form_field_order FROM property WHERE rel_type_id=".$_REQUEST['entidadePertence'];
-            $resOrder = $this->bd->runQuery($queryCheckOrdem);
+            $resOrder = $this->db->runQuery($queryCheckOrdem);
             while($readOrder = $resOrder->fetch_assoc()){
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
