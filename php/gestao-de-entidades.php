@@ -818,7 +818,7 @@ class EntHist {
                         if($count == 0)
                         {
 ?>
-                             <td clospan="2">Não existem propriedades associadas a este tipo de entidade</td>
+                             <td colspan="2">Não existem propriedades associadas a este tipo de entidade</td>
                               <td><?php if($readHE['state'] == 'active')
                                 {
                                     echo "Ativo";
