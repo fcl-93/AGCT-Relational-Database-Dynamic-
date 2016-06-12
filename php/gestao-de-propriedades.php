@@ -848,7 +848,11 @@ class PropertyManage
             while($readOrder = $resOrder->fetch_assoc()){
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
-                    return false;
+?>
+                    <p> Já uma propriedade com uma ordem igual a introduzida.</p><br>
+<?php 
+                   goBack();
+                   return false;
                 }
             }
         }
@@ -858,7 +862,11 @@ class PropertyManage
             while($readOrder = $resOrder->fetch_assoc()){
                 if($readOrder['form_field_order'] == $_REQUEST["ordem"])
                 {
-                    return false;
+?>
+                    <p> Já uma propriedade com uma ordem igual a introduzida.</p><br>
+<?php 
+                   goBack();
+                   return false;
                 }
             }
         }
