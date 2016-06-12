@@ -1071,7 +1071,7 @@ class PropertyManage
             $val['entity_id'] == ""? $ent_id="NULL" : $ent_id = $val['entity_id']; 
             $val['relation_id'] == ""? $rel_id ="NULL" : $rel_id = $val['relation_id'];  
             $this->db->runQuery("INSERT INTO hist_value (`entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
-                    . "VALUES ('".$ent_id."',".$val['property_id'].",'".$val['value']."','".$val['producer']."',".$rel_id.",".$val['id'].",'".$val['updated_on']."','".$data."','".$val['state']."'");
+                    . "VALUES ('".$ent_id."',".$val['property_id'].",'".$val['value']."','".$val['producer']."',".$rel_id.",".$val['id'].",'".$val['updated_on']."','".$data."','".$val['state']."')");
             $this->db->runQuery("UPDATE value SET state = 'inactive',updated_on ='".$data."' WHERE id = ".$val['id']);
         }
     }
