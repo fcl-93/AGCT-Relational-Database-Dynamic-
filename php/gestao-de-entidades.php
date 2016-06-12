@@ -645,7 +645,7 @@ class EntHist {
         } else {
             while ($readHE = $resHE->fetch_assoc()) {
                 //get properties from the history where the inactive field has an hour equal the ent_type selected
-                $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND '".$readHE['inactive_on']."' >= active_on AND '".$readHE['inactive_on']."'< inactive_on");
+                $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND '".$readHE['inactive_on']."' > active_on AND '".$readHE['inactive_on']."'<= inactive_on");
                 //selects a property from properties table where the updated value is smaller than the inactive from the ent_type selected
                 $getProp = $bd->runQuery("SELECT * FROM property WHERE updated_on < '".$readHE['inactive_on']."' AND ent_type_id =".$readHE['ent_type_id']."");
                 $conta = 0;
