@@ -819,7 +819,7 @@ class EntHist {
                         {
 ?>
                              <td clospan="2">Não existem propriedades associadas a este tipo de entidade</td>
-                              <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
+                              <td><?php if($readHE['state'] == 'active')
                                 {
                                     echo "Ativo";
                                 }else
