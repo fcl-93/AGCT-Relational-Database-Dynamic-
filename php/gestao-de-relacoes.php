@@ -850,7 +850,7 @@ class RelHist{
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nome da Relação></th>
+                    <th>Nome da Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
                     <th>Propriedade</th>
