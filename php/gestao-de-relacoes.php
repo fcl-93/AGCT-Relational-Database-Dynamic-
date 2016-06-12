@@ -909,9 +909,6 @@ class RelHist{
                                 {
 ?>
                                     <td>Ativo</td>
-                                    <td rowspan="<?php echo $numProp?>">
-                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
-                                    </td>
                                 </tr>
 <?php
                                 }
@@ -919,9 +916,6 @@ class RelHist{
                                 {
 ?>
                                     <td>Inativo</td>
-                                    <td rowspan="<?php echo $numProp?>">
-                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
-                                    </td>
                                 </tr>
 <?php
                                 }
@@ -958,9 +952,6 @@ class RelHist{
                                 {
 ?>
                                     <td>Ativo</td>
-                                    <td rowspan="<?php echo $numProp?>">
-                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
-                                    </td>
                                 </tr>
 <?php
                                 }
@@ -968,9 +959,6 @@ class RelHist{
                                 {
 ?>
                                     <td>Inativo</td>
-                                    <td rowspan="<?php echo $numProp?>">
-                                        <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
-                                    </td>
                                 </tr>
 <?php
                                 }
