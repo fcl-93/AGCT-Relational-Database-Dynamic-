@@ -60,3 +60,8 @@ cursor: pointer;
 #acertaCabecalho {
     background: white;
 }
+
+.tablegr, td, th, table{
+    text-align: center;
+    border:none;
+}
