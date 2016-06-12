@@ -945,18 +945,6 @@ class RelHist{
                                 <tr>
                                     <td><?php echo $prop["name"];?></td>
                                     <td><?php echo $prop["value_type"];?></td>
-<?php
-                                    if ($arraySelec["state"] === "active") {
-?>
-                                        <td rowspan="<?php echo $numProp?>">Ativo</td>
-<?php
-                                    }
-                                    else {
-?>
-                                        <td rowspan="<?php echo $numProp?>">Inativo</td>
-<?php
-                                    }
-?>
                                 </tr>
 <?php                        
                             }
@@ -988,18 +976,6 @@ class RelHist{
                                 <tr>
                                     <td><?php echo $prop["name"];?></td>
                                     <td><?php echo $prop["value_type"];?></td>
-<?php
-                                    if ($arraySelec["state"] === "active") {
-?>
-                                        <td rowspan="<?php echo $numProp?>">Ativo</td>
-<?php
-                                    }
-                                    else {
-?>
-                                        <td rowspan="<?php echo $numProp?>">Inativo</td>
-<?php
-                                    }
-?>
                                 </tr>
 <?php                        
                             }
