@@ -683,7 +683,7 @@ class RelHist{
                     <th>Entidade 2</th>
                     <th>Propriedade</th>
                     <th>Tipo de Valor</th>
-                    <th>Estado</th>
+                    <th>Estado da Propriedade</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -738,10 +738,10 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            if ($hist["state"] === "active")
+                            if ($prop["state"] === "active")
                             {
 ?>
-                                <td rowspan="<?php echo $numProp?>">Ativo</td>
+                                <td>Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
                                     <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
                                 </td>
@@ -749,8 +749,9 @@ class RelHist{
 <?php
                             }
                             else
-                            {?>
-                                <td rowspan="<?php echo $numProp?>">Inativo</td>
+                            {
+?>
+                                <td>Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
                                     <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
                                 </td>
@@ -763,6 +764,18 @@ class RelHist{
                             <tr>
                                 <td><?php echo $prop["name"];?></td>
                                 <td><?php echo $prop["value_type"];?></td>
+<?php
+                                if ($prop["state"] === "active") {
+?>
+                                    <td>Ativo</td>
+<?php
+                                }
+                                else {
+?>
+                                    <td>Inativo</td>
+<?php
+                                }
+?>
                             </tr>
 <?php                        
                         }
@@ -774,10 +787,10 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            if ($hist["state"] === "active")
+                            if ($prop["state"] === "active")
                             {
 ?>
-                                <td rowspan="<?php echo $numProp?>">Ativo</td>
+                                <td>Ativo</td>
                                 <td rowspan="<?php echo $numProp?>">
                                     <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
                                 </td>
@@ -787,7 +800,7 @@ class RelHist{
                             else
                             {
 ?>
-                                <td rowspan="<?php echo $numProp?>">Inativo</td>
+                                <td>Inativo</td>
                                 <td rowspan="<?php echo $numProp?>">
                                     <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
                                 </td>
@@ -800,6 +813,18 @@ class RelHist{
                             <tr>
                                 <td><?php echo $prop["name"];?></td>
                                 <td><?php echo $prop["value_type"];?></td>
+<?php
+                                if ($prop["state"] === "active") {
+?>
+                                    <td>Ativo</td>
+<?php
+                                }
+                                else {
+?>
+                                    <td>Inativo</td>
+<?php
+                                }
+?>
                             </tr>
 <?php                        
                         }
