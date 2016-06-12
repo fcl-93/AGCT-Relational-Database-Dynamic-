@@ -951,14 +951,14 @@ class RelHist{
                                 if ($arraySelec["state"] === "active")
                                 {
 ?>
-                                    <td>Ativo</td>
+                                    <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 </tr>
 <?php
                                 }
                                 else
                                 {
 ?>
-                                    <td>Inativo</td>
+                                    <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 </tr>
 <?php
                                 }
@@ -971,12 +971,12 @@ class RelHist{
 <?php
                                     if ($arraySelec["state"] === "active") {
 ?>
-                                        <td>Ativo</td>
+                                        <td rowspan="<?php echo $numProp?>">Ativo</td>
 <?php
                                     }
                                     else {
 ?>
-                                        <td>Inativo</td>
+                                        <td rowspan="<?php echo $numProp?>">Inativo</td>
 <?php
                                     }
 ?>
@@ -985,21 +985,6 @@ class RelHist{
                             }
                             $conta++;
                         }
-?>
-                        <td>
-<?php
-                        if ($arraySelec["state"] === "active")
-                        {
-                            echo 'Ativo';
-                        }
-                        else
-                        {
-                            echo 'Inativo';
-                        }
-?>
-                        </td>
-                    </tr>
-<?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
                 
