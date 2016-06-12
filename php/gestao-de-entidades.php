@@ -815,6 +815,19 @@ class EntHist {
                             $count ++;
                             ?></tr><?php
                         }
+                        if($count == 0)
+                        {
+?>
+                             <td>Não existem propriedades associadas a este tipo de entidade</td>
+                              <td rowspan="<?php echo $numLines; ?>"><?php if($readHE['state'] == 'active')
+                                {
+                                    echo "Ativo";
+                                }else
+                                {
+                                    echo "Inativo";
+                                }?></td>
+<?php 
+                        }
 ?>
                       
                 <?php
