@@ -905,17 +905,17 @@ class RelHist{
                                 <td><?php echo $prop["name"];?></td>
                                 <td><?php echo $prop["value_type"];?></td>
 <?php
-                                if ($prop["state"] === "active")
+                                if ($arraySelec["state"] === "active")
                                 {
 ?>
-                                    <td>Ativo</td>
+                                    <td rowspan="<?php echo $numProp?>">Ativo</td>
                                 </tr>
 <?php
                                 }
                                 else
                                 {
 ?>
-                                    <td>Inativo</td>
+                                    <td rowspan="<?php echo $numProp?>">Inativo</td>
                                 </tr>
 <?php
                                 }
@@ -926,14 +926,14 @@ class RelHist{
                                     <td><?php echo $prop["name"];?></td>
                                     <td><?php echo $prop["value_type"];?></td>
 <?php
-                                    if ($prop["state"] === "active") {
+                                    if ($arraySelec["state"] === "active") {
 ?>
-                                        <td>Ativo</td>
+                                        <td rowspan="<?php echo $numProp?>">Ativo</td>
 <?php
                                     }
                                     else {
 ?>
-                                        <td>Inativo</td>
+                                        <td rowspan="<?php echo $numProp?>">Inativo</td>
 <?php
                                     }
 ?>
@@ -948,7 +948,7 @@ class RelHist{
                                 <td><?php echo $prop["name"];?></td>
                                 <td><?php echo $prop["value_type"];?></td>
 <?php
-                                if ($prop["state"] === "active")
+                                if ($arraySelec["state"] === "active")
                                 {
 ?>
                                     <td>Ativo</td>
@@ -969,7 +969,7 @@ class RelHist{
                                     <td><?php echo $prop["name"];?></td>
                                     <td><?php echo $prop["value_type"];?></td>
 <?php
-                                    if ($prop["state"] === "active") {
+                                    if ($arraySelec["state"] === "active") {
 ?>
                                         <td>Ativo</td>
 <?php
