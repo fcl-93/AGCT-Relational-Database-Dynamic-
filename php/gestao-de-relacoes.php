@@ -883,7 +883,7 @@ class RelHist{
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
-                    if ($numProp == 0) {
+                    if ($resultSeleciona->num_rows == 0) {
 ?>
                         <td colspan="7">Não existe registos para esta tabela no dia selecionado</td>
 <?php
