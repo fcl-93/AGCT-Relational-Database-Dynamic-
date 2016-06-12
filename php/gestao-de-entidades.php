@@ -755,6 +755,7 @@ class EntHist {
                 <th>Nome Tipo de Entidade</th>
                 <th>Propriedade</th>	
                 <th>Tipo de Valor</th>
+                <th>Estado da Propriedade</th>
                 <th>Estado Durante o Período</th>
             </thead>
         <tbody>
