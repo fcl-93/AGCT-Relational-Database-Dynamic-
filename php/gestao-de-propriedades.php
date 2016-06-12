@@ -840,6 +840,16 @@ class PropertyManage
      */
     private function validarDados()
     {
+        
+
+        if(isset($_REQUEST['entidadePertence'])){
+            
+        }
+        else if(isset ($_REQUEST['relacaoPertence'])){
+        
+        }
+        
+        
         if (empty($_REQUEST["nome"]))
         {
 ?>
