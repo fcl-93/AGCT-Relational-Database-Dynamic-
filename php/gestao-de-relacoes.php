@@ -886,8 +886,8 @@ class RelHist{
                     
                     while($arraySelec = $resultSeleciona->fetch_assoc()) {
                         
-                        $selecionaHistProp = "SELECT * FROM hist_property WHERE inactive_on >= '".$_REQUEST["data"]." 23:59:59' AND active_on < '".$_REQUEST["data"]." 23:59:59' WHERE rel_type_id = ".$arraySelec["id"];
-                        $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]." 23:59:59' WHERE rel_type_id = ".$arraySelec["id"];
+                        $selecionaHistProp = "SELECT * FROM hist_property WHERE inactive_on >= '".$_REQUEST["data"]." 23:59:59' AND active_on < '".$_REQUEST["data"]." 23:59:59' AND rel_type_id = ".$arraySelec["id"];
+                        $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]." 23:59:59' AND rel_type_id = ".$arraySelec["id"];
 
                         $selecionaProp = $db->runQuery($selecionaProp);
                         $selecionaHistProp = $db->runQuery($selecionaHistProp);
