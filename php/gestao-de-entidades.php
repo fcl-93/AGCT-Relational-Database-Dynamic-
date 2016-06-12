@@ -787,15 +787,12 @@ class EntHist {
                 $numLines = $propPrint->num_rows;
 ?>
                     <tr>
-<?php
+
+                        <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>  
+                                <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td>
+<?php                        
                         $count = 0;
                         while($propP = $propPrint->fetch_assoc()){
-                            if($count == 0){
-?>
-                                <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['id'] ?></td>  
-                                <td rowspan="<?php echo $numLines ?>"><?php echo $readHE['name'] ?></td>
-<?php
-                            }
 ?>
 <?php
 ?>
