@@ -883,7 +883,11 @@ class RelHist{
                     }
                     
                     $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
-                    
+                    if ($numProp == 0) {
+?>
+                        <td colspan="7">Não existe registos para esta tabela no dia selecionado</td>
+<?php
+                    }
                     while($arraySelec = $resultSeleciona->fetch_assoc()) {
                         
                         $selecionaHistProp = "SELECT * FROM hist_property WHERE inactive_on >= '".$_REQUEST["data"]." 23:59:59' AND active_on < '".$_REQUEST["data"]." 23:59:59' AND rel_type_id = ".$arraySelec["id"];
