@@ -600,7 +600,7 @@ class EntHist {
                     //$propInHist = $getInHist->fetch_assoc();
                     //Se as propriedades são diferente vão pro historico caso contrário não faço nada
                   
-                    if($getEntHist['inactive_on'] >= $prop['updated_on'])
+                    if( $prop['updated_on'] < $getEntHist['inactive_on'] )
                     {
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
                         $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
