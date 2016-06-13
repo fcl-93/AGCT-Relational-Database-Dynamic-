@@ -622,10 +622,13 @@ class EntHist {
                         
                         $checkPropAct = $bd->runQuery("SELECT * FROM property WHERE id=".$prop['id']);
                         $checkPropHist = $bd->runQuery("SELECT * from hist_property WHERE property_id=".$prop['id']);
-                        
+                        echo "SELECT * FROM property WHERE id=".$prop['id']."<br>";
+                        echo "SELECT * from hist_property WHERE property_id=".$prop['id']."<br>";
+                        echo $checkPropAct->num_rows ." = ". $checkPropHist ." ? <br>";
                         if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
                         {
                             $bd->runQuery("UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id']);
+                            echo "UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id'];
                         }
                        
                     }
