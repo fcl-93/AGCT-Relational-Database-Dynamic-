@@ -404,7 +404,7 @@ class Entidade {
                 if ($this->gereHist->addHist($id, $this->bd)) 
                 {
                     $this->bd->runQuery("UPDATE ent_type SET state='inactive', updated_on='" . date("Y-m-d H:i:s", time()) . "' WHERE id =" . $id);
-    ?>
+?>
                     <p>A entidade <?php echo $read_EntTypeD['name'] ?>  foi desativada</p>
                     <p>Clique em <a href="/gestao-de-entidades"/>Continuar</a> para avançar</p>
                     <?php
@@ -594,6 +594,7 @@ class EntHist {
                 while($prop = $getCurrProps->fetch_assoc())
                 {
                     $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$timeEntHist."' AND property_id = ".$prop['id'];
+                   echo $queryGetPropHist;
                     $getInHist = $bd->runQuery($queryGetPropHist);
                     $propInHist = $getInHist->fetch_assoc();
                     //Se as propriedades sºao diferente vão pro historico caso contrário n fa ço nada
