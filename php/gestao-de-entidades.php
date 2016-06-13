@@ -594,7 +594,8 @@ class EntHist {
                 while($prop = $getCurrProps->fetch_assoc())
                 {
                     $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$timeEntHist."' AND property_id = ".$prop['id'];
-                    $propInHist = $bd->runQuery($queryGetPropHist);
+                    $getInHist = $bd->runQuery($queryGetPropHist);
+                    $propInHist = $getInHist->fetch_assoc();
                     //Se as propriedades sºao diferente vão pro historico caso contrário n fa ço nada
                     if($prop['state'] !=  $propInHist['state']  || $prop['form_field_order'] !=  $propInHist['form_field_order']  )
                     {
