@@ -1159,7 +1159,7 @@ class PropertyManage
      * This method executes the necessary update's query to update the values inserted in the database
      */
     private function estadoUpdate() {
-        $last = $erro = false;
+        $erro = false;
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
@@ -1173,10 +1173,7 @@ class PropertyManage
         $data = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {
             if ($_REQUEST['ordem_'.$prop['id']] != $prop["form_field_order"]) {
-                if ($contaProp === $numProp) {
-                    $last = true;
-                }
-                if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
+                if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) {
 ?>
                     <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
