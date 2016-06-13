@@ -544,7 +544,7 @@ class PropertyManage
 ?>
         <form method="POST">
             <p>Estamos prestes a inserir a propriedade abaixo na base de dados.</p>
-            <p style='color: red'>Tenha em consideração que uma ve submetido só poderá alterar o campo Ordem do campo no formulário.</p>
+            <p style='color: red'>Tenha em consideração que uma vez submetido só poderá alterar o campo Ordem do campo no formulário.</p>
             <p>Confirma que os dados estão correctos e pretende submeter os mesmos?</p>
         <ul>
             <li>Nome da propriedade: <?php echo $_REQUEST['nome']?></li>
