@@ -162,11 +162,13 @@ class RelationManage
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
+            $this->db->getMysqli()->rollback();
             echo "Ocorreu um erro ao editar a relação.";
             goBack();
         }
         else
         {
+            $this->db->getMysqli()->commit();
             echo 'Atualizou os dados da relação com sucesso.';
             echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
         }
@@ -185,6 +187,7 @@ class RelationManage
         if ($_REQUEST["estado"] === "desativar"){
             if (!$this->verificaInst ($_REQUEST['rel_id'])) {
                 if ($this->gereHist->atualizaHistorico($this->db) == false) {
+                    $this->db->getMysqli()->rollback();
 ?>
                     <p>Não foi possível desativar a propriedade pretendida.</p>
 <?php 
@@ -199,6 +202,7 @@ class RelationManage
         }
         else {
             if ($this->gereHist->atualizaHistorico($this->db) == false) {
+                $this->db->getMysqli()->rollback();
 ?>
                 <p>Não foi possível ativar a propriedade pretendida.</p>
 <?php 
@@ -213,6 +217,7 @@ class RelationManage
         if ($avanca) {
             $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['rel_id'];
             $this->db->runQuery($queryUpdate);
+            $this->db->getMysqli()->commit();
 ?>
             <html>
                 <p>A relação <?php echo $this->db->getEntityName($idNome1)."-".$this->db->getEntityName($idNome2) ?> foi <?php echo $estado ?></p>
@@ -599,9 +604,11 @@ class RelHist{
     /**
      * This method is responsible for insert into the history a copy of the property
      * before being updated
-     * @param type $db (object form the class Db_Op)
+     * @param Db_Op $db (object form the class Db_Op)
      */
     public function atualizaHistorico ($db) {
+        $db->getMysqli()->autocommit(false);
+        $db->getMysqli()->begin_transaction;
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
@@ -635,12 +642,14 @@ class RelHist{
         $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
+            
 ?>
             <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
+            $this->db->getMysqli()->rollback();
 ?>
             <p>Não foi possível reverter o tipo de relação para a versão selecionada</p>
 <?php
