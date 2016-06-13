@@ -603,10 +603,9 @@ class EntHist {
                     //Se as propriedades são diferente vão pro historico caso contrário não faço nada
                   
                     if( $prop['updated_on'] < $getEntHist['inactive_on'] )//propriedade ta na principal
-                    {
-                        $checkPropAct = $bd->runQuery("SELECT * FROM property WHERE id=".$prop['id']);
-                        $checkPropHist = $bd->runQuery("SELECT * from hist_property WHERE property_id=".$prop['id']);
-                        //Backup
+                    {}
+                    else
+                    { //prop tá no historico (vai pro)
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
                         $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
                         $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
@@ -615,24 +614,20 @@ class EntHist {
                         $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
                                 . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
                         
-                        if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
-                        {
-                            $bd->runQuery("UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id']);
-                        }
-                        
-                    }else{ //prop tá no historico (vai pro)
-                        $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
-                        $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
-                        $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
-                        $prop['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $prop['fk_ent_type_id'];
-
-                        $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
-                                . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
                         if(!$bd->runQuery($query))
                         {
                             $error = true;
                             break;
                         }
+                        
+                        $checkPropAct = $bd->runQuery("SELECT * FROM property WHERE id=".$prop['id']);
+                        $checkPropHist = $bd->runQuery("SELECT * from hist_property WHERE property_id=".$prop['id']);
+                        
+                        if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
+                        {
+                            $bd->runQuery("UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id']);
+                        }
+                       
                     }
                 }
                 
