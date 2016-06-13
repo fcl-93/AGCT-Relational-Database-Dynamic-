@@ -591,7 +591,7 @@ class EntHist {
            {
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
                 $error = false;
-                while($prop = $saveProps->fetch_assoc())
+                while($prop = $getCurrProps->fetch_assoc())
                 {
                     $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
                     $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
