@@ -73,11 +73,11 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "relation")
         {
-            $this->estadoEntityRelation("relation");
+            $this->apresentaTabela("relation");
         }
         elseif ($_REQUEST["estado"] === "entity")
         {
-            $this->estadoEntityRelation("entity");
+            $this->apresentaTabela("entity");
         }
         elseif ($_REQUEST["estado"] === "validar")
         {
@@ -125,52 +125,6 @@ class PropertyManage
         elseif($_REQUEST['estado'] == 'conclusao')
         {
             $this->estadoConclusao();		
-        }
-    }
-    
-    /**
-     * Method that checks if there are any Properties in the previous selected type of property (entity or relation)
-     * @param string $tipo ("relation" if we want to check properties's relation, "entity" for entities's properties)
-     * @return boolean (true if there are properties otherwise it will return false)
-     */
-    private function existePropriedade($tipo)
-    {
-        $querySelect = "SELECT * FROM property WHERE ";
-        if ($tipo === "relation")
-        {
-            $querySelect.= "rel_type_id != 0";
-        }
-        else
-        {
-            $querySelect.= "ent_type_id != 0";
-        }
-        $resultSelect = $this->db->runQuery($querySelect);
-
-        if ($resultSelect->num_rows == 0)
-        {
-    ?>
-        <html>
-            <p>Não existem propiedades especificadas para o tipo selecionado</p>
-        </html>
-    <?php
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    /**
-     * This method is responsible to control the flow execution of the state entity and relation
-     * @param string $tipo ("relation" if we selected relation in first state, "entity" if we selected entity in first state)
-     */
-    private function estadoEntityRelation($tipo)
-    {
-        if($this->existePropriedade($tipo))
-        {
-            $this->apresentaTabela($tipo);
-
         }
     }
 
