@@ -654,26 +654,17 @@ class RelHist{
             $selPropAtual = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel);
             while ($prop = $selPropAtual->fetch_assoc()) {
                 $selProp = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel." AND updated_on < '".$inactive."' AND id = ".$prop["id"]);
-                if ($selProp->num_rows == 0) {
-                    echo "SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]."<br>";
+                if ($selProp->num_rows == 0) {                    
                     $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]);
-                    print_r($selPropHist);
                     $propHist = $selPropHist->fetch_assoc();
-                    print_r($propHist);
                     $estado = $propHist["state"];
                     $ordem = $propHist["form_field_order"];
                     $prop["unit_type_id"] == ""? $unit ="NULL" : $unit = $prop['unit_type_id'];
-                    echo "<br>INSERT INTO hist_property "
-                            . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
-                            . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `form_field_size`, "
-                            . "`property_id`, `active_on`, `inactive_on`)"
-                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')<br>";
                     $updateHistProp = $db->runQuery("INSERT INTO hist_property "
                             . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
                             . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `form_field_size`, "
                             . "`property_id`, `active_on`, `inactive_on`)"
                             . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
-                    echo "UPDATE property SET form_field_order =".$ordem." state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]."<br>";
                     $updateProp = $db->runQuery("UPDATE property SET form_field_order =".$ordem.", state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);
                 } 
             }
