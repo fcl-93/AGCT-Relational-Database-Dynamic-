@@ -551,7 +551,7 @@ class EntHist {
         $inactive = date("Y-m-d H:i:s", time()); //current date.
         $goToEnt = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE id=" . $id)->fetch_assoc();
         //Backup the actual entities and properties that exist in the table.
-         if($this->helpReturnPrev($goToEnt['ent_type_id'],$bd,$inactive,$goToEnt['inactive_on']))
+         if($this->helpReturnPrev($goToEnt['ent_type_id'],$bd,$inactive,$goToEnt['id']))
          {
              //if sucessfully backup
 ?>                <html>
@@ -580,7 +580,7 @@ class EntHist {
      * $bd used to make database operations
      * $hour in which we are turning off the properties and the entity type
      */
-    private function helpReturnPrev($id,$bd,$inactive,$timeEntHist){
+    private function helpReturnPrev($id,$bd,$inactive,$idEntHist){
         $getCurrEnt = "SELECT * FROM ent_type WHERE id=".$id;
         $resCurrEnt = $bd->runQuery($getCurrEnt);
         if($resCurrEnt)
@@ -590,10 +590,12 @@ class EntHist {
            if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "','" . $readCurrEnt['state'] . "','" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
            {
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
+                
+                $getEntHist = $bd->runQuery("SELECT * FROM hist_ent_type WHERE id=".$idEntHist)->fetch_assoc();
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
-                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$timeEntHist."' AND property_id = ".$prop['id'];
+                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive']."' AND property_id = ".$prop['id'];
                   echo $queryGetPropHist ;
                     $getInHist = $bd->runQuery($queryGetPropHist);
                     $propInHist = $getInHist->fetch_assoc();
