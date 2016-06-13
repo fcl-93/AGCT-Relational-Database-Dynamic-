@@ -1314,8 +1314,8 @@ class InsereRelacoes
             $relType = $this->bd->runQuery("SELECT * FROM rel_type");
             if ($relType->num_rows == 0) {
 ?>
-                <p>Não existem ainda quaisquer tipos de relações, pelo que não pode introduzir qualquer relação.</p>
-                <p>Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
+                <p align="center">Não existem ainda quaisquer tipos de relações, pelo que não pode introduzir qualquer relação.</p>
+                <p align="center">Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
 <?php
             }
             else {
