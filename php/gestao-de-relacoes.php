@@ -668,14 +668,14 @@ class RelHist{
                     $updateProp = $db->runQuery("UPDATE property SET form_field_order =".$ordem." state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);
                 } 
             }
-            $this->db->getMysqli()->commit();
+            $db->getMysqli()->commit();
 ?>
             <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.</p>
 <?php
         }
         else {
-            $this->db->getMysqli()->rollback();
+            $db->getMysqli()->rollback();
 ?>
             <p>Não foi possível reverter o tipo de relação para a versão selecionada</p>
 <?php
