@@ -641,10 +641,10 @@ class RelHist{
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "rel_type_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
-            if ($atributo != "rel_type_id") {
+            if ($atributo == "rel_type_id") {
                 $idRel = $valor;
             }
-            if ($atributo != "inactive_on") {
+            if ($atributo == "inactive_on") {
                 $inactive = $valor;
             }
         }
