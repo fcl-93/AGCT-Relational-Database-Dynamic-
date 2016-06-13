@@ -595,13 +595,13 @@ class EntHist {
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
-                    //$queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive_on']."' AND property_id = ".$prop['id'];
-                    //$getInHist = $bd->runQuery($queryGetPropHist);
-                    //$propInHist = $getInHist->fetch_assoc();
+                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive_on']."' AND property_id = ".$prop['id'];
+                    $getInHist = $bd->runQuery($queryGetPropHist);
+                    $propInHist = $getInHist->fetch_assoc();
                     //Se as propriedades são diferente vão pro historico caso contrário não faço nada
                   
-                    if( $prop['updated_on'] < $getEntHist['inactive_on'] )
-                    {
+                    if( $prop['updated_on']< $getEntHist['inactive_on'] )
+                    {}else{
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
                         $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
                         $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
