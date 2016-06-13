@@ -674,7 +674,7 @@ class RelHist{
                             . "`property_id`, `active_on`, `inactive_on`)"
                             . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
                     echo "UPDATE property SET form_field_order =".$ordem." state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]."<br>";
-                    $updateProp = $db->runQuery("UPDATE property SET form_field_order =".$ordem." state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);
+                    $updateProp = $db->runQuery("UPDATE property SET form_field_order =".$ordem.", state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);
                 } 
             }
             $db->getMysqli()->commit();
