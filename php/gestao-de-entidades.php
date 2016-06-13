@@ -595,7 +595,7 @@ class EntHist {
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
-                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive']."' AND property_id = ".$prop['id'];
+                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive_on']."' AND property_id = ".$prop['id'];
                   echo $queryGetPropHist ;
                     $getInHist = $bd->runQuery($queryGetPropHist);
                     $propInHist = $getInHist->fetch_assoc();
