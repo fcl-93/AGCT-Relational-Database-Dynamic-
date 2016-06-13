@@ -147,7 +147,8 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "update"
      */
     private function estadoUpdate() {
-        $this->gereHist->atualizaHistorico($this->db);
+        $data = date("Y-m-d H:i:s",time());
+        $this->gereHist->atualizaHistorico($this->db, $data);
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
         if (empty($_REQUEST['nome'])) {
@@ -158,7 +159,7 @@ class RelationManage
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryUpdate = "UPDATE `rel_type` SET name = '".$nome."', ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id = ".$_REQUEST["rel_id"];
+        $queryUpdate = "UPDATE `rel_type` SET name = '".$nome."', ent_type1_id = ".$ent1.", ent_type2_id = ".$ent2.",updated_on ='".$data."' WHERE id = ".$_REQUEST["rel_id"];
         $update = $this->db->runQuery($queryUpdate);
         if(!$update)
         {
@@ -178,6 +179,7 @@ class RelationManage
      * This method is responsible to control the flow execution when state is "ativar" or "desativar"
      */
     private function estadoAtivarDesativar() {
+        $data = date("Y-m-d H:i:s",time());
         $getNomes = $this->db->runQuery("SELECT * FROM rel_type WHERE id = ".$this->db->userInputVal($_REQUEST['rel_id']));
         $nomes = $getNomes->fetch_assoc();
         $idNome1 = $nomes["ent_type1_id"];
@@ -186,7 +188,7 @@ class RelationManage
         $queryUpdate = "UPDATE rel_type SET state=";
         if ($_REQUEST["estado"] === "desativar"){
             if (!$this->verificaInst ($_REQUEST['rel_id'])) {
-                if ($this->gereHist->atualizaHistorico($this->db) == false) {
+                if ($this->gereHist->atualizaHistorico($this->db, $data) == false) {
                     $this->db->getMysqli()->rollback();
 ?>
                     <p>Não foi possível desativar a propriedade pretendida.</p>
@@ -201,7 +203,7 @@ class RelationManage
             }
         }
         else {
-            if ($this->gereHist->atualizaHistorico($this->db) == false) {
+            if ($this->gereHist->atualizaHistorico($this->db, $data) == false) {
                 $this->db->getMysqli()->rollback();
 ?>
                 <p>Não foi possível ativar a propriedade pretendida.</p>
@@ -215,7 +217,7 @@ class RelationManage
             }
         }
         if ($avanca) {
-            $queryUpdate .= ",updated_on ='".date("Y-m-d H:i:s",time())."' WHERE id =".$_REQUEST['rel_id'];
+            $queryUpdate .= ",updated_on ='".$data."' WHERE id =".$_REQUEST['rel_id'];
             $this->db->runQuery($queryUpdate);
             $this->db->getMysqli()->commit();
 ?>
@@ -606,14 +608,14 @@ class RelHist{
      * before being updated
      * @param Db_Op $db (object form the class Db_Op)
      */
-    public function atualizaHistorico ($db) {
+    public function atualizaHistorico ($db,$data) {
         $db->getMysqli()->autocommit(false);
         $db->getMysqli()->begin_transaction;
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`name`,`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
-                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$db->userInputVal($_REQUEST["rel_id"]).")";
+                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".$data."',".$db->userInputVal($_REQUEST["rel_id"]).")";
         $updateHist =$db->runQuery($updateHist);
         if(!$updateHist)
         {
@@ -629,7 +631,8 @@ class RelHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
-        $this->atualizaHistorico($db);
+        $data = date("Y-m-d H:i:s",time());
+        $this->atualizaHistorico($db, $data);
         $selectAtributos = "SELECT * FROM hist_rel_type WHERE id = ".$db->userInputVal($_REQUEST['hist']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
@@ -638,11 +641,35 @@ class RelHist{
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "rel_type_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
+            if ($atributo != "rel_type_id") {
+                $relId = $valor;
+            }
+            if ($atributo != "inactive_on") {
+                $inactive = $valor;
+            }
         }
-        $updateHist .= " updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
+        $updateHist .= " updated_on = '".$data."' WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
-            
+            $selPropAtual = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel);
+            while ($prop = $selPropAtual->fetch_assoc()) {
+                $selProp = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel." AND updated_on < ".$inactive." AND id = ".$prop["id"]);
+                if ($selProp->num_rows == 0) {
+                    $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on > ".$inactive." AND inactive_on <= ".$inactive." AND id = ".$prop["id"]);
+                    $propHist = $selPropHist->fetch_assoc();
+                    $estado = $propHist["state"];
+                    $ordem = $propHist["form_field_order"];
+                    $prop["unit_type_id"] == ""? $unit ="NULL" : $unit = $prop['unit_type_id'];
+                    $updateHistProp = $db->runQuery("INSERT INTO hist_property "
+                            . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
+                            . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `form_field_size`, "
+                            . "`property_id`, `active_on`, `inactive_on`)"
+                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',
+                                . ".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'".$prop["state"]."',".$prop["form_field_size"].",
+                                    . ".$prop['id'].",'".$prop['updated_on']."','".$data."')");
+                    $updateProp = $db->runQuery("UPDATE property SET form_field_order =".$ordem." state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);
+                } 
+            }
 ?>
             <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
             <p>Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.</p>
@@ -729,7 +756,7 @@ class RelHist{
             else {
                 while ($hist = $queryHistorico->fetch_assoc()) {
                     $selProp =$db->runQuery("SELECT * FROM property WHERE updated_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
-                    $selPropHist =$db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on <= '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
+                    $selPropHist =$db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     
                     $numProp = $selProp->num_rows+$selPropHist->num_rows;
 ?>
