@@ -73,11 +73,11 @@ class PropertyManage
         }
         elseif ($_REQUEST["estado"] === "relation")
         {
-            $this->apresentaTabela("relation");
+            $this->estadoEntityRelation("relation");
         }
         elseif ($_REQUEST["estado"] === "entity")
         {
-            $this->apresentaTabela("entity");
+            $this->estadoEntityRelation("entity");
         }
         elseif ($_REQUEST["estado"] === "validar")
         {
@@ -125,6 +125,54 @@ class PropertyManage
         elseif($_REQUEST['estado'] == 'conclusao')
         {
             $this->estadoConclusao();		
+        }
+    }
+
+    /**
+     * Method that checks if there are any entity or relation types
+     * @param string $tipo ("relation" if we want to check properties's relation, "entity" for entities's properties)
+     * @return boolean (true if there are properties otherwise it will return false)
+     */
+    private function existeTipo($tipo)
+    {
+        if ($tipo == "entity") {
+            $selEnt = $this->db->runQuery("SELECT * FROM ent_type");
+            if ($selEnt->num_rows == 0) {
+?>
+                <p>Não pode adicionar ou gerir propriedades uma vez que ainda não foram criadas quaisquer tipos de entidades.</p>
+                <p>Clique em <a href="/gestao-de-entidades">Criar tipos de entidades</a>para criar um novo tipo de entidade.</p>
+<?php
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            $selRel = $this->db->runQuery("SELECT * FROM rel_type");
+            if ($selRel->num_rows == 0) {
+?>
+                <p>Não pode adicionar ou gerir propriedades uma vez que ainda não foram criadas quaisquer tipos de relações.</p>
+                <p>Clique em <a href="/gestao-de-relacoes">Criar tipos de relações</a>para criar um novo tipo de relação.</p>
+<?php
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    /**
+     * This method is responsible to control the flow execution of the state entity and relation
+     * @param string $tipo ("relation" if we selected relation in first state, "entity" if we selected entity in first state)
+     */
+    private function estadoEntityRelation($tipo)
+    {
+        if($this->existeTipo($tipo))
+        {
+            $this->apresentaTabela($tipo);
+
         }
     }
 
