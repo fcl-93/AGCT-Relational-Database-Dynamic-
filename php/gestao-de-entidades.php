@@ -598,7 +598,8 @@ class EntHist {
                     $getInHist = $bd->runQuery($queryGetPropHist);
                     $propInHist = $getInHist->fetch_assoc();
                     //Se as propriedades sºao diferente vão pro historico caso contrário n fa ço nada
-                    echo $prop['state'] ." != ".  $propInHist['state']."    ".$prop['form_field_order'] ." != ".$propInHist['form_field_order'];
+                    echo $prop['state'] ." != ".  $propInHist['state']."<br>";
+                    echo $prop['form_field_order'] ." != ".$propInHist['form_field_order']."<br>";
                   
                     if($prop['state'] !=  $propInHist['state']  || $prop['form_field_order'] !=  $propInHist['form_field_order']  )
                     {
