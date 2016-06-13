@@ -595,17 +595,13 @@ class EntHist {
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
-                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive_on']."' AND property_id = ".$prop['id'];
-                  echo $queryGetPropHist ;
-                    $getInHist = $bd->runQuery($queryGetPropHist);
-                    $propInHist = $getInHist->fetch_assoc();
-                    //Se as propriedades sºao diferente vão pro historico caso contrário n fa ço nada
-                    echo $prop['state'] ." != ".  $propInHist['state']."<br>";
-                    echo $prop['form_field_order'] ." != ".$propInHist['form_field_order']."<br>";
+                    //$queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$getEntHist['inactive_on']."' AND property_id = ".$prop['id'];
+                    //$getInHist = $bd->runQuery($queryGetPropHist);
+                    //$propInHist = $getInHist->fetch_assoc();
+                    //Se as propriedades são diferente vão pro historico caso contrário não faço nada
                   
-                    if($prop['state'] !=  $propInHist['state']  || $prop['form_field_order'] !=  $propInHist['form_field_order']  )
+                    if($getEntHist['inactive_on'] >= $prop['updated_on'])
                     {
-                    
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
                         $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
                         $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
