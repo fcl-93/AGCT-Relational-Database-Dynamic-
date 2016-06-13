@@ -610,7 +610,7 @@ class RelHist{
      */
     public function atualizaHistorico ($db,$data) {
         $db->getMysqli()->autocommit(false);
-        $db->getMysqli()->begin_transaction;
+        $db->getMysqli()->begin_transaction();
         $selectAtributos = "SELECT * FROM rel_type WHERE id = ".$db->userInputVal($_REQUEST['rel_id']);
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
