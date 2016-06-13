@@ -551,7 +551,7 @@ class EntHist {
         $inactive = date("Y-m-d H:i:s", time()); //current date.
         $goToEnt = $bd->runQuery("SELECT * FROM `hist_ent_type` WHERE id=" . $id)->fetch_assoc();
         //Backup the actual entities and properties that exist in the table.
-         if($this->helpReturnPrev($goToEnt['ent_type_id'],$bd,$inactive))
+         if($this->helpReturnPrev($goToEnt['ent_type_id'],$bd,$inactive,$goToEnt['inactive_on']))
          {
              //if sucessfully backup
 ?>                <html>
@@ -580,7 +580,7 @@ class EntHist {
      * $bd used to make database operations
      * $hour in which we are turning off the properties and the entity type
      */
-    private function helpReturnPrev($id,$bd,$inactive){
+    private function helpReturnPrev($id,$bd,$inactive,$timeEntHist){
         $getCurrEnt = "SELECT * FROM ent_type WHERE id=".$id;
         $resCurrEnt = $bd->runQuery($getCurrEnt);
         if($resCurrEnt)
@@ -593,17 +593,25 @@ class EntHist {
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
-                    $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
-                    $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
-                    $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
-                    $prop['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $prop['fk_ent_type_id'];
-
-                    $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
-                            . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
-                    if(!$bd->runQuery($query))
+                    $queryGetPropHist = "SELECT * FROM hist_property WHERE inactive_on='".$timeEntHist."' AND property_id = ".$prop['id'];
+                    $propInHist = $bd->runQuery($queryGetPropHist);
+                    //Se as propriedades sºao diferente vão pro historico caso contrário n fa ço nada
+                    if($prop['state'] !=  $propInHist['state']  || $prop['form_field_order'] !=  $propInHist['form_field_order']  )
                     {
-                        $error = true;
-                        break;
+                    
+                        $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
+                        $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
+                        $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
+                        $prop['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $prop['fk_ent_type_id'];
+
+                        $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
+                                . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
+
+                        if(!$bd->runQuery($query))
+                        {
+                            $error = true;
+                            break;
+                        }
                     }
                 }
                 
@@ -697,6 +705,7 @@ class EntHist {
             while ($readHE = $resHE->fetch_assoc()) {
                 //get properties from the history where the inactive field has an hour equal the ent_type selected
                 $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND '".$readHE['inactive_on']."' > active_on AND '".$readHE['inactive_on']."'<= inactive_on");
+                
                 //selects a property from properties table where the updated value is smaller than the inactive from the ent_type selected
                 $getProp = $bd->runQuery("SELECT * FROM property WHERE updated_on < '".$readHE['inactive_on']."' AND ent_type_id =".$readHE['ent_type_id']."");
                 $conta = 0;
