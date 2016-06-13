@@ -586,6 +586,7 @@ class EntHist {
      */
     private function helpReturnPrev($id,$bd,$inactive,$idEntHist){
         $getCurrEnt = "SELECT * FROM ent_type WHERE id=".$id;
+        echo "SELECT * FROM ent_type WHERE id=".$id;
         $resCurrEnt = $bd->runQuery($getCurrEnt);
         if($resCurrEnt)
         {
@@ -593,6 +594,7 @@ class EntHist {
            $readCurrEnt = $resCurrEnt->fetch_assoc();
            if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "','" . $readCurrEnt['state'] . "','" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
            {
+               $bd->runQuery("UPDATE ent_type SET updated_on='".$inactive."'");
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
                 
                 $getEntHist = $bd->runQuery("SELECT * FROM hist_ent_type WHERE id=".$idEntHist)->fetch_assoc();
