@@ -655,7 +655,7 @@ class RelHist{
             while ($prop = $selPropAtual->fetch_assoc()) {
                 $selProp = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel." AND updated_on < '".$inactive."' AND id = ".$prop["id"]);
                 if ($selProp->num_rows == 0) {
-                    $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on > ".$inactive." AND inactive_on <= ".$inactive." AND id = ".$prop["id"]);
+                    $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on > '".$inactive."' AND inactive_on <= '".$inactive."' AND id = ".$prop["id"]);
                     $propHist = $selPropHist->fetch_assoc();
                     $estado = $propHist["state"];
                     $ordem = $propHist["form_field_order"];
