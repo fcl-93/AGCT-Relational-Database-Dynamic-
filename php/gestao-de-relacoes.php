@@ -656,7 +656,7 @@ class RelHist{
                 $selProp = $db->runQuery("SELECT * FROM property WHERE rel_type_id = ".$idRel." AND updated_on < '".$inactive."' AND id = ".$prop["id"]);
                 if ($selProp->num_rows == 0) {
                     echo "SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]."<br>";
-                    $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND id = ".$prop["id"]);
+                    $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]);
                     print_r($selPropHist);
                     $propHist = $selPropHist->fetch_assoc();
                     print_r($propHist);
