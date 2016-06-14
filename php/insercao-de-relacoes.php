@@ -551,7 +551,7 @@ class InsereRelacoes
 ?>
                  <h3>Inserção de Relações - Lista Tipos de relação</h3>
                   <p>Não selecionou uma entidade.</p>
-                  <p>Clique em <?php goBack(); ?></p>
+                  <p>Clique em <?php goBack(); ?> para voltar à página anterior</p>
 <?php
                  exit;
             }
@@ -565,12 +565,6 @@ class InsereRelacoes
                     
                   $_REQUEST['ent'] = substr_replace($this->bd->userInputVal($_REQUEST['ent']),"",0,12);    
                 }
-                
-                
-                
-               
-                //print_r($_REQUEST);
-               
             }
             //after
             $res_EntType = $this->bd->runQuery("SELECT * FROM entity WHERE id=".$this->bd->userInputVal($_REQUEST['ent']));
@@ -595,11 +589,16 @@ class InsereRelacoes
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Tipo de Relacao</th>
+                            <th>Tipo de Relação</th>
                         </tr>
                     </thead>
                     <tbody>
 <?php
+                        if($res_RelTypes->num_rows)
+                        {
+?>
+                            <td colspan="2"> Não existem tipos de relações compativeis com a entidade escolhida</td>
+<?php                        }
                         while($read_RelTypes = $res_RelTypes->fetch_assoc())
                         {
 ?>
@@ -636,13 +635,16 @@ class InsereRelacoes
             if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
             {
                $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']);
-?>
+               
+               echo "SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']; 
+               ?>
                 <html>
                     <form>
                         <table class="table">
                             <thead>
                             <th>Entidades que podem ser associadas</th>
                             <th>Nome da relação</th>
+                            <th>Ação</th>
                             </thead>
                             <tbody>
 <?php
