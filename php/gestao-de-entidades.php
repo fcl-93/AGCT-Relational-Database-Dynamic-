@@ -185,6 +185,9 @@ class Entidade {
                                     <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
                                     <a href="gestao-de-entidades?estado=desativar&ent_id=<?php echo $read_EntType['id']; ?>">[Desativar]</a>
                                     <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a> 
+                                    <br>
+                                    <a href="gestao-de-propriedades?estado=introducao&ent_id=<?php echo $read_EntType['id']; ?>">[Adicionar propriedades]</a>
+                                    <a href="pesquisa-dinamica?estado=execucao&ent=<?php echo $read_EntType['id']; ?>">[Ver instâncias das entidades]</a>
                                 </td>
     <?php
                             } else {
@@ -193,8 +196,11 @@ class Entidade {
                                 <td rowspan="<?php echo $numLinhas;?>">
                                     <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>  
                                     <a href="gestao-de-entidades?estado=ativar&ent_id=<?php echo $read_EntType['id']; ?>">[Ativar]</a>
-                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>  
+                                    <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a><br>  
+                                     <a href="gestao-de-propriedades?estado=introducao&ent_id=<?php echo $read_EntType['id']; ?>">[Adicionar propriedades]</a>
+                            <a href="pesquisa-dinamica?estado=execucao&ent=<?php echo $read_EntType['id']; ?>">[Ver instâncias das entidades]</a>
                                 </td>	
+                                
     <?php
                             }
                         }
