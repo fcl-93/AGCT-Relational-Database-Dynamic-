@@ -636,7 +636,7 @@ class InsereRelacoes
             {
                $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']);
                
-               echo "SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']; 
+               //echo "SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']; 
                ?>
                 <html>
                     <form>
@@ -679,7 +679,10 @@ class InsereRelacoes
                                     }
                                 }
                                 $_SESSION['numEnt2Max'] = $control; 
-?>
+                            if($control == 0)
+                            {?>
+                                <td colspan="3">Não existem entidades que possam ser associadas a entidade selecionada.</td>
+                       <?php}?> 
                             </tbody>
                         </table>
                                 <input type="hidden" name="rel_type" value="<?php echo $sltd_RelType;?>">
@@ -695,6 +698,8 @@ class InsereRelacoes
             else if( $read_CompRel['ent_type2_id'] == $read_InsType['ent_type_id'])
             {
                 $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id  AND rel_type.ent_type1_id=".$read_CompRel['ent_type1_id']);
+                echo "SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type1_id = entity.ent_type_id  AND rel_type.ent_type1_id=".$read_CompRel['ent_type1_id'];
+                
 ?>
                 <html>
                     <form>
@@ -736,6 +741,10 @@ class InsereRelacoes
                                 }
                             }
                             $_SESSION['numEnt2Max'] = $control; 
+                            if($control == 0)
+                            {?>
+                                <td colspan="3">Não existem entidades que possam ser associadas a entidade selecionada.</td>
+                       <?php}
         ?>
                                     </tbody>
                         </table>
