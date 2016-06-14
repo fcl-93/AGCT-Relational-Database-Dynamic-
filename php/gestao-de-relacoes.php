@@ -686,21 +686,21 @@ class RelHist{
                     }  
                 } 
             }
-            if (!$this->verificaInst ($_REQUEST['rel_id'])) 
-            {
-                $db->getMysqli()->rollback();
+//            if (!$this->verificaInst($_REQUEST['rel_id'])) 
+//            {
+//                $db->getMysqli()->rollback();
 ?>
-                <p>Não foi possível reverter o tipo de relação para a versão selecionada</p>
+                <!--<p>Não foi possível reverter o tipo de relação para a versão selecionada</p>-->
 <?php
-                goBack();
-            }
-            else{
+////                goBack();
+//            }
+//            else{
                 $db->getMysqli()->commit();
 ?>
                 <p>Atualizou o tipo de relação com sucesso para uma versão anterior.</p>
                 <p>Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.</p>
 <?php       
-            }
+//            }
         }
         else {
             $db->getMysqli()->rollback();
