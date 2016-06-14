@@ -136,7 +136,7 @@ class Entidade {
 ?>
                         </td>
                         <td>
-                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar]</a>
+                            <a href="gestao-de-entidades?estado=editar&ent_id=<?php echo $read_EntType['id']; ?>">[Editar Tipo de entidade]</a>
 <?php
                             if ($read_EntType['state'] === 'active') {
 ?>
@@ -150,7 +150,9 @@ class Entidade {
 <?php
                             }
 ?>
-                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a>
+                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a><br>
+                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Adicionar propriedades]</a>
+                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Ver instâncias das entidades]</a>
                         </td>
                     </tr>
 <?php
