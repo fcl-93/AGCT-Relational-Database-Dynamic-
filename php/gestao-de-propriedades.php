@@ -1168,7 +1168,7 @@ class PropertyManage
             $val['entity_id'] == ""? $ent_id="NULL" : $ent_id = $val['entity_id']; 
             $val['relation_id'] == ""? $rel_id ="NULL" : $rel_id = $val['relation_id'];  
             $this->db->runQuery("INSERT INTO hist_value (`entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
-                    . "VALUES ('".$ent_id."',".$val['property_id'].",'".$val['value']."','".$val['producer']."',".$rel_id.",".$val['id'].",'".$val['updated_on']."','".$data."','".$val['state']."')");
+                    . "VALUES ('".$ent_id."',".$val['property_id'].",'".$val['value']."','".$val['producer']."',".$rel_id.",".$val['id'].",'".$val['updated_on']."','".$data."','inactive')");
             $this->db->runQuery("UPDATE value SET state = 'inactive',updated_on ='".$data."' WHERE id = ".$val['id']);
         }
     }
@@ -1496,6 +1496,9 @@ class PropHist{
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
             }
+            if ($atributo == "state") {
+                $valor = "inactive";
+            }
             if ($atributo != "id" && !is_null($valor)) {
                 $attr .= "`".$atributo."`,";
                 $val .= "'".$valor."',"; 
@@ -1577,6 +1580,9 @@ class PropHist{
             if ($attr == "updated_on") {
                 $attr = "active_on";
             }
+            if ($attr == "state") {
+                $val = "inactive";
+            }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
                 $valor .= "'".$val."', "; 
@@ -1615,6 +1621,9 @@ class PropHist{
         foreach ($getEnt as $attr => $val) {
             if ($attr == "updated_on") {
                 $attr = "active_on";
+            }
+            if ($attr == "state") {
+                $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
