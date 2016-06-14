@@ -814,11 +814,15 @@ class Search{
      * is composed by other subqueries that are joined together using the IN clause
      */
     private function estadoExecucao() {
-        $tipo = $_SESSION["tipo"];
-        $idEnt = $_SESSION['id'];
+        $idEnt = $_REQUEST['ent'];
         // the number of printed checks equals the $_SESSION['ER'] because the ER retains the number
         // of printed checks inthe ER table types plus all the previous table types
-        $numeroDechecksImpressos = $_SESSION['ER'];
+        if (isset($_SESSION['ER'])) {
+            $numeroDechecksImpressos = $_SESSION['ER'];
+        }
+        else {
+            $numeroDechecksImpressos = 0;
+        }
         // control variables count the number of checkboxes selected by type
         $checkSelected = 0;
         $checkSelectedET = 0;
