@@ -802,36 +802,47 @@ class PropertyManage
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
         if ($_REQUEST['nome_'.$propId] != $getProp["name"]) {
+            echo "#1";
             return true;
         }
         else if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"]) {
+            echo "#2";
             return true;
         }
         else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) {
+            echo "#3";
             return true;
         }
         else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) {
+            echo "#4";
             return true;
         }
         else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
+            echo "#5";
             return true;
         }
         else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
+            echo "#6";
             return true;
         }
         else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
+            echo "#7";
             return true;
         }
         else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
+            echo "#8";
             return true;
         }
         else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
+            echo "#9";
             return true;
         }
         else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+            echo "#10";
             return true;
         }
         else {
+            echo "#11";
 ?>
             <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
 <?php
@@ -923,45 +934,9 @@ class PropertyManage
             if (!$this->checkforChanges($prop['id'])) {
               return false;
             }
-            if($this->checkForValues($prop['id'])) {
-                return false;
-            }
         }
         return true;
         
-    }
-    
-    /**
-     * This method checks if there are already any entities or relations with values for the property the user want to update.
-     * We do this verification only to some fields wich are the ones we think could generate major inconsistencies
-     * @return boolean (true if there are already some entities/relations with values for the property the user want to update)
-     */
-    private function checkForValues ($propId) {
-        $getProp = "SELECT * FROM property WHERE id = ".$propId;
-        $getProp = $this->db->runQuery($getProp)->fetch_assoc();
-        $getValues = "SELECT * FROM value WHERE property_id = ".$propId;
-        $numValues = $this->db->runQuery($getValues)->num_rows;
-        if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"] && $numValues > 0) {
-            return true;
-        }
-        else if (((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) && $numValues > 0) {
-            return true;
-        }
-        else if (((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) && $numValues > 0) {
-            return true;
-        }
-        else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"] && $numValues > 0) {
-            return true;
-        }
-        else if (((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != "NULL") || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) && $numValues > 0) {
-            return true;
-        }
-        else if (((empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != "NULL") || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) && $numValues > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
     
     /**
