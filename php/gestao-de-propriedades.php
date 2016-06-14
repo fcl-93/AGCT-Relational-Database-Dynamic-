@@ -846,6 +846,7 @@ class PropertyManage
         while ($prop = $queryProp->fetch_assoc()) {
             if (empty($_REQUEST["nome_".$prop['id']]))
             {
+                echo $prop['id'];
 ?>
                 <p>Por favor introduza o nome da propriedade.</p><br>
 <?php
