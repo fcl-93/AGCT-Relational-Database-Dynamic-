@@ -809,19 +809,11 @@ class PropertyManage
             echo "#2";
             return true;
         }
-        else if ((empty($getProp["ent_type_id"]) && isset($_REQUEST['entidadePertence_'.$propId])) || (isset($getProp["ent_type_id"]) && $_REQUEST['entidadePertence_'.$propId] != $getProp["ent_type_id"])) {
-            echo "#3";
-            return true;
-        }
-        else if ((empty($getProp["rel_type_id"]) && isset($_REQUEST['relacaoPertence_'.$propId])) || (isset($getProp["rel_type_id"]) && $_REQUEST['relacaoPertence_'.$propId] != $getProp["rel_type_id"])) {
-            echo "#4";
-            return true;
-        }
         else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
             echo "#5";
             return true;
         }
-        else  if ((empty($getProp["unit_type"]) && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
+        else  if (($getProp["unit_type"] == 'NULL' && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
             echo "#6";
             return true;
         }
@@ -837,7 +829,7 @@ class PropertyManage
             echo "#9";
             return true;
         }
-        else if ((empty($getProp["fk_ent_type_id"]) && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+        else if (($getProp["fk_ent_type_id"] == 'NULL' && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
             echo "#10";
             return true;
         }
@@ -1106,45 +1098,7 @@ class PropertyManage
 ?>
                     <label class="error" for="tipoValor_<?php echo $prop['id'];?>"></label>
                     <br>
-<?php
-                        if ($tipo === "entity")
-                        {
-?>
-                            <label>Entidade a que irá pertencer esta propriedade</label><br>
-                            <select id="entidadePertence" name="entidadePertence_<?php echo $prop['id'];?>">
-                                <option></option>
-<?php
-                            $selecionaEntRel = "SELECT name, id FROM ent_type";
-                        }
-                        else
-                        {
-?>
-                            <label>Relação a que irá pertencer esta propriedade</label><br>
-                            <select id="relacaoPertence" name="relacaoPertence_<?php echo $prop['id'];?>">
-                                <option></option>
-<?php
-                            $selecionaEntRel = "SELECT name, id FROM rel_type";
-                        }
-                        $result = $this->db->runQuery($selecionaEntRel);
-                        while($guardaEntRel= $result->fetch_assoc())
-                        {
-                            if($guardaEntRel["name"] === $nomeRelEnt)
-                            {
-?>
-                                <option value="<?php echo $guardaEntRel["id"];?>" selected><?php echo $guardaEntRel["name"];?></option>
-<?php
-                            }
-                            else
-                            {
-?>
-                                <option value="<?php echo $guardaEntRel["id"];?>"><?php echo $guardaEntRel["name"];?></option>
-<?php
-                            }
-                        }
-?>
-                        </select><br><br>
-            <label class="error" for="relacaoPertence_<?php echo $prop['id'];?>"></label><label class="error" for="entidadePertence_<?php echo $prop['id'];?>"></label>
-            <label>Tipo do campo do formulário</label><br>
+                    <label>Tipo do campo do formulário</label><br>
                     <?php
                         $field = 'form_field_type';
                         $table = 'property';
