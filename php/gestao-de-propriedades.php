@@ -813,7 +813,7 @@ class PropertyManage
             echo "#5";
             return true;
         }
-        else  if (($getProp["unit_type"] == 'NULL' && isset($_REQUEST['tipoUnidade_'.$propId])) || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
+        else  if ((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != 'NULL') || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
             echo "#6";
             return true;
         }
@@ -829,7 +829,7 @@ class PropertyManage
             echo "#9";
             return true;
         }
-        else if (($getProp["fk_ent_type_id"] == 'NULL' && isset($_REQUEST['entidadeReferenciada_'.$propId])) || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+        else if ((empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != 'NULL') || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
             echo "#10";
             return true;
         }
