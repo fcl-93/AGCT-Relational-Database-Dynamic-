@@ -143,7 +143,7 @@ class RelationManage
             }
         }
         else
-        {
+        { 
           echo "A relação que está a tentar introduzir já existe.";
           echo "Clique em ".goback()." para voltar a página anterior";
         }
