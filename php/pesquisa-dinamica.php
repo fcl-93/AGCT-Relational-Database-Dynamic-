@@ -446,8 +446,8 @@ class Search{
 <?php
                         $count++;
                     }
-                    $_SESSION['relPropCount'] = $count;
             }
+            $_SESSION['relPropCount'] = $count;
 ?>
 
                     </tbody>
@@ -597,7 +597,6 @@ class Search{
                         </tr>
 <?php
                         }
-                        $_SESSION['vtPropCount'] = $count;
                     }
 ?>
                     </tbody>
@@ -607,6 +606,7 @@ class Search{
 ?>
 <?php
         }
+        $_SESSION['vtPropCount'] = $count;
     }
 
     /**
@@ -740,12 +740,12 @@ class Search{
 <?php
                             $count++;
                         }
-                        $_SESSION['countPrintedProps']= $count;
 ?>
                     </tbody>
                 </table>
 <?php
         }
+        $_SESSION['countPrintedProps']= $count;
     }
 
     /**
