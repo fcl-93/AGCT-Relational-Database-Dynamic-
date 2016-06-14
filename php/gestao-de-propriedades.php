@@ -1205,18 +1205,19 @@ class PropertyManage
                 }
 ?>
                 <label class="error" for="entidadeReferenciada_<?php echo $prop['id'];?>"></label><br>
- <?php       
-        }
-        if (isset($_REQUEST["rel_id"])) {
+ <?php          
+                if (isset($_REQUEST["rel_id"])) {
 ?>
-            <input type="hidden" name="relacaoPertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["rel_id"];?>"><br>
+                    <input type="hidden" name="relacaoPertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["rel_id"];?>"><br>
 <?php
-        }
-        else {
+                }
+                else {
 ?>
-            <input type="hidden" name="entidadePertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["ent_id"];?>"><br>
+                    <input type="hidden" name="entidadePertence_<?php echo $prop['id'];?>" value="<?php echo $_REQUEST["ent_id"];?>"><br>
 <?php
+                }     
         }
+
 ?>
                 <input type="hidden" name="estado" value="update"><br>
                 <input type="submit" value="Editar propriedades">
