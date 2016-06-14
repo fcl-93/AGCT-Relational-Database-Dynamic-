@@ -1243,7 +1243,7 @@ class PropertyManage
         $numProp = $queryProp->num_rows;
         $contaProp = 1;
         while ($prop = $queryProp->fetch_assoc()) {
-            if (!$this->checkforChanges($prop['id'])) {
+            if ($this->checkforChanges($prop['id'])) {
             if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
             {
                 $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence_".$prop['id']];
