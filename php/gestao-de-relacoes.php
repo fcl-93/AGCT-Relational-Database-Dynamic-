@@ -414,7 +414,7 @@ class RelationManage
                 <tr>
                     <td><label>Entidade 1</label></td>
                     <td><label>Entidade 2</label></td>
-                    <td><label>Nome para o tipo de relação*</label></td>
+                    <td><label>Nome para o tipo de relação</label></td>
                 </tr>  
                 <tr>
                     <td>
@@ -440,7 +440,7 @@ class RelationManage
                 <tr>
                     <td> <label class="error" for="ent1"></label><br></td>
                     <td> <label class="error" for="ent2"></label><br> </td>
-                    <td> <label>* Não é obrigatório</label></td>
+                    <td> <label>(Não é obrigatório)</label></td>
                 </tr>
             </table>
            
