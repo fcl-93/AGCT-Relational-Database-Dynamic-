@@ -594,7 +594,7 @@ class InsereRelacoes
                     </thead>
                     <tbody>
 <?php
-                        if($res_RelTypes->num_rows)
+                        if($res_RelTypes->num_rows == 0)
                         {
 ?>
                             <td colspan="2"> Não existem tipos de relações compativeis com a entidade escolhida</td>
@@ -711,8 +711,9 @@ class InsereRelacoes
                                     {
             ?>
                                     <tr>
-                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                        <td><?php echo $read_SecondEnt['entity_name']; ?></td>
                                         <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                        <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
                                     </tr>
             <?php   
                                     }
@@ -722,6 +723,7 @@ class InsereRelacoes
                                         <tr>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
                                             <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
+                                            <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
                                         <tr>
     <?php                                    
 
