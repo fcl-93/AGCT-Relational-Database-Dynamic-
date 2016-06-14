@@ -114,6 +114,7 @@ class RelationManage
     private function estadoInserir() {
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        //Cria um nome para a relação
         if (empty($_REQUEST['nome'])) {
             $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
@@ -122,17 +123,29 @@ class RelationManage
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
-        $insert = $this->db->runQuery($queryInsert);
-        if(!$insert)
+        
+        //Verificar se existe ou não uma relação entre as mesmas entidades.
+        $queryGetNomes = "SELECT * FROM rel_type WHERE ent_type1_id='".$ent1."' AND ent_type2_id='".$ent2."' OR ent_type1_id='".$ent2."' AND ent_type2_id='".$ent1."'";
+        $checkExistRel = $this->db->runQuery($queryGetNomes);        
+        if($checkExistRel->num_rows == 0)
         {
-            echo "Ocorreu um erro ao intoduzir a nova relação.";
-            goBack();
+            $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
+            $insert = $this->db->runQuery($queryInsert);
+            if(!$insert)
+            {
+                echo "Ocorreu um erro ao intoduzir a nova relação.";
+                goBack();
+            }
+            else
+            {
+                echo 'Inseriu os dados de nova relação com sucesso.';
+                echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+            }
         }
         else
         {
-            echo 'Inseriu os dados de nova relação com sucesso.';
-            echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+          echo "A relação que está a tentar introduzir já existe.";
+          echo "Clique em ".goback()." para voltar a página anterior";
         }
     } 
     
