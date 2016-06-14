@@ -822,7 +822,7 @@ class PropertyManage
         else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
             return true;
         }
-        else if ((empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != 'NULL') || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"])) {
+        else if (isset($_REQUEST['entidadeReferenciada_'.$propId]) && ((empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != 'NULL') || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"]))) {
             return true;
         }
         else {
