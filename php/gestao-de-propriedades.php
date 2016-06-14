@@ -1308,7 +1308,10 @@ class PropHist{
         $isEntity = false;
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
-                $atributo = "active_on";
+                $valor = "active_on";
+            }
+            if ($atributo == "state") {
+                $atributo = "inactive";
             }
             if ($atributo != "id" && !is_null($valor)) {
                 $attr .= "`".$atributo."`,";
@@ -1391,6 +1394,9 @@ class PropHist{
             if ($attr == "updated_on") {
                 $attr = "active_on";
             }
+            if ($attr == "state") {
+                $attr = "inactive";
+            }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
                 $valor .= "'".$val."', "; 
@@ -1429,6 +1435,9 @@ class PropHist{
         foreach ($getEnt as $attr => $val) {
             if ($attr == "updated_on") {
                 $attr = "active_on";
+            }
+            if ($attr == "ative") {
+                $attr = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
