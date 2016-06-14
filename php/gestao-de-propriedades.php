@@ -362,7 +362,7 @@ class PropertyManage
                                 if ($controlo === 1) {
 ?>
                                 <td rowspan="<?php echo $numLinhas; ?>">
-                                    <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=editar&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
                                     <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Inserir propriedades]</a>
                                 </td> 
 <?php
