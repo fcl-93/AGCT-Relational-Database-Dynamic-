@@ -114,6 +114,7 @@ class RelationManage
     private function estadoInserir() {
         $ent1 = $this->db->userInputVal($_REQUEST['ent1']);
         $ent2 = $this->db->userInputVal($_REQUEST['ent2']);
+        //Cria um nome para a relação
         if (empty($_REQUEST['nome'])) {
             $queryNome1 = "SELECT name FROM ent_type WHERE id = ".$ent1;
             $queryNome2 = "SELECT name FROM ent_type WHERE id = ".$ent2;
@@ -122,17 +123,29 @@ class RelationManage
         else {
             $nome = $this->db->userInputVal($_REQUEST['nome']);
         }
-        $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
-        $insert = $this->db->runQuery($queryInsert);
-        if(!$insert)
+        
+        //Verificar se existe ou não uma relação entre as mesmas entidades.
+        $queryGetNomes = "SELECT * FROM rel_type WHERE ent_type1_id='".$ent1."' AND ent_type2_id='".$ent2."' OR ent_type1_id='".$ent2."' AND ent_type2_id='".$ent1."'";
+        $checkExistRel = $this->db->runQuery($queryGetNomes);        
+        if($checkExistRel->num_rows == 0)
         {
-            echo "Ocorreu um erro ao intoduzir a nova relação.";
-            goBack();
+            $queryInsert = "INSERT INTO `rel_type`(`name`, `ent_type1_id`, `ent_type2_id`, `updated_on`) VALUES ('".$nome."',".$ent1.",".$ent2.",'".date("Y-m-d H:i:s",time())."')";
+            $insert = $this->db->runQuery($queryInsert);
+            if(!$insert)
+            {
+                echo "Ocorreu um erro ao intoduzir a nova relação.";
+                goBack();
+            }
+            else
+            {
+                echo 'Inseriu os dados de nova relação com sucesso.';
+                echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+            }
         }
         else
-        {
-            echo 'Inseriu os dados de nova relação com sucesso.';
-            echo 'Clique em <a href="/gestao-de-relacoes/">Continuar</a> para avançar.';
+        { 
+          echo "A relação que está a tentar introduzir já existe.";
+          echo "Clique em ".goback()." para voltar a página anterior";
         }
     } 
     
@@ -412,9 +425,9 @@ class RelationManage
         <form id="insertRelation" method="POST" align="center" class="tablegr">
             <table>
                 <tr>
-                    <td><label>Entidade 1</label></td>
-                    <td><label>Entidade 2</label></td>
-                    <td><label>Nome para o tipo de relação*</label></td>
+                    <td><label>Entidade 1*</label></td>
+                    <td><label>Entidade 2*</label></td>
+                    <td><label>Nome para o tipo de relação</label></td>
                 </tr>  
                 <tr>
                     <td>
@@ -440,7 +453,7 @@ class RelationManage
                 <tr>
                     <td> <label class="error" for="ent1"></label><br></td>
                     <td> <label class="error" for="ent2"></label><br> </td>
-                    <td> <label>* Não é obrigatório</label></td>
+                    <td> <label>*Obrigatório</label></td>
                 </tr>
             </table>
            
@@ -518,16 +531,16 @@ class RelationManage
         $getRel = $this->db->runQuery($getRel);
         if ($getRel->num_rows > 0) {
             $rel = $getRel->fetch_assoc();
-            if ($rel["name"] == $_REQUEST["nome"]) {
+//            if ($rel["name"] == $_REQUEST["nome"]) {
 ?>
                 <p>Já existe um tipo de relação com as entidades selecionadas</p>
 <?php
                 goBack();
                 return true;
-            }
-            else {
-                return false;
-            }
+//            }
+//            else {
+//                return false;
+//            }
         }
         else {
             return false;
@@ -771,6 +784,16 @@ class RelHist{
                         <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
                         <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
 <?php
+                    if($numProp == 0)
+                    {
+?>
+                        <td colspan="3"> Não existem propriedades associadas a este tipo de relação</td>
+                        <td rowspan="<?php echo $numProp?>">
+                                    <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                        </td>
+                        </tr>
+<?php
+                    }
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
                         if ($conta == 0) {
