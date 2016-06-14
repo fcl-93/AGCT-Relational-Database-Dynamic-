@@ -1310,6 +1310,16 @@ class InsereRelacoes
         private function createNewRel(){
 ?>
             <h3 align="center">Inserção de Relações - Nova Relação</h3>
+<?php
+            $relType = $this->bd->runQuery("SELECT * FROM rel_type");
+            if ($relType->num_rows == 0) {
+?>
+                <p align="center">Não existem ainda quaisquer tipos de relações, pelo que não pode introduzir qualquer relação.</p>
+                <p align="center">Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
+<?php
+            }
+            else {
+?>
             <form align="center">
                 <label>Entidade 1</label><br>
                 <select id="ent" name="ent">
@@ -1349,10 +1359,8 @@ class InsereRelacoes
             //mandar um ent com o id da propriedade selecionada para o associar
 
             
-        }
-        
-        
-        
+            }
+        }  
 }
 
 /**
