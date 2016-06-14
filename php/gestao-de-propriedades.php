@@ -1230,7 +1230,6 @@ class PropertyManage
      */
     private function estadoUpdate() {
         $data = date("Y-m-d H:i:s",time());
-        $last = false;
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
@@ -1245,9 +1244,6 @@ class PropertyManage
         $contaProp = 1;
         while ($prop = $queryProp->fetch_assoc()) {
             if (!$this->checkforChanges($prop['id'])) {
-            if ($contaProp === $numProp) {
-                $last = true;
-            }
             if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
             {
                 $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence_".$prop['id']];
