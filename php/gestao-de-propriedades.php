@@ -990,6 +990,38 @@ class PropertyManage
         $queryProp = $this->db->runQuery($queryProp);
         $changes = array();
         while ($prop = $queryProp->fetch_assoc()) {
+            if (empty($_REQUEST["nome_".$prop['id']]))
+            {
+?>
+                <p>Por favor introduza o nome da propriedade.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["tipoValor_".$prop['id']]))
+            {
+?>
+                <p>Por favor selecione um tipo de valor para a sua entidade.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["tipoCampo_".$prop['id']]))
+            {
+?>
+                <p>Por favor selecione um tipo do campo do formulário.</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            if (empty($_REQUEST["obrigatorio_".$prop['id']]))
+            {
+?>
+                <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
+<?php
+                goBack();;
+                return false;
+            }
             if(!is_numeric($_REQUEST["ordem_".$prop['id']]) || empty($_REQUEST["ordem_".$prop['id']]))
             {
 ?>
@@ -1006,6 +1038,25 @@ class PropertyManage
                 goBack();
                 return false;
             }
+            if(($_REQUEST["tipoCampo_".$prop['id']] === "text") && (!is_numeric($_REQUEST["tamanho_".$prop['id']]) || empty($_REQUEST["tamanho_".$prop['id']])))
+            {
+?>
+                <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com valores numéricos
+                    uma vez que indicou que o Tipo do campo do formulário era text</p><br>
+<?php
+                goBack();
+                return false;
+            }
+            // preg_match serve para verificar se o valor introduzido está no formato aaxbb onde aa e bb são números de 0 a 9
+            if(($_REQUEST["tipoCampo_".$prop['id']] === "textbox") && ((preg_match("/[0-9]{2}x[0-9]{2}/", $_REQUEST["tamanho_".$prop['id']]) === 0) || empty($_REQUEST["tamanho_".$prop['id']])))
+            {
+?>
+                <p>ERRO! O campo Tamanho do campo no formulário deve ser preenchido com o seguinte formato
+                    aaxbb em que aa é o número de colunas e bb o número de linhas da caixa de texto</p><br>
+<?php
+                goBack();
+                return false;
+            }
             if (!$this->checkforChanges($prop['id'])) {
               array_push($changes,false);
             }
@@ -1018,10 +1069,6 @@ class PropertyManage
                 return true;   
             }
         }
-?>
-        <p>Não pode efetuar a atualização pretendida uma vez que já existem entidades/relações com valores atribuídos para essa propriedade.</p>
-<?php
-        goBack();
         return false;
     }
     
