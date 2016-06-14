@@ -1030,7 +1030,6 @@ class Search{
         // if anything was selected all we need to do is to present all the entities of the selected type
         if($checkSelected == 0)
         {
-            echo "não selecionei nada id ent: ".$idEnt;
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         else {
