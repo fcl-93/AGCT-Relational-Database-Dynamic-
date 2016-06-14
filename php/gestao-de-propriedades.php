@@ -1196,7 +1196,7 @@ class PropertyManage
         $erro = false;
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
+            $queryProp = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel_id"];
             $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $data);
         }
         else {
