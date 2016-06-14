@@ -151,8 +151,8 @@ class Entidade {
                             }
 ?>
                             <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Histórico]</a><br>
-                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Adicionar propriedades]</a>
-                            <a href="gestao-de-entidades?estado=historico&ent_id=<?php echo $read_EntType['id']; ?>">[Ver instâncias das entidades]</a>
+                            <a href="gestao-de-propriedades?estado=introducao&ent_id=<?php echo $read_EntType['id']; ?>">[Adicionar propriedades]</a>
+                            <a href="pesquisa-dinamica?estado=execucao&ent=<?php echo $read_EntType['id']; ?>">[Ver instâncias das entidades]</a>
                         </td>
                     </tr>
 <?php
