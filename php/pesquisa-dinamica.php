@@ -1639,11 +1639,11 @@ class Search{
 ?>
             <tr>
 <?php
-                    $getEntName = "SELECT * FROM entity WHERE id = ".$instancias['id'];
+                    $getEnt = "SELECT * FROM entity WHERE id = ".$instancias['id'];
                     //$getValues = "SELECT * FROM value WHERE entity_id=".$instancias['id']." ORDER BY property_id ASC";
                     $getValues = "SELECT *, v.state as ValueState FROM property as p, value as v WHERE v.property_id = p.id AND v.entity_id =".$instancias['id'];
                     $getValues = $this->bd->runQuery($getValues);
-                    if ($this->bd->runQuery($getEntName)->num_rows == 0) {
+                    if ($this->bd->runQuery($getEnt)->num_rows == 0) {
 ?>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
@@ -1653,7 +1653,7 @@ class Search{
 <?php
                     }
                     else {
-                        $entity = $this->bd->runQuery($getEntName)->fetch_assoc();
+                        $entity = $this->bd->runQuery($getEnt)->fetch_assoc();
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
@@ -1675,19 +1675,20 @@ class Search{
 <?php
                         }
                     }
+                    $entity = $this->bd->runQuery($getEnt)->fetch_assoc();
 ?>
-                        <td rowspan="<?php echo $getValues->num_rows;?>">
+                    <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
-                           if($instancias['state'] == 'active')
-                           {
-                               echo 'Ativo';
-                           }
-                           else
-                           {
-                               echo 'Inativo';
-                           }
+                       if($entity['state'] == 'active')
+                       {
+                           echo 'Ativo';
+                       }
+                       else
+                       {
+                           echo 'Inativo';
+                       }
 ?>
-                        </td>
+                    </td>
 <?php
         $first = true;
         while($readVals = $getValues->fetch_assoc()){
