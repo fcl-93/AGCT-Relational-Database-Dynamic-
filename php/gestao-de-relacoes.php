@@ -531,16 +531,16 @@ class RelationManage
         $getRel = $this->db->runQuery($getRel);
         if ($getRel->num_rows > 0) {
             $rel = $getRel->fetch_assoc();
-            if ($rel["name"] == $_REQUEST["nome"]) {
+//            if ($rel["name"] == $_REQUEST["nome"]) {
 ?>
                 <p>Já existe um tipo de relação com as entidades selecionadas</p>
 <?php
                 goBack();
                 return true;
-            }
-            else {
-                return false;
-            }
+//            }
+//            else {
+//                return false;
+//            }
         }
         else {
             return false;
