@@ -1209,12 +1209,12 @@ class PropertyManage
         }
         if (isset($_REQUEST["rel_id"])) {
 ?>
-            <input type="hidden" name="rel_id" value="<?php echo $_REQUEST["rel_id"];?>"><br>
+            <input type="hidden" name="relacaoPertence" value="<?php echo $_REQUEST["rel_id"];?>"><br>
 <?php
         }
         else {
 ?>
-            <input type="hidden" name="ent_id" value="<?php echo $_REQUEST["ent_id"];?>"><br>
+            <input type="hidden" name="entidadePertence" value="<?php echo $_REQUEST["ent_id"];?>"><br>
 <?php
         }
 ?>
