@@ -362,7 +362,7 @@ class PropertyManage
                                 if ($controlo === 1) {
 ?>
                                 <td rowspan="<?php echo $numLinhas; ?>">
-                                    <a href="gestao-de-propriedade?estado=editar&erel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
+                                    <a href="gestao-de-propriedade?estado=editar&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Editar propriedades]</a>
                                     <a href="gestao-de-propriedade?estado=introducao&rel_id=<?php echo $arraySelec['rel_type_id'];?>">[Inserir propriedades]</a>
                                 </td> 
 <?php
@@ -836,7 +836,7 @@ class PropertyManage
      */
     private function validaEdicoes() {
         if (isset($_REQUEST["rel_id"])) {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
+            $queryProp = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel_id"];
         }
         else {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
@@ -949,14 +949,9 @@ class PropertyManage
         else {
             $queryUpdate = "UPDATE property SET state=";
             if ($_REQUEST["estado"] === "desativar") {
-                if ($this->verificaValue ($_REQUEST['prop_id'])) {
-                    goBack();
-                }
-                else {
-                    $queryUpdate .= "'inactive'";
-                    $estado = "desativada";
-                    $avanca = true;
-                }
+                $queryUpdate .= "'inactive'";
+                $estado = "desativada";
+                $avanca = true;
             }
             else {
                 $queryUpdate .= "'active'";
@@ -983,39 +978,7 @@ class PropertyManage
         }
         
     }
-    
-    /**
-     * This method verifies if there is any value for the selected property
-     * @param type $idProp (id of the property we want to check)
-     * @return boolean (true if already exists)
-     */
-    private function verificaValue ($idProp) {
-        $queryProp = "SELECT * FROM property WHERE id = ".$idProp;
-        $queryProp = $this->db->runQuery($queryProp);
-        $prop = $queryProp->fetch_assoc();
-        $queryCheck = "SELECT * FROM value WHERE state = 'active' AND property_id = ".$idProp;
-        $queryCheck = $this->db->runQuery($queryCheck);
-        if ($queryCheck->num_rows > 0) {
-            if (isset($prop["ent_type_id"])) {
-?>
-                <p>Não pode desativar esta propriedade, uma vez que já existem entidades com valores para essas propriedades.</p>
-                <p>Necessita de desativar estas propriedades nessas entidades antes de desativar esta propriedade.</p>
-                <p>Para fazê-lo deve dirigir-se à página <a href = "/pesquisa-dinamica?estado=execucao&ent=<?php echo $prop["ent_type_id"]?>">Pesquisa dinâmica</a></p>
-<?php
-            }
-            else {
-?>
-                <p>Não pode desativar esta propriedade, uma vez que já existem relações com valores para essas propriedades.</p>
-                <p>Necessita de desativar estas propriedades nessas relações antes de desativar esta propriedade.</p>
-                <p>Para fazê-lo deve dirigir-se à página <a href = "/insercao-de-relacoes">Inserção de Relações</a></p>
-<?php
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+
     
     /**
      * This method presents the form that users must fill to update properties.
@@ -1027,7 +990,7 @@ class PropertyManage
         <form id="editProp" method="POST">
 <?php
         if (isset($_REQUEST["rel_id"])) {
-            $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
+            $queryProp = "SELECT * FROM property WHERE rel_type_id = ".$_REQUEST["rel_id"];
         }
         else {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
