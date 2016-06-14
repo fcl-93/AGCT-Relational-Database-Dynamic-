@@ -784,6 +784,13 @@ class RelHist{
                         <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type1_id"]);?></td>
                         <td rowspan="<?php echo $numProp?>"><?php echo $db->getEntityName($hist["ent_type2_id"]);?></td>
 <?php
+                    if($numProp == 0)
+                    {
+?>
+                        <td colspan="4"> Não existem propriedades associadas a este tipo de relação</td>
+                        </tr>
+<?php
+                    }
                     $conta=0;
                     while ($prop = $selProp->fetch_assoc()) {
                         if ($conta == 0) {
