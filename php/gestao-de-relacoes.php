@@ -787,7 +787,10 @@ class RelHist{
                     if($numProp == 0)
                     {
 ?>
-                        <td colspan="4"> Não existem propriedades associadas a este tipo de relação</td>
+                        <td colspan="3"> Não existem propriedades associadas a este tipo de relação</td>
+                        <td rowspan="<?php echo $numProp?>">
+                                    <a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&rel_id=<?php echo $idRel;?>">Voltar para esta versão</a>
+                        </td>
                         </tr>
 <?php
                     }
