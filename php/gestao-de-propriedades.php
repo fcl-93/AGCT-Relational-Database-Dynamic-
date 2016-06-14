@@ -1229,22 +1229,21 @@ class PropertyManage
      * This method executes the necessary update's query to update the values inserted in the database
      */
     private function estadoUpdate() {
-        $last = false;
+        $data = date("Y-m-d H:i:s",time());
         echo '<h3>Gestão de propriedades - Atualização</h3>';
         if (isset($_REQUEST["rel_id"])) {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["rel_id"];
+            $this->gereHist->createNewRel($_REQUEST["rel_id"], $this->db, $data);
         }
         else {
             $queryProp = "SELECT * FROM property WHERE ent_type_id = ".$_REQUEST["ent_id"];
+            $this->gereHist->createNewEnt($_REQUEST["ent_id"], $this->db, $data);
         }
         $queryProp = $this->db->runQuery($queryProp);
         $numProp = $queryProp->num_rows;
         $contaProp = 1;
-        $data = date("Y-m-d H:i:s",time());
         while ($prop = $queryProp->fetch_assoc()) {
-            if ($contaProp === $numProp) {
-                $last = true;
-            }
+            if ($this->checkforChanges($prop['id'])) {
             if(!empty($_REQUEST["entidadePertence_".$prop['id']]))
             {
                 $entRelQuery = 'SELECT name FROM ent_type WHERE id = '.$_REQUEST["entidadePertence_".$prop['id']];
@@ -1269,7 +1268,7 @@ class PropertyManage
             // Substituimos todos pos espaços por underscore
             $nomeField = str_replace(' ', '_', $nomeField);
             $form_field_name = $entRel.$traco.$idProp.$traco.$nomeField;
-        if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],$last) == false) {
+            if ($this->gereHist->atualizaHistorico($this->db,$data,$prop['id'],false) == false) {
 ?>
                 <p>Não foi possível atualizar a propriedade pretendida.</p>
 <?php 
@@ -1311,6 +1310,7 @@ class PropertyManage
                     <p>Clique em <a href="/gestao-de-propriedades/">Continuar</a> para avançar.</p>
 <?php
                 }
+            }
             }
             $contaProp++;
         }
