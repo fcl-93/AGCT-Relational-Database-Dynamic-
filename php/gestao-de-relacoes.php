@@ -355,6 +355,11 @@ class RelationManage
                             <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                             <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
                             <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            
+                            <a href="gestao-de-propriedades?estado=introducao&rel_id=<?php echo $rel["id"];?>">[Adicionar Propriedades]</a>
+                            <a href="gestao-de-propriedades?estado=editar&rel_id=<?php echo $rel["id"];?>">[Editar Propriedades]</a>
+                            <a href="insercao-de-relacoes?rel_id=<?php echo $rel["id"];?>">[Verificar instâncias]</a>
+                            
                         </td>
 <?php
                     }
@@ -366,6 +371,10 @@ class RelationManage
                             <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                             <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
                             <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                            
+                            <a href="gestao-de-propriedades?estado=introducao&rel_id=<?php echo $rel["id"];?>">[Adicionar Propriedades]</a>
+                            <a href="gestao-de-propriedades?estado=editar&rel_id=<?php echo $rel["id"];?>">[Editar Propriedades]</a>
+                            <a href="insercao-de-relacoes?rel_id=<?php echo $rel["id"];?>">[Verificar instâncias]</a>
                         </td>
 <?php
                     }
@@ -385,6 +394,9 @@ class RelationManage
                                 <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                                 <a href="?estado=desativar&rel_id=<?php echo $rel['id'];?>">[Desativar]</a>
                                 <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                                <a href="gestao-de-propriedades?estado=introducao&rel_id=<?php echo $rel["id"];?>">[Adicionar Propriedades]</a>
+                                <a href="gestao-de-propriedades?estado=editar&rel_id=<?php echo $rel["id"];?>">[Editar Propriedades]</a>
+                                <a href="insercao-de-relacoes?rel_id=<?php echo $rel["id"];?>">[Verificar instâncias]</a>
                             </td>
 <?php
                         }
@@ -396,6 +408,9 @@ class RelationManage
                                 <a href="?estado=editar&rel_id=<?php echo $rel['id'];?>">[Editar]</a>  
                                 <a href="?estado=ativar&rel_id=<?php echo $rel['id'];?>">[Ativar]</a>
                                 <a href="?estado=historico&id=<?php echo $rel["id"];?>">[Histórico]</a>
+                                <a href="gestao-de-propriedades?estado=introducao&rel_id=<?php echo $rel["id"];?>">[Adicionar Propriedades]</a>
+                                <a href="gestao-de-propriedades?estado=editar&rel_id=<?php echo $rel["id"];?>">[Editar Propriedades]</a>
+                                <a href="insercao-de-relacoes?rel_id=<?php echo $rel["id"];?>">[Verificar instâncias]</a>
                             </td>
 <?php
                         }
