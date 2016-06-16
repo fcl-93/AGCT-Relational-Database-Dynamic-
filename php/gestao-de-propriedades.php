@@ -801,31 +801,41 @@ class PropertyManage
         
         $getProp = "SELECT * FROM property WHERE id = ".$propId;
         $getProp = $this->db->runQuery($getProp)->fetch_assoc();
+        echo $propId;
         if ($_REQUEST['nome_'.$propId] != $getProp["name"]) {
+            echo "#1";
             return true;
         }
         else if ($_REQUEST['tipoValor_'.$propId] != $getProp["value_type"]) {
+            echo "#2";
             return true;
         }
         else if ($_REQUEST['tipoCampo_'.$propId] != $getProp["form_field_type"]) {
+            echo "#3";
             return true;
         }
         else  if ((empty($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != 'NULL') || (isset($getProp["unit_type"]) && $_REQUEST['tipoUnidade_'.$propId] != $getProp["unit_type"])) {
+            echo "#4";
             return true;
         }
         else if ($_REQUEST['ordem_'.$propId] != $getProp["form_field_order"]) {
+            echo "#5";
             return true;
         }
         else if ($_REQUEST['tamanho_'.$propId] != $getProp["form_field_size"]) {
+            echo "#6";
             return true;
         }
         else if ($_REQUEST['obrigatorio_'.$propId] != $getProp["mandatory"]) {
+            echo "#7";
             return true;
         }
         else if (isset($_REQUEST['entidadeReferenciada_'.$propId]) && ((empty($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != 'NULL') || (isset($getProp["fk_ent_type_id"]) && $_REQUEST['entidadeReferenciada_'.$propId] != $getProp["fk_ent_type_id"]))) {
+            echo "#8";
             return true;
         }
         else {
+            echo "#9";
             return false;
         }
     }
