@@ -221,10 +221,17 @@ class InsereRelacoes
 <?php
                                                 if($readRelations['state'] == 'active')
                                                 {
-?>       
+                                                    $getRel = $db->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']."AND updated_on >".$readRelations['inactive_on']);
+?>                                                  
+                                             
                                                         <td>Ativo </td>
                                                         <td>
+<?php
+                                                            if($getRel->num_rows > 0){
+?>
                                                             <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
+<?php                                                       }
+?>
                                                             <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
                                                             <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
 							</td>
@@ -235,7 +242,15 @@ class InsereRelacoes
 ?>
                                                     <td>Inativo</td>
                                                     <td>
+<?php
+                                                            if($getRel->num_rows > 0){
+?>
+                               
                                                         <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
+<?php
+
+                                                            }
+?>
                                                         <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
                                                         <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
                                                    </td>
@@ -1466,14 +1481,14 @@ class RelHist{
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Ativação</th>
-                    <th>Data de Desativação</th>
+                    <th>Data de Início</th>
+                    <th>Data de FIm</th>
                     <th>Tipo de Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
                     <th>Propriedade</th>
                     <th>Valor</th>
-                    <th>Estado</th>
+                    <th>Estado da Relação</th>
                     <th>Ação</th>
                 </tr>
             </thead>
