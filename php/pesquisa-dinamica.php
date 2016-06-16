@@ -2226,7 +2226,7 @@ $first = false;
                             {
                                $this->bd->getMysqli()->rollback();
                             }
-                            else if (!$this->bd->runQuery("UPDATE `value` SET state = 'inactive', update_on = ".$updated_on." WHERE id = ".$readVals['id'])) {
+                            else if (!$this->bd->runQuery("UPDATE `value` SET state = 'inactive', update_on = '".$updated_on."' WHERE id = ".$readVals['id'])) {
                                 $this->bd->getMysqli()->rollback();
                             }
                         }
@@ -2236,7 +2236,7 @@ $first = false;
                             {
                                 $this->bd->getMysqli()->rollback();
                             }
-                            else if (!$this->bd->runQuery("UPDATE `value` SET state = 'inactive', update_on = ".$updated_on." WHERE id = ".$readVals['id'])) {
+                            else if (!$this->bd->runQuery("UPDATE `value` SET state = 'inactive', update_on = '".$updated_on."' WHERE id = ".$readVals['id'])) {
                                 $this->bd->getMysqli()->rollback();
                             }
                         }
