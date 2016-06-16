@@ -1395,7 +1395,7 @@ class PropHist{
                 $attr = "active_on";
             }
             if ($attr == "state") {
-                $attr = "inactive";
+                $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
@@ -1437,7 +1437,7 @@ class PropHist{
                 $attr = "active_on";
             }
             if ($attr == "ative") {
-                $attr = "inactive";
+                $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
@@ -1454,7 +1454,6 @@ class PropHist{
         }
         else {
             $updateRel = "UPDATE rel_type SET updated_on = '".$data."'";
-            echo $updateRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
                 $db->getMysqli()->rollback();
