@@ -1728,11 +1728,18 @@ class Search{
                         ?></td>
 <?php
                     if($first == true){
+                        $ent = $this->bd->runQuery("SELECT updated_on, ent_type_id FROM entity WHERE id = ".entity_id);
+                        $ent = $ent->fetch_assoc();
+                        
+                        $selCurrVersion = $this->bd->runQuery("SELECT updated_on FROM ent_type WHERE id = ".$ent['ent_type_id']);
+                        $selCurrVersion = $selCurrVersion->fetch_assoc();
+                        if (strtotime($ent['updated_on']) >= strtotime($selCurrVersion['updated_on'])) {
 ?>
                 <td rowspan="<?php echo $getValues->num_rows;?>">
                      <a href="?estado=apresentacao&id=<?php echo $entity_id;?>">[Inserir/Editar Valores das Propriedades da Instância da Entidade]</a>
 
 <?php
+                        }
 
                     $readState = $this->bd->runQuery("SELECT state FROM entity WHERE id=".$entity_id)->fetch_assoc();
                     if($readState['state'] == "active")
