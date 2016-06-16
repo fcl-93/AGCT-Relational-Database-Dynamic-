@@ -636,7 +636,7 @@ class EntHist {
                             
                             
                             //$bd->runQuery("UPDATE property SET state='active', ,rel_type_id='".$rel."',ent_type_id='".$getHist['ent_type_id']."' ,name='".$getHist['name']."', updated_on='".$inactive."', form_field_order='".$getHist['form_field_order']."' WHERE id=".$prop['id']);
-                            $bd->runQuery("UPDATE `property` SET `name`='".$getHist['name']."',`ent_type_id`='".$getHist['ent_type_id']."',`rel_type_id`='".$rel."',`value_type`='".$getHist['value_type']."',`form_field_name`='".$getHist['form_field_name']."',`form_field_type`='".$getHist['form_field_type']."',`unit_type_id`=".$unit.",`form_field_order`='".$getHist['form_field_order']."',`mandatory`='".$getHist['mandatory']."',`state`='".$getHist['state']."',`fk_ent_type_id`=".$fk_ent.",`form_field_size`='".$f_sz."',`updated_on`='".$inactive."' WHERE id=".$prop['id']."");
+                            $bd->runQuery("UPDATE `property` SET `name`='".$getHist['name']."',`ent_type_id`='".$getHist['ent_type_id']."',`rel_type_id`='".$rel.",`value_type`='".$getHist['value_type']."',`form_field_name`='".$getHist['form_field_name']."',`form_field_type`='".$getHist['form_field_type']."',`unit_type_id`=".$unit.",`form_field_order`='".$getHist['form_field_order']."',`mandatory`='".$getHist['mandatory']."',`state`='".$getHist['state']."',`fk_ent_type_id`=".$fk_ent.",`form_field_size`='".$f_sz."',`updated_on`='".$inactive."' WHERE id=".$prop['id']."");
                         }
                         
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
@@ -645,7 +645,7 @@ class EntHist {
                         $prop['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $prop['fk_ent_type_id'];
 
                         $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
-                                . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','inactive',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
+                                . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",".$rel.",'".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','inactive',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
                         
                         if(!$bd->runQuery($query))
                         {
