@@ -1308,10 +1308,10 @@ class PropHist{
         $isEntity = false;
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
-                $valor = "active_on";
+                $atributo = "active_on";
             }
             if ($atributo == "state") {
-                $atributo = "inactive";
+                $valor = "inactive";
             }
             if ($atributo != "id" && !is_null($valor)) {
                 $attr .= "`".$atributo."`,";
@@ -1395,7 +1395,7 @@ class PropHist{
                 $attr = "active_on";
             }
             if ($attr == "state") {
-                $attr = "inactive";
+                $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
@@ -1436,8 +1436,8 @@ class PropHist{
             if ($attr == "updated_on") {
                 $attr = "active_on";
             }
-            if ($attr == "ative") {
-                $attr = "inactive";
+            if ($attr == "state") {
+                $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
                 $atributo .= "".$attr.", ";
@@ -1454,7 +1454,6 @@ class PropHist{
         }
         else {
             $updateRel = "UPDATE rel_type SET updated_on = '".$data."'";
-            echo $updateRel;
             $updateRel =$db->runQuery($updateRel);
             if (!$updateRel) {
                 $db->getMysqli()->rollback();
