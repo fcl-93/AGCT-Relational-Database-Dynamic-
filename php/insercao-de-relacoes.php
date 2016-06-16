@@ -950,7 +950,11 @@ class InsereRelacoes
             {
                 if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'inactive' WHERE id=".$idRel))
                 {
-                    
+                    $queryDisVal = "SELECT * FROM value WHERE relation_id=".$idRel."";
+                    $runDis = $this->bd->runQuery($queryDisVal);
+                    while($disableVal = $runDis->fetch_assoc()){
+                        $this->bd->runQuery("UPDATE value SET state=inactive WHERE id=".$disableVal['id']);
+                    }
 ?>
                     <html>
                         <p>A relação foi desativada.</p>
