@@ -616,7 +616,7 @@ class EntHist {
                             $getAllHist = "SELECT * FROM hist_property WHERE property_id=".$prop['id']." AND inactive_on='".$getEntHist['inactive_on']."'";
                             $resGetHist = $bd->runQuery($getAllHist);
                             $getHist = $resGetHist->fetch_assoc();
-                            $bd->runQuery("UPDATE property SET state='".$getHist['state']."', updated_on='".$inactive."', form_field_order='".$getHist['form_field_order']."' WHERE id=".$prop['id']);
+                            $bd->runQuery("UPDATE property SET state='active', updated_on='".$inactive."', form_field_order='".$getHist['form_field_order']."' WHERE id=".$prop['id']);
                             
                         }
                         
