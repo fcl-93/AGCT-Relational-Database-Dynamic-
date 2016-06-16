@@ -515,26 +515,11 @@ class EntHist {
         //create a copy in the history table  
         $inactive = date("Y-m-d H:i:s", time());
         echo $inactive;
-        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','" . $read_getEntTp['state'] . "','" .$read_getEntTp['updated_on']. "','" . $inactive . "'," . $id . ")")) {
+        if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "',inactive,'" .$read_getEntTp['updated_on']. "','" . $inactive . "'," . $id . ")")) {
            $bd->runQuery("UPDATE ent_type SET updated_on='" .$inactive. "' WHERE id =" . $id);
            
            $error = false;
-//           $saveProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
-//           $error = false;
-//           while($prop = $saveProps->fetch_assoc()){
-//               $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
-//               $prop['unit_type_id'] == "" ? $unit = "NULL" : $unit = $prop['unit_type_id'];
-//               $prop['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $prop['form_field_size'];
-//               $prop['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $prop['fk_ent_type_id'];
-//               
-//               $query = "INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) "
-//                       . "VALUES (NULL,'".$prop['name']."',".$prop['ent_type_id'].",'".$rel."','".$prop['value_type']."','".$prop['form_field_name']."','".$prop['form_field_type']."',".$unit.",'".$prop['form_field_order']."','".$prop['mandatory']."','".$prop['state']."',".$fk_ent.",'".$f_sz."','".$prop['id']."','".$prop['updated_on']."','".$inactive."')";
-//               //echo $query;*/
-//               if(!$bd->runQuery($query))
-//               {
-//                   $error = true;
-//                   
-//               }
+//           $saveProps = $bd->runQuery 
 //               
 //           }
            return true;
@@ -600,7 +585,7 @@ class EntHist {
         {
            //it always returns one value no need for a while
            $readCurrEnt = $resCurrEnt->fetch_assoc();
-           if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "','" . $readCurrEnt['state'] . "','" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
+           if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "',inactive,'" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
            {
                $bd->runQuery("UPDATE ent_type SET updated_on='".$inactive."'");
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
