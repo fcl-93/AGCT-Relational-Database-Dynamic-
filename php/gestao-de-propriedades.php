@@ -1311,7 +1311,7 @@ class PropHist{
                 $valor = "active_on";
             }
             if ($atributo == "state") {
-                $atributo = "inactive";
+                $valor = "inactive";
             }
             if ($atributo != "id" && !is_null($valor)) {
                 $attr .= "`".$atributo."`,";
@@ -1436,7 +1436,7 @@ class PropHist{
             if ($attr == "updated_on") {
                 $attr = "active_on";
             }
-            if ($attr == "ative") {
+            if ($attr == "state") {
                 $val = "inactive";
             }
             if ($attr != "id" && !is_null($val)) {
