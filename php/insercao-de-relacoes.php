@@ -219,7 +219,7 @@ class InsereRelacoes
 ?>                         
                                              </td>
 <?php
- $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']."AND updated_on >'".$readRelations['inactive_on']."'");
+ $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']."AND updated_on >'".$readRelations['updated_on']."'");
                                                 if($readRelations['state'] == 'active')
                                                 {
                                                    
