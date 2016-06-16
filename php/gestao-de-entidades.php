@@ -607,6 +607,8 @@ class EntHist {
                         //echo "SELECT * FROM property WHERE id=".$prop['id']."<br>";
                         //echo "SELECT * from hist_property WHERE property_id=".$prop['id']."<br>";
                         //echo $checkPropAct->num_rows ." = ". $checkPropHist->num_rows ." ? <br>";
+                        
+                        //Verifica se tenho uma propriedade agora que n esteja no historico
                         if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
                         {
                             $bd->runQuery("UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id']);
@@ -616,8 +618,18 @@ class EntHist {
                             $getAllHist = "SELECT * FROM hist_property WHERE property_id=".$prop['id']." AND inactive_on='".$getEntHist['inactive_on']."'";
                             $resGetHist = $bd->runQuery($getAllHist);
                             $getHist = $resGetHist->fetch_assoc();
-                            $bd->runQuery("UPDATE property SET state='active', updated_on='".$inactive."', form_field_order='".$getHist['form_field_order']."' WHERE id=".$prop['id']);
                             
+                            
+                        $getHist['rel_type_id']==""? $rel = "NULL" : $rel = $getHist['rel_type_id'];
+                        $getHist['unit_type_id'] == "" ? $unit = "NULL" : $unit = $getHist['unit_type_id'];
+                        $getHist['form_field_size'] == "" ? $f_sz = "NULL" : $f_sz = $getHist['form_field_size'];
+                        $getHist['fk_ent_type_id'] == ""? $fk_ent= "NULL" : $fk_ent = $getHist['fk_ent_type_id'];
+                        
+                            
+                            
+                            //$bd->runQuery("UPDATE property SET state='active', ,rel_type_id='".$rel."',ent_type_id='".$getHist['ent_type_id']."' ,name='".$getHist['name']."', updated_on='".$inactive."', form_field_order='".$getHist['form_field_order']."' WHERE id=".$prop['id']);
+                            $bd->runQuery("UPDATE `property` SET `name`='".$getHist['name']."',`ent_type_id`='".$getHist['ent_type_id']."',"
+                        . "`rel_type_id`=".$getHist['rel_type_id'].",`value_type`='".$getHist['value_type']."',`form_field_name`='".$getHist['form_field_name']."',`form_field_type`='".$getHist['form_field_type']."',`unit_type_id`='".$getHist['unit_type_id']."',`form_field_order`='".$getHist['form_field_order']."',`mandatory`='".$getHist['mandatory']."',`state`='".$getHist['state']."',`fk_ent_type_id`='".$getHist['fk_ent_type_id']."',`form_field_size`='".$getHist['form_field_size']."',`updated_on`='".$inactive."' WHERE id=".$prop['id']");
                         }
                         
                         $prop['rel_type_id']==""? $rel = "NULL" : $rel = $prop['rel_type_id'];
