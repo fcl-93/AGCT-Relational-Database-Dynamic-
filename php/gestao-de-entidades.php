@@ -585,7 +585,7 @@ class EntHist {
         {
            //it always returns one value no need for a while
            $readCurrEnt = $resCurrEnt->fetch_assoc();
-           if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "',inactive,'" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
+           if($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $readCurrEnt['name'] . "','inactive','" .$readCurrEnt['updated_on']. "','" . $inactive . "'," . $id . ")")) 
            {
                $bd->runQuery("UPDATE ent_type SET updated_on='".$inactive."'");
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
