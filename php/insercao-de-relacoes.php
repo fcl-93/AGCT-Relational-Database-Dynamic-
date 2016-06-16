@@ -891,6 +891,14 @@ class InsereRelacoes
 	public function activate(){
             
             $idRel = $this->bd->userInputVal($_REQUEST['rel']);
+            $selRel = $this->bd->runQuery("SELECT * FROM relation WHERE id = ".$idRel)->fetch_assoc();
+            $selEnt1 = $selRel['entity1_id'];
+            $selEnt2 = $selRel['entity2_id'];
+            
+            $checkActive1 = $this->bd->runQuery("SELECT * FROM entity WHERE state = 'active' AND id = ".$selEnt1)->num_rows;
+            $checkActive2 = $this->bd->runQuery("SELECT * FROM entity WHERE state = 'active' AND id = ".$selEnt2)->num_rows;
+            
+            if ($checkActive1 > 0 && $checkActive2 > 0){
             if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
                 if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$idRel))
@@ -923,6 +931,13 @@ class InsereRelacoes
                 </html>
 <?php   
             $this->bd->getMysqli()->rollback();
+            }
+            }
+            else {
+?>
+                <p>Não pode ativar esta relação uma vez que uma das suas entidades encontra-se desativada</p>
+                <p>Clique em <?php goBack();?>.</p>
+<?php
             }
         }
         
