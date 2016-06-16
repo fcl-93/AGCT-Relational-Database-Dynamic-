@@ -898,7 +898,7 @@ class InsereRelacoes
             $checkActive1 = $this->bd->runQuery("SELECT * FROM entity WHERE state = 'active' AND id = ".$selEnt1)->num_rows;
             $checkActive2 = $this->bd->runQuery("SELECT * FROM entity WHERE state = 'active' AND id = ".$selEnt2)->num_rows;
             
-            if ($checkActive1 > 0 || $checkActive2 > 0){
+            if ($checkActive1 > 0 && $checkActive2 > 0){
             if( $this->gereInsRel->addHist($idRel,$this->bd))
             {
                 if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'active' WHERE id=".$idRel))
