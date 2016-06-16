@@ -314,7 +314,7 @@ class RelationManage
             <input type="hidden" name="histAll" value="true">
             <input type="submit" value="Apresentar propriedades">
         </form>
-            <table id="sortedTable" class="table">
+            <table  class="table">
             <thead>
                 <tr>
                     <th><span>ID</span></th>
