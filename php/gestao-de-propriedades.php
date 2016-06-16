@@ -1308,7 +1308,7 @@ class PropHist{
         $isEntity = false;
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "updated_on") {
-                $valor = "active_on";
+                $atributo = "active_on";
             }
             if ($atributo == "state") {
                 $valor = "inactive";
