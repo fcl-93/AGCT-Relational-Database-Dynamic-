@@ -1728,7 +1728,7 @@ class Search{
                         ?></td>
 <?php
                     if($first == true){
-                        $ent = $this->bd->runQuery("SELECT updated_on, ent_type_id FROM entity WHERE id = ".entity_id);
+                        $ent = $this->bd->runQuery("SELECT updated_on, ent_type_id FROM entity WHERE id = ".$entity_id);
                         $ent = $ent->fetch_assoc();
                         
                         $selCurrVersion = $this->bd->runQuery("SELECT updated_on FROM ent_type WHERE id = ".$ent['ent_type_id']);
