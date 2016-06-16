@@ -317,14 +317,14 @@ class RelationManage
             <table  class="table">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
-                    <th><span>Nome da Relação</span></th>
-                    <th><span>Entidade 1</span></th>
-                    <th><span>Entidade 2</span></th>
-                    <th><span>Propriedade</span></th>
-                    <th><span>Tipo de Valor</span></th>
-                    <th><span>Estado</span></th>
-                    <th><span>Ação</span></th>
+                    <th>ID</th>
+                    <th>Nome da Relação</th>
+                    <th>Entidade 1</th>
+                    <th>Entidade 2</th>
+                    <th>Propriedade</th>
+                    <th>Tipo de Valor</th>
+                    <th>Estado<th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
