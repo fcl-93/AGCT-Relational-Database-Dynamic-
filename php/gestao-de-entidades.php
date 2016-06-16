@@ -839,7 +839,7 @@ class EntHist {
                    
 
         $selecionaProp = "SELECT * FROM ent_type WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
-    echo $selecionaProp."<br>";
+   //echo $selecionaProp."<br>";
         $querEntTp = $bd->runQuery($selecionaProp);
          while($readEntTP = $querEntTp->fetch_assoc())
          {
