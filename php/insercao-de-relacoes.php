@@ -228,7 +228,7 @@ class InsereRelacoes
                                                         <td>Ativo </td>
                                                         <td>
 <?php
-                                                            if($getRel->num_rows > 0){
+                                                            if($getRel->num_rows == 0){
 ?>
                                                             <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
 <?php                                                       }
@@ -244,7 +244,7 @@ class InsereRelacoes
                                                     <td>Inativo</td>
                                                     <td>
 <?php
-                                                            if($getRel->num_rows > 0){
+                                                            if($getRel->num_rows == 0){
 ?>
                                
                                                         <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
