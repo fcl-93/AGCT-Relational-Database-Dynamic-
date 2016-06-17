@@ -1024,7 +1024,7 @@ class ValPerHist{
                 . "VALUES (".$val."'".$data."',".$idProp.")";
         $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
-            if ($db->runQuery("UPDATE property SET updated_on = '".$data."' WHERE id = ".$idProp)) {
+            if ($bd->runQuery("UPDATE property SET updated_on = '".$data."' WHERE id = ".$idProp)) {
                 return true;
             }
         }
