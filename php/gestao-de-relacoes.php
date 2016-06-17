@@ -323,7 +323,7 @@ class RelationManage
                     <th>Entidade 2</th>
                     <th>Propriedade</th>
                     <th>Tipo de Valor</th>
-                    <th>Estado<th>
+                    <th>Estado</th>
                     <th>Ação</th>
                 </tr>
             </thead>
