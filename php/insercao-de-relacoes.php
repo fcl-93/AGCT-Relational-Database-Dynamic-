@@ -230,7 +230,16 @@ class InsereRelacoes
 <?php
                                                     $getValName = $this->bd->runQuery("SELECT value FROM value WHERE property_id=".$relProps['id']." AND relation_id=".$readRelations['id'])->fetch_assoc();
 ?>
-                                                    <td><?php echo $getValName['value']?></td>
+                                                    <td><?php 
+                                                    if(empty($getValName['value'] ))
+                                                    {
+                                                        echo "Sem valor atribuído";
+                                                    }
+                                                    else
+                                                    {
+                                                        echo $getValName['value'];
+                                                    }
+                                                    ?></td>
 <?php
                                                     if($count == 0)
                                                     {
