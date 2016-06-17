@@ -51,6 +51,14 @@ class Unidade
                                 {
                                     $this->activate();
                                 }
+                                else if($_REQUEST['estado'] == 'editar')
+                                {
+                                    $this->editForm();
+                                }
+                                else if($_REQUEST['estado'] == 'update')
+                                {
+                                    $this->update();
+                                }
                                 else if($_REQUEST['estado'] == 'historico')
                                 {
                                     $this->gereHist->showHist($this->bd);
@@ -131,6 +139,7 @@ class Unidade
 ?>
                                         <td>Ativo</td>
                                         <td>
+                                            <a href="gestao-de-unidades?estado=editar&unit_id=<?php echo $read_Units['id'];?>">[Editar]</a>
                                             <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
                                             <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
                                         </td>
@@ -141,6 +150,7 @@ class Unidade
 ?>
                                         <td>Inativo</td>
                                         <td>
+                                            <a href="gestao-de-unidades?estado=editar&unit_id=<?php echo $read_Units['id'];?>">[Editar]</a>
                                             <a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a>
                                             <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
                                         </td>
@@ -251,37 +261,42 @@ class Unidade
 	 */
 	public function insertFormPrint(){
 ?>
-		<h3 align="center">Gestão de unidades - Introdução</h3>
-			<form id="insertForm" method="post" align="center">
-				<label>Inserir nova unidade:</label> 
-				<br>
-				<input type="text" id ="nome" name="nome"/>
-				<br>
-				<label class="error" for="nome"></label>
-				<br>
-				<input type ="hidden" name ="estado" value ="inserir"/>
-				<input type="submit" name="submit" value ="Inserir tipo de unidade"/>
-			</form>
+            <h3 align="center">Gestão de unidades - Introdução</h3>
+                <form id="insertForm" method="post" align="center">
+                    <label>Inserir nova unidade:</label> 
+                    <br>
+                    <input type="text" id ="nome" name="nome"/>
+                    <br>
+                    <label class="error" for="nome"></label>
+                    <br>
+                    <input type ="hidden" name ="estado" value ="inserir"/>
+                    <input type="submit" name="submit" value ="Inserir tipo de unidade"/>
+                </form>
 <?php 
 	}
 	/**
 	 * Check if the tried yo submit with an empty field.
 	 */
 	public function ssvalidation(){
-		if(empty($_REQUEST['nome']))
-		{
+            if(empty($_REQUEST['nome']))
+            {
 ?>
-			<html>
-				<p>O campo nome é de preenchimento obrigatório.</p>
-			</html>
+                <html>
+                    <p>O campo nome é de preenchimento obrigatório.</p>
+                </html>
 <?php
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+                return false;
+            }
+            $selName = $this->bd->runQuery("SELECT * FROM prop_unit_type WHERE name = '".$this->bd->userInputVal($_REQUEST['nome'])."'");
+            if ($selName->num_rows > 0) {
+?>
+                <p>Já existe uma unidade com o nome introduzido.</p>
+<?php
+                return false;
+            }
+            return true;
 	}
+        
 	/**
 	 * If everything is ok with the input this method will eun the query to insert the user input into the database
 	 */
@@ -308,7 +323,64 @@ class Unidade
 		}
 		
 	}
-	
+        
+        /**
+         * This method presents a form where the user can change the name of the unit
+         */
+        private function editForm() {
+        ?>
+            <h3 align="center">Gestão de unidades - Edição</h3>
+                <form id="insertForm" method="post" align="center">
+                    <label>Novo nome para a Unidade:</label> 
+                    <br>
+                    <input type="text" id ="nome" name="nome"/>
+                    <br>
+                    <label class="error" for="nome"></label>
+                    <br>
+                    <input type ="hidden" name ="estado" value ="update"/>
+                    <input type ="hidden" name ="unit_id" value ="<?php echo $_REQUEST['unit_id']?>"/>
+                    <input type="submit" name="submit" value ="Atualizar tipo de unidade"/>
+                </form>
+<?php
+        }
+        
+        /**
+         * This method updates the unit with the new name
+         */
+        private function update() {
+            if(!$this->ssvalidation())
+            {
+?>
+                <p>Clique em para <?php goBack(); ?></p>
+<?php 
+            }
+            else
+            {
+                $this->gereHist->atualizaHistorico($this->bd);
+                $sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
+                $sanitizedId =  $this->bd->userInputVal($_REQUEST['unit_id']);
+                if ($this->bd->runQuery("UPDATE `prop_unit_type` SET name = '".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId)) {
+                    $this->bd->getMysqli()->commit();
+?>
+                <html>
+                    <h3>Gestão de unidades - Atualização</h3>
+                    <p>Atualizou os dados do novo tipo de unidade com sucesso.</p>
+                    <p>Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.</p>
+                </html>
+<?php 
+                }
+                else {
+                    $this->bd->getMysqli()->rollback();
+?>
+                <html>
+                    <h3>Gestão de unidades - Atualização</h3>
+                    <p>Ocorreu um erro ao atualizar o tipo de entidade.</p>
+                    <p>Clique em <?php goBack();?></p>
+                </html>
+<?php                     
+                }
+            }
+        }
 }
 
 class UnidadeHist
