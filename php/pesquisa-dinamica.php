@@ -3163,7 +3163,93 @@ class entityHist{
      * @param Db_Op $bd (object form the class Db_Op)
      */
     private function histVal($bd) {
-        
+        if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $bd->validaDatas($_REQUEST['data']))){
+?>
+                <form method="GET">
+                                Verificar histórico:<br>
+                                <input type="radio" name="controlDia" value="ate">até ao dia<br>
+                                <input type="radio" name="controlDia" value="aPartir">a partir do dia<br>
+                                <input type="radio" name="controlDia" value="dia">no dia<br>
+                                <input type="text" id="datepicker" class="datepicker" name="data" placeholder="Introduza uma data">
+                                <input type="hidden" name="selData" value="true">
+                                <input type="hidden" name="estado" value="historico">
+                                <input type="hidden" name="ent_id" value="<?php echo $_REQUEST['ent_id']; ?>">
+                                <input type="submit" value="Apresentar histórico">
+                        </form>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data de Início</th>
+                                <th>Data de Fim</th>
+                                <th>Valor</th>
+                                <th>Estado durante o período</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<?php
+                        $id = $bd->userInputVal($_REQUEST['ent_id']);
+                        if (isset($_REQUEST['data'])) {
+                            $data = $bd->userInputVal($_REQUEST['data']);
+                        }
+                        if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
+                        }
+                        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+                        }
+                        else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+
+                        }
+                        else {
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id);
+                        }
+                        if($presetOld->num_rows == 0)
+                        {
+?>
+                            <tr>
+                                    <td colspan="6">Não existe registo referente à entidade selecionada no histórico</td>
+                                    <td><?php goBack(); ?></td>
+                            </tr>
+<?php
+                        }
+                        else
+                        {
+                            while($readHistory = $presetOld->fetch_assoc()){
+                                //echo "SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC";
+                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC");
+?>
+                                <tr>
+                                    <td><?php echo $readHistory['active_on']?></td>
+                                    <td><?php echo $readHistory['inactive_on']?></td>
+                                    <td><?php echo $readHistory['value']?></td>
+
+
+<?php
+                                       if($readHistory['state'] == 'inactive')
+                                       {
+?>
+                                        <td><?php echo "Inativo"?></td>
+<?php
+                                       }
+                                       else
+                                       {
+?>
+                                         <td><?php echo "Ativo"?></td>
+<?php
+                                       }
+?>
+                                          <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                        </tr><?php
+                            }
+                                     
+                        }
+?>
+                        </tbody>
+                    </table>
+<?php
+        }
     }
 
 }
