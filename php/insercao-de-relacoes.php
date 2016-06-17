@@ -684,7 +684,7 @@ class InsereRelacoes
                     <td><?php echo $getProp['name'] ?></td>
                     <td><?php echo $getProp['value_type'] ?></td>
                     <td><?php echo $rdVal['value'] ?></td>
-                    <td><a href ="?estado=voltar&hist=<?php echo $rdVal["id"];?>;?>">Voltar para esta versão</a></td>
+                    <td><a href="?estado=voltar&hist=<?php echo $rdVal["id"];?>">Voltar para esta versão</a></td>
                     </tr>
 <?php
                 }
