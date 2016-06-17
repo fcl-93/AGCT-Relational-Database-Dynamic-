@@ -2832,11 +2832,11 @@ class entityHist{
                                     echo "<br>SELECT * FROM hist_value WHERE inactive_on >= '".$readHistory["inactive_on"]."' AND active_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id'];
                                     $selVal =$bd->runQuery("SELECT * FROM value WHERE updated_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id']);
                                     $val = $selVal->fetch_assoc();
-                                    echo "val"
+                                    echo "val";
                                     print_r($val);
                                     $selValHist =$bd->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$readHistory["inactive_on"]."' AND active_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id']);
                                     $valHist = $selVal->fetch_assoc();
-                                    echo "hist"
+                                    echo "hist";
                                     print_r($valHist);
                                     if($conta == 0){
 ?>
