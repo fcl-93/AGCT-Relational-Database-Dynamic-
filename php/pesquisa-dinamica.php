@@ -73,6 +73,10 @@ class Search{
                 {
                     $this->gereInsts->changeVersion($this->bd->userInputVal($_REQUEST['histId']),$this->bd);
                 }
+                else if($_REQUEST['estado']=='valueBack')
+                {
+                    $this->gereInsts->changeValueVersion($this->bd->userInputVal($_REQUEST['histId']),$this->bd);
+                }
                 else if($_REQUEST['estado'] == 'novasPropriedadesAdd')
                 {
                     $this->addAttrEnt();
@@ -3251,6 +3255,63 @@ class entityHist{
 <?php
         }
     }
+    
+    /**
+      * Procedes to the version change of a value
+      * hist_entity and hist_value to the value and entity tables.
+      * @param type $id -> id from the entity we want to reactivate
+      * @param type $bd
+      */
+     public function changeVersion($id,$bd){
+         //Get the value we want to reactivate
+        $getHistVal = $bd->runQuery("SELECT * FROM hist_value WHERE id =".$id);
+        $readHistVal = $getHistVal->fetch_assoc();
+        
+        //get the actual entity
+        $getAcVal = $bd->runQuery("SELECT * FROM value WHERE id=".$readHistEnt['value_id']);
+        $readActVal = $getAcVal->fetch_assoc();
+        
+        //backup the current values
+        $bd->getMysqli()->autocommit(false);
+	$bd->getMysqli()->begin_transaction();
+
+        $errorFound = false;
+
+        $updated_on = date("Y-m-d H:i:s",time());
+        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `value`, `entity_id`, `value_id`,`producer`,`property_id`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActVal['value'].",".$readActVal['id'].",'".$readActVal['entity_id']."','".$readActVal['producer']."','".$readActVal['property_id']."','inactive','".$readActVal['updated_on']."','".$updated_on."')"))
+        {
+                echo "#NO BACKUP DA ENTITY";
+                $errorFound = true;
+        }
+        else {
+            //changes the current valuees and entities to the ones that come from the history
+            if(!$bd->runQuery("UPDATE `value` SET `value`='".$readHistVal['value']."',`state`='active',`updated_on`='".$updated_on."' WHERE id=".$readActVal['id'].""))
+            {
+                 echo "#NO UPDATE DA ENTITY";
+                $errorFound = true;
+            }   
+        }
+
+        //Updates if there is no error
+        if($errorFound)
+        {
+?>
+                <p>Ocorreu um erro. Não atualizou a propriedade para uma versão anterior.</p>
+                <p>Clique em <?php goBack() ?> para voltar a página anterior</p>
+<?php
+            $bd->getMysqli()->rollback();
+        }
+        else
+        {
+?>
+                <p>Atualizou a propriedade com sucesso para uma versão anterior.</p>
+                <p>Clique em <a href="/pesquisa-dinamica"/>Continuar</a> para avançar</p>
+<?php
+            $bd->getMysqli()->commit();
+        }
+
+
+     }
 
 }
 
