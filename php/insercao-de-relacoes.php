@@ -655,9 +655,10 @@ class InsereRelacoes
          */
         public function histVal(){
             $queruGetVals = "SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['rel']);
+            echo $queruGetVals;
             $runVals = $this->bd->runQuery($queruGetVals);
 ?>
-            <table>
+            <table class="table">
                 <thead>
                     <th>Data Início</th>
                     <th>Data Fim </th>
