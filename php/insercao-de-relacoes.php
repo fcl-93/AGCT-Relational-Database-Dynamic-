@@ -86,6 +86,10 @@ class InsereRelacoes
                     {
                         $this->desactivateVal();
                     }
+                    else if($_REQUEST['estado'] == 'histVal')
+                    {
+                        $this->histVal();
+                    }
                 }
                 else
                 {
@@ -614,6 +618,7 @@ class InsereRelacoes
 ?>       
                                     <td>
                                         <a href="insercao-de-relacoes?estado=desativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Desativar]</a>
+                                        <a href="insercao-de-relacoes?estado=histVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Histórico]</a>
                                     </td>
 <?php
                                 } 
@@ -622,6 +627,7 @@ class InsereRelacoes
 ?>
                                     <td>
                                         <a href="insercao-de-relacoes?estado=ativarVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Ativar]</a>
+                                        <a href="insercao-de-relacoes?estado=histVal&rel=<?php echo $_REQUEST['rel'];?>&val=<?php echo $read_GetPropRel['id'];?>">[Histórico]</a>
                                    </td>
 <?php   
                                 }
@@ -642,6 +648,43 @@ class InsereRelacoes
                 </form>
            </html>
 <?php                    
+        }
+        
+        /**
+         * Get all the value of a relation from the history and prints them.
+         */
+        public function histVal(){
+            $queruGetVals = "SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['rel']);
+            $runVals = $this->bd->runQuery($queruGetVals);
+?>
+            <table>
+                <thead>
+                    <th>Data Início</th>
+                    <th>Data Fim </th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Ação</th>
+                </thead>
+                <tbody>
+<?php
+                while($rdVal = $runVals->fetch_assoc()){
+?>
+                    <td><?php echo $rdVal['active_on'] ?></td>
+                    <td><?php echo $rdVal['inactive_on'] ?></td>
+<?php
+                    $getProp = $this->bd->runQuery("SELECT * FROM property WHERE id=".$rdVal['property_id'])->fetch_assoc();
+?>  
+                    <td><?php echo $getProp['name'] ?></td>
+                    <td><?php echo $getProp['value_type'] ?></td>
+                    <td><?php echo $rdVal['value'] ?></td>
+                    <td><?php echo "Voltar ATrás"?></td>
+<?php
+                }
+?>
+                </tbody>
+            </table>
+<?php
         }
         
 	/**
