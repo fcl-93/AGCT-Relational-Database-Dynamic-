@@ -2816,9 +2816,9 @@ class entityHist{
                         {
                             $conta = 0;
                             while($readHistory = $presetOld->fetch_assoc()){
-                                $selVal =$db->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
-                                $selValHist =$db->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
-                                $selProp =$db->runQuery("SELECT * FROM property WHERE ent_type_id = ".$readHistory['ent_type_id']);
+                                $selVal =$bd->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
+                                $selValHist =$bd->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
+                                $selProp =$bd->runQuery("SELECT * FROM property WHERE ent_type_id = ".$readHistory['ent_type_id']);
                                 $numProp = $selProp->num_rows;
 ?>
                                 <tr>
@@ -2828,9 +2828,9 @@ class entityHist{
 
 <?php
                                 while ($prop = $selVal->fetch_assoc()) {
-                                    $selVal =$db->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$prop['id']);
+                                    $selVal =$bd->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$prop['id']);
                                     $val = $selVal->fetch_assoc();
-                                    $selValHist =$db->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$prop['id']);
+                                    $selValHist =$bd->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$prop['id']);
                                     $valHist = $selVal->fetch_assoc();
                                     if($conta == 0){
 ?>
