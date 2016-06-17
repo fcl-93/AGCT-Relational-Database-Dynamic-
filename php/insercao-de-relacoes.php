@@ -654,7 +654,7 @@ class InsereRelacoes
          * Get all the value of a relation from the history and prints them.
          */
         public function histVal(){
-            $queruGetVals = "SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['rel']);
+            $queruGetVals = "SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['val']);
             echo $queruGetVals;
             $runVals = $this->bd->runQuery($queruGetVals);
 ?>
