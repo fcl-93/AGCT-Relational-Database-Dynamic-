@@ -838,7 +838,7 @@ class ValPerHist{
                     <td><?php echo $prop["value"];?></td>
                     <td>
 <?php
-                    if ($hist["state"] === "active")
+                    if ($prop["state"] === "active")
                     {
                         echo 'Ativo';
                     }
@@ -879,7 +879,7 @@ class ValPerHist{
                     <td><?php echo $prop["value"];?></td>
                     <td>
 <?php
-                    if ($hist["state"] === "active")
+                    if ($prop["state"] === "active")
                     {
                         echo 'Ativo';
                     }
