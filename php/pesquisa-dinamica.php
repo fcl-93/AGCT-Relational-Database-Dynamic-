@@ -2935,7 +2935,7 @@ class entityHist{
 
 
         //changes the current valuees and entities to the ones that come from the history
-        if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='".$readHistEnt['state']."',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
+        if(!$bd->runQuery("UPDATE `entity` SET `entity_name`='".$readHistEnt['entity_name']."',`state`='active',`updated_on`='".$updated_on."' WHERE id=".$readActENt['id'].""))
         {
              echo "#NO UPDATE DA ENTITY";
             $errorFound = true;
