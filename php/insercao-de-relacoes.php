@@ -697,19 +697,41 @@ class InsereRelacoes
          * This method will make the change in history
          */
         public function trocaComHist(){
+            
+            $bd->getMysqli()->autocommit(false);
+            $bd->getMysqli()->begin_transaction();
             $inactive = date("Y-m-d H:i:s",time());
+            $error = false;
             //Get Vals From hist
             $getNewVal = $this->bd->runQuery("SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['hist']))->fetch_assoc();
             
             $getOldVal = $this->bd->runQuery("SELECT * FROM value WHERE id=".$getNewVal['value_id'])->fetch_assoc();
+            if(empty($getOldVal) || empty($getNewVal) ){
+                $error = true;
+            }
             
             //insert the value in hist_value
-            $this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES "
-                    . "(NULL,NULL,".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactive."','inactive')");
+            if(!$this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES "
+                    . "(NULL,NULL,".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactive."','inactive')")){
+                $error = true;
+                    }
             //atualiza o oficial
-            $this->bd->runQuery("UPDATE `value` SET `value`='".$getNewVal['value']."',`producer`='".$getNewVal['value']."',`updated_on`='".$inactive."',`state`='active' WHERE id=".$getNewVal['value_id']);
+            if(!$this->bd->runQuery("UPDATE `value` SET `value`='".$getNewVal['value']."',`producer`='".$getNewVal['value']."',`updated_on`='".$inactive."',`state`='active' WHERE id=".$getNewVal['value_id'])){
+                $erro = true;
+            }
            
-            
+            if($error == false)
+            {?>
+                <p>A reversão foi bem sucedida.</p>
+                <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
+            <?php
+            }
+            else
+            {?>
+                <p>A reversão não foi concluida com sucesso.</p>
+                 <p>Clique em <?php goBack(); ?>para voltar á página anterior</p>
+<?php
+            }
             
             
             //Get val from  norm.
