@@ -699,9 +699,9 @@ class InsereRelacoes
         public function trocaComHist(){
             
             //Get Vals From hist
-            $getNewVal = $this->bd->runQuery("SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['hist']));
+            $getNewVal = $this->bd->runQuery("SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['hist']))->fetch_assoc();
             
-            $getOldVal = $this->bd->runQuery("SELECT * FROM value WHERE id=".$getNewVal['value_id']);
+            $getOldVal = $this->bd->runQuery("SELECT * FROM value WHERE id=".$getNewVal['value_id'])->fetch_assoc();
             
             //insert the value in hist_value
             $this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES "
