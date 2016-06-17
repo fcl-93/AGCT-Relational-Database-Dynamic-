@@ -3162,7 +3162,7 @@ class entityHist{
      * This method presents to the user rhe history of the selected value.
      * @param Db_Op $bd (object form the class Db_Op)
      */
-    private function histVal($bd) {
+    public function histVal($bd) {
         if (empty($_REQUEST["selData"]) || (!empty($_REQUEST["selData"]) && $bd->validaDatas($_REQUEST['data']))){
 ?>
                 <form method="GET">
