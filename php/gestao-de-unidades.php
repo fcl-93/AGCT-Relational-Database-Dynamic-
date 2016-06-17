@@ -51,6 +51,14 @@ class Unidade
                                 {
                                     $this->activate();
                                 }
+                                else if($_REQUEST['estado'] == 'editar')
+                                {
+                                    $this->editForm();
+                                }
+                                else if($_REQUEST['estado'] == 'update')
+                                {
+                                    $this->update();
+                                }
                                 else if($_REQUEST['estado'] == 'historico')
                                 {
                                     $this->gereHist->showHist($this->bd);
@@ -268,20 +276,25 @@ class Unidade
 	 * Check if the tried yo submit with an empty field.
 	 */
 	public function ssvalidation(){
-		if(empty($_REQUEST['nome']))
-		{
+            if(empty($_REQUEST['nome']))
+            {
 ?>
-			<html>
-				<p>O campo nome é de preenchimento obrigatório.</p>
-			</html>
+                <html>
+                    <p>O campo nome é de preenchimento obrigatório.</p>
+                </html>
 <?php
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+                return false;
+            }
+            $selName = $this->bd->runQuery("SELECT * FROM prop_unit_type WHERE name = ".$this->bd->userInputVal($_REQUEST['nome']));
+            if ($selName->num_rows > 0) {
+?>
+                <p>Já existe uma unidade com o nome introduzido.</p>
+<?php
+                return false;
+            }
+            return true;
 	}
+        
 	/**
 	 * If everything is ok with the input this method will eun the query to insert the user input into the database
 	 */
@@ -308,7 +321,49 @@ class Unidade
 		}
 		
 	}
-	
+        
+        /**
+         * This method presents a form where the user can change the name of the unit
+         */
+        private function editForm() {
+        ?>
+            <h3 align="center">Gestão de unidades - Edição</h3>
+                <form id="insertForm" method="post" align="center">
+                    <label>Novo nome para a Unidade:</label> 
+                    <br>
+                    <input type="text" id ="nome" name="nome"/>
+                    <br>
+                    <label class="error" for="nome"></label>
+                    <br>
+                    <input type ="hidden" name ="estado" value ="update"/>
+                    <input type="submit" name="submit" value ="Atualizar tipo de unidade"/>
+                </form>
+<?php
+        }
+        
+        /**
+         * This method updates the unit with the new name
+         */
+        private function update() {
+            if(!$this->ssvalidation())
+            {
+?>
+                <p>Clique em para <?php goBack(); ?></p>
+<?php 
+            }
+            else
+            {
+                $sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
+                $this->bd->runQuery("UPDATE `prop_unit_type`(`id`, `name`, `updated_on`) VALUES (null,'".$sanitizedName."','".date("Y-m-d H:i:s",time())."')");
+?>
+                <html>
+                    <h3>Gestão de unidades - Atualização</h3>
+                    <p>Atualizou os dados do novo tipo de unidade com sucesso.</p>
+                    <p>Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.</p>
+                </html>
+<?php 
+            }
+        }
 }
 
 class UnidadeHist
