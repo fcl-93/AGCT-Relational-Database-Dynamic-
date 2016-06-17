@@ -501,10 +501,11 @@ class ValoresPermitidos
 <?php 
             if($this->ssvalidation())
             {
-                if($this->histVal->addPropHist($_SESSION["property_id"], $this->bd, true)){
+                $data = date("Y-m-d H:i:s",time());
+                if($this->histVal->addPropHist($_SESSION["property_id"], $this->bd,$data ,true)){
                     //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
                     $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
-                    if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')")) {
+                    if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`, `updated_on`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active', '".$data."')")) {
                         $this->bd->getMysqli()->commit();
 ?>
                         <p>Inseriu os dados de novo valor permitido com sucesso.</p>
@@ -999,7 +1000,7 @@ class ValPerHist{
      * @param int $idProp -> id of the property we will do the backup
      * @param Db_Op $bd ->objecto from Db_Op class
      */
-    public function addPropHist($idProp, $bd, $data,$unique) {
+    public function addPropHist($idProp, $bd, $data, $unique) {
         if ($unique) {
             $bd->getMysqli()->autocommit(false);
             $bd->getMysqli()->begin_transaction();
