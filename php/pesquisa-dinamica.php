@@ -3267,9 +3267,13 @@ class entityHist{
         $getHistVal = $bd->runQuery("SELECT * FROM hist_value WHERE id =".$id);
         $readHistVal = $getHistVal->fetch_assoc();
         
-        //get the actual entity
+        //get the actual value
         $getAcVal = $bd->runQuery("SELECT * FROM value WHERE id=".$readHistVal['value_id']);
         $readActVal = $getAcVal->fetch_assoc();
+        
+        //get the actual entity
+        $getActEnt = $bd->runQuery("SELECT * FROM entity WHERE id =".$readActVal['entity_id']);
+        $readActEnt = $getActEnt->fetch_assoc();
         
         //backup the current values
         $bd->getMysqli()->autocommit(false);
@@ -3288,7 +3292,17 @@ class entityHist{
         {
              echo "#NO UPDATE DA ENTITY";
             $errorFound = true;
-        }   
+        }
+        else { 
+            if (!$bd->runQuery("INSERT INTO `hist_entity`(`id`, `ent_type_id`, `entity_id`, `entity_name`, `state`, `active_on`, `inactive_on`) VALUES (NULL,".$readActEnt['ent_type_id'].",".$readActEnt['id'].",'".$readActEnt['entity_name']."','inactive','".$readActEnt['updated_on']."','".$updated_on."')")) {
+                $errorFound = true;
+            }
+            else {
+                if(!$bd->runQuery("UPDATE `entity` SET `updated_on`='".$updated_on."' WHERE id=".$readActEnt['id']."")) {
+                    $errorFound = true;
+                }
+            }
+        }
         
 
         //Updates if there is no error
