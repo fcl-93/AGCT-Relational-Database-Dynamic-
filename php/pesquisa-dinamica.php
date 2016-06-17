@@ -2824,7 +2824,7 @@ class entityHist{
                                 <tr>
                                     <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['active_on']?></td>
                                     <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['inactive_on']?></td>
-                                    <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['name']?></td>
+                                    <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['entity_name']?></td>
 
 <?php
                                 while ($prop = $selProp->fetch_assoc()) {
