@@ -471,7 +471,7 @@ class UnidadeHist
         $selectAtributos = $bd->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_prop_unit_type`(`name`, `state`, `active_on`,`inactive_on`, `prop_unit_type_id`) "
-                . "VALUES ('".$atributos["name"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
+                . "VALUES ('".$atributos["name"]."','inactive','".$atributos["updated_on"]."','".date("Y-m-d H:i:s",time())."',".$_REQUEST["unit_id"].")";
         $updateHist = $bd->runQuery($updateHist);
         if ($updateHist) {
             return true;
