@@ -1738,6 +1738,9 @@ class RelHist{
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE relation SET ";
         foreach ($atributos as $atributo => $valor) {
+            if ($atributo == 'state') {
+                $valor = "active";
+            }
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "relation_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
@@ -1794,7 +1797,7 @@ class RelHist{
                 $insertHist = "INSERT INTO `hist_value`"
                         . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) "
                         . "VALUES "
-                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".$dataUpdate."','".$values["state"]."')";
+                        . "(".$values["property_id"].",'".$values["value"]."','".$values["producer"]."',".$_REQUEST["rel"].",".$values["id"].",'".$values["updated_on"]."','".$dataUpdate."','inactive')";
                 echo $insertHist."<br>";
                 $insertHist = $bd->runQuery($insertHist);
                 if (!$insertHist) {
@@ -1850,6 +1853,9 @@ class RelHist{
         $atributos = $selectAtributos->fetch_assoc();
         $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
+            if ($atributo == 'state') {
+                $valor = "inactive";
+            }
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
             }
@@ -1882,7 +1888,7 @@ class RelHist{
             $insertHist = "INSERT INTO `hist_value`"
                     . "(`property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`)"
                     . " VALUES "
-                    . "(".$val["property_id"].",'".$val["value"]."','".$val["producer"]."',".$val["relation_id"].",".$idVal.",".date("Y-m-d H:i:s",time()).",".$val["state"].")";
+                    . "(".$val["property_id"].",'".$val["value"]."','".$val["producer"]."',".$val["relation_id"].",".$idVal.",".date("Y-m-d H:i:s",time()).",'inactive')";
             if (!$insertHist) {
                 return false;
             }

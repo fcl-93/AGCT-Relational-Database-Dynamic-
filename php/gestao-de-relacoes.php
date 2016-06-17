@@ -323,7 +323,7 @@ class RelationManage
                     <th>Entidade 2</th>
                     <th>Propriedade</th>
                     <th>Tipo de Valor</th>
-                    <th>Estado<th>
+                    <th>Estado</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -643,7 +643,7 @@ class RelHist{
         $selectAtributos = $db->runQuery($selectAtributos);
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "INSERT INTO `hist_rel_type`(`name`,`ent_type1_id`,`ent_type2_id`, `state`, `active_on`,`inactive_on`, `rel_type_id`) "
-                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','".$atributos["state"]."','".$atributos["updated_on"]."','".$data."',".$db->userInputVal($_REQUEST["rel_id"]).")";
+                . "VALUES ('".$atributos["name"]."','".$atributos["ent_type1_id"]."','".$atributos["ent_type2_id"]."','inactive','".$atributos["updated_on"]."','".$data."',".$db->userInputVal($_REQUEST["rel_id"]).")";
         $updateHist =$db->runQuery($updateHist);
         if(!$updateHist)
         {
@@ -666,6 +666,9 @@ class RelHist{
         $atributos = $selectAtributos->fetch_assoc();
         $updateHist = "UPDATE rel_type SET ";
         foreach ($atributos as $atributo => $valor) {
+            if ($atributo == "state") {
+                $valor = "active";
+            }
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "rel_type_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
             }
@@ -688,7 +691,7 @@ class RelHist{
                             . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
                             . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `form_field_size`, "
                             . "`property_id`, `active_on`, `inactive_on`)"
-                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
+                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'inactive',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
                     $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]);
                     if ($selPropHist->num_rows == 0) {
                         $updateProp = $db->runQuery("UPDATE property SET state = 'inactive', updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
