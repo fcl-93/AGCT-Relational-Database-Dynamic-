@@ -428,6 +428,7 @@ class ValoresPermitidos
 					<input type="text" name="valor" value="<?php echo $read_EnumName['value']; ?>">
 					
 					<input type="hidden" name="enum_id" value="<?php echo $_REQUEST['enum_id']; ?>">
+                                        <input type="hidden" name="propriedade" value="<?php echo $_REQUEST['prop_id']; ?>">
 					<input type="hidden" name="estado" value="alteracao">
 					<input type="submit" value="Inserir valor permitido">
 					<br>
@@ -452,6 +453,9 @@ class ValoresPermitidos
 		else 
 		{
 			$sanitizedName = $this->bd->userInputVal($_REQUEST['valor']);//for both if's the value input
+                        if (isset($_REQUEST['propriedade'])) {
+                            $_SESSION['property_id'] = $_REQUEST['propriedade'];
+                        }
 			$res_CheckPropEnums = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id=".$_SESSION['property_id']." AND value='".$sanitizedName."'");
 			
 			//for the edit submission
