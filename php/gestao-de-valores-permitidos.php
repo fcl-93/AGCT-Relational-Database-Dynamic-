@@ -868,7 +868,7 @@ class ValPerHist{
     public function addHist($id,$bd,$updateTime){
         $bd->getMySqli()->autocommit(false);
         $bd->getMySqli()->begin_transaction();
-        $selOld = "SELECT * FROM prop_allowed_value WHERE id = ".$id;
+        $selOld = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$id);
         $read_oldEnum = $selOld->fetch_assoc();
         if($this->addPropHist($read_oldEnum['property_id'], $bd, $updateTime,false)) {
             if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','inactive',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
