@@ -3278,7 +3278,7 @@ class entityHist{
         $errorFound = false;
 
         $updated_on = date("Y-m-d H:i:s",time());
-        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `value`, `entity_id`, `value_id`,`producer`,`property_id`, `state`, `active_on`, `inactive_on`) VALUES (NULL,'".$readActVal['value']."',".$readActVal['id'].",'".$readActVal['entity_id']."','".$readActVal['producer']."','".$readActVal['property_id']."','inactive','".$readActVal['updated_on']."','".$updated_on."')"))
+        if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `value`, `entity_id`, `value_id`,`producer`,`property_id`, `state`, `active_on`, `inactive_on`) VALUES (NULL,'".$readActVal['value']."',".$readActVal['entity_id'].",'".$readActVal['id']."','".$readActVal['producer']."','".$readActVal['property_id']."','inactive','".$readActVal['updated_on']."','".$updated_on."')"))
         {
                 echo "#NO BACKUP DA ENTITY";
                 $errorFound = true;
