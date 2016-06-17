@@ -549,7 +549,7 @@ class ValoresPermitidos
                 
                 if($this->histVal->addHist($getEnumId, $this->bd, $data)){
                     //insert the new value for the enum.
-                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."'value='".$sanitizedName."' WHERE id=".$getEnumId);
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data.", 'value='".$sanitizedName."' WHERE id=".$getEnumId);
                 //echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
                     $this->bd->getMysqli()->commit();
 ?>
@@ -583,7 +583,7 @@ class ValoresPermitidos
             $data = date("Y-m-d H:i:s",time());
             if($this->histVal->addHist($getEnum, $this->bd, $data))
             {
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."' state='active' WHERE id=".$getEnum);
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."', state='active' WHERE id=".$getEnum);
                 //gets the name of the enum that has been enabled 
 		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
 		$read_enumName = $res_enumName->fetch_assoc();
@@ -619,7 +619,7 @@ class ValoresPermitidos
             if (!$this->checkValues($idProp,$value)) {
                 if($this->histVal->addHist($getEnum, $this->bd, $data))
                 {
-                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."' state='inactive' WHERE id=".$getEnum);
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."', state='inactive' WHERE id=".$getEnum);
                     //get the name to show to the users after the item is disabled
                     $res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
                     $read_enumName = $res_enumName->fetch_assoc();
