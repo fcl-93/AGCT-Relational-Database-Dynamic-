@@ -2888,6 +2888,7 @@ class entityHist{
                                         }
   
                                     }
+                                    $conta++;
 ?>
                                     </tr>
 <?php
