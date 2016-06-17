@@ -697,7 +697,7 @@ class InsereRelacoes
          * This method will make the change in history
          */
         public function trocaComHist(){
-            
+            $inactive = date("Y-m-d H:i:s",time());
             //Get Vals From hist
             $getNewVal = $this->bd->runQuery("SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['hist']))->fetch_assoc();
             
