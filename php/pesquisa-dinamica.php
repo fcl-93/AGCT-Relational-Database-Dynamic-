@@ -3188,22 +3188,22 @@ class entityHist{
                         </thead>
                         <tbody>
 <?php
-                        $id = $bd->userInputVal($_REQUEST['ent_id']);
+                        $id = $bd->userInputVal($_REQUEST['idVal']);
                         if (isset($_REQUEST['data'])) {
                             $data = $bd->userInputVal($_REQUEST['data']);
                         }
                         if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE value_id=".$id." AND inactive_on<='".$data."' ORDER BY inactive_on DESC");
                         }
                         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE value_id=".$id." AND inactive_on>='".$data."' ORDER BY inactive_on DESC");
                         }
                         else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE value_id=".$id." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC");
 
                         }
                         else {
-                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE entity_id=".$id);
+                            $presetOld = $bd->runQuery("SELECT * FROM hist_value WHERE value_id=".$id);
                         }
                         if($presetOld->num_rows == 0)
                         {
