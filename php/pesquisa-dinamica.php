@@ -3244,7 +3244,7 @@ class entityHist{
 <?php
                                        }
 ?>
-                                          <td><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+                                          <td><a href="?estado=valueBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
                                         </tr><?php
                             }
                                      
