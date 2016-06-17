@@ -950,10 +950,12 @@ class InsereRelacoes
             {
                 if($this->bd->runQuery("UPDATE relation SET updated_on = '".date("Y-m-d H:i:s",time())."', state = 'inactive' WHERE id=".$idRel))
                 {
+                    $getHour = $this->bd->runQuery("SELECT * FROM hist_value ORDER BY inactive_on DESC LIMIT 1")->fetch_assoc();
+                    
                     $queryDisVal = "SELECT * FROM value WHERE relation_id=".$idRel."";
                     $runDis = $this->bd->runQuery($queryDisVal);
                     while($disableVal = $runDis->fetch_assoc()){
-                        $this->bd->runQuery("UPDATE value SET state=inactive WHERE id=".$disableVal['id']);
+                        $this->bd->runQuery("UPDATE value SET state='inactive', updated_on='".$getHour['inactive_on']."' WHERE id=".$disableVal['id']);
                     }
 ?>
                     <html>
