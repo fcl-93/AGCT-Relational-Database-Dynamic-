@@ -2828,16 +2828,10 @@ class entityHist{
 <?php
                                 $conta = 0;
                                 while ($prop = $selProp->fetch_assoc()) {
-                                    echo "SELECT * FROM value WHERE updated_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id'];
-                                    echo "<br>SELECT * FROM hist_value WHERE inactive_on >= '".$readHistory["inactive_on"]."' AND active_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id'];
                                     $selVal =$bd->runQuery("SELECT * FROM value WHERE updated_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id']);
                                     $val = $selVal->fetch_assoc();
-                                    echo "val";
-                                    print_r($val);
                                     $selValHist =$bd->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$readHistory["inactive_on"]."' AND active_on < '".$readHistory["inactive_on"]."' AND entity_id = ".$id." AND property_id = ".$prop['id']);
-                                    $valHist = $selVal->fetch_assoc();
-                                    echo "hist";
-                                    print_r($valHist);
+                                    $valHist = $selValHist->fetch_assoc();
                                     if($conta == 0){
 ?>
                                         <td><?php echo $prop['name']?></td>
