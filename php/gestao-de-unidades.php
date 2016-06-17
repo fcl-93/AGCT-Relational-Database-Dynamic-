@@ -287,7 +287,7 @@ class Unidade
 <?php
                 return false;
             }
-            $selName = $this->bd->runQuery("SELECT * FROM prop_unit_type WHERE name = ".$this->bd->userInputVal($_REQUEST['nome']));
+            $selName = $this->bd->runQuery("SELECT * FROM prop_unit_type WHERE name = '".$this->bd->userInputVal($_REQUEST['nome'])."'");
             if ($selName->num_rows > 0) {
 ?>
                 <p>Já existe uma unidade com o nome introduzido.</p>
