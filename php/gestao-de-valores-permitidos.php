@@ -813,8 +813,8 @@ class ValPerHist{
 <?php
         }
         else {
-            $contaLinhas = 1;
             while ($hist = $queryHistorico->fetch_assoc()) {
+                $contaLinhas = 1;
                 echo "SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp;
                 echo "<br>SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp;
                 $selProp = $db->runQuery("SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
