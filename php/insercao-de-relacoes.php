@@ -705,7 +705,7 @@ class InsereRelacoes
             
             //insert the value in hist_value
             $this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES "
-                    . "(NULL,NULL,".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactive."',inactive)");
+                    . "(NULL,NULL,".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['id'].",'".$getOldVal['updated_on']."','".$inactive."','inactive')");
             //atualiza o oficial
             $this->bd->runQuery("UPDATE `value` SET `value`='".$getNewVal['value']."',`producer`='".$getNewVal['value']."',`updated_on`='".$inactive."',`state`='active' WHERE id=".$getNewVal['value_id']);
            
