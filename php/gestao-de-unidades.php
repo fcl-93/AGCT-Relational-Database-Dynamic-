@@ -356,9 +356,11 @@ class Unidade
             }
             else
             {
+                $this->gereHist->atualizaHistorico($this->bd);
                 $sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
                 $sanitizedId =  $this->bd->userInputVal($_REQUEST['unit_id']);
-                $this->bd->runQuery("UPDATE `prop_unit_type` SET name = '".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId);
+                if ($this->bd->runQuery("UPDATE `prop_unit_type` SET name = '".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId)) {
+                    $this->bd->getMysqli()->commit();
 ?>
                 <html>
                     <h3>Gestão de unidades - Atualização</h3>
@@ -366,6 +368,17 @@ class Unidade
                     <p>Clique em <a href='/gestao-de-unidades/'> Continuar </a> para avançar.</p>
                 </html>
 <?php 
+                }
+                else {
+                    $this->bd->getMysqli()->rollback();
+?>
+                <html>
+                    <h3>Gestão de unidades - Atualização</h3>
+                    <p>Ocorreu um erro ao atualizar o tipo de entidade.</p>
+                    <p>Clique em <?php goBack();?></p>
+                </html>
+<?php                     
+                }
             }
         }
 }
