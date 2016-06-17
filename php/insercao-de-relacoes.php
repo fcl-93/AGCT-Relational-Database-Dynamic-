@@ -698,8 +698,8 @@ class InsereRelacoes
          */
         public function trocaComHist(){
             
-            $bd->getMysqli()->autocommit(false);
-            $bd->getMysqli()->begin_transaction();
+            $this->bd->getMysqli()->autocommit(false);
+            $this->bd->getMysqli()->begin_transaction();
             $inactive = date("Y-m-d H:i:s",time());
             $error = false;
             //Get Vals From hist
@@ -721,13 +721,18 @@ class InsereRelacoes
             }
            
             if($error == false)
-            {?>
+            {
+                $this->bd->getMysqli()->commit();
+                ?>
+           
                 <p>A reversão foi bem sucedida.</p>
                 <p>Clique em <a href="/insercao-de-relacoes"/>Continuar</a> para avançar</p>
             <?php
             }
             else
-            {?>
+            {
+                $this->bd->getMysqli()->rollback();
+                ?>
                 <p>A reversão não foi concluida com sucesso.</p>
                  <p>Clique em <?php goBack(); ?>para voltar á página anterior</p>
 <?php
