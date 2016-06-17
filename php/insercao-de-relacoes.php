@@ -90,6 +90,10 @@ class InsereRelacoes
                     {
                         $this->histVal();
                     }
+                    else if($_REQUEST['estado'] == 'voltar')
+                    {
+                        $this->trocaComHist();
+                    }
                 }
                 else
                 {
@@ -680,7 +684,7 @@ class InsereRelacoes
                     <td><?php echo $getProp['name'] ?></td>
                     <td><?php echo $getProp['value_type'] ?></td>
                     <td><?php echo $rdVal['value'] ?></td>
-                    <td><?php echo "Voltar ATrás"?></td>
+                    <td><a href ="?estado=voltar&hist=<?php echo $rdVal["id"];?>;?>">Voltar para esta versão</a></td>
                     </tr>
 <?php
                 }
@@ -688,6 +692,30 @@ class InsereRelacoes
                 </tbody>
             </table>
 <?php
+        }
+        /**
+         * This method will make the change in history
+         */
+        public function trocaComHist(){
+            
+            //Get Vals From hist
+            $getNewVal = $this->bd->runQuery("SELECT * FROM hist_value WHERE id=".$this->bd->userInputVal($_REQUEST['hist']));
+            
+            $getOldVal = $this->bd->runQuery("SELECT * FROM value WHERE id=".$getNewVal['value_id']);
+            
+            //insert the value in hist_value
+            $this->bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES "
+                    . "(NULL,".$getOldVal['entity_id'].",".$getOldVal['property_id'].",'".$getOldVal['value']."','".$getOldVal['producer']."',".$getOldVal['relation_id'].",".$getOldVal['value_id'].",'".$getOldVal['updated_on']."','".$inactive."',inactive)");
+            //atualiza o oficial
+            $this->bd->runQuery("UPDATE `value` SET `value`='".$getNewVal['value']."',`producer`='".$getNewVal['value']."',`updated_on`='".$inactive."',`state`='active' WHERE id=".$getNewVal['value_id']);
+           
+            
+            
+            
+            //Get val from  norm.
+
+            //copy from 
+            "INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10])";
         }
         
 	/**
