@@ -989,7 +989,7 @@ class HistDeForms{
                         //get the name form the history table
                         $getNamePars = $bd->runQuery("SELECT *  FROM hist_custom_form WHERE inactive_on = '".$formToBack['inactive_on']."'")->fetch_assoc();
                         //updqte tghe current  name to the one that comes form the history
-                            if(!$bd->runQuery("UPDATE `custom_form` SET `name`='".$getNamePars['name']."',`state`='".$getNamePars['state']."',`updated_on`='".$inactive."' WHERE id=".$formToBack['custom_form_id'])){
+                            if(!$bd->runQuery("UPDATE `custom_form` SET `name`='".$getNamePars['name']."',`state`='active',`updated_on`='".$inactive."' WHERE id=".$formToBack['custom_form_id'])){
                                 $error = true;
                                 break;
                             }
