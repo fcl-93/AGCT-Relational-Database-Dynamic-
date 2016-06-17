@@ -3283,14 +3283,13 @@ class entityHist{
                 echo "#NO BACKUP DA ENTITY";
                 $errorFound = true;
         }
-        else {
-            //changes the current valuees and entities to the ones that come from the history
-            if(!$bd->runQuery("UPDATE `value` SET `value`='".$readHistVal['value']."',`state`='active',`updated_on`='".$updated_on."' WHERE id=".$readActVal['id'].""))
-            {
-                 echo "#NO UPDATE DA ENTITY";
-                $errorFound = true;
-            }   
-        }
+        //changes the current valuees and entities to the ones that come from the history
+        if(!$bd->runQuery("UPDATE `value` SET `value`='".$readHistVal['value']."',`state`='active',`updated_on`='".$updated_on."' WHERE id=".$readActVal['id'].""))
+        {
+             echo "#NO UPDATE DA ENTITY";
+            $errorFound = true;
+        }   
+        
 
         //Updates if there is no error
         if($errorFound)
