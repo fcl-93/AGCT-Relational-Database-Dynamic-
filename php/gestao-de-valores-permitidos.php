@@ -852,6 +852,10 @@ class ValPerHist{
                             </a>
                         </td>
 <?php
+                    }
+?>
+                </tr>
+<?php
                 }
                 while ($prop = $selPropHist->fetch_assoc()) {
                     if ($contaLinhas > $rowspan) {
@@ -888,7 +892,6 @@ class ValPerHist{
                         </td>
 <?php
                     }
-                }
 ?>
                 </tr>
 <?php
