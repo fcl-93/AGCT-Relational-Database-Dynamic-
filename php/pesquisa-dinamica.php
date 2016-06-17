@@ -2851,10 +2851,47 @@ class entityHist{
                                             <td>Sem valor associado</td>
 <?php                                            
                                         }
-                                        
+                                        if($readHistory['state'] == 'inactive')
+                                        {
+?>
+                                            <td rowspan="<?php echo $numProp?>"><?php echo "Inativo"?></td>
+<?php
+                                        }
+                                        else
+                                        {
+?>
+                                            <td rowspan="<?php echo $numProp?>"><?php echo "Ativo"?></td>
+<?php
+                                        }
+?>
+                                        <td rowspan="<?php echo $numProp?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
+<?php
                                     }
+                                    else {
+?>                                        
+                                        <td><?php echo $prop['name']?></td>
+<?php
+                                        if ($selVal->num_rows > 0) {
+?>
+                                            <td><?php echo $val['value']?></td>
+<?php                                            
+                                        }
+                                        else if ($selValHist->num_rows > 0){
+?>
+                                            <td><?php echo $valHist['value']?></td>
+<?php                                            
+                                        }
+                                        else {
+?>
+                                            <td>Sem valor associado</td>
+<?php                                            
+                                        }
+  
+                                    }
+?>
+                                    </tr>
+<?php
                                 }
-
                             }
                         }
 
