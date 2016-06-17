@@ -85,7 +85,10 @@ class Search{
                 {
                     $this->ativarVal();
                 }
-
+                else if($_REQUEST['estado'] == 'histVal')
+                {
+                    $this->gereInsts->histVal($this->bd);
+                }
 
             }
             else {
@@ -1966,6 +1969,7 @@ $first = false;
 <?php
                     }
 ?>
+                        <a href="pesquisa-dinamica?estado=histVal&idVal=<?php echo $value['id'];?>">[Histórico]</a>
                    <input type="hidden" name="state<?php echo $x?>" value="<?php echo $value["state"] ?>">
                 </td>
 
@@ -3152,6 +3156,14 @@ class entityHist{
         </table>
 <?php
         }
+    }
+    
+    /**
+     * This method presents to the user rhe history of the selected value.
+     * @param Db_Op $bd (object form the class Db_Op)
+     */
+    private function histVal($bd) {
+        
     }
 
 }
