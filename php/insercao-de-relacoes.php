@@ -159,7 +159,7 @@ class InsereRelacoes
                                         <tr>
                                              <td rowspan="<?php echo $num_props?>"><?php echo $readRelations['id'];?></td>
                                              <td rowspan="<?php echo $num_props?>"><?php echo $read_RelName['name'] ?></td>
-                                             <td data-showHidden="true">
+                                             <td rowspan="<?php echo $num_props?>" data-showHidden="true">
 <?php 
                                                 $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity1_id'])->fetch_assoc();
                                                 if($_readEnt1['entity_name'] != '')
@@ -192,7 +192,7 @@ class InsereRelacoes
 ?>                           
                                              </td>
                                            
-                                             <td data-showHidden="true">
+                                             <td rowspan="<?php echo $num_props?>" data-showHidden="true">
 <?php   
                                             $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity2_id'])->fetch_assoc();
                                             if($_readEnt2['entity_name'] != '')
