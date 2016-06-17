@@ -1000,7 +1000,7 @@ class ValPerHist{
             $bd->getMysqli()->autocommit(false);
             $bd->getMysqli()->begin_transaction();
         }
-        $getProp = "SELECT * FROM property WHERE id = ".$idProp;
+        $getProp = $bd->runQuery("SELECT * FROM property WHERE id = ".$idProp);
         $prop = $getProp->fetch_assoc();
         
         foreach ($prop as $atributo => $valor) {
