@@ -778,7 +778,7 @@ class HistDeForms{
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         
         $inactive = date("Y-m-d H:i:s",time());
-        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','".$read_getEntTp['state']."','".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
+        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','state,'".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
            //get all the properties from the seleced form
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
            if($resCf_Prop->num_rows > 0)
@@ -813,7 +813,7 @@ class HistDeForms{
                         else{
                                 $fk_ent_type_id = $backupFormProps['fk_ent_type_id'];
                         }
-                        if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$rel_type_id.",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."','".$unit_type_id."',".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'".$backupFormProps['state']."',".$fk_ent_type_id.",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
+                        if(!$bd->runQuery("INSERT INTO `hist_property`(`id`, `name`, `ent_type_id`, `rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, `unit_type_id`, `form_field_order`, `mandatory`, `state`, `fk_ent_type_id`, `form_field_size`, `property_id`, `active_on`, `inactive_on`) VALUES (NULL,'".$backupFormProps['name']."',".$backupFormProps['ent_type_id'].",".$rel_type_id.",'".$backupFormProps['value_type']."','".$backupFormProps['form_field_name']."','".$backupFormProps['form_field_type']."','".$unit_type_id."',".$backupFormProps['form_field_order'].",".$backupFormProps['mandatory'].",'inactive',".$fk_ent_type_id.",".$backupFormProps['form_field_size'].",".$backupFormProps['id'].",'".$backupFormProps['updated_on']."','".$inactive."')")){
                                 return false;
                         }
                 }
