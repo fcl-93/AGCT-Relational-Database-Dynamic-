@@ -3262,7 +3262,7 @@ class entityHist{
       * @param type $id -> id from the entity we want to reactivate
       * @param type $bd
       */
-     public function changeValVersion($id,$bd){
+     public function changeValueVersion($id,$bd){
          //Get the value we want to reactivate
         $getHistVal = $bd->runQuery("SELECT * FROM hist_value WHERE id =".$id);
         $readHistVal = $getHistVal->fetch_assoc();
