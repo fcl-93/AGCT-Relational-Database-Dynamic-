@@ -358,7 +358,7 @@ class Unidade
             {
                 $sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
                 $sanitizedId =  $this->bd->userInputVal($_REQUEST['unit_id']);
-                $this->bd->runQuery("UPDATE `prop_unit_type` SET name = ".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId);
+                $this->bd->runQuery("UPDATE `prop_unit_type` SET name = '".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId);
 ?>
                 <html>
                     <h3>Gestão de unidades - Atualização</h3>
