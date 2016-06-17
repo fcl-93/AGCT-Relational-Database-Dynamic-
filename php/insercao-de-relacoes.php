@@ -1205,13 +1205,13 @@ class InsereRelacoes
         /**
          * Updates the current value from the properties to new ones.
          */
-        private function updateAttr()
+        private function  updateAttr()
         {
             $erro = false;
             for($i= 0; $i <= $_SESSION['attrDaRelImp']; $i++ )
             {
                 $id = $this->bd->userInputVal($_REQUEST['iddarel']);
-                if ($i == $_SESSION['propImpressas']) {
+                if ($i == $_SESSION['attrDaRelImp']) {
                     if(!$this->gereInsRel->addHist($id, $this->bd)) {
                         $erro = true;
                         break;
