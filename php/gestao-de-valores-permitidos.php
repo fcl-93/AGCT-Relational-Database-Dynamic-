@@ -818,31 +818,58 @@ class ValPerHist{
                 $selProp = $db->runQuery("SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
                 $selPropHist = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
                 $rowspan = $selProp->num_rows + $selPropHist->num_rows;
-                if ($contaLinhas > $rowspan) {
-                    $contaLinhas = 1;
-                }
+                while ($prop = $selProp->fetch_assoc()) {
+                    if ($contaLinhas > $rowspan) {
+                        $contaLinhas = 1;
+                    }
 ?>
-                <tr>
+                    <tr>
 <?php
-                if ($contaLinhas === 1) {
+                    if ($contaLinhas === 1) {
 ?>
-                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
-                    <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
+                        <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
+                        <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
 <?php
-                }
-                
-                if ($selProp->num_rows > 0) {
+                    }
 ?>
-                    <td><?php echo $selProp["value"];?></td>
+                    <td><?php echo $prop["value"];?></td>
                     <td>
 <?php
-                }
-                else if ($selPropHist->num_rows > 0) {
+                    if ($hist["state"] === "active")
+                    {
+                        echo 'Ativo';
+                    }
+                    else
+                    {
+                        echo 'Inativo';
+                    }
 ?>
-                    <td><?php echo $selPropHist["value"];?></td>
-                    <td>
-<?php                    
+                    </td>
+<?php
+                    if ($contaLinhas === 1) {
+?>
+                        <td rowspan="<?php echo $rowspan;?>"><a href ="?estado=voltar&hist=<?php echo $hist["id"];?>&prop_id=<?php echo $_REQUEST["prop_id"];?>">Voltar para esta versão
+                            </a>
+                        </td>
+<?php
                 }
+                while ($prop = $selPropHist->fetch_assoc()) {
+                    if ($contaLinhas > $rowspan) {
+                        $contaLinhas = 1;
+                    }
+?>
+                    <tr>
+<?php
+                    if ($contaLinhas === 1) {
+?>
+                        <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["active_on"];?></td>
+                        <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
+<?php
+                    }
+?>
+                    <td><?php echo $prop["value"];?></td>
+                    <td>
+<?php
                     if ($hist["state"] === "active")
                     {
                         echo 'Ativo';
@@ -861,9 +888,11 @@ class ValPerHist{
                         </td>
 <?php
                     }
+                }
 ?>
                 </tr>
 <?php
+                }
                 $contaLinhas++;
             }
         }
