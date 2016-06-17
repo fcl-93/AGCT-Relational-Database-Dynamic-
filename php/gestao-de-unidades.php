@@ -139,6 +139,7 @@ class Unidade
 ?>
                                         <td>Ativo</td>
                                         <td>
+                                            <a href="gestao-de-unidades?estado=editar&unit_id=<?php echo $read_Units['id'];?>">[Editar]</a>
                                             <a href="gestao-de-unidades?estado=desativar&unit_id=<?php echo $read_Units['id'];?>">[Desativar]</a>
                                             <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
                                         </td>
@@ -149,6 +150,7 @@ class Unidade
 ?>
                                         <td>Inativo</td>
                                         <td>
+                                            <a href="gestao-de-unidades?estado=editar&unit_id=<?php echo $read_Units['id'];?>">[Editar]</a>
                                             <a href="gestao-de-unidades?estado=activar&unit_id=<?php echo $read_Units['id'];?>">[Ativar]</a>
                                             <a href="gestao-de-unidades?estado=historico&unit_id=<?php echo $read_Units['id'];?>">[Histórico]</a>
                                         </td>
@@ -259,17 +261,17 @@ class Unidade
 	 */
 	public function insertFormPrint(){
 ?>
-		<h3 align="center">Gestão de unidades - Introdução</h3>
-			<form id="insertForm" method="post" align="center">
-				<label>Inserir nova unidade:</label> 
-				<br>
-				<input type="text" id ="nome" name="nome"/>
-				<br>
-				<label class="error" for="nome"></label>
-				<br>
-				<input type ="hidden" name ="estado" value ="inserir"/>
-				<input type="submit" name="submit" value ="Inserir tipo de unidade"/>
-			</form>
+            <h3 align="center">Gestão de unidades - Introdução</h3>
+                <form id="insertForm" method="post" align="center">
+                    <label>Inserir nova unidade:</label> 
+                    <br>
+                    <input type="text" id ="nome" name="nome"/>
+                    <br>
+                    <label class="error" for="nome"></label>
+                    <br>
+                    <input type ="hidden" name ="estado" value ="inserir"/>
+                    <input type="submit" name="submit" value ="Inserir tipo de unidade"/>
+                </form>
 <?php 
 	}
 	/**
@@ -336,6 +338,7 @@ class Unidade
                     <label class="error" for="nome"></label>
                     <br>
                     <input type ="hidden" name ="estado" value ="update"/>
+                    <input type ="hidden" name ="unit_id" value ="<?php echo $_REQUEST['unit_id']?>"/>
                     <input type="submit" name="submit" value ="Atualizar tipo de unidade"/>
                 </form>
 <?php
@@ -354,7 +357,8 @@ class Unidade
             else
             {
                 $sanitizedName =  $this->bd->userInputVal($_REQUEST['nome']);
-                $this->bd->runQuery("UPDATE `prop_unit_type`(`id`, `name`, `updated_on`) VALUES (null,'".$sanitizedName."','".date("Y-m-d H:i:s",time())."')");
+                $sanitizedId =  $this->bd->userInputVal($_REQUEST['unit_id']);
+                $this->bd->runQuery("UPDATE `prop_unit_type` SET name = ".$sanitizedName."', updated_on = '".date("Y-m-d H:i:s",time())."' WHERE id = ".$sanitizedId);
 ?>
                 <html>
                     <h3>Gestão de unidades - Atualização</h3>
