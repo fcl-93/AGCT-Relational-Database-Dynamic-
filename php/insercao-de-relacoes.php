@@ -671,6 +671,7 @@ class InsereRelacoes
 <?php
                 while($rdVal = $runVals->fetch_assoc()){
 ?>
+                    <tr>
                     <td><?php echo $rdVal['active_on'] ?></td>
                     <td><?php echo $rdVal['inactive_on'] ?></td>
 <?php
@@ -680,6 +681,7 @@ class InsereRelacoes
                     <td><?php echo $getProp['value_type'] ?></td>
                     <td><?php echo $rdVal['value'] ?></td>
                     <td><?php echo "Voltar ATrás"?></td>
+                    </tr>
 <?php
                 }
 ?>
