@@ -713,9 +713,9 @@ class ValPerHist{
                     break;
                 }
             }
-            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$updateTime."'");
+            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on != '".$data."'");
             while ($propOut = $selPropOut->fetch_assoc()) {
-                $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$updateTime."', state = 'inactive' WHERE id = ".$propOut["id"]);
+                $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$data."', state = 'inactive' WHERE id = ".$propOut["id"]);
                 if (!$updateOut) {
 ?>
                     <p>Não foi possível reverter os valores permitidos para a versão selecionada</p>
