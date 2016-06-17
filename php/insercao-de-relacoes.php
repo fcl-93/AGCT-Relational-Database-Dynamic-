@@ -225,8 +225,8 @@ class InsereRelacoes
                                             $count = 0;
                                             while($relProps = $read_RelProps->fetch_assoc()){
 ?>
-                                                    <td><?php echo $relProps['']?></td>
-                                                    <td><?php echo $relProps['']?></td>
+                                                    <td><?php echo $relProps['name']?></td>
+                                                    <td><?php echo $relProps['value_type']?></td>
 <?php
                                                     if($count == 0)
                                                     {
