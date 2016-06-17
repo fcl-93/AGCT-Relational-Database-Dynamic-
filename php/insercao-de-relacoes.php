@@ -136,7 +136,7 @@ class InsereRelacoes
                                  {
 ?>                                     
                             <html>
-                                <table class="table" id="pagerTable">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -144,7 +144,8 @@ class InsereRelacoes
                                             <th>Entidade 1</th>
                                             <th>Entidade 2</th>
                                             <th>Propriedade</th>
-                                            <th>Estado da Propriedade</th>
+                                            <th>Valor</th>
+                                            <th>Estado</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -226,7 +227,10 @@ class InsereRelacoes
                                             while($relProps = $read_RelProps->fetch_assoc()){
 ?>
                                                     <td><?php echo $relProps['name']?></td>
-                                                    <td><?php echo $relProps['value_type']?></td>
+<?php
+                                                    $getValName = $this->bd->runQuery("SELECT value FROM value WHERE property_id=".$relProps['id']." AND relation_id=".$readRelations['id'])->fetch_assoc();
+?>
+                                                    <td><?php echo $getValName['value']?></td>
 <?php
                                                     if($count == 0)
                                                     {
