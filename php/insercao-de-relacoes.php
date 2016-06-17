@@ -143,7 +143,8 @@ class InsereRelacoes
                                             <th>Tipo de relação</th>
                                             <th>Entidade 1</th>
                                             <th>Entidade 2</th>
-                                            <th>Estado</th>
+                                            <th>Propriedade</th>
+                                            <th>Estado da Propriedade</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -151,11 +152,13 @@ class InsereRelacoes
 <?php
                                     while($readRelations = $res_Rel->fetch_assoc()){
                                          $read_RelName = $this->bd->runQuery("SELECT name FROM rel_type WHERE id=".$readRelations['rel_type_id']);
+                                         $read_RelProps = $this->bd->runQuery("SELECT * FROM property WHERE rel_type_id=".$readRelations['rel_type_id']);
+                                         $num_props = $read_RelProps->num_rows;
                                          $read_RelName = $read_RelName->fetch_assoc();
 ?>                                         
                                         <tr>
-                                             <td><?php echo $readRelations['id'];?></td>
-                                             <td><?php echo $read_RelName['name'] ?></td>
+                                             <td rowspan="<?php echo $num_props?>"><?php echo $readRelations['id'];?></td>
+                                             <td rowspan="<?php echo $num_props?>"><?php echo $read_RelName['name'] ?></td>
                                              <td data-showHidden="true">
 <?php 
                                                 $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity1_id'])->fetch_assoc();
@@ -218,15 +221,85 @@ class InsereRelacoes
 <?php                                       }
 ?>                         
                                              </td>
+<?php                                       
+                                            $count = 0;
+                                            while($relProps = $read_RelProps->fetch_assoc()){
+?>
+                                                    <td><?php echo $relProps['']?></td>
+                                                    <td><?php echo $relProps['']?></td>
 <?php
- $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']." AND updated_on >'".$readRelations['updated_on']."'");
+                                                    if($count == 0)
+                                                    {
+                                                        $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']." AND updated_on >'".$readRelations['updated_on']."'");
+                                                        if($readRelations['state'] == 'active')
+                                                        {
+                                                   
+?>                                                  
+
+                                                                <td rowspan="<?php echo $num_props?>">Ativo </td>
+                                                                <td rowspan="<?php echo $num_props?>">
+<?php
+                                                                if($getRel->num_rows == 0){
+?>
+                                                                    <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
+<?php                                                           }
+?>
+                                                                    <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
+                                                                    <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
+                                                                </td>
+<?php
+                                                        } 
+                                                        else
+                                                        {
+?>
+                                                            <td rowspan="<?php echo $num_props?>">Inativo</td>
+                                                            <td rowspan="<?php echo $num_props?>">
+<?php
+                                                            if($getRel->num_rows == 0){
+?>
+                               
+                                                                <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
+<?php
+                                                            }
+?>
+                                                               <a href="insercao-de-relacoes?estado=ativar&rel=<?php echo $readRelations['id'];?>">[Ativar]</a>
+                                                                <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
+                                                           </td>
+<?php   
+                                                        }
+                                                        
+                                                    }
+?>                                                    
+                                                    
+                                                    
+                                                    
+                                                </tr>
+<?php
+                                                $count++;
+                                            }
+
+
+
+
+
+
+
+                                                 
+                                                 
+                                                 
+?>    
+                                                 
+                                                 
+<?php
+                                                if($count == 0){
+                                               $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']." AND updated_on >'".$readRelations['updated_on']."'");
                                                 if($readRelations['state'] == 'active')
                                                 {
                                                    
 ?>                                                  
                                              
-                                                        <td>Ativo </td>
-                                                        <td>
+                                                        <td rowspan="<?php echo $num_props?>">Ativo </td>
+                                                        <td rowspan="<?php echo $num_props?>">
 <?php
                                                             if($getRel->num_rows == 0){
 ?>
@@ -241,8 +314,8 @@ class InsereRelacoes
                                                 else
                                                 {
 ?>
-                                                    <td>Inativo</td>
-                                                    <td>
+                                                    <td rowspan="<?php echo $num_props?>">Inativo</td>
+                                                    <td rowspan="<?php echo $num_props?>">
 <?php
                                                             if($getRel->num_rows == 0){
 ?>
@@ -257,6 +330,7 @@ class InsereRelacoes
                                                    </td>
 <?php   
                                                 }
+                                            }
 ?>
                                          </tr>
 <?php
