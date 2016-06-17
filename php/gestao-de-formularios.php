@@ -778,7 +778,7 @@ class HistDeForms{
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         
         $inactive = date("Y-m-d H:i:s",time());
-        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','state,'".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
+        if($bd->runQuery("INSERT INTO `hist_custom_form`(`id`, `name`, `state`, `active_on`, `inactive_on`, `custom_form_id`) VALUES (NULL,'".$read_getEntTp['name']."','inactive','".$read_getEntTp['updated_on']."','".$inactive."',".$id.")")){
            //get all the properties from the seleced form
            $resCf_Prop = $bd->runQuery("SELECT * FROM custom_form_has_prop WHERE custom_form_id=".$id); 
            if($resCf_Prop->num_rows > 0)
