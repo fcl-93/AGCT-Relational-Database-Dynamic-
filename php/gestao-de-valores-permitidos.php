@@ -999,7 +999,7 @@ class ValPerHist{
      * @param int $idProp -> id of the property we will do the backup
      * @param Db_Op $bd ->objecto from Db_Op class
      */
-    private function addPropHist($idProp, $bd, $data,$unique) {
+    public function addPropHist($idProp, $bd, $data,$unique) {
         if ($unique) {
             $bd->getMysqli()->autocommit(false);
             $bd->getMysqli()->begin_transaction();
