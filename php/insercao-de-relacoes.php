@@ -675,7 +675,7 @@ class InsereRelacoes
                     <td><?php echo $rdVal['active_on'] ?></td>
                     <td><?php echo $rdVal['inactive_on'] ?></td>
 <?php
-                    $getProp = $this->bd->runQuery("SELECT * FROM property WHERE id=".$rdVal['property_id'])->fetch_assoc();
+                    $getProp = $this->bd->runQuery("SELECT * FROM property WHERE id=".$rdVal['property_id']."ORDEN BY inactive_on DESC")->fetch_assoc();
 ?>  
                     <td><?php echo $getProp['name'] ?></td>
                     <td><?php echo $getProp['value_type'] ?></td>
