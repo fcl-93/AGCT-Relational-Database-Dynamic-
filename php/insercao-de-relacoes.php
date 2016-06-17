@@ -136,7 +136,7 @@ class InsereRelacoes
                                  {
 ?>                                     
                             <html>
-                                <table class="table" id="pagerTable">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -144,7 +144,8 @@ class InsereRelacoes
                                             <th>Entidade 1</th>
                                             <th>Entidade 2</th>
                                             <th>Propriedade</th>
-                                            <th>Estado da Propriedade</th>
+                                            <th>Valor</th>
+                                            <th>Estado</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -159,7 +160,7 @@ class InsereRelacoes
                                         <tr>
                                              <td rowspan="<?php echo $num_props?>"><?php echo $readRelations['id'];?></td>
                                              <td rowspan="<?php echo $num_props?>"><?php echo $read_RelName['name'] ?></td>
-                                             <td data-showHidden="true">
+                                             <td rowspan="<?php echo $num_props?>" data-showHidden="true">
 <?php 
                                                 $_readEnt1 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity1_id'])->fetch_assoc();
                                                 if($_readEnt1['entity_name'] != '')
@@ -192,7 +193,7 @@ class InsereRelacoes
 ?>                           
                                              </td>
                                            
-                                             <td data-showHidden="true">
+                                             <td rowspan="<?php echo $num_props?>" data-showHidden="true">
 <?php   
                                             $_readEnt2 = $this->bd->runQuery("SELECT entity_name FROM entity WHERE id=".$readRelations['entity2_id'])->fetch_assoc();
                                             if($_readEnt2['entity_name'] != '')
@@ -225,8 +226,11 @@ class InsereRelacoes
                                             $count = 0;
                                             while($relProps = $read_RelProps->fetch_assoc()){
 ?>
-                                                    <td><?php echo $relProps['']?></td>
-                                                    <td><?php echo $relProps['']?></td>
+                                                    <td><?php echo $relProps['name']?></td>
+<?php
+                                                    $getValName = $this->bd->runQuery("SELECT value FROM value WHERE property_id=".$relProps['id']." AND relation_id=".$readRelations['id'])->fetch_assoc();
+?>
+                                                    <td><?php echo $getValName['value']?></td>
 <?php
                                                     if($count == 0)
                                                     {
