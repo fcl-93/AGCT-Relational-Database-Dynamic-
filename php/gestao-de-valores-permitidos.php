@@ -553,7 +553,7 @@ class ValoresPermitidos
                 
                 if($this->histVal->addHist($getEnumId, $this->bd, $data)){
                     //insert the new value for the enum.
-                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data.", 'value='".$sanitizedName."' WHERE id=".$getEnumId);
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."', value='".$sanitizedName."' WHERE id=".$getEnumId);
                 //echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
                     $this->bd->getMysqli()->commit();
 ?>
