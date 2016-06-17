@@ -2814,76 +2814,46 @@ class entityHist{
                         }
                         else
                         {
-                            $oneTimePrint = false;
+                            $conta = 0;
                             while($readHistory = $presetOld->fetch_assoc()){
-                                //echo "SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC";
-                                $readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."' ORDER BY inactive_on DESC, property_id ASC");
+                                $selVal =$db->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
+                                $selValHist =$db->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$id);
+                                $selProp =$db->runQuery("SELECT * FROM property WHERE ent_type_id = ".$readHistory['ent_type_id']);
+                                $numProp = $selProp->num_rows;
 ?>
                                 <tr>
-                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['active_on']?></td>
-                                    <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['inactive_on']?></td>
-
+                                    <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['active_on']?></td>
+                                    <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['inactive_on']?></td>
+                                    <td rowspan="<?php echo $numProp?>"><?php echo $readHistory['name']?></td>
 
 <?php
-
-                                    if($oneTimePrint == false){
-                                        if($readHistory['entity_name'] == '')
-                                        {
+                                while ($prop = $selVal->fetch_assoc()) {
+                                    $selVal =$db->runQuery("SELECT * FROM value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$prop['id']);
+                                    $val = $selVal->fetch_assoc();
+                                    $selValHist =$db->runQuery("SELECT * FROM hist_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND entity_id = ".$prop['id']);
+                                    $valHist = $selVal->fetch_assoc();
+                                    if($conta == 0){
 ?>
-                                            <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['id']?></td>
+                                        <td><?php echo $prop['name']?></td>
 <?php
+                                        if ($selVal->num_rows > 0) {
+?>
+                                            <td><?php echo $val['value']?></td>
+<?php                                            
                                         }
-                                        else
-                                        {
+                                        else if ($selValHist->num_rows > 0){
 ?>
-                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo $readHistory['entity_name']?></td>
-<?php
+                                            <td><?php echo $valHist['value']?></td>
+<?php                                            
                                         }
+                                        else {
 ?>
-<?php
-                                    $oneTimePrint = true;
+                                            <td>Sem valor associado</td>
+<?php                                            
+                                        }
+                                        
                                     }
-?>
-
-
-<?php                               //echo "SELECT * FROM hist_value WHERE entity_id = ".$readHistory['id']." AND inactive_on = '".$readHistory['inactive_on']."'";
-                                    //$readHistValues = $bd->runQuery("SELECT * FROM hist_value WHERE inactive_on = '".$readHistory['inactive_on']."'");
-                                    $oneTimePrint2 = false;
-                                    while($readHV = $readHistValues->fetch_assoc())
-                                    {
-                                        //echo "SELECT name FROM property WHERE id=".$readHV['property_id'];
-                                        $propName = $bd->runQuery("SELECT name FROM property WHERE id=".$readHV['property_id'])->fetch_assoc();
-?>
-                                            <td><?php echo $propName['name']?></td>
-
-                                        <td><?php echo $readHV['value']?></td>
-<?php
-
-                                   if($oneTimePrint2 == false){
-                                       if($readHistory['state'] == 'inactive')
-                                       {
-?>
-                                        <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Inativo"?></td>
-<?php
-                                       }
-                                       else
-                                       {
-?>
-                                         <td rowspan="<?php echo $readHistValues->num_rows?>"><?php echo "Ativo"?></td>
-<?php
-                                       }
-?>
-                                          <td rowspan="<?php echo $readHistValues->num_rows?>"><a href="?estado=versionBack&histId=<?php echo $readHistory['id']?>">Voltar para esta versão</a></td>
-
-                                     <?php
-                                     $oneTimePrint2 = true;
-                                   }
-                                     $oneTimePrint = false;
-                                     ?></tr><?php
-                                    }
-                                     ?>
-
-<?php
+                                }
 
                             }
                         }
