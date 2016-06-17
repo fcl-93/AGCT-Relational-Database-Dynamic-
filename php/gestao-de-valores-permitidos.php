@@ -497,7 +497,7 @@ class ValoresPermitidos
 <?php 
             if($this->ssvalidation())
             {
-                if($this->histVal->addHist($_SESSION["property_id"], $this->bd)){
+                if($this->histVal->addPropHist($_SESSION["property_id"], $this->bd, true)){
                     //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
                     $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
                     if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active')")) {
@@ -545,9 +545,11 @@ class ValoresPermitidos
                 $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnumId);
                 $idProp = $selProp->fetch_assoc()["property_id"];
                 
-                if($this->histVal->addHist($idProp, $this->bd)){
+                $data = date("Y-m-d H:i:s",time());
+                
+                if($this->histVal->addHist($getEnumId, $this->bd, $data)){
                     //insert the new value for the enum.
-                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$getEnumId);
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."'value='".$sanitizedName."' WHERE id=".$getEnumId);
                 //echo "UPDATE `prop_allowed_value` SET value='".$sanitizedName."' WHERE id=".$_REQUEST['enum_id'];
                     $this->bd->getMysqli()->commit();
 ?>
@@ -578,9 +580,10 @@ class ValoresPermitidos
             $getEnum = $this->bd->userInputVal($_REQUEST['enum_id']);
             $selProp = $this->bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$getEnum);
             $idProp = $selProp->fetch_assoc()["property_id"];
-            if($this->histVal->addHist($idProp, $this->bd))
+            $data = date("Y-m-d H:i:s",time());
+            if($this->histVal->addHist($getEnum, $this->bd, $data))
             {
-		$this->bd->runQuery("UPDATE `prop_allowed_value` SET state='active' WHERE id=".$getEnum);
+		$this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."' state='active' WHERE id=".$getEnum);
                 //gets the name of the enum that has been enabled 
 		$res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
 		$read_enumName = $res_enumName->fetch_assoc();
@@ -612,10 +615,11 @@ class ValoresPermitidos
             $prop = $selProp->fetch_assoc();
             $idProp = $prop["property_id"];
             $value = $prop['value'];
+            $data = date("Y-m-d H:i:s",time());
             if (!$this->checkValues($idProp,$value)) {
-                if($this->histVal->addHist($idProp, $this->bd))
+                if($this->histVal->addHist($getEnum, $this->bd, $data))
                 {
-                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET state='inactive' WHERE id=".$getEnum);
+                    $this->bd->runQuery("UPDATE `prop_allowed_value` SET updated_on = '".$data."' state='inactive' WHERE id=".$getEnum);
                     //get the name to show to the users after the item is disabled
                     $res_enumName = $this->bd->runQuery("SELECT value FROM prop_allowed_value WHERE id=".$getEnum);
                     $read_enumName = $res_enumName->fetch_assoc();
@@ -673,9 +677,9 @@ class ValPerHist{
      * @param type $db (object form the class Db_Op)
      */
     public function estadoVoltar ($db) {
-        if ($this->addHist($_REQUEST["prop_id"],$db)) {
+        $data = date("Y-m-d H:i:s",time());
+        if ($this->addHist($_REQUEST["prop_id"],$db,$data)) {
             //get all the prop_allowed_values in the selected version
-            $updateTime = date("Y-m-d H:i:s",time());
             $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"].")";
             $selOld = $db->runQuery($selOld);
             $erro = false;
@@ -692,7 +696,7 @@ class ValPerHist{
                         $updateHist .= $atributo." = '".$valor."',"; 
                     }
                 }
-                $updateHist .= " updated_on = '".$updateTime."' WHERE id = ".$old['prop_allowed_value_id'];
+                $updateHist .= " updated_on = '".$data."' WHERE id = ".$old['prop_allowed_value_id'];
                 $updateHist =$db->runQuery($updateHist);
                 if ($updateHist) {}
                 else {
@@ -861,22 +865,18 @@ class ValPerHist{
      * @param type $bd -> database object to allow me to use the database run querys.
      * @return boolean 
      */
-    public function addHist($idProp,$bd){
+    public function addHist($id,$bd,$updateTime){
         $bd->getMySqli()->autocommit(false);
         $bd->getMySqli()->begin_transaction();
-        $updateTime = date("Y-m-d H:i:s",time());
-            
-        $selAllVal = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE property_id =".$idProp);
-
-        while ($read_oldEnum = $selAllVal->fetch_assoc()) {
-           if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','inactive',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
+        $selOld = "SELECT * FROM prop_allowed_value WHERE id = ".$id;
+        $read_oldEnum = $selOld->fetch_assoc();
+        if($this->addPropHist($read_oldEnum['property_id'], $bd, $updateTime,false)) {
+            if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','inactive',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
             {
-                //the history was created
                 return false;
             } 
         }
         return true;
-        
     }
     
     /**
@@ -988,6 +988,45 @@ class ValPerHist{
         </table>
 <?php
         }
+    }
+    
+    /**
+     * This method do a backup of the property and updates the new version of it
+     * @param int $idProp -> id of the property we will do the backup
+     * @param Db_Op $bd ->objecto from Db_Op class
+     */
+    private function addPropHist($idProp, $bd, $data,$unique) {
+        if ($unique) {
+            $bd->getMysqli()->autocommit(false);
+            $bd->getMysqli()->begin_transaction();
+        }
+        $getProp = "SELECT * FROM property WHERE id = ".$idProp;
+        $prop = $getProp->fetch_assoc();
+        
+        foreach ($prop as $atributo => $valor) {
+            if ($atributo == "updated_on") {
+                $atributo = "active_on";
+            }
+            if ($atributo == "state") {
+                $valor = "inactive";
+            }
+            if ($atributo != "id" && !is_null($valor)) {
+                $attr .= "`".$atributo."`,";
+                $val .= "'".$valor."',"; 
+            }
+            if ($atributo == "ent_type_id" && !is_null($valor)) {
+               $isEntity = true; 
+            }
+        }
+        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
+                . "VALUES (".$val."'".$data."',".$idProp.")";
+        $updateHist =$db->runQuery($updateHist);
+        if ($updateHist) {
+            if ($db->runQuery("UPDATE property SET updated_on = '".$data."' WHERE id = ".$idProp)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
