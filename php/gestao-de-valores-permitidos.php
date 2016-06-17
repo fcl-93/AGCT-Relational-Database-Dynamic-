@@ -784,22 +784,23 @@ class ValPerHist{
             </thead>
             <tbody>
 <?php
+        $idProp = $db->userInputVal($_REQUEST["prop_id"]);
         if (empty($_REQUEST['data'])) {
-            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." ORDER BY inactive_on DESC";
+            $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$idProp." ORDER BY inactive_on DESC";
         }
         else {
             $data = $db->userInputVal($_REQUEST['data']);
             if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "ate") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on <= '".$data."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$idProp." AND inactive_on <= '".$data."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "aPartir") {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$idProp." AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
             else if (isset($_REQUEST["controlDia"]) && $_REQUEST["controlDia"] == "dia"){
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$idProp." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
             else {
-                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
+                $queryHistorico = "SELECT * FROM hist_prop_allowed_value WHERE property_id = ".$idProp." AND inactive_on < '".date("Y-m-d",(strtotime($data) + 86400))."' AND inactive_on >= '".$data."' ORDER BY inactive_on DESC";
             }
         }
         $queryHistorico = $db->runQuery($queryHistorico);
@@ -814,7 +815,9 @@ class ValPerHist{
         else {
             $contaLinhas = 1;
             while ($hist = $queryHistorico->fetch_assoc()) {
-                $rowspan = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on = '".$hist["inactive_on"]."'")->num_rows;
+                $selProp = $db->runQuery("SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
+                $selPropHist = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
+                $rowspan = $selProp->num_rows + $selPropHist->num_rows;
                 if ($contaLinhas > $rowspan) {
                     $contaLinhas = 1;
                 }
@@ -827,10 +830,19 @@ class ValPerHist{
                     <td rowspan="<?php echo $rowspan;?>"><?php echo $hist["inactive_on"];?></td>
 <?php
                 }
+                
+                if ($selProp->num_rows > 0) {
 ?>
-                    <td><?php echo $hist["value"];?></td>
+                    <td><?php echo $selProp["value"];?></td>
                     <td>
 <?php
+                }
+                else if ($selPropHist->num_rows > 0) {
+?>
+                    <td><?php echo $selPropHist["value"];?></td>
+                    <td>
+<?php                    
+                }
                     if ($hist["state"] === "active")
                     {
                         echo 'Ativo';
