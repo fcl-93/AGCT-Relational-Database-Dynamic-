@@ -1665,7 +1665,7 @@ class RelHist{
         $updateHist = "UPDATE relation SET ";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == 'state') {
-                $valor = "'active'";
+                $valor = "active";
             }
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "relation_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
@@ -1780,7 +1780,7 @@ class RelHist{
         $attr = $val = "";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == 'state') {
-                $valor = "'inactive'";
+                $valor = "inactive";
             }
             if ($atributo == "updated_on") {
                 $atributo = "active_on";

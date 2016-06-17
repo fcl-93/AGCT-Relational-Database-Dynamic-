@@ -667,7 +667,7 @@ class RelHist{
         $updateHist = "UPDATE rel_type SET ";
         foreach ($atributos as $atributo => $valor) {
             if ($atributo == "state") {
-                $valor = "'active'";
+                $valor = "active";
             }
             if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "rel_type_id" && !is_null($valor)) {
                 $updateHist .= $atributo." = '".$valor."',"; 
