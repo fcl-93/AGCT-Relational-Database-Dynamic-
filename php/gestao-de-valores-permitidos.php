@@ -1003,6 +1003,8 @@ class ValPerHist{
         $getProp = $bd->runQuery("SELECT * FROM property WHERE id = ".$idProp);
         $prop = $getProp->fetch_assoc();
         
+        $attr = $val = "";
+        $isEntity = false;
         foreach ($prop as $atributo => $valor) {
             if ($atributo == "updated_on") {
                 $atributo = "active_on";
@@ -1020,7 +1022,7 @@ class ValPerHist{
         }
         $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
                 . "VALUES (".$val."'".$data."',".$idProp.")";
-        $updateHist =$db->runQuery($updateHist);
+        $updateHist =$bd->runQuery($updateHist);
         if ($updateHist) {
             if ($db->runQuery("UPDATE property SET updated_on = '".$data."' WHERE id = ".$idProp)) {
                 return true;
