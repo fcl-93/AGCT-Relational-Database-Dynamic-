@@ -687,7 +687,8 @@ class ValPerHist{
             //get all the prop_allowed_values in the selected version
             $selInactive = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"]);
             $selInactive = $selInactive->fetch_assoc();
-            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on IN (SELECT inactive_on FROM hist_prop_allowed_value WHERE id = ".$_REQUEST["hist"].")";
+            $dataHist = $selInactive['inactive_on'];
+            $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= ".$dataHist." AND active_on < ".$dataHist;
             $selOld = $db->runQuery($selOld);
             $erro = false;
             while ($old = $selOld->fetch_assoc()) {
@@ -713,7 +714,7 @@ class ValPerHist{
                     break;
                 }
             }
-           /* $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on > '".$selInactive['inactive_on']."' AND id != ".$selInactive['prop_allowed_value_id']);
+            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on > '".$selInactive['inactive_on']."' AND id != ".$selInactive['prop_allowed_value_id']);
             while ($propOut = $selPropOut->fetch_assoc()) {
                 $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$data."', state = 'inactive' WHERE id = ".$propOut["id"]);
                 if (!$updateOut) {
@@ -725,7 +726,7 @@ class ValPerHist{
                     $erro = true;
                     break;
                 }
-            }*/
+            }
             if (!$erro) {
                 $db->getMysqli()->commit();
 ?>
