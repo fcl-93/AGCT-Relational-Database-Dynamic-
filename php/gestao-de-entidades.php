@@ -54,10 +54,6 @@ class Entidade {
                 } else if ($_REQUEST['estado'] == 'versionBack') {
                     $this->gereHist->returnPreviousVersion($this->bd->userInputVal($_REQUEST['histId']), $this->bd);
                 }
-                else if($_REQUEST['estado'] == 'histAll')
-                {
-                    
-                }
             } else {
                 ?>
                 <html>
@@ -288,7 +284,7 @@ class Entidade {
      * This method will do the server side validation
      */
     public function ssvalidation() {
-        echo '<h3>Gestão de componentes - inserção</h3>';
+        echo '<h3>Gestão de entidades - inserção</h3>';
         if (empty($_REQUEST['nome'])) {
             ?>
             <html><p>O campo nome é de preenchimento obrigatório.</p></html>
@@ -321,7 +317,7 @@ class Entidade {
         $read_EntToEdit = $res_EntEdit->fetch_assoc();
         ?>		
         <html>
-            <h3>Gestão de Componentes - Edição</h3>
+            <h3>Gestão de Entidades - Edição</h3>
             <form id="editForm">
                 <label>Nome:</label>
                 <br>
@@ -392,7 +388,7 @@ class Entidade {
                         $this->bd->getMysqli()->commit();
                     } else {
                         ?>
-                <h3>Gestão de Componentes - Edição</h3>
+                <h3>Gestão de Entidades - Edição</h3>
                 <p>O tipo de entidade não foi alterado.</p>
 
                         <?php
@@ -522,7 +518,6 @@ class EntHist {
         $read_getEntTp = $res_getEntTp->fetch_assoc();
         //create a copy in the history table  
         $inactive = date("Y-m-d H:i:s", time());
-        echo $inactive;
         if ($bd->runQuery("INSERT INTO `hist_ent_type`(`id`, `name`, `state`, `active_on`, `inactive_on`, `ent_type_id`) VALUES (NULL,'" . $read_getEntTp['name'] . "','inactive','" .$read_getEntTp['updated_on']. "','" . $inactive . "'," . $id . ")")) {
            $bd->runQuery("UPDATE ent_type SET updated_on='" .$inactive. "' WHERE id =" . $id);
            
@@ -587,7 +582,6 @@ class EntHist {
      */
     private function helpReturnPrev($id,$bd,$inactive,$idEntHist){
         $getCurrEnt = "SELECT * FROM ent_type WHERE id=".$id;
-        echo "SELECT * FROM ent_type WHERE id=".$id;
         $resCurrEnt = $bd->runQuery($getCurrEnt);
         if($resCurrEnt)
         {
