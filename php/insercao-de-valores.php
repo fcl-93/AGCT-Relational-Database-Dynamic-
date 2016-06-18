@@ -86,7 +86,7 @@ class InsertValues{
         //check if there are any entities in the DB
         if($row_cnt == 0)
         {
-            echo 'Não pode inserir valores uma vez que ainda não foram introduzidas entidades.';
+            echo 'Não pode inserir valores uma vez que ainda não foram introduzidos tipos de entidades.';
         }
         else
 	{
