@@ -592,7 +592,7 @@ class EntHist {
                 $getCurrProps = $bd->runQuery("SELECT * FROM property WHERE ent_type_id = " .$id."");
                 
                 $getEntHist = $bd->runQuery("SELECT * FROM hist_ent_type WHERE id=".$idEntHist)->fetch_assoc();
-                $bd->runQuery("UPDATE ent_type SET name='".$getEntHist['name'].", 'updated_on='".$inactive."' WHERE id=".$id);
+                $bd->runQuery("UPDATE ent_type SET name='".$getEntHist['name']."', updated_on='".$inactive."' WHERE id=".$id);
                 $error = false;
                 while($prop = $getCurrProps->fetch_assoc())
                 {
