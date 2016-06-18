@@ -277,7 +277,8 @@ class RelationManage
         else
         {
     ?>
-            <p>Não existem entidades que se possam relacionar.</p>
+            <p>Não pode criar tipos de relações uma vez que ainda não existem tipos de entidades.</p>
+            <p>Clique em <a href="/gestao-de-entidades">Gestão de Entidades</a> para criar um novo tipo de entidade.</p>
     <?php
             return false;
         }
