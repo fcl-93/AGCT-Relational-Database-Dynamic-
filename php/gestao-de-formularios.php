@@ -103,11 +103,11 @@ class GereForms
 	public function tablePrint(){
 ?>
         <form method="GET">
-            Verificar propriedades existentes no dia : 
+            Verificar formulários existentes no dia : 
             <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="histAll" value="true">
-            <input type="submit" value="Apresentar propriedades">
+            <input type="submit" value="Apresentar formulários">
         </form>
 <?php
 		$resForm = $this->bd->runQuery("SELECT * FROM custom_form ORDER BY name ASC");
