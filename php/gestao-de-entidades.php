@@ -278,7 +278,7 @@ class Entidade {
                 <label class="error" for="atv_int"></label>
                 <br>
                 <input type="hidden" name="estado" value="inserir">
-                <input type="submit" value="Inserir Componente">
+                <input type="submit" value="Inserir Entidade">
             </form>
         </html>
         <?php
