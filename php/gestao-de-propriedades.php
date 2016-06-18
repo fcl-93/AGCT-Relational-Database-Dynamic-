@@ -142,7 +142,7 @@ class PropertyManage
             if ($this->db->runQuery("SELECT * FROM rel_type")->num_rows == 0) {
 ?>
                 <p>Não pode adicionar/gerir propriedades uma vez que ainda não existem tipos de relações.</p>
-                <p>Clique em <a href="/getao-de-relacoes">Gestão de relações</a> para criar um novo tipo de relação.</p>
+                <p>Clique em <a href="/gestao-de-relacoes">Gestão de relações</a> para criar um novo tipo de relação.</p>
 <?php                
                 return false;
             }
@@ -153,7 +153,7 @@ class PropertyManage
             if ($this->db->runQuery("SELECT * FROM ent_type")->num_rows == 0) {
 ?>
                 <p>Não pode adicionar/gerir propriedades uma vez que ainda não existem tipos de entidades.</p>
-                <p>Clique em <a href="/getao-de-entidades">Gestão de entidades</a> para criar um novo tipo de entidade.</p>
+                <p>Clique em <a href="/gestao-de-entidades">Gestão de entidades</a> para criar um novo tipo de entidade.</p>
 <?php               
                 return false;
             }
