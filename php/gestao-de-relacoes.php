@@ -271,7 +271,7 @@ class RelationManage
     private function checkEntidades() {
         $querySelEnt = "SELECT * FROM ent_type";
         $ent = $this->db->runQuery($querySelEnt);
-        if($ent->num_rows >= 2){
+        if($ent->num_rows > 0){
             return true;
         }
         else
