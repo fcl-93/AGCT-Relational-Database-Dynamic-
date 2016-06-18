@@ -249,7 +249,7 @@ class ValoresPermitidos
             <h3>Gestão de valores permitidos - Relações</h3>
             <form method="GET">
                 Verificar propriedades existentes no dia : 
-                <input type="text" class="datepicker" id="datepickerRel" name="dataRel" placeholder="Introduza uma data"> 
+                <input type="text" class="datepicker" id="datepickerRel" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
                 <input type="hidden" name="tipo" value="rel">
@@ -970,7 +970,7 @@ class ValPerHist{
                 }
                 else
                 {
-                    $data = $db->userInputVal($_REQUEST['dataRel']);
+                    $data = $db->userInputVal($_REQUEST['data']);
                     $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
                 }
