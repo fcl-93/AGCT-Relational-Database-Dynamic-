@@ -689,6 +689,7 @@ class ValPerHist{
             $selInactive = $selInactive->fetch_assoc();
             $dataHist = $selInactive['inactive_on'];
             $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$dataHist."' AND active_on < '".$dataHist."'";
+            echo $selOld;
             $selOld = $db->runQuery($selOld);
             $erro = false;
             while ($old = $selOld->fetch_assoc()) {
