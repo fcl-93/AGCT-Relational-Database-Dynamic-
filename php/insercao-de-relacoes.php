@@ -1693,7 +1693,7 @@ class RelHist{
             <thead>
                 <tr>
                     <th>Data de Início</th>
-                    <th>Data de FIm</th>
+                    <th>Data de Fim</th>
                     <th>Tipo de Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>
@@ -2114,7 +2114,7 @@ class RelHist{
                     }
         
 ?>
-            <tbody>
+            </tbody>
         </table>
 <?php
         $bd->runQuery("DROP TEMPORARY TABLE temp_table");
