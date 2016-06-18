@@ -131,34 +131,32 @@ class PropertyManage
     }
     
     /**
-     * Method that checks if there are any Properties in the previous selected type of property (entity or relation)
+     * Method that checks if there are any enitity/relation according with the selected before
      * @param string $tipo ("relation" if we want to check properties's relation, "entity" for entities's properties)
      * @return boolean (true if there are properties otherwise it will return false)
      */
-    private function existePropriedade($tipo)
+    private function existeTipo($tipo)
     {
-        $querySelect = "SELECT * FROM property WHERE ";
         if ($tipo === "relation")
         {
-            $querySelect.= "rel_type_id != 0";
+            if ($this->db->runQuery("SELECT * FROM rel_type")->num_rows == 0) {
+?>
+                <p>Não pode adicionar/gerir propriedades uma vez que ainda não existem tipos de relações.</p>
+                <p>Clique em <a href="/getao-de-relacoes">Gestão de relações</a> para criar um novo tipo de relação.</p>
+<?php                
+                return false;
+            }
+            return true;
         }
         else
         {
-            $querySelect.= "ent_type_id != 0";
-        }
-        $resultSelect = $this->db->runQuery($querySelect);
-
-        if ($resultSelect->num_rows == 0)
-        {
-    ?>
-        <html>
-            <p>Não existem propiedades especificadas para o tipo selecionado</p>
-        </html>
-    <?php
-            return false;
-        }
-        else
-        {
+            if ($this->db->runQuery("SELECT * FROM ent_type")->num_rows == 0) {
+?>
+                <p>Não pode adicionar/gerir propriedades uma vez que ainda não existem tipos de entidades.</p>
+                <p>Clique em <a href="/getao-de-entidades">Gestão de entidades</a> para criar um novo tipo de entidade.</p>
+<?php               
+                return false;
+            }
             return true;
         }
     }
@@ -169,7 +167,7 @@ class PropertyManage
      */
     private function estadoEntityRelation($tipo)
     {
-        if($this->existePropriedade($tipo))
+        if($this->existeTipo($tipo))
         {
             $this->apresentaTabela($tipo);
 
