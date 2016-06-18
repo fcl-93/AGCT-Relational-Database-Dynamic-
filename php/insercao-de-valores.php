@@ -86,7 +86,10 @@ class InsertValues{
         //check if there are any entities in the DB
         if($row_cnt == 0)
         {
-            echo 'Não pode inserir valores uma vez que ainda não foram introduzidos tipos de entidades.';
+?>
+            <p>Não pode inserir valores uma vez que ainda não foram introduzidos tipos de entidades.</p>
+            <p>Clique em <a href="/gestao-de-entidades">Gestão de entidades</a> para adicionar um novo tipo de entidade</p>
+<?php
         }
         else
 	{

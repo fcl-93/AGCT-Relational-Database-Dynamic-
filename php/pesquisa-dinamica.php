@@ -767,6 +767,7 @@ class Search{
             <html>
                 <h3>Pesquisa Dinâmica - escolher componente</h3>
                 <p>Não pode efetuar pesquisas uma vez que ainda não foram introduzidos tipos de entidades.</p>
+                <p>Clique em <a href="/gestao-de-entidades">Gestão de entidades</a> para adicionar um novo tipo de entidade</p>
             </html>
 <?php
         }
