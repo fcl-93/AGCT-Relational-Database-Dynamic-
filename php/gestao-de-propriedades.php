@@ -1665,6 +1665,8 @@ class PropHist{
                     $resultSelecionaProp = $db->runQuery($selecionaProp);
                     $resultSelecionaHist = $db->runQuery($selecionaHist);
                     $numLinhas = $resultSelecionaProp->num_rows + $resultSelecionaHist->num_rows;
+                    
+                    if ($numLinhas > 0) {
 ?>
                 <tr>
                     <td rowspan="<?php echo $numLinhas; ?>"><?php echo $nome; ?></td>
@@ -1793,6 +1795,14 @@ class PropHist{
 <?php
                     }
                     $db->runQuery("DROP TEMPORARY TABLE temp_table");
+                }
+                else {
+?>
+                <tr>
+                    <td colspan="12">Não existe registo referente à entidade selecionada no histórico</td>
+                </tr>
+<?php
+                }
                 }
 ?>
             </tbody>
