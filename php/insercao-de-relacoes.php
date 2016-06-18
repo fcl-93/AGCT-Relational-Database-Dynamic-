@@ -2055,7 +2055,7 @@ class RelHist{
         if ($queryHistorico->num_rows == 0) {
 ?>
             <tr>
-                <td colspan="8">Não existe registo referente à propriedade selecionada no histórico</td>
+                <td colspan="4">Não existe registo referente à propriedade selecionada no histórico</td>
             </tr>
 <?php
         }
@@ -2113,11 +2113,11 @@ class RelHist{
 <?php
                     }
         
+        $bd->runQuery("DROP TEMPORARY TABLE temp_table");
+    }
 ?>
             </tbody>
         </table>
 <?php
-        $bd->runQuery("DROP TEMPORARY TABLE temp_table");
-    }
 }
 }
