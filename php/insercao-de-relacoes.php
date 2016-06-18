@@ -1832,7 +1832,7 @@ class RelHist{
             }
         }
 ?>
-            <tbody>
+            </tbody>
         </table>
 <?php
         }
