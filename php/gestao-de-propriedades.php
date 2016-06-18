@@ -662,7 +662,7 @@ class PropertyManage
             // constroi novamente o form_field_name agora com o id do tuplo que acabou de ser introduzido
             $form_field_name = $entRel.$traco.$id.$traco.$nomeField;
             // atualiza esse atributo
-            $atualiza = "UPDATE property SET updated_on = ".$_SESSION['data'].", form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
+            $atualiza = "UPDATE property SET updated_on = '".$_SESSION['data']."', form_field_name = '".$form_field_name."' WHERE property.id = ".$id;
             $atualiza = $this->db->runQuery($atualiza);
             if(!$atualiza)
             {
