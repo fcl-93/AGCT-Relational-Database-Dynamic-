@@ -97,12 +97,12 @@ class ValoresPermitidos
 ?>
             <h3>Gestão de valores permitidos - Entidades</h3>
             <form method="GET">
-                Verificar propriedades existentes no dia : 
+                Verificar valores permitidos existentes no dia : 
                 <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
                 <input type="hidden" name="estado" value="historico">
                 <input type="hidden" name="histAll" value="true">
                 <input type="hidden" name="tipo" value="ent">
-                <input type="submit" value="Apresentar propriedades">
+                <input type="submit" value="Apresentar valores permitidos">
             </form>
 <?php
 		$res_NProp = $this->bd->runQuery("SELECT * FROM property WHERE value_type = 'enum' AND rel_type_id IS NULL ORDER BY `property`.`ent_type_id` ASC"); 
@@ -973,7 +973,7 @@ class ValPerHist{
                     $data = $db->userInputVal($_REQUEST['data']);
                     $selecionaEntOrRel = "SELECT name, id FROM rel_type";
                     $resultSelEntOrRel = $db->runQuery($selecionaEntOrRel);
-                }
+                }  
                 while ($resEntRel = $resultSelEntOrRel->fetch_assoc())
                 {
                     $idEntRel = $resEntRel["id"];
@@ -990,6 +990,14 @@ class ValPerHist{
                         $selProp = $db->runQuery($selProp);
                         
                     }
+                    if ($resHe->num_rows < 1) {
+?>
+                        <tr>
+                            <td colspan="6">Não existe registos para esta tabela no dia selecionado</td>
+                        </tr>
+<?php
+                    } else {              
+                    
                     while ($prop = $selProp->fetch_assoc()) {
                         $selecionaHist = "SELECT * FROM hist_prop_allowed_value WHERE (('".$data."' > active_on AND '".$data."' < inactive_on) OR ((active_on LIKE '".$data."%' AND inactive_on < '".$data."') OR inactive_on LIKE '".$data."%')) AND property_id = ".$prop["id"]." GROUP BY property_id ORDER BY inactive_on DESC";
                         $selecionaProp = "SELECT * FROM prop_allowed_value WHERE (updated_on < '".$data."'OR updated_on LIKE '".$data."%') AND property_id = ".$prop["id"];
@@ -1012,13 +1020,11 @@ class ValPerHist{
                         $resultSeleciona = $db->runQuery("SELECT * FROM temp_table GROUP BY id ORDER BY id ASC");
 ?>
                         <tr>
-<?php
-                        if ($resultSeleciona->num_rows > 0) {
-?>
                             <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $nome; ?></td>
                             <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["id"]; ?></td>
                             <td rowspan="<?php echo $resultSeleciona->num_rows; ?>"><?php echo $prop["name"]; ?></td>
 <?php
+                        if ($resultSeleciona->num_rows > 0) {
                             while($arraySelec = $resultSeleciona->fetch_assoc())
                             {
 ?>
@@ -1030,6 +1036,11 @@ class ValPerHist{
 <?php
                             }
                         
+                        }
+                        else {
+?>
+                            <td rowspan="3">Não existem valores atributídos</td>
+<?php
                         }
                         $db->runQuery("DROP TEMPORARY TABLE temp_table");
                     }
