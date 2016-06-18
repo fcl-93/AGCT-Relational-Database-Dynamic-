@@ -86,7 +86,7 @@ class Entidade {
             <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="histAll" value="true">
-            <input type="submit" value="Apresentar propriedades">
+            <input type="submit" value="Apresentar tipos de entidades">
         </form>
 <?php
         //Apresentar tabela
@@ -244,7 +244,7 @@ class Entidade {
     public function form() {
                         ?>
         <html>
-            <h3 align="center">Gestão de Componentes - Introdução</h3>
+            <h3 align="center">Gestão de Entidades - Introdução</h3>
             <form id="insertForm" align="center"> 
                 <label>Nome:</label>
                 <br>
@@ -847,7 +847,7 @@ class EntHist {
          }
          
          $selecionaHist = "SELECT * FROM hist_ent_type WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
-    echo $selecionaHist."<br>";
+    
         $querHist = $bd->runQuery($selecionaHist);
         while($readHist = $querHist->fetch_assoc())
         {
@@ -863,14 +863,12 @@ class EntHist {
         $createTempProp = $bd->runQuery($createTempProp);     
         
         $selecionaProp = "SELECT * FROM property WHERE updated_on < '".$_REQUEST["data"]."' OR updated_on LIKE '".$_REQUEST["data"]."%'";
-    echo $selecionaProp."<br>"; 
         $res_getProp = $bd->runQuery($selecionaProp);
          while($prop = $res_getProp->fetch_assoc()){
                 $prop['ent_type_id'] == "" ? $entID = "NULL" : $entID =$prop['ent_type_id'];
                 $bd->runQuery("INSERT INTO temp_hist_property VALUES (".$prop['id'].",'".$prop['name']."','".$prop['value_type']."',".$entID.",'".$prop['state']."')");
          }
         $selecionaHist = "SELECT * FROM hist_property WHERE ('".$_REQUEST["data"]."' > active_on AND '".$_REQUEST["data"]."' < inactive_on) OR ((active_on LIKE '".$_REQUEST["data"]."%' AND inactive_on < '".$_REQUEST["data"]."') OR inactive_on LIKE '".$_REQUEST["data"]."%') GROUP BY ent_type_id ORDER BY inactive_on DESC";
-    echo $selecionaHist."<br>";
         $res_getPropHist = $bd->runQuery($selecionaHist);
          while($propHist = $res_getPropHist->fetch_assoc()){
              $propHist['ent_type_id'] == "" ? $entID = "NULL" : $entID =$propHist['ent_type_id'];
