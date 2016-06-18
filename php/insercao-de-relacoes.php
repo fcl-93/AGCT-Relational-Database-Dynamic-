@@ -123,11 +123,11 @@ class InsereRelacoes
         {                        
 ?>
         <form method="GET">
-            Verificar propriedades existentes no dia : 
+            Verificar relações existentes no dia : 
             <input type="text" class="datepicker" id="datepicker" name="data" placeholder="Introduza uma data"> 
             <input type="hidden" name="estado" value="historico">
             <input type="hidden" name="histAll" value="true">
-            <input type="submit" value="Apresentar propriedades">
+            <input type="submit" value="Apresentar relações">
         </form>
 <?php
                                 $res_Rel = $this->bd->runQuery("SELECT * From relation");
@@ -356,7 +356,6 @@ class InsereRelacoes
                                          </tr>
 <?php
                                      }
-                                 }
 ?>                               
                                 </tbody>
                             </table>   
@@ -379,6 +378,7 @@ class InsereRelacoes
                     </html>
 
 <?php
+                                 }
         $this->createNewRel();
         }
         
