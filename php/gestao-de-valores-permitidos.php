@@ -715,7 +715,7 @@ class ValPerHist{
                     break;
                 }
             }
-            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on > '".$selInactive['inactive_on']."'");
+            $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on > '".$selInactive['inactive_on']."' AND id NOT IN (SELECT prop_allowed_value_id FROM hist_prop_allowed_value)");
             while ($propOut = $selPropOut->fetch_assoc()) {
                 $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$data."', state = 'inactive' WHERE id = ".$propOut["id"]);
                 if (!$updateOut) {
