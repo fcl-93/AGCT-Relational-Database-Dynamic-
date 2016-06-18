@@ -481,7 +481,8 @@ class PropertyManage
                 <input id="ordem" type="text" name="ordem" min="1"><br>
                 <label class="error" for="ordem"></label><br>
                 <label>Tamanho do campo no formulário</label><br>
-                <input id="size" type="text" name="tamanho"><br><br>
+                <input id="size" type="text" name="tamanho"><br>
+                <label id="errTam"></label><br>
                 <label>Obrigatório</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                 <br>
