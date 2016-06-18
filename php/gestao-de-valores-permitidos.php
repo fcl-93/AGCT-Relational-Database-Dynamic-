@@ -689,7 +689,6 @@ class ValPerHist{
             $selInactive = $selInactive->fetch_assoc();
             $dataHist = $selInactive['inactive_on'];
             $selOld = "SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$dataHist."' AND active_on < '".$dataHist."'";
-            echo $selOld;
             $selOld = $db->runQuery($selOld);
             $erro = false;
             while ($old = $selOld->fetch_assoc()) {
@@ -715,6 +714,7 @@ class ValPerHist{
                     break;
                 }
             }
+            // desactive values that didn't exist in the versionwe'll go back
             $selPropOut = $db->runQuery("SELECT * FROM prop_allowed_value WHERE property_id = ".$_REQUEST["prop_id"]." AND updated_on > '".$selInactive['inactive_on']."' AND id NOT IN (SELECT prop_allowed_value_id FROM hist_prop_allowed_value)");
             while ($propOut = $selPropOut->fetch_assoc()) {
                 $updateOut = $db->runQuery("UPDATE prop_allowed_value SET updated_on = '".$data."', state = 'inactive' WHERE id = ".$propOut["id"]);
@@ -814,13 +814,10 @@ class ValPerHist{
         else {
             while ($hist = $queryHistorico->fetch_assoc()) {
                 $contaLinhas = 1;
-                echo "SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp;
-                echo "<br>SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp;
                 $selProp = $db->runQuery("SELECT * FROM prop_allowed_value WHERE updated_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
                 $selPropHist = $db->runQuery("SELECT * FROM hist_prop_allowed_value WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND property_id = ".$idProp);
                 $rowspan = $selProp->num_rows + $selPropHist->num_rows;
                 while ($prop = $selProp->fetch_assoc()) {
-                    echo "while 1 linhas: ".$contaLinhas." rowspan: ".$rowspan."<br>";
                     if ($contaLinhas > $rowspan) {
                         $contaLinhas = 1;
                     }
@@ -861,7 +858,6 @@ class ValPerHist{
                 $contaLinhas++;
                 }
                 while ($prop = $selPropHist->fetch_assoc()) {
-                    echo "while 2 linhas: ".$contaLinhas." rowspan: ".$rowspan."<br>";
                     if ($contaLinhas > $rowspan) {
                         $contaLinhas = 1;
                     }
