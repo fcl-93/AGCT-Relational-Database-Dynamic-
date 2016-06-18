@@ -696,9 +696,6 @@ class ValPerHist{
                 $atributos = $selOldVal->fetch_assoc();
                 $updateHist = "UPDATE prop_allowed_value SET ";
                 foreach ($atributos as $atributo => $valor) {
-                    if ($atributo == 'state') {
-                        $valor = "active";
-                    }
                     if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
                         $updateHist .= $atributo." = '".$valor."',"; 
                     }
