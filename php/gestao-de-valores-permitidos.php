@@ -990,7 +990,7 @@ class ValPerHist{
                         $selProp = $db->runQuery($selProp);
                         
                     }
-                    if ($resHe->num_rows < 1) {
+                    if ($selProp->num_rows < 1) {
 ?>
                         <tr>
                             <td colspan="6">Não existe registos para esta tabela no dia selecionado</td>
