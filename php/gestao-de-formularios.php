@@ -226,7 +226,7 @@ class GereForms
 		{
 ?>	
 			<html>
-				<p>Não pode criar formulários uma vez que ainda não foram inseridas entidades.</p>
+				<p>Não pode criar formulários uma vez que ainda não foram inseridas propriedades.</p>
 			</html>
 <?php 
 		}
