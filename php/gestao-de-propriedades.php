@@ -486,7 +486,7 @@ class PropertyManage
                 <label>Obrigatório</label><br>
                 <input id="obrigatorio" type="radio" name="obrigatorio" value="1">Sim
                 <br>
-                <input id="obrigatorio" type="radio" name="obrigatorio" value="2">Não
+                <input id="obrigatorio" type="radio" name="obrigatorio" value="0">Não
                 <br>
                 <label class="error" for="obrigatorio"></label><br>
 <?php
@@ -1123,7 +1123,7 @@ class PropertyManage
 ?>       
                     <input id="mandatory" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="1" checked>Sim
                     <br>
-                    <input id="mandatory" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="2">Não
+                    <input id="mandatory" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="0">Não
                     <br>
                     <label class="error" for="obrigatorio_<?php echo $prop['id'];?>"></label><br>
 <?php
@@ -1133,7 +1133,7 @@ class PropertyManage
 ?>       
                     <input id="obrigatorio" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="1">Sim
                     <br>
-                    <input id="obrigatorio" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="2" checked>Não
+                    <input id="obrigatorio" type="radio" name="obrigatorio_<?php echo $prop['id'];?>" value="0" checked>Não
                     <br>
                     <label class="error" for="obrigatorio_<?php echo $prop['id'];?>"></label><br>
 <?php   
