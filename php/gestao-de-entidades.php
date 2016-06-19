@@ -739,7 +739,7 @@ class EntHist {
                 $getPropsHist = $bd->runQuery("SELECT * FROM hist_property WHERE ent_type_id = ".$id." AND '".$readHE['inactive_on']."' > active_on AND '".$readHE['inactive_on']."'<= inactive_on");
                 
                 //selects a property from properties table where the updated value is smaller than the inactive from the ent_type selected
-                $getProp = $bd->runQuery("SELECT * FROM property WHERE updated_on < '".$readHE['inactive_on']."' AND ent_type_id =".$readHE['ent_type_id']."");
+                $getProp = $bd->runQuery("SELECT * FROM property WHERE state = 'active' AND updated_on < '".$readHE['inactive_on']."' AND ent_type_id =".$readHE['ent_type_id']."");
                 $conta = 0;
                 $numlinhas = $getPropsHist->num_rows + $getProp->num_rows;
  ?>
