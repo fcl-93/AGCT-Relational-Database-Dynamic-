@@ -747,7 +747,7 @@ class PropertyManage
             goBack();
             return false;
         }
-        if (empty($_REQUEST["obrigatorio"]) && strlen($_REQUEST['obrigatorio"]) == 0)
+        if (empty($_REQUEST["obrigatorio"]) && strlen($_REQUEST['obrigatorio']) == 0)
         {
 ?>
             <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
