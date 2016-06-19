@@ -604,21 +604,16 @@ class EntHist {
                     else
                     { //prop tá no historico (vai pro)
                         $checkPropAct = $bd->runQuery("SELECT * FROM property WHERE id=".$prop['id']);
-                        $checkPropHist = $bd->runQuery("SELECT * from hist_property WHERE property_id=".$prop['id']);
-                        echo "SELECT * FROM property WHERE id=".$prop['id']."<br>";
-                        echo "SELECT * from hist_property WHERE property_id=".$prop['id']."<br>";
-                        echo $checkPropAct->num_rows ." = ". $checkPropHist->num_rows ." ? <br>";
+                        $getAllHist = "SELECT * FROM hist_property WHERE property_id=".$prop['id']." AND inactive_on >='".$getEntHist['inactive_on']."' AND active_on <'".$getEntHist['inactive_on']."'";
+                        $resGetHist = $bd->runQuery($getAllHist);
                         
                         //Verifica se tenho uma propriedade agora que n esteja no historico
-                        if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
+                        if($checkPropAct->num_rows > 0 && $resGetHist->num_rows == 0)
                         {
                             $bd->runQuery("UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id']);
                             //echo "UPDATE property SET state='inactive', updated_on='".$inactive."' WHERE id=".$prop['id'];
                         }
                         else{
-                            $getAllHist = "SELECT * FROM hist_property WHERE property_id=".$prop['id']." AND inactive_on >='".$getEntHist['inactive_on']."' AND active_on <'".$getEntHist['inactive_on']."'";
-                            echo $getAllHist;
-                            $resGetHist = $bd->runQuery($getAllHist);
                             $getHist = $resGetHist->fetch_assoc();
                             
                             
