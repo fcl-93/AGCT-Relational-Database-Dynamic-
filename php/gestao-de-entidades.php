@@ -618,6 +618,7 @@ class EntHist {
                         }
                         else{
                             $getAllHist = "SELECT * FROM hist_property WHERE property_id=".$prop['id']." AND inactive_on >='".$getEntHist['inactive_on']."' AND active_on <'".$getEntHist['inactive_on']."'";
+                            echo $getAllHist;
                             $resGetHist = $bd->runQuery($getAllHist);
                             $getHist = $resGetHist->fetch_assoc();
                             
