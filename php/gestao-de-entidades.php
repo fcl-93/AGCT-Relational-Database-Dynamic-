@@ -603,12 +603,11 @@ class EntHist {
                     {}
                     else
                     { //prop tá no historico (vai pro)
-                        
                         $checkPropAct = $bd->runQuery("SELECT * FROM property WHERE id=".$prop['id']);
                         $checkPropHist = $bd->runQuery("SELECT * from hist_property WHERE property_id=".$prop['id']);
-                        //echo "SELECT * FROM property WHERE id=".$prop['id']."<br>";
-                        //echo "SELECT * from hist_property WHERE property_id=".$prop['id']."<br>";
-                        //echo $checkPropAct->num_rows ." = ". $checkPropHist->num_rows ." ? <br>";
+                        echo "SELECT * FROM property WHERE id=".$prop['id']."<br>";
+                        echo "SELECT * from hist_property WHERE property_id=".$prop['id']."<br>";
+                        echo $checkPropAct->num_rows ." = ". $checkPropHist->num_rows ." ? <br>";
                         
                         //Verifica se tenho uma propriedade agora que n esteja no historico
                         if($checkPropAct->num_rows > 0 && $checkPropHist->num_rows == 0)
