@@ -2010,7 +2010,7 @@ $first = false;
 
 <?php
                     //echo "SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND  p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")";
-                    $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.ent_type_id = e.ent_type_id AND e.id=".$id." AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
+                    $getAvaiablePropsToAdd = $this->bd->runQuery("SELECT p.* FROM property AS p, entity AS e WHERE p.state = 'active' AND p.ent_type_id = e.ent_type_id AND e.id=".$id." AND p.id NOT IN (SELECT property_id FROM value AS v WHERE v.entity_id=".$id.")");
                     if($getAvaiablePropsToAdd->num_rows == 0)
                     {
 ?>
