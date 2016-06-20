@@ -2853,7 +2853,7 @@ class entityHist{
                                             <td>Sem valor associado</td>
 <?php                                            
                                         }
-                                        if($readHistory['state_backup'] == 'inactive')
+                                        if($valHist['state_backup'] == 'inactive')
                                         {
 ?>
                                             <td rowspan="<?php echo $numProp?>"><?php echo "Inativo"?></td>
