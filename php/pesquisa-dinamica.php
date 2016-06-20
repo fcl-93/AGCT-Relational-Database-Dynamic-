@@ -2781,6 +2781,7 @@ class entityHist{
                                 <th>Nome</th>
                                 <th>Propriedade</th>
                                 <th>Valor</th>
+                                <th>Estado do valor</th>
                                 <th>Estado durante o período</th>
                                 <th>Ação</th>
                             </tr>
@@ -2851,6 +2852,18 @@ class entityHist{
 ?>
                                             <td>Sem valor associado</td>
 <?php                                            
+                                        }
+                                        if($readHistory['state_backup'] == 'inactive')
+                                        {
+?>
+                                            <td rowspan="<?php echo $numProp?>"><?php echo "Inativo"?></td>
+<?php
+                                        }
+                                        else
+                                        {
+?>
+                                            <td rowspan="<?php echo $numProp?>"><?php echo "Ativo"?></td>
+<?php
                                         }
                                         if($readHistory['state'] == 'inactive')
                                         {
