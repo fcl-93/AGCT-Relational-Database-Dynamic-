@@ -2856,13 +2856,13 @@ class entityHist{
                                         if($valHist['state_backup'] == 'inactive')
                                         {
 ?>
-                                            <td rowspan="<?php echo $numProp?>"><?php echo "Inativo"?></td>
+                                            <td><?php echo "Inativo"?></td>
 <?php
                                         }
                                         else
                                         {
 ?>
-                                            <td rowspan="<?php echo $numProp?>"><?php echo "Ativo"?></td>
+                                            <td><?php echo "Ativo"?></td>
 <?php
                                         }
                                         if($readHistory['state'] == 'inactive')
@@ -2899,6 +2899,18 @@ class entityHist{
 ?>
                                             <td>Sem valor associado</td>
 <?php                                            
+                                        }
+                                        if($valHist['state_backup'] == 'inactive')
+                                        {
+?>
+                                            <td><?php echo "Inativo"?></td>
+<?php
+                                        }
+                                        else
+                                        {
+?>
+                                            <td><?php echo "Ativo"?></td>
+<?php
                                         }
   
                                     }
