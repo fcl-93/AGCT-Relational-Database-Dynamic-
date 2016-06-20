@@ -502,34 +502,25 @@ class ValoresPermitidos
             if($this->ssvalidation())
             {
                 $data = date("Y-m-d H:i:s",time());
-                if($this->histVal->addPropHist($_SESSION["property_id"], $this->bd,$data ,true)){
-                    //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
-                    $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
-                    if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`, `updated_on`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active', '".$data."')")) {
-                        $this->bd->getMysqli()->commit();
+                //echo "INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`) VALUES (NULL,".$_SESSION['property_id'].",'".$_REQUEST['valor']."','active')";
+                $_sanitizedInput = $this->bd->userInputVal($_REQUEST['valor']);                        
+                if ($this->bd->runQuery("INSERT INTO `prop_allowed_value`(`id`, `property_id`, `value`, `state`, `updated_on`) VALUES (NULL,".$_SESSION['property_id'].",'".$_sanitizedInput."','active', '".$data."')")) {
 ?>
-                        <p>Inseriu os dados de novo valor permitido com sucesso.</p>
-                        <p>Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
+                    <p>Inseriu os dados de novo valor permitido com sucesso.</p>
+                    <p>Clique em <a href="gestao-de-valores-permitidos"> Continuar </a> para avançar</p>
 <?php 
-                    }
-                    else {
-                        $this->bd->getMysqli()->rollback();
-?>
-                        <p>Não foi possível inserir o novo valor permitido</p>
-<?php
-                        goBack();
-                    }
                 }
                 else {
-                    $this->bd->getMysqli()->rollback();
 ?>
                     <p>Não foi possível inserir o novo valor permitido</p>
 <?php
                     goBack();
                 }
             }
-            else 
-            {
+            else {
+?>
+                <p>Não foi possível inserir o novo valor permitido</p>
+<?php
                 goBack();
             }
 	}
@@ -697,6 +688,9 @@ class ValPerHist{
                 $atributos = $selOldVal->fetch_assoc();
                 $updateHist = "UPDATE prop_allowed_value SET ";
                 foreach ($atributos as $atributo => $valor) {
+                    if ($atributo == 'state_backup') {
+                        $atributo = 'state';
+                    }
                     if ($atributo != "id" && $atributo != "inactive_on" && $atributo != "active_on" && $atributo != "prop_allowed_value_id" && !is_null($valor)) {
                         $updateHist .= $atributo." = '".$valor."',"; 
                     }
@@ -921,12 +915,10 @@ class ValPerHist{
         $bd->getMySqli()->begin_transaction();
         $selOld = $bd->runQuery("SELECT * FROM prop_allowed_value WHERE id = ".$id);
         $read_oldEnum = $selOld->fetch_assoc();
-        if($this->addPropHist($read_oldEnum['property_id'], $bd, $updateTime,false)) {
-            if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
-            {
-                return false;
-            } 
-        }
+        if(!$bd->runQuery("INSERT INTO `hist_prop_allowed_value`(`id`, `property_id`, `value`, `state`, `state_backup`, `prop_allowed_value_id`, `active_on`, `inactive_on`) VALUES (NULL,".$read_oldEnum['property_id'].",'".$read_oldEnum['value']."','inactive','".$read_oldEnum['state']."',".$read_oldEnum['id'].",'".$read_oldEnum['updated_on']."','".$updateTime."')"))
+        {
+            return false;
+        } 
         return true;
     }
     
@@ -1060,47 +1052,6 @@ class ValPerHist{
         </table>
 <?php
         }
-    }
-    
-    /**
-     * This method do a backup of the property and updates the new version of it
-     * @param int $idProp -> id of the property we will do the backup
-     * @param Db_Op $bd ->objecto from Db_Op class
-     */
-    public function addPropHist($idProp, $bd, $data, $unique) {
-        if ($unique) {
-            $bd->getMysqli()->autocommit(false);
-            $bd->getMysqli()->begin_transaction();
-        }
-        $getProp = $bd->runQuery("SELECT * FROM property WHERE id = ".$idProp);
-        $prop = $getProp->fetch_assoc();
-        
-        $attr = $val = "";
-        $isEntity = false;
-        foreach ($prop as $atributo => $valor) {
-            if ($atributo == "updated_on") {
-                $atributo = "active_on";
-            }
-            if ($atributo == "state") {
-                $valor = "inactive";
-            }
-            if ($atributo != "id" && !is_null($valor)) {
-                $attr .= "`".$atributo."`,";
-                $val .= "'".$valor."',"; 
-            }
-            if ($atributo == "ent_type_id" && !is_null($valor)) {
-               $isEntity = true; 
-            }
-        }
-        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                . "VALUES (".$val."'".$data."',".$idProp.")";
-        $updateHist =$bd->runQuery($updateHist);
-        if ($updateHist) {
-            if ($bd->runQuery("UPDATE property SET updated_on = '".$data."' WHERE id = ".$idProp)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 
