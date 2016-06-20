@@ -1311,7 +1311,7 @@ class PropHist{
                 $atributo = "active_on";
             }
             if ($atributo == "state") {
-                $valor = "inactive";
+                $atributo = "state_backup";
             }
             if ($atributo != "id" && !is_null($valor)) {
                 $attr .= "`".$atributo."`,";
@@ -1321,8 +1321,8 @@ class PropHist{
                $isEntity = true; 
             }
         }
-        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id) "
-                . "VALUES (".$val."'".$data."',".$idProp.")";
+        $updateHist = "INSERT INTO `hist_property`(".$attr." inactive_on, property_id, state) "
+                . "VALUES (".$val."'".$data."',".$idProp.",'inactive')";
         $updateHist =$db->runQuery($updateHist);
         if ($updateHist) {
             if ($last && $isEntity && $this->createNewEnt($atributos["ent_type_id"], $db, $data) == false) {
