@@ -422,7 +422,7 @@ class PropertyManage
             }
             else {
                 $queryEnt = "SELECT name FROM rel_type WHERE id = ".$_REQUEST['rel_id'];
-                $nomeRel = $this->runQuery($queryEnt)->fetch_assoc()["name"];
+                $nomeRel = $this->db->runQuery($queryEnt)->fetch_assoc()["name"];
 ?>
             <h3>Gestão de propriedades - Relação <?php echo $nomeRel;?> - introdução</h3>
 <?php 
