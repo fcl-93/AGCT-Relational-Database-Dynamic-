@@ -1559,10 +1559,18 @@ class InsereRelacoes
             <h3 align="center">Inserção de Relações - Nova Relação</h3>
 <?php
             $relType = $this->bd->runQuery("SELECT * FROM rel_type");
+            $selEntRel = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id IN ((SELECT ent_type1_id FROM rel_type) || (SELECT ent_type2_id FROM rel_type))");
             if ($relType->num_rows == 0) {
 ?>
                 <p align="center">Não existem ainda quaisquer tipos de relações, pelo que não pode introduzir qualquer relação.</p>
                 <p align="center">Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
+<?php
+            }
+            else if ($selEntRel->num_rows == 0) {
+?>
+                <p align="center">Não existem ainda quaisquer entidade que possam participar nos tipos de relações existentes, pelo que não pode introduzir qualquer relação.</p>
+                <p align="center">Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
+                <p align="center">Ou clique em <a href="/insercao-de-valores">Criar noa instância de entidade</a> para criar uma nova instância de entidade.</p>
 <?php
             }
             else {
