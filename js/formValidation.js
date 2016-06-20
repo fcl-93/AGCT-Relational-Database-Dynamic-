@@ -61,38 +61,38 @@ $().ready(function(){
                 {
                     if($.isNumeric(sizeVal) && sizeVal > 0)
                     {
-                      //console.log("Ok");
-                      $('#errTam').text("");
+                        //console.log("Ok");
+                        $('#errTam').text("");
 //                      $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").prop('disabled', false);
+                        $("#submitBttInProp").prop('disabled', false);
                     }
                     else
                     {
                         //console.log("Erro");  
-                       $('#errTam').text("Por favor introduza um valor superior a 0.");
-                       $('#errTam').css("color","red");
-                       $('#errTam').css("font-style","italic");
-                       $('#errTam').css("display","inline");
+                        $('#errTam').text("Por favor introduza um valor superior a 0.");
+                        $('#errTam').css("color","red");
+                        $('#errTam').css("font-style","italic");
+                        $('#errTam').css("display","inline");
                        /*$(this).submit(function(e){
                             console.log('submit intercepted');
                             e.preventDefault(e);
                         });*/
-$("#submitBttInProp").prop('disabled', true);
+                        $("#submitBttInProp").prop('disabled', true);
                     }
                 }
                 else
                 {   
-                       $('#errTam').text("Por favor introduza um valor superior a 0.");
-                       $('#errTam').css("color","red");
-                       $('#errTam').css("font-style","italic");
-                       $('#errTam').css("display","inline");
+                    $('#errTam').text("Por favor introduza um valor superior a 0.");
+                    $('#errTam').css("color","red");
+                    $('#errTam').css("font-style","italic");
+                    $('#errTam').css("display","inline");
 //                       $(this).submit(function(e){
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").prop('disabled', true);
+                    $("#submitBttInProp").prop('disabled', true);
                 }
             }else if($('input[name=tipoCampo]:checked', '#insertProp').val() == "textbox"){ 
                 var sizeVal = $("#size").val();
@@ -106,38 +106,40 @@ $("#submitBttInProp").prop('disabled', true);
 //                            $(this).submit(function(e){
 //                             console.log('submit sucess');
 //                        });
-$("#submitBttInProp").prop('disabled', false);
+                        $("#submitBttInProp").prop('disabled', false);
                     }else{
                         console.log(sizeVal);
-                            console.log("It's Null");
-                           $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
-                           $('#errTam').css("color","red");
-                           $('#errTam').css("font-style","italic");
-                           $('#errTam').css("display","inline");
+                        console.log("It's Null");
+                        $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
+                        $('#errTam').css("color","red");
+                        $('#errTam').css("font-style","italic");
+                        $('#errTam').css("display","inline");
 //                           $(this).submit(function(e){
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").prop('disabled', true);
+                        $("#submitBttInProp").prop('disabled', true);
 
 
                     }
-                }else
-                {
+                }else{
                     console.log(sizeVal.length);
-                       $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
-                       $('#errTam').css("color","red");
-                       $('#errTam').css("font-style","italic");
-                       $('#errTam').css("display","inline");
+                    $('#errTam').text("Por favor introduza um valor no formato aaxbb, em que a e b variam entre 0 e 9");
+                    $('#errTam').css("color","red");
+                    $('#errTam').css("font-style","italic");
+                    $('#errTam').css("display","inline");
 //                       $(this).submit(function(e){
 //                            console.log('submit intercepted');
 //                            e.preventDefault(e);
 //                        });
-$("#submitBttInProp").prop('disabled', true);
+                    $("#submitBttInProp").prop('disabled', true);
                 }
 
 
-        }});
+        }else{
+            $('#errTam').text("");
+        }
+    });
         
         
         //edition form in page gestão de propriedades.php
