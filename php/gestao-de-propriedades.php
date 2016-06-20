@@ -747,7 +747,7 @@ class PropertyManage
             goBack();
             return false;
         }
-        if (empty($_REQUEST["obrigatorio"]))
+        if (empty($_REQUEST["obrigatorio"]) && strlen($_REQUEST['obrigatorio']) == 0)
         {
 ?>
             <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
@@ -868,7 +868,7 @@ class PropertyManage
                 goBack();
                 return false;
             }
-            if (empty($_REQUEST["obrigatorio_".$prop['id']]))
+            if (empty($_REQUEST["obrigatorio_".$prop['id']]) && strlen($_REQUEST['obrigatorio_'.$prop['id']]) == 0)
             {
 ?>
                 <p>Por favor indique se esta propriedade deve ou não ser obrigatória.</p><br>
@@ -1493,8 +1493,8 @@ class PropHist{
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Ativação</th>
-                    <th>Data de Desativação</th>
+                    <th>Data de Início</th>
+                    <th>Data de Fim</th>
                     <th>Propriedade</th>
                     <th>Tipo de valor</th>
                     <th>Nome do campo no formulário</th>
