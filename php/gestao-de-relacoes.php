@@ -690,18 +690,17 @@ class RelHist{
                     $prop["unit_type_id"] == ""? $unit ="NULL" : $unit = $prop['unit_type_id'];
                     $updateHistProp = $db->runQuery("INSERT INTO hist_property "
                             . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
-                            . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `form_field_size`, "
+                            . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `state_backup`, `form_field_size`, "
                             . "`property_id`, `active_on`, `inactive_on`)"
-                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'inactive',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
+                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'inactive','".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
                     $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]);
                     if ($selPropHist->num_rows == 0) {
                         $updateProp = $db->runQuery("UPDATE property SET state = 'inactive', updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
                     }
                     else {
                         $propHist = $selPropHist->fetch_assoc();
-                        $estado = $propHist["state"];
-                        $ordem = $propHist["form_field_order"];
-                        $updateProp = $db->runQuery("UPDATE property SET form_field_order = ".$ordem.", state = '".$estado."', updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
+                        $propHist["unit_type_id"] == ""? $unit ="NULL" : $unit = $propHist['unit_type_id'];
+                        $updateProp = $db->runQuery("UPDATE property SET name = '".$propHist['name']."', value_type = '".$propHist['value_type']."', form_field_name = '".$propHist['form_field_name']."', unit_type_id = ".$unit.", form_field_order = ".$propHist['form_field_order'].", mandatory = ".$propHist['mandatory'].", state = '".$propHist['state_backup']."',".$propHist["form_field_size"].", updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
                     }  
                 } 
             }
@@ -879,7 +878,7 @@ class RelHist{
                             <td><?php echo $prop["name"];?></td>
                             <td><?php echo $prop["value_type"];?></td>
 <?php
-                            if ($prop["state"] === "active")
+                            if ($prop["state_backup"] === "active")
                             {
 ?>
                                 <td>Ativo</td>
@@ -1052,7 +1051,7 @@ class RelHist{
                                 <td><?php echo $prop["name"];?></td>
                                 <td><?php echo $prop["value_type"];?></td>
 <?php
-                                if ($arraySelec["state"] === "active")
+                                if ($arraySelec["state_backup"] === "active")
                                 {
 ?>
                                     <td rowspan="<?php echo $numProp?>">Ativo</td>
