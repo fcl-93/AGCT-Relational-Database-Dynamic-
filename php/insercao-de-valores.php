@@ -569,35 +569,39 @@ class InsertValues{
                }
                switch ($arrayProp["value_type"]) {
                    case "int":
-                       if(ctype_digit($propVal))
-                        {
-                            $propVal = (int)$propVal;
-                            //quando o request tem um int e trata o int,actualiza esse valor com esse valor tratado
-                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
-                        }
-                        else
-                        {
+                       if (isset($propVal)) {
+                           if(ctype_digit($propVal))
+                            {
+                                $propVal = (int)$propVal;
+                                //quando o request tem um int e trata o int,actualiza esse valor com esse valor tratado
+                                $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                            }
+                            else
+                            {
 ?>
-                            <p>Certifique-se que introduziu um número inteiro no campo <?php echo $arrayProp['name'];?>.</p>
+                                <p>Certifique-se que introduziu um número inteiro no campo <?php echo $arrayProp['name'];?>.</p>
 <?php
-                            goBack();
-                            $goBack = true;
+                                goBack();
+                                $goBack = true;
+                            }
                         }
                        break;
                    case "double":
-                       if(is_numeric($propVal))
-                        {
-                            $propVal = floatval($propVal);
-                            //quando o request tem um double e trata o double,actualiza esse valor com esse valor tratado
-                            $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
-                        }
-                        else
-                        {
+                        if (isset($propVal)) {
+                            if(is_numeric($propVal))
+                            {
+                                $propVal = floatval($propVal);
+                                //quando o request tem um double e trata o double,actualiza esse valor com esse valor tratado
+                                $_REQUEST[$arrayProp["form_field_name"]] = $propVal;
+                            }
+                            else
+                            {
 ?>
-                            <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
+                                <p>Certifique-se que introduziu um valor numérico no campo <?php echo $arrayProp['name'];?>.</p>
 <?php
-                            goBack();
-                            $goBack = true;
+                                goBack();
+                                $goBack = true;
+                            }
                         }
                        break;
                    default:
@@ -629,7 +633,7 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
-                if (is_null($_REQUEST[$arrayProp['form_field_name']])){
+                if (empty($_REQUEST[$arrayProp['form_field_name']]) || is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
                 else if ($_REQUEST[$arrayProp['form_field_name']] == "instPorCriar") {
