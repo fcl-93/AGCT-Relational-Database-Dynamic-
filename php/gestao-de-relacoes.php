@@ -692,7 +692,7 @@ class RelHist{
                             . "( `name`,`rel_type_id`, `value_type`, `form_field_name`, `form_field_type`, "
                             . "`unit_type_id`, `form_field_order`, `mandatory`, `state`, `state_backup`, `form_field_size`, "
                             . "`property_id`, `active_on`, `inactive_on`)"
-                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'inactive','".$prop["state"]."',,".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
+                            . "VALUES ('".$prop["name"]."',".$prop["rel_type_id"].",'".$prop["value_type"]."','".$prop["form_field_name"]."','".$prop["form_field_type"]."',".$unit.",".$prop["form_field_order"].",".$prop["mandatory"].",'inactive','".$prop["state"]."',".$prop["form_field_size"].",".$prop['id'].",'".$prop['updated_on']."','".$data."')");
                     $selPropHist = $db->runQuery("SELECT * FROM hist_property WHERE rel_type_id = ".$idRel." AND active_on < '".$inactive."' AND inactive_on >= '".$inactive."' AND property_id = ".$prop["id"]);
                     if ($selPropHist->num_rows == 0) {
                         $updateProp = $db->runQuery("UPDATE property SET state = 'inactive', updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
