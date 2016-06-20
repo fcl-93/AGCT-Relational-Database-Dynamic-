@@ -633,6 +633,7 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
+                echo $_REQUEST[$arrayProp['form_field_name']];
                 if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
