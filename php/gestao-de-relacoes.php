@@ -701,7 +701,7 @@ class RelHist{
                     else {
                         $propHist = $selPropHist->fetch_assoc();
                         $propHist["unit_type_id"] == ""? $unit ="NULL" : $unit = $propHist['unit_type_id'];
-                        $updateProp = $db->runQuery("UPDATE property SET name = '".$propHist['name']."', value_type = '".$propHist['value_type']."', form_field_name = '".$propHist['form_field_name']."', unit_type_id = ".$unit.", form_field_order = ".$propHist['form_field_order'].", mandatory = ".$propHist['mandatory'].", state = '".$propHist['state_backup']."',".$propHist["form_field_size"].", updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
+                        $updateProp = $db->runQuery("UPDATE property SET name = '".$propHist['name']."', value_type = '".$propHist['value_type']."', form_field_name = '".$propHist['form_field_name']."', unit_type_id = ".$unit.", form_field_order = ".$propHist['form_field_order'].", mandatory = ".$propHist['mandatory'].", state = '".$propHist['state_backup']."', form_field_size = ".$propHist["form_field_size"].", updated_on = '".$data."' WHERE id = ".$prop["id"]);                        
                     }  
                 } 
             }
