@@ -2782,7 +2782,7 @@ class entityHist{
                                 <th>Propriedade</th>
                                 <th>Valor</th>
                                 <th>Estado do valor</th>
-                                <th>Estado durante o período</th>
+                                <th>Estado da instância</th>
                                 <th>Ação</th>
                             </tr>
                         </thead>
