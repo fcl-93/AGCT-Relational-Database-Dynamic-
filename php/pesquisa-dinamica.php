@@ -2853,7 +2853,7 @@ class entityHist{
                                             <td>Sem valor associado</td>
 <?php                                            
                                         }
-                                        if($valHist['state_backup'] == 'inactive')
+                                        if($valHist['state_backup'] == 'inactive' || $selValHist->num_rows == 0)
                                         {
 ?>
                                             <td><?php echo "Inativo"?></td>
@@ -2900,7 +2900,7 @@ class entityHist{
                                             <td>Sem valor associado</td>
 <?php                                            
                                         }
-                                        if($valHist['state_backup'] == 'inactive')
+                                        if($valHist['state_backup'] == 'inactive' || $selValHist->num_rows == 0)
                                         {
 ?>
                                             <td><?php echo "Inativo"?></td>
