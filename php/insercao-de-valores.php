@@ -569,7 +569,7 @@ class InsertValues{
                }
                switch ($arrayProp["value_type"]) {
                    case "int":
-                       if (isset($propVal)) {
+                       if (!is_null($propVal)) {
                            if(ctype_digit($propVal))
                             {
                                 $propVal = (int)$propVal;
@@ -587,7 +587,7 @@ class InsertValues{
                         }
                        break;
                    case "double":
-                        if (isset($propVal)) {
+                        if (!is_null($propVal)) {
                             if(is_numeric($propVal))
                             {
                                 $propVal = floatval($propVal);
@@ -633,7 +633,7 @@ class InsertValues{
 <?php
             $execQueryProp = $this->db->runQuery($queryProp);
             while ($arrayProp = $execQueryProp->fetch_assoc()) {
-                if (empty($_REQUEST[$arrayProp['form_field_name']]) || is_null($_REQUEST[$arrayProp['form_field_name']])){
+                if (is_null($_REQUEST[$arrayProp['form_field_name']])){
                     $valor = "Não introduziu nenhum valor";
                 }
                 else if ($_REQUEST[$arrayProp['form_field_name']] == "instPorCriar") {
