@@ -2967,7 +2967,7 @@ class entityHist{
             while( $readActVal = $getActVal->fetch_assoc())
             {
 
-                if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`) VALUES (NULL,".$readActVal['entity_id'].",".$readActVal['property_id'].",'".$readActVal['value']."','".$readActVal['producer']."',NULL,".$readActVal['id'].",'".$readActVal['updated_on']."','".$updated_on."','inactive')")){
+                if(!$bd->runQuery("INSERT INTO `hist_value`(`id`, `entity_id`, `property_id`, `value`, `producer`, `relation_id`, `value_id`, `active_on`, `inactive_on`, `state`, `state_backup`) VALUES (NULL,".$readActVal['entity_id'].",".$readActVal['property_id'].",'".$readActVal['value']."','".$readActVal['producer']."',NULL,".$readActVal['id'].",'".$readActVal['updated_on']."','".$updated_on."','inactive','".$readActVal['state_backup']."')")){
                      echo "#NO BACKUP DOS VALUES";
                     $errorFound = true;
                     break;
