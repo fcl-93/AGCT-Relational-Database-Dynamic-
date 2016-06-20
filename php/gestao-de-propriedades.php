@@ -644,7 +644,6 @@ class PropertyManage
             $queryInsere .=  ','.$_REQUEST["entidadeReferenciada"];
         }
         $queryInsere .=  ', "'.$_SESSION["data"].'")';
-        echo $queryInsere;
         $insere = $this->db->runQuery($queryInsere);
 	if(!$insere)
 	{
