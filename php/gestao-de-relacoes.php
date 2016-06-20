@@ -801,6 +801,8 @@ class RelHist{
             }
             else {
                 while ($hist = $queryHistorico->fetch_assoc()) {
+                    echo "SELECT * FROM property WHERE updated_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel;
+                    echo "<br>SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel;
                     $selProp =$db->runQuery("SELECT * FROM property WHERE updated_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     $selPropHist =$db->runQuery("SELECT * FROM hist_property WHERE inactive_on >= '".$hist["inactive_on"]."' AND active_on < '".$hist["inactive_on"]."' AND rel_type_id = ".$idRel);
                     
