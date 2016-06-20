@@ -128,9 +128,9 @@ class GereForms
                             <tr>
                                 <th>Id</th>
                                 <th>Nome do formulário customizado</th>
-                                <th>Estado</th>
-                                <th>Propriedade</span></th>
+                                <th>Propriedade</th>
                                 <th>Tipo de Valor</span></th>
+                                <th>Estado</span></th>
                                 <th>Ação</th>
                             </tr>
                         </thead>
