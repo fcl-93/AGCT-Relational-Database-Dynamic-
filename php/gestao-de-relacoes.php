@@ -758,8 +758,8 @@ class RelHist{
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Ativação</th>
-                    <th>Data de Desativação</th>
+                    <th>Data de Início</th>
+                    <th>Data de Fim</th>
                     <th>Nome da Relação</th>
                     <th>Entidade 1</th>
                     <th>Entidade 2</th>

@@ -465,8 +465,8 @@ class UnidadeHist
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Ativação</th>
-                    <th>Data de Desativação</th>
+                    <th>Data de Início</th>
+                    <th>Data de Fim</th>
                     <th>Unidade</th>
                     <th>Estado</th>
                     <th>Ação</th>
