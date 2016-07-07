@@ -869,8 +869,8 @@ class HistDeForms{
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Data de Início</th>
-                        <th>Data de Fim</th>
+                        <th>Data de Iníco</th>
+                        <th>Data de Fm</th>
                         <th>Nome do Formulário</th>
                         <th>Propriedade</th>
                         <th>Nome do campo no formulário</th>
