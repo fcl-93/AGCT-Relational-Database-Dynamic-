@@ -768,8 +768,8 @@ class ValPerHist{
         <table class="table">
             <thead>
                 <tr>
-                    <th>Data de Iníco</th>
-                    <th>Data de Fm</th>
+                    <th>Data de Início</th>
+                    <th>Data de Fim</th>
                     <th>Valores Permitidos</th>
                     <th>Estado</th>
                     <th>Ação</th>
