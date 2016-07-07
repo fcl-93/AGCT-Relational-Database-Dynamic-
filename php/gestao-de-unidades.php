@@ -7,7 +7,7 @@ require_once("custom/php/common.php");
 
 
 /**
- * Class has all the method that are responsable for the management of the entity_type page
+ * Class has all the method that are responsable for the management of the entity_type page.
  * @author fabio
  *
  */

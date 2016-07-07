@@ -21,7 +21,7 @@ class ValoresPermitidos
 	}
 	/**
 	 *  This method will check if the user as the permission to acess this page
-	 * and will handle all the Requests states
+	 * and will handle all the Requests states.
 	 */
 	public function checkUser(){
 		$capability = 'manage_custom_forms';

@@ -5,7 +5,7 @@ $gerencia = new GereForms();
 
 /**
  The methods that are present in this class will handle all the operations that we can do in 
- * the page gestão de formularios
+ * the page gestão de formularios.
  *  @author fabio
  * 
  */

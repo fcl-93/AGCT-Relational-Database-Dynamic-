@@ -2,7 +2,7 @@
 require_once("custom/php/common.php");
 
 /**
- * Class that handle all the methods that are necessary to execute this component
+ * Class that handle all the methods that are necessary to execute this component.
  */
 class RelationManage
 {
