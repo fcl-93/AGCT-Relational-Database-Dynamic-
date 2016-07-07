@@ -5,4 +5,4 @@ This repository is used to mantain the ncessary code in PHP, JS and CSS necesssa
 
 We are using Wordpress as a Web Framework.
 
-This project id being developed by Fábio Luís aka fcl-93 and Vítor Baptista aka vmcbaptista.
+This project id being developed by Fábio Luís aka fcl-93 and Vítor Baptista aka vmcbaptista
