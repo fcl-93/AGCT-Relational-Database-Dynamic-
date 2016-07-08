@@ -520,7 +520,7 @@ class ImportValues{
                                     $ent_fk_id = $atrProp['fk_ent_type_id'];
                                     $ent_type_id = $atrProp["ent_type_id"];
                                     $rel_type_id = $atrProp["rel_type_id"];
-                                    if (isset($_REQUEST["ent"])) {
+                                    if (isset($_REQUEST["ent"]) || isset($_REQUEST["rel"])) {
                                         $size = $atrProp["form_field_size"];
                                         $mandatory = $atrProp["mandatory"];
                                     }
