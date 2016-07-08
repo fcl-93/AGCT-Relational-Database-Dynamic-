@@ -1635,7 +1635,7 @@ class Search{
         <table class="table">
             <thead>
                 <tr>
-                     <th>Id<th>
+                     <th>Id</th>
                     <th>Instância</th>
                     <th>Estado da Instância</th>
                     <th>Propriedade</th>
