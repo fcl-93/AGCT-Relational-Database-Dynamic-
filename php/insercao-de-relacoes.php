@@ -919,13 +919,13 @@ class InsereRelacoes
                             while($read_SecondEnt = $res_SencondEnt->fetch_assoc())
                             {
                                 $verificaRel = "SELECT DISTINCT * FROM relation WHERE (entity1_id = ".$prev_SelEnt." AND entity2_id = ".$read_SecondEnt['id'].") OR (entity2_id = ".$prev_SelEnt." AND entity1_id = ".$read_SecondEnt['id'].")";
-                                echo $verificaRel ;
+                               
                                 if ($this->bd->runQuery($verificaRel)->num_rows === 0) {
                                     if($read_SecondEnt['entity_name'] != '')
                                     {
             ?>
                                     <tr>
-                                        <td><?php echo $read_SecondEnt['entity_name']; ?></td>
+                                        <td><?php echo $verificaRel ; /*$read_SecondEnt['entity_name']; */?></td>
                                         <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                         <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
                                     </tr>
