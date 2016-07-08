@@ -1047,12 +1047,14 @@ class Search{
             // if it was it means that we need to go to another methods to
             // generated the others subqueries
             if (strlen($query1Ent) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo '#1';
                 if ($primeiraVez) {
                     $querydinamica .= $query1Ent.")";
                     $primeiraVez = false;
                 }
             }
             if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo '#2';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
@@ -1072,7 +1074,7 @@ class Search{
                 }
             }
             if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-                echo '#1';
+                echo '#3';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
@@ -1092,6 +1094,7 @@ class Search{
                 }
             }
             if (strlen($query1ER) > 56 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo '#4';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
