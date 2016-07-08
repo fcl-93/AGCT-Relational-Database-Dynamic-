@@ -183,7 +183,7 @@ class InsereRelacoes
 						$sanitizeId = $this->bd->userInputVal($readRelations['entity1_id']);
 						$res_GetVal = $this->bd->runQuery("SELECT * FROM value WHERE entity_id=".$sanitizeId);
 ?>
-<?php
+<?php                                           
                                                 $count = 0;
                                              	while($read_Props = $res_GetVal->fetch_assoc())
                                              	{
@@ -232,6 +232,23 @@ class InsereRelacoes
                                              </td>
 <?php                                       
                                             $count = 0;
+                                            
+                                            if ($num_props == 0) {
+?>
+                                                <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
+<?php
+                                                $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']." AND updated_on >'".$readRelations['updated_on']."'");
+                                                if($getRel->num_rows == 0){
+?>
+                                                    <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
+<?php 
+                                                }
+?>
+                                                <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
+                                                <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
+<?php
+                                            }
+                                            else {
                                             while($relProps = $read_RelProps->fetch_assoc()){
 ?>
                                                     <td><?php echo $relProps['name']?></td>
@@ -297,6 +314,7 @@ class InsereRelacoes
                                                 </tr>
 <?php
                                                 $count++;
+                                            }
                                             }
 
 
