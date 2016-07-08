@@ -1431,16 +1431,13 @@ class Search{
      * @return boolean|string (true if there are any error with validations, the query if not)
      */
     private function filtros3Tabela($query1,$controlo ,$count,$idDaPropriedade,$nomeProp,$tipoValor, $tipo) {
-        echo '#1<br>';
         $res_GetEntId = $this->bd->runQuery("SELECT ent_type_id FROM property WHERE id=".$idDaPropriedade);
         $read_GetEntId = $res_GetEntId->fetch_assoc();
         if ($controlo) {
-            echo '#2<br>';
             array_push($this->saveNames, $read_GetEntId['ent_type_id']);
             $query1 .= "r.id IN (";
         }
         else {
-            echo '#3<br>';
             //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
@@ -1457,7 +1454,6 @@ class Search{
             //print_r($this->saveNames);
         }
         if ($tipoValor == "int") {
-            echo '#4<br>';
             if ($this->validaInt($count, $tipo) === false) {
                 return true;
             }
@@ -1468,8 +1464,8 @@ class Search{
             }
         }
         else if ($tipoValor == "double") {
-            echo '#5<br>';
             if ($this->validaDouble($count, $tipo) === false) {
+                echo '#1<br>';
                 return true;
             }
             else {
@@ -1479,17 +1475,14 @@ class Search{
             }
         }
         else  if ($tipoValor == "text"){
-            echo '#6<br>';
             $valor = $this->bd->userInputVal($_REQUEST['text'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
         }
         else  if ($tipoValor == "enum"){
-            echo '#7<br>';
             $valor = $this->bd->userInputVal($_REQUEST['select'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
         }
         else  if ($tipoValor == "bool"){
-            echo '#8<br>';
             $valor = $this->bd->userInputVal($_REQUEST['radio'.$tipo.$count]);
             $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value = '".$valor."' AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id";
         }
