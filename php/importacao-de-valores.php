@@ -452,6 +452,7 @@ class ImportValues{
             $contaLinhas = 3;
             $this->db->getMysqli()->autocommit(false);
             $this->db->getMysqli()->begin_transaction();
+            echo count($sheetData);
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
                 print_r($sheetData[strval($contaLinhas)]);
