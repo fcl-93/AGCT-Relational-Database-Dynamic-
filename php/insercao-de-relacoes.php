@@ -1568,7 +1568,7 @@ class InsereRelacoes
 <?php
             }
             else if ($selEntRel->num_rows == 0) {
-?>
+?>   
                 <p align="center">Não existem ainda quaisquer entidade que possam participar nos tipos de relações existentes, pelo que não pode introduzir qualquer relação.</p>
                 <p align="center">Clique em <a href="/gestao-de-relacoes">Criar tipo de relação</a> para criar um novo tipo de relação.</p>
                 <p align="center">Ou clique em <a href="/insercao-de-valores">Criar noa instância de entidade</a> para criar uma nova instância de entidade.</p>
