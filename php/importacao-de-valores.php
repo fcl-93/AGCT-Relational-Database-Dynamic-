@@ -457,6 +457,7 @@ class ImportValues{
                 $i = 0;
                 print_r($sheetData[strval($contaLinhas)]);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
+                    echo $i.' ';
                     if ($i > 0) {
                         if (isset($_REQUEST["rel"])) {
                             if( $i == 1) {
