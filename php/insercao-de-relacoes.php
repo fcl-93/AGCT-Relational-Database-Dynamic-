@@ -935,6 +935,7 @@ class InsereRelacoes
                                     {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
     ?>
                                         <tr>
+                                            <td><?php echo $verificaRel ?></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
                                             <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
