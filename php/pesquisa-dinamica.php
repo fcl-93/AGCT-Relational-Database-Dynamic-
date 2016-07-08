@@ -1076,7 +1076,7 @@ class Search{
             if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
                 echo '#3';
                 if ($primeiraVez) {
-                    if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    if ($this->geraQueryTabela3($query1Rel,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
                     }
                     else {
@@ -1085,7 +1085,7 @@ class Search{
                     }
                 }
                 else {
-                    if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    if ($this->geraQueryTabela3($query1Rel,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
                     }
                     else {
@@ -1096,7 +1096,7 @@ class Search{
             if (strlen($query1ER) > 56 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
                 echo '#4';
                 if ($primeiraVez) {
-                    if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    if ($this->geraQueryTabela4($query1ER,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
                     }
                     else {
@@ -1105,7 +1105,7 @@ class Search{
                     }
                 }
                 else {
-                    if ($this->geraQueryTabela4($query1Ref,$idEnt,$cabecalhoQuery) === false) {
+                    if ($this->geraQueryTabela4($query1ER,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
                     }
                     else {
