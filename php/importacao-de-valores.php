@@ -510,6 +510,7 @@ class ImportValues{
                                 }
                             }
                             else {
+                                echo $propriedadesExcel[$i];
                                 $querySelectProp = "SELECT * FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                                 $querySelectProp = $this->db->runQuery($querySelectProp);
                                 if(!$querySelectProp ) {
