@@ -1639,6 +1639,7 @@ class Search{
         <table class="table">
             <thead>
                 <tr>
+                     <th>Id<th>
                     <th>Instância</th>
                     <th>Estado da Instância</th>
                     <th>Propriedade</th>
@@ -1661,6 +1662,7 @@ class Search{
                     $getValues = $this->bd->runQuery($getValues);
                     if ($this->bd->runQuery($getEnt)->num_rows == 0) {
 ?>
+                        
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                             echo $instancias['id'];
@@ -1673,7 +1675,8 @@ class Search{
                         $entity_name = $entity['entity_name'];
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
-?>
+?>                      
+                        <td><?php echo $entity_id ?></td>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                             echo $entity_name;
@@ -1683,6 +1686,7 @@ class Search{
                         }
                         else {
 ?>
+                        <td><?php echo $entity_id ?></td>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                            echo $entity_id;
