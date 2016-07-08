@@ -846,37 +846,39 @@ class ImportValues{
         $valores = $this->db->getMysqli()->real_escape_string($valores);
         $tipoCorreto = false;
 
-       if ($mandatory == 1  && empty($valores)){
+        if ($mandatory == 1  && strlen($valores) == 0){
 ?>
             <p>O campo <?php echo $propriedadesExcel[$i];?> é de preenchimento obrigatório!</p>
 <?php
             return false;
-       }           
-
-       if (strlen($valores) > $size) {
-?>
-            <p>O valor introduzido no campo <?php echo $propriedadesExcel[$i];?> tem muitos carateres.</p>
-<?php
-            return false;
-       }
-        switch($value_type) {
-            case 'int':
-                $tipoCorreto = $this->validaInt($i,$propriedadesExcel,$valores);
-                break;
-            case 'double':
-                $tipoCorreto = $this->validaDouble($i,$propriedadesExcel,$valores);
-                break;
-            case 'bool':
-                $tipoCorreto = $this->validaBool($i,$propriedadesExcel,$valores);
-                break;
-            case 'ent_ref':
-                $tipoCorreto = $this->validaEntRef($i,$propriedadesExcel,$valores, $ent_fk_id);
-                break;
-            default: 
-                $tipoCorreto = true;
-                break;
         }
-        return $tipoCorreto;
+        if (strlen($valores) > 0) {    
+            if (strlen($valores) > $size) {
+?>
+                <p>O valor introduzido no campo <?php echo $propriedadesExcel[$i];?> tem muitos carateres.</p>
+<?php
+                return false;
+            }
+            switch($value_type) {
+                case 'int':
+                    $tipoCorreto = $this->validaInt($i,$propriedadesExcel,$valores);
+                    break;
+                case 'double':
+                    $tipoCorreto = $this->validaDouble($i,$propriedadesExcel,$valores);
+                    break;
+                case 'bool':
+                    $tipoCorreto = $this->validaBool($i,$propriedadesExcel,$valores);
+                    break;
+                case 'ent_ref':
+                    $tipoCorreto = $this->validaEntRef($i,$propriedadesExcel,$valores, $ent_fk_id);
+                    break;
+                default: 
+                    $tipoCorreto = true;
+                    break;
+            }
+            return $tipoCorreto;
+        }
+        return true;
     }
     
     /**
