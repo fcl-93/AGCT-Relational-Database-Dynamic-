@@ -854,6 +854,7 @@ class ImportValues{
         }
         if (strlen($valores) > 0) {    
             if (strlen($valores) > $size) {
+                echo 'valor = '.$valores.'<br>';
 ?>
                 <p>O valor introduzido no campo <?php echo $propriedadesExcel[$i];?> tem muitos carateres.</p>
 <?php
