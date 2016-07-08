@@ -207,7 +207,9 @@ class Db_Op
             "menor"=>"<",
             "maior"=>">",
             "igual"=>"=",
-            "diferente"=>"!="
+            "diferente"=>"!=",
+            "maiorouigual"=>">=",
+            "menorouigual"=>"<="
             );
         return $operadores;
    }
