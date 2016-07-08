@@ -916,7 +916,7 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
 
                 // each type of property will have a different treatment
-
+                echo 'prop: '.$idDaPropriedade.' tipo: '.$tipo.'<br>';
                 if ($tipo == "ET") {
                     if ($primeiraVezET) {
                         $this->frase .= " cuja propriedade ".$nomeProp." é ";
