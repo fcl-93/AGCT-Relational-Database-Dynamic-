@@ -1559,7 +1559,8 @@ class InsereRelacoes
             <h3 align="center">Inserção de Relações - Nova Relação</h3>
 <?php
             $relType = $this->bd->runQuery("SELECT * FROM rel_type");
-            $selEntRel = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id IN ((SELECT ent_type1_id FROM rel_type) || (SELECT ent_type2_id FROM rel_type))");
+            //$selEntRel = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id IN ((SELECT ent_type1_id FROM rel_type) || (SELECT ent_type2_id FROM rel_type))");
+            $selEntRel = $this->bd->runQuery("SELECT * FROM entity WHERE ent_type_id IN (SELECT ent_type1_id FROM rel_type) OR ent_type_id IN (SELECT ent_type2_id FROM rel_type)");
             if ($relType->num_rows == 0) {
 ?>
                 <p align="center">Não existem ainda quaisquer tipos de relações, pelo que não pode introduzir qualquer relação.</p>
