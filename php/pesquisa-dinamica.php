@@ -1469,6 +1469,7 @@ class Search{
                 return true;
             }
             else {
+                echo '#2<br>';
                 $valor = $this->validaDouble($count, $tipo);
                 $query1 .= "SELECT r.id FROM relation AS r, value AS v WHERE v.value".$_REQUEST['operators'.$count]." ".$valor." AND  v.property_id = ".$idDaPropriedade." AND v.relation_id = r.id)";
                 $this->frase .= $_REQUEST['operators'.$count]." ";
