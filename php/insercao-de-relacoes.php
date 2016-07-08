@@ -838,7 +838,7 @@ class InsereRelacoes
             
             if($read_CompRel['ent_type1_id'] == $read_InsType['ent_type_id'])
             {
-               $res_SencondEnt =  $this->bd->runQuery("SELECT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']);
+               $res_SencondEnt =  $this->bd->runQuery("SELECT DISTINCT entity.id, entity.entity_name FROM rel_type, entity WHERE rel_type.ent_type2_id = entity.ent_type_id AND rel_type.ent_type2_id=".$read_CompRel['ent_type2_id']);
                
 ?>
                 <html>
@@ -860,6 +860,7 @@ class InsereRelacoes
                                         {
     ?>
                                         <tr>
+                                         
                                             <td><?php echo $read_SecondEnt['entity_name']; ?></td>
                                             <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
@@ -871,6 +872,7 @@ class InsereRelacoes
                                             //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
     ?>
                                         <tr>
+                                             
                                             <td><?php echo  $read_SecondEnt['id']; ?></td>
                                             <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
@@ -925,7 +927,7 @@ class InsereRelacoes
                                     {
             ?>
                                     <tr>
-                                        <td><?php echo $verificaRel ; /*$read_SecondEnt['entity_name']; */?></td>
+                                        <td><?php echo $read_SecondEnt['entity_name']; ?></td>
                                         <td><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                         <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
                                     </tr>
@@ -935,7 +937,6 @@ class InsereRelacoes
                                     {               //if the user didn't fave any name to the entity e need to search for the attribute of that entity who has a name.
     ?>
                                         <tr>
-                                            <td><?php echo $verificaRel ?></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"><?php echo  $read_SecondEnt['id']; ?></td>
                                             <td> <!--<label>Nome para a relação </label>--><input type="text" name ="nomeDaRel<?php echo $control; ?>"></td>
                                             <td><input type="checkbox" name="secondEnt<?php echo $control; ?>" value="<?php echo $read_SecondEnt['id'];?>"></td>
