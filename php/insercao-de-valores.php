@@ -552,7 +552,7 @@ class InsertValues{
                     break;
                }  
            }
-           if (strlen($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"]) {
+           if ($arrayProp["form_field_type"] == 'text' || $arrayProp["form_field_type"] == 'textbox' && (strlen($_REQUEST[$arrayProp["form_field_name"]]) > $arrayProp["form_field_size"])) {
 ?>
                 <p>O valor introduzido no campo <?php echo $arrayProp['name'];?> tem muitos carateres.</p>
 <?php
