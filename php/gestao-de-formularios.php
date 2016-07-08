@@ -908,11 +908,34 @@ class HistDeForms{
                         $checkIfFIrst = true;
                         while($getPropId = $getPropHist ->fetch_assoc())
                        {
-                            $getPropName = $bd->runQuery("SELECT * FROM property WHERE id= ".$getPropId['property_id']." AND inactive_on='".$readFNhist['inactive_on']."'" )->fetch_assoc();
+                            $getPropName = $bd->runQuery("SELECT * FROM property WHERE id= ".$getPropId['property_id']." AND updated_on < '".$readFNhist['inactive_on']."'" )->fetch_assoc();
+                            $getHistPropName = $bd->runQuery("SELECT * FROM hist_property WHERE id= ".$getPropId['property_id']." AND active_on < '".$readFNhist['inactive_on']." AND inactive_on >= '".$readFNhist['inactive_on']."'" )->fetch_assoc();
 ?>
-                            <td><?php echo $getPropName['name']?></td>
-                            <td><?php echo $getPropName['form_field_name']?></td>
-                            <td><?php echo $getPropName['form_field_size']?></td>
+                            
+                            <td>
+<?php
+                                if (empty($getHistPropName['name']))
+                                    echo $getPropName['name'];
+                                else 
+                                    echo $getHistPropName['name'];
+?>
+                            </td>
+                            <td>
+<?php
+                                if (empty($getHistPropName['form_field_name']))
+                                    echo $getPropName['form_field_name'];
+                                else
+                                    echo $getHistPropName['form_field_name'];
+?>
+                            </td>
+                            <td>
+<?php
+                                if(empty($getHistPropName['form_field_size']))
+                                    echo $getPropName['form_field_size'];
+                                else 
+                                    echo $getHistPropName['form_field_size'];
+?>
+                            </td>
 
                             <td><?php echo $getPropId['field_order']?></td>
                             <td>
