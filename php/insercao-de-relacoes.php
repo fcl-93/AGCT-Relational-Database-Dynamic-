@@ -236,18 +236,6 @@ class InsereRelacoes
                                             if ($num_props == 0) {
 ?>
                                                 <td colspan="2">Não existem propriedades associadas a este tipo de relação</td>
-                                                <td>
-<?php
-                                                $getRel = $this->bd->runQuery("SELECT * FROM rel_type WHERE id=".$readRelations['rel_type_id']." AND updated_on >'".$readRelations['updated_on']."'");
-                                                if($getRel->num_rows == 0){
-?>
-                                                    <a href="insercao-de-relacoes?estado=editar&rel=<?php echo $readRelations['id'];?>">[Inserir/Editar Propriedades da Relação]</a>  
-<?php 
-                                                }
-?>
-                                                <a href="insercao-de-relacoes?estado=desativar&rel=<?php echo $readRelations['id'];?>">[Desativar]</a>
-                                                <a href="insercao-de-relacoes?estado=historico&rel=<?php echo $readRelations['id'];?>">[Histórico]</a>
-                                                </td>
 <?php
                                             }
                                             else {
