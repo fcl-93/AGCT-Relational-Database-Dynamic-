@@ -1040,7 +1040,6 @@ class Search{
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         else {
-            echo 'query: '.$query1Rel;
             $primeiraVez = true;
             // the strlen presented above checks if anything was added to the
             // 1st subquery during the previous cycle.
@@ -1054,7 +1053,6 @@ class Search{
                 }
             }
             if (strlen($query1Ref) > 56 && !$erro) { //56 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-                echo '#2';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela2($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
@@ -1074,7 +1072,6 @@ class Search{
                 }
             }
             if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-                echo '#3';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela3($query1Rel,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
@@ -1094,7 +1091,6 @@ class Search{
                 }
             }
             if (strlen($query1ER) > 56 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
-                echo '#4';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela4($query1ER,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
