@@ -454,6 +454,7 @@ class ImportValues{
             $this->db->getMysqli()->begin_transaction();
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
+                print_r($sheetData[strval($contaLinhas)]);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
                     if ($i > 0) {
                         if (isset($_REQUEST["rel"])) {
