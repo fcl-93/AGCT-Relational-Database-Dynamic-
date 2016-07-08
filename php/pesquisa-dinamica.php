@@ -916,7 +916,6 @@ class Search{
                 $tipoValor = $queryNomeValProp["value_type"];
 
                 // each type of property will have a different treatment
-
                 if ($tipo == "ET") {
                     if ($primeiraVezET) {
                         $this->frase .= " cuja propriedade ".$nomeProp." é ";
@@ -1041,6 +1040,7 @@ class Search{
             $querydinamica = "SELECT * FROM entity WHERE ent_type_id = ".$idEnt;
         }
         else {
+            echo 'query: '.$query1Rel;
             $primeiraVez = true;
             // the strlen presented above checks if anything was added to the
             // 1st subquery during the previous cycle.
@@ -1072,6 +1072,7 @@ class Search{
                 }
             }
             if (strlen($query1Rel) > 46 && !$erro) { //46 é o tamanho da query qd esta não é alterada pelos métodos antecessores
+                echo '#1';
                 if ($primeiraVez) {
                     if ($this->geraQueryTabela3($query1Ref,$idEnt,$cabecalhoQuery) === false) {
                         $erro = true;
@@ -1439,7 +1440,6 @@ class Search{
             $query1 .= "r.id IN (";
         }
         else {
-
             //echo in_array($read_GetEntId['ent_type_id'],$this->saveNames);
             //echo "O valor da entidade é ".$read_GetEntId['ent_type_id'];
             if(in_array($read_GetEntId['ent_type_id'],$this->saveNames))
@@ -1467,6 +1467,7 @@ class Search{
         }
         else if ($tipoValor == "double") {
             if ($this->validaDouble($count, $tipo) === false) {
+                echo '#1<br>';
                 return true;
             }
             else {
