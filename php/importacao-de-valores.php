@@ -452,12 +452,10 @@ class ImportValues{
             $contaLinhas = 3;
             $this->db->getMysqli()->autocommit(false);
             $this->db->getMysqli()->begin_transaction();
-            echo count($sheetData);
             while($contaLinhas <= count($sheetData)) {
                 $i = 0;
-                print_r($sheetData[strval($contaLinhas)]);
                 foreach($sheetData[strval($contaLinhas)] as $valores) {
-                    echo $i.' ';
+                    if (isset($propriedadesExcel[$i])) {
                     if ($i > 0) {
                         if (isset($_REQUEST["rel"])) {
                             if( $i == 1) {
@@ -510,7 +508,6 @@ class ImportValues{
                                 }
                             }
                             else {
-                                echo $propriedadesExcel[$i];
                                 $querySelectProp = "SELECT * FROM property WHERE form_field_name = '".$propriedadesExcel[$i]."'";
                                 $querySelectProp = $this->db->runQuery($querySelectProp);
                                 if(!$querySelectProp ) {
@@ -562,6 +559,7 @@ class ImportValues{
                                 }
                             }
                         }
+                    }
                     }
                     $i++;
                 }
