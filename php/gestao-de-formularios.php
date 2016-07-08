@@ -909,7 +909,7 @@ class HistDeForms{
                         while($getPropId = $getPropHist ->fetch_assoc())
                        {
                             $getPropName = $bd->runQuery("SELECT * FROM property WHERE id= ".$getPropId['property_id']." AND updated_on < '".$readFNhist['inactive_on']."'" )->fetch_assoc();
-                            $getHistPropName = $bd->runQuery("SELECT * FROM hist_property WHERE id= ".$getPropId['property_id']." AND active_on < '".$readFNhist['inactive_on']." AND inactive_on >= '".$readFNhist['inactive_on']."'" )->fetch_assoc();
+                            $getHistPropName = $bd->runQuery("SELECT * FROM hist_property WHERE id= ".$getPropId['property_id']." AND active_on < '".$readFNhist['inactive_on']."' AND inactive_on >= '".$readFNhist['inactive_on']."'" )->fetch_assoc();
 ?>
                             
                             <td>
