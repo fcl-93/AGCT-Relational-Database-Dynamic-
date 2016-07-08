@@ -1676,7 +1676,7 @@ class Search{
                         $entity_id = $entity['id'];
                         if (!empty ($entity_name)) {
 ?>                      
-                        <td><?php echo $entity_id ?></td>
+                        <td rowspan="<?php echo $getValues->num_rows;?>"><?php echo $entity_id ?></td>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                             echo $entity_name;
@@ -1686,7 +1686,7 @@ class Search{
                         }
                         else {
 ?>
-                        <td><?php echo $entity_id ?></td>
+                        <td rowspan="<?php echo $getValues->num_rows;?>"><?php echo $entity_id ?></td>
                         <td rowspan="<?php echo $getValues->num_rows;?>">
 <?php
                            echo $entity_id;
